@@ -3,6 +3,7 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
+from application.classes.settings.list_packages.listpackages import NightcapListPackages
 from application.classes.base_cmd.base_cmd import NightcapBaseCMD
 from application.classes.helpers.screen.screen_helper import ScreenHelper
 from application.classes.settings.install_package.install import NightcapInstallPackage
@@ -38,6 +39,12 @@ class NightcapSettings(NightcapBaseCMD):
          %s %s
         ''' % ((Fore.GREEN + h1),(Fore.YELLOW + h2 + Style.RESET_ALL))
         print(h)
+    #endregion
+
+    #region List Packages
+    def do_list(self, line):
+        NightcapListPackages().list_packages()
+
     #endregion
 
     #region Uninstall

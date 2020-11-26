@@ -24,6 +24,19 @@ class NightcapPackages():
 
     #endregion
 
+    #region Get All Packages
+    def get_all_packages(self):
+        _packages = list(map(lambda v : v, self.db_packages.table('packages').all()))
+        if(_packages == []):
+            print("\t\tNo Packages Installed\n")
+        else:
+            # print(_packages, "\n\n\n")
+            for p in _packages:
+                print(Fore.YELLOW,'\t- ', p['package_for']['module'],'/',p['package_for']['submodule'],'/',p['package_information']['package_name'], Fore.LIGHTCYAN_EX, "\tver: ",p['package_information']['version'], Fore.LIGHTMAGENTA_EX, "  author: ",p['author_info']['creator'], sep='')
+                print(Fore.GREEN, '\t\t', p['package_information']['details'],"\n")
+            print("\n\n")
+    #endregion
+
     #region Get Packages
     def packages(self,parentmodules: list,isDetailed: bool = False):
         npackages = self.db_packages.table('packages').search(
