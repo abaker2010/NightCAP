@@ -125,5 +125,3 @@ dmypy.json
 .pyre/
 
 .DS_STORE
-*.cfg
-EXAMPLE_MODULE/
