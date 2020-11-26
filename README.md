@@ -13,7 +13,8 @@ Aaron Baker
 Overview
 -----------------------
 
-	The program analyzes traffic
+	This program is built for the automation pcap file analysis. Custom packages can be built and 
+	installed to the program to fit the needs of the analyst
 
 
 Simple Installation
