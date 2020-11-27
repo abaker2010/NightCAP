@@ -33,8 +33,6 @@ Requirements
 		- pyreadline 	        2.1
 		- tinydb		4.3.0
 		- art 			5.0
-	
-	(Recommended) Needed requirements can be installed using the `python3.8 -m pip install -r requirements.txt` command
 
 	Extra Installed Software : 
 	-----------------------
