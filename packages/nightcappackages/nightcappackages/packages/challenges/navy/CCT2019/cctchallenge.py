@@ -3,8 +3,9 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
+# from nightcapcore import *
 from nightcapcore import NightcapSimpleReport, NightcapCore
-from nightcapcore import *
+
 from nightcapcore.report.widgets import NightcapSimpleReportHeader, NightcapSimpleReportParagraph
 import os
 
@@ -32,7 +33,26 @@ def main():
     for packet in ncore.pcapFiles:
         # print(packet)
         for pkt in packet:
-            print(dir(pkt))
+            print(pkt.layers)
+            for layer in pkt.layers:
+                print("-" * 50)
+                print(layer.layer_name)
+                print(dir(layer))
+                if(layer.layer_name == "usb"):
+                    print("-" * 10)
+                    print("Src:", layer.src)
+                    print("Dst:", layer.dst)
+                    print("Device Address:", layer.device_address)
+                    print("Transfer Type:", layer.transfer_type)
+
+
+                if(layer.layer_name == "data"):
+                    print("-" * 10)
+                    print(layer.raw_mode)
+                    print(len(layer.usb_capdata))
+
+                print("-" * 50)
+            print("\n")
     # for packet in ncore.pcapFiles:
     #     print("\n", packet.input_filename)
     #     count_of_lines_in_pcap = 0
