@@ -28,29 +28,31 @@ class NightcapDevOptions(NightcapBaseCMD):
 
     #region 
     def do_genPackageUID(self,package_path: str):
-        data = None
-        with open(os.path.join(package_path, "package_info.json")) as json_file:
-            data = json.load(json_file)
-            print(json.dumps(data, indent=4))
+        try:
+            data = None
+            with open(os.path.join(package_path, "package_info.json")) as json_file:
+                data = json.load(json_file)
+                print(json.dumps(data, indent=4))
 
-        print("\n\nData that we will need")
-        package_name = data["package_information"]["package_name"]
-        package_module = data["package_for"]["module"]
-        package_submodule = data["package_for"]["submodule"]
+            print("\n\nData that we will need")
+            package_name = data["package_information"]["package_name"]
+            package_module = data["package_for"]["module"]
+            package_submodule = data["package_for"]["submodule"]
 
-        package = (package_module + "/" + package_submodule + "/" + package_name)
-        hash = hashlib.sha256(package.encode()).hexdigest()
-        print(hash)
-        print("\n\n")
+            package = (package_module + "/" + package_submodule + "/" + package_name)
+            hash = hashlib.sha256(package.encode()).hexdigest()
+            print(hash)
+            print("\n\n")
 
-        data["package_information"]["uid"] = hash
+            data["package_information"]["uid"] = hash
 
-        print(data)
-        with open(os.path.join(package_path, "package_info.json"), 'w') as outfile:
-            json.dump(data, outfile)
+            print(data)
+            with open(os.path.join(package_path, "package_info.json"), 'w') as outfile:
+                json.dump(data, outfile)
 
-        print("\n\n")
-
+            print("\n\n")
+        except Exception as e:
+            print(e) 
 
     def help_genPackageUID(self):
         h1 = "Generate UID for custom package:"

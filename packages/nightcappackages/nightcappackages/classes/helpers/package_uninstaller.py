@@ -4,13 +4,14 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 from nightcapcore.output.console_output import NightcapCoreConsoleOutput
+from nightcappackages.classes.modules import NightcapModules
+from nightcappackages.classes.submodules import NightcapSubModule
 from ..paths import NightcapPackagesPathsEnum, NightcapPackagesPaths
 from tinydb import TinyDB, Query
 import shutil
 
 class NightcapPackageUninstaller():
     def __init__(self, package_path: str):
-        print("uninstaller")
         self.db_packages = TinyDB(NightcapPackagesPaths().generate_path(NightcapPackagesPathsEnum.Databases, ['packages.json']))
         self.output = NightcapCoreConsoleOutput()
         self.__package_paths = NightcapPackagesPaths()
@@ -22,6 +23,7 @@ class NightcapPackageUninstaller():
                 & (Query()['package_for']['submodule'] == split_package_path[1])
                 & (Query()['package_information']['package_name'] == split_package_path[2])
             )
+            ##region Working DO NOT REMOVE
             if(len(packageExists) == 0):
                 self.output.output("Package does not exist", level=6)
             else:
@@ -34,8 +36,24 @@ class NightcapPackageUninstaller():
                         
                         if(self.db_packages.table('packages').contains(Query()['package_information']['uid'] == packageExists[0]["package_information"]["uid"]) is False):
                             self.output.output("UNINSTALLED")
+
+                            packages = self.db_packages.table('packages').search(
+                                    (Query()['package_for']['module'] == split_package_path[0])
+                                    & (Query()['package_for']['submodule'] == split_package_path[1])
+                                )
+
+                            # If there are no packages then remove the submodule
+                            if(len(packages) == 0):
+                                # print("No packages left in module/submodule")
+                                NightcapSubModule().submodule_try_uninstall(split_package_path[0], split_package_path[1])
+                                # If there are no submodules then remove the module
+                                if(len(NightcapSubModule().find_submodules(split_package_path[0])) == 0):
+                                    # print("remove module")
+                                    NightcapModules().module_try_unintall(split_package_path[0])
+
                     except Exception as e:
                         self.output.output('Didnt Delete: '+str(e), level=6)
+            ##endregion 
 
         except Exception as e:
             raise Exception("Package not found")
@@ -46,7 +64,6 @@ class NightcapPackageUninstaller():
 
     def _delete(self, pkt: dict):
         _path = self.__package_paths.generate_path(NightcapPackagesPathsEnum.PackagesBase, [pkt['package_for']['module'],pkt['package_for']['submodule'], pkt['package_information']['package_name']])
-        # self.output.output("Path to delete: " + _path, level=2)
         try:
             shutil.rmtree(_path)
         except OSError as e:

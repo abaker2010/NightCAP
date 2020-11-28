@@ -39,15 +39,17 @@ class NightcapOptionGenerator():
                 _vals = list(map(lambda v: Fore.CYAN + v + Style.RESET_ALL, vals))
                 
                 _cvals = []
-
-                if(len(vals) > 1):
-                    for v in _vals:
-                        _cvals.append(v)
-                        _cvals.append(_join)
-                    _cvals = _cvals[:-1]
+                if(len(vals) != 0):
+                    if(len(vals) > 1):
+                        for v in _vals:
+                            _cvals.append(v)
+                            _cvals.append(_join)
+                        _cvals = _cvals[:-1]
+                    else:
+                        for v in _vals:
+                            _cvals.append(v)
                 else:
-                    for v in _vals:
-                        _cvals.append(v)
+                    _cvals.append("No Pacakges Installed")
 
                 self.console_output.output("".join(_cvals))
             self.console_output.output('\n\n')

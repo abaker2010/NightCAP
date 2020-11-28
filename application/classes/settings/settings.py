@@ -50,7 +50,7 @@ class NightcapSettings(NightcapBaseCMD):
     #region Uninstall
     def do_uninstall(self,line):
         print("Uninstall module:",line)
-        NightcapRemovePackage().remove_package(line)
+        NightcapRemovePackage().remove_package(line) 
 
     def help_uninstall(self):
         h1 = "Uninstall a module example:"

@@ -14,7 +14,7 @@ class NightcapCoreProject(object):
 
     def projects(self):
         '''List all projects'''
-        print(NightcapCoreRemoteDocs().get_link("eth"))
+        # print(NightcapCoreRemoteDocs().get_link("eth"))
         return self.projects_db.all()
  
     def project_name(self,line):

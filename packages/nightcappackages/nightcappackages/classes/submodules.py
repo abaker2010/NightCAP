@@ -34,3 +34,12 @@ class NightcapSubModule():
             else:
                 _t = {'module' : module, 'type' : submodule}
             self.db_submodules.table('submodules').insert(_t)
+
+    def submodule_try_uninstall(self, module: str, submodule: str):
+        _submoduleexists = self.db_submodules.table('submodules').search(
+            (Query()['type'] == submodule) & (Query()['module'] == module)
+        )
+        self.db_submodules.table('submodules').remove(doc_ids=[_submoduleexists[0].doc_id])
+
+
+        

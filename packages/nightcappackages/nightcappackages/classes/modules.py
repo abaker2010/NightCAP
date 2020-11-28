@@ -42,4 +42,8 @@ class NightcapModules():
             self.db_modules.table('modules').insert(_t)
         #endregion
     
+    def module_try_unintall(self, module: str):
+        _moduleexists = self.db_modules.table('modules').search((Query()['type'] == module))
+        self.db_modules.table('modules').remove(doc_ids=[_moduleexists[0].doc_id])
+    
     

@@ -17,7 +17,6 @@ import errno
 
 class NightcapPackageInstaller():
     def __init__(self, package: dict, package_path: str):
-        print("installer for packages")
         self.__package_paths = NightcapPackagesPaths()
         self.db_packages = TinyDB(NightcapPackagesPaths().generate_path(NightcapPackagesPathsEnum.Databases, ['packages.json']))
         self.output = NightcapCoreConsoleOutput()
@@ -67,10 +66,7 @@ class NightcapPackageInstaller():
                                     self.output.output("Permission Denied: Please reopen the program as an administrator", level=5)
                                 else:
                                     self.output.output("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output), level=6)
-                else:
-                    print("No packages to import/download")
-                    
-
+                
             except Exception as imperro:
                 self.output.output(str(imperro), level=6)
             
