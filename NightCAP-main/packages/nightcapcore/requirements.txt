@@ -1,0 +1,6 @@
+colorama==0.4.4
+configparser==5.0.1
+pyshark==0.4.2.11
+pathlib==1.0.1
+tinydb==4.3.0
+json5==0.9.5
