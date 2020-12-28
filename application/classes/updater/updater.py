@@ -7,8 +7,6 @@ from colorama import Fore, Style
 # from tqdl import download
 import requests
 from tqdm.auto import tqdm
-from zipfile import ZipFile
-import os
 import tempfile
 import shutil
 
@@ -16,15 +14,11 @@ class NightcapUpdater:
     def __init__(self):
         print("Calling update for system")
         self.tmpdir = None
-        self.currentDir = os.getcwd()
-        self.updateFile = os.path.join("" if self.tmpdir == None else self.tmpdir, "update.zip")
     
     def update(self):
         try:
             self.__create_tmp()
             self.__get_update()
-            self.__unpackupdate()
-            self.__move_data()
             self.__remove_tmp()
         except KeyboardInterrupt as e:
             print("User terminated")
@@ -41,7 +35,7 @@ class NightcapUpdater:
     def __get_update(self):
         resp = requests.get("https://github.com/abaker2010/NightCAP/archive/main.zip", stream=True)
         total = int(resp.headers.get('content-length', 0))
-        with open(self.updateFile, 'wb') as file, tqdm(
+        with open(self.tmpdir + "update.zip", 'wb') as file, tqdm(
             desc="update.zip",
             total=total,
             unit='iB',
@@ -52,15 +46,27 @@ class NightcapUpdater:
                 size = file.write(data)
                 bar.update(size)
 
-    def __unpackupdate(self):
-        with ZipFile(self.updateFile, 'r') as zip: 
-            # printing all the contents of the zip file 
-            zip.printdir() 
-            # extracting all the files 
-            print('Extracting all the files now...') 
-            zip.extractall() 
-            print('Done!') 
-    
-    def __move_data(self):
-        print("Moving file from update")
-        
+
+    # def __get_update(self):
+    #     try:
+    #         print("Downloading Update")
+    #         print("Tmp Folder: ", self.tmpdir)
+    #         download("https://github.com/abaker2010/NightCAP/archive/main.zip", self.tmpdir + "update.zip")
+    #         # response = requests.get("https://github.com/abaker2010/NightCAP/archive/main.zip")
+    #     except Exception as err:
+    #         print(f'Other error occurred: {err}')  # Python 3.6
+    #     else:
+    #         print("Download completed successfully!")
+        # for url in ['https://api.github.com', 'https://api.github.com/invalid']:
+        #     try:
+        #         response = requests.get(url)
+
+        #         # If the response was successful, no Exception will be raised
+        #         response.raise_for_status()
+            # except HTTPError as http_err:
+            #     print(f'HTTP error occurred: {http_err}')  # Python 3.6
+            # except Exception as err:
+            #     print(f'Other error occurred: {err}')  # Python 3.6
+        #     else:
+        #         print('Success!')
+
