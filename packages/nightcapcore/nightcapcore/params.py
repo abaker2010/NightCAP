@@ -17,7 +17,7 @@ class NightcapDynamicParams(object):
             self.project = params_dict['project']
         else:
             self.isDir = False
-            self.dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_pcaps", "pcaps")
+            self.dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_pcaps")
             self.filename = "xmrig2.pcapng"
             self.project = None
         self.verboselevel = verboselevel
