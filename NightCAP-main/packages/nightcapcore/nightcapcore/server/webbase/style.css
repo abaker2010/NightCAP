@@ -1,0 +1,180 @@
+/*
+    # Copyright 2020 by Aaron Baker.
+    # All rights reserved.
+    # This file is part of the Nightcap Project,
+    # and is released under the "MIT License Agreement". Please see the LICENSE
+    # file that should have been included as part of this package.
+*/
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+html {
+  display: inline-block;
+  margin: auto;
+}
+
+body {
+  font-family: 'Cinzel Decorative';
+  background-color:#f1faee;
+  margin-bottom: 20px !important;
+}
+
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #AAC7DA;
+  color: white;
+  text-align: center;
+}
+
+footer#isShowing {
+  display: block;
+}
+
+@media screen and (max-width: 768px) {
+  footer#isShowing {
+    display: none;
+  }
+
+  body {
+    font-family: 'Cinzel Decorative';
+    background-color:#f1faee;
+    margin-bottom: 5% !important;
+  }
+}
+
+footer p {
+  font-size: small;
+  color: white;
+}
+
+div.content {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+div.report {
+  position: absolute;
+  left: 50%;
+  top: 5%;
+  -webkit-transform: translate(-50%, -5%);
+  transform: translate(-50%, -5%);
+}
+
+a {
+  text-decoration:none;
+}
+
+div.card{
+  height: 50%;
+  width: 50%;
+  background-color: #AAC7DA;
+
+}
+
+h1 { 
+  font-family: 'Almendra Display';
+  font-size: 40px;
+  font-weight: bold;
+  color: #1D3557;
+}
+
+
+
+
+
+hr.style18 { 
+  height: 30px; 
+  border-style: solid; 
+  border-color: #8c8b8b; 
+  border-width: 1px 0 0 0; 
+  border-radius: 20px; 
+  width: 80%;
+} 
+hr.style18:before { 
+  display: block; 
+  content: ""; 
+  height: 30px; 
+  margin-top: -31px; 
+  border-style: solid; 
+  border-color: #8c8b8b; 
+  border-width: 0 0 1px 0; 
+  border-radius: 20px; 
+}
+
+
+hr.style18:after {
+  content: "§";
+  display: inline-block;
+  position: relative;
+  top: -0.7em;
+  font-size: 1.5em;
+  padding: 0 0.25em;
+  background: #f1f1f1;
+}
+
+hr.dotted {
+  border: 0;
+  border-bottom: 1px dashed #ccc;
+  background: #999;
+}
+
+p {
+  font-family: 'Alike Angular';
+  color: #1D3557;
+}
+
+
+li, ol {
+  color: whitesmoke;
+}
+
+div.padded {
+  margin-top: 20px;
+}
+
+div.panel-body {
+  color: red;
+}
+
+li:hover {
+  background-color: #1D3557;
+  border-radius: 4px;
+}
+
+a {
+  color: white;
+}
+
+ul {
+  background-color: #457b9d;
+}
+
+.rpcontainer {
+  background-color: #1D3557;
+}
+
+.rpcontainer h1 { 
+  font-family: 'Almendra Display';
+  font-size: 40px;
+  font-weight: bold;
+  color: #AAC7DA; 
+}
+
+.rpcontainer p {
+  font-family: 'Alike Angular';
+  color: #F1FAEE;
+}
+
+.rpcontainer hr.dotted {
+  border: 0;
+  border-bottom: 1px dashed #ccc;
+  background: #F1FAEE;
+}

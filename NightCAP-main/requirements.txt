@@ -1,0 +1,11 @@
+colorama==0.4.4
+configparser==5.0.1
+pyshark==0.4.2.11
+pathlib==1.0.1
+gnureadline==8.0.0
+pyreadline==2.1
+tinydb==4.3.0
+art==5.0
+nightcapcore==0.0.1
+nightcappackages==0.0.1
+tqdm==4.54.1
