@@ -7,18 +7,29 @@ from colorama import Fore, Style
 # from tqdl import download
 import requests
 from tqdm.auto import tqdm
+from zipfile import ZipFile
+import os
 import tempfile
+import re
+from fnmatch import fnmatch
 import shutil
 
 class NightcapUpdater:
     def __init__(self):
         print("Calling update for system")
         self.tmpdir = None
+        self.currentDir = os.getcwd()
+        self.updateFile = "update.zip"
+        self.tmpUpdatePaths = []
+        self.excludedPaths = []
+        self._excludeExt = (".json", ".cfg")
     
     def update(self):
         try:
             self.__create_tmp()
-            self.__get_update()
+            self.__get_update() # working just commented out for now
+            self.__unpackupdate() # working just commented out for now 
+            self.__move_data()
             self.__remove_tmp()
         except KeyboardInterrupt as e:
             print("User terminated")
@@ -35,7 +46,7 @@ class NightcapUpdater:
     def __get_update(self):
         resp = requests.get("https://github.com/abaker2010/NightCAP/archive/main.zip", stream=True)
         total = int(resp.headers.get('content-length', 0))
-        with open(self.tmpdir + "update.zip", 'wb') as file, tqdm(
+        with open(os.path.join(self.tmpdir,self.updateFile), 'wb') as file, tqdm(
             desc="update.zip",
             total=total,
             unit='iB',
@@ -46,27 +57,42 @@ class NightcapUpdater:
                 size = file.write(data)
                 bar.update(size)
 
+    def __unpackupdate(self):
+        with ZipFile(os.path.join(self.tmpdir,self.updateFile), 'r') as zip: 
+            print('Extracting all the files now...') 
+            zip.extractall(self.tmpdir) 
+            print('Done!')
 
-    # def __get_update(self):
-    #     try:
-    #         print("Downloading Update")
-    #         print("Tmp Folder: ", self.tmpdir)
-    #         download("https://github.com/abaker2010/NightCAP/archive/main.zip", self.tmpdir + "update.zip")
-    #         # response = requests.get("https://github.com/abaker2010/NightCAP/archive/main.zip")
-    #     except Exception as err:
-    #         print(f'Other error occurred: {err}')  # Python 3.6
-    #     else:
-    #         print("Download completed successfully!")
-        # for url in ['https://api.github.com', 'https://api.github.com/invalid']:
-        #     try:
-        #         response = requests.get(url)
+    def __move_file(self, tmpPath: str, installPath: str):
+        print("Moving file from", tmpPath, "->", installPath)
+        os.replace(tmpPath, installPath)
+        print("*" * 10)
+    
+    def __move_data(self):
+        print("Listing of files in tmp dir")
 
-        #         # If the response was successful, no Exception will be raised
-        #         response.raise_for_status()
-            # except HTTPError as http_err:
-            #     print(f'HTTP error occurred: {http_err}')  # Python 3.6
-            # except Exception as err:
-            #     print(f'Other error occurred: {err}')  # Python 3.6
-        #     else:
-        #         print('Success!')
+        tmpUpdateLocation = os.path.join(self.tmpdir, "NightCAP-main")
+        installLocation = os.getcwd()
 
+        for path, subdirs, files in os.walk(tmpUpdateLocation):
+            for name in files:
+                if name.endswith(self._excludeExt):
+                   print(os.path.join(path, name)) 
+                   self.excludedPaths.append(os.path.join(path, name))
+                else:
+                    self.tmpUpdatePaths.append(os.path.join(path, name))
+                    
+
+        print("Tmp path:", tmpUpdateLocation)
+        print(installLocation)
+        newPath = lambda s: re.sub(tmpUpdateLocation, installLocation, s)
+
+        print("Files to move")
+        for tpath in self.tmpUpdatePaths:
+            self.__move_file(tpath, newPath(tpath))
+            
+        print("Files to exclude")
+        for tpath in self.excludedPaths:
+            print(tpath)
+            print(newPath(tpath))
+            print("*" * 10)
