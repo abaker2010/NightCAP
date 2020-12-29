@@ -100,7 +100,7 @@ class NightcapUpdater:
     
     def onCloseModifications(self):
         
-        tmpUpdateLocation = os.path.join(self.tmpdir, "NightCAP-dev")
+        tmpUpdateLocation = os.path.join(self.tmpdir, "NightCAP-main")
         installLocation = os.getcwd()
         newPath = lambda s: re.sub(tmpUpdateLocation, installLocation, s)
         
