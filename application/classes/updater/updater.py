@@ -4,7 +4,6 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 from colorama import Fore, Style
-# from tqdl import download
 import requests
 from tqdm.auto import tqdm
 from zipfile import ZipFile
@@ -69,12 +68,12 @@ class NightcapUpdater:
             print('Done!')
 
     def __move_file(self, tmpPath: str, installPath: str):
-        print("Moving file from", tmpPath, "->", installPath)
+        # print("Moving file from", tmpPath, "->", installPath)
         os.replace(tmpPath, installPath)
-        print("*" * 10)
+        # print("*" * 10)
     
     def __move_data(self):
-        print("Listing of files in tmp dir")
+        # print("Listing of files in tmp dir")
 
         tmpUpdateLocation = os.path.join(self.tmpdir, "NightCAP-main")
         installLocation = os.getcwd()
@@ -82,17 +81,17 @@ class NightcapUpdater:
         for path, subdirs, files in os.walk(tmpUpdateLocation):
             for name in files:
                 if name.endswith(self._excludeExt):
-                   print(os.path.join(path, name)) 
+                #    print(os.path.join(path, name)) 
                    self.excludedPaths.append(os.path.join(path, name))
                 else:
                     self.tmpUpdatePaths.append(os.path.join(path, name))
                     
 
-        print("Tmp path:", tmpUpdateLocation)
-        print(installLocation)
+        # print("Tmp path:", tmpUpdateLocation)
+        # print(installLocation)
         newPath = lambda s: re.sub(tmpUpdateLocation, installLocation, s)
 
-        print("Files to move")
+        # print("Files to move")
         for tpath in self.tmpUpdatePaths:
             self.__move_file(tpath, newPath(tpath))
             
