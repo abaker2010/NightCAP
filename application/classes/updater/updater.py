@@ -24,7 +24,7 @@ class NightcapUpdater:
         self.updateFile = "update.zip"
         self.tmpUpdatePaths = []
         self.excludedPaths = []
-        self._excludeExt = (".json", ".cfg", ".md", "LICENSE")
+        self._excludeExt = (".json")
         self.updateCalled = False
 
     def update(self):
@@ -109,4 +109,6 @@ class NightcapUpdater:
             print(tpath)
             print(newPath(tpath))
             print("*" * 10)
+
+        # Right here is where the excluded json files will need to be merged with the existing files 
         self.__remove_tmp()
