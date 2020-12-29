@@ -13,6 +13,7 @@ from application.classes.legal.legal import Legal
 from application.classes.banners.nightcap_banner import NightcapBanner
 from application.classes.helpers.screen.screen_helper import ScreenHelper
 from nightcapcore import NighcapCoreSimpleServer
+from application.classes.updater.updater import NightcapUpdater
         
 try:
     import readline
@@ -59,6 +60,10 @@ if __name__ == '__main__':
     except Exception as e:
         print(e)
     finally:  
-        NighcapCoreSimpleServer.instance().shutdown()      
+        NighcapCoreSimpleServer.instance().shutdown()   
+        if(NightcapUpdater.instance().updateCalled):
+            print("Changes need to be made:", "Updater called")
+            print("Files that need modified")
+            NightcapUpdater.instance().onCloseModifications()
         exit()
 #endregion

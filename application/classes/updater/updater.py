@@ -11,11 +11,12 @@ from zipfile import ZipFile
 import os
 import tempfile
 import re
-from nightcapcore.decorators.singleton import Singleton 
 import shutil
+from nightcapcore.decorators.singleton import Singleton 
 
 @Singleton
 class NightcapUpdater:
+    
     def __init__(self):
         print("Calling update for system")
         self.tmpdir = None
@@ -24,17 +25,19 @@ class NightcapUpdater:
         self.tmpUpdatePaths = []
         self.excludedPaths = []
         self._excludeExt = (".json", ".cfg")
-    
+        self.updateCalled = False
+
     def update(self):
+        self.updateCalled = True
         try:
             self.__create_tmp()
             self.__get_update() # working just commented out for now
             self.__unpackupdate() # working just commented out for now 
             self.__move_data()
-            self.__remove_tmp()
         except KeyboardInterrupt as e:
             print("User terminated")
             self.__remove_tmp()
+            self.updateCalled = False
 
     def __create_tmp(self):
         self.tmpdir = tempfile.mkdtemp()
@@ -46,6 +49,7 @@ class NightcapUpdater:
 
     def __get_update(self):
         resp = requests.get("https://github.com/abaker2010/NightCAP/archive/main.zip", stream=True)
+        # resp = requests.get("https://github.com/abaker2010/NightCAP/archive/Dev.zip", stream=True)
         total = int(resp.headers.get('content-length', 0))
         with open(os.path.join(self.tmpdir,self.updateFile), 'wb') as file, tqdm(
             desc="update.zip",
@@ -92,8 +96,17 @@ class NightcapUpdater:
         for tpath in self.tmpUpdatePaths:
             self.__move_file(tpath, newPath(tpath))
             
+        
+    
+    def onCloseModifications(self):
+        
+        tmpUpdateLocation = os.path.join(self.tmpdir, "NightCAP-dev")
+        installLocation = os.getcwd()
+        newPath = lambda s: re.sub(tmpUpdateLocation, installLocation, s)
+        
         print("Files to exclude")
         for tpath in self.excludedPaths:
             print(tpath)
             print(newPath(tpath))
             print("*" * 10)
+        self.__remove_tmp()
