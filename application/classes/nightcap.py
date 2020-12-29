@@ -23,6 +23,6 @@ class Nightcap(NightcapDynamicOptions):
 
     def do_update(self, line):
         print("Updating system")
-        NightcapUpdater().update()
+        NightcapUpdater.instance().update()
 
 #endregion

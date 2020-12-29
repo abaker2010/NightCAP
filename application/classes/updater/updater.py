@@ -11,9 +11,10 @@ from zipfile import ZipFile
 import os
 import tempfile
 import re
-from fnmatch import fnmatch
+from nightcapcore.decorators.singleton import Singleton 
 import shutil
 
+@Singleton
 class NightcapUpdater:
     def __init__(self):
         print("Calling update for system")

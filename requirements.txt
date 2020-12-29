@@ -5,7 +5,7 @@ pathlib==1.0.1
 gnureadline==8.0.0
 pyreadline==2.1
 tinydb==4.3.0
-art==5.0
+art==5.1
 nightcapcore==0.0.1
 nightcappackages==0.0.1
-tqdm==4.54.1
+tqdm==4.55.0
