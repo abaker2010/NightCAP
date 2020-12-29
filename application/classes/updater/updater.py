@@ -24,7 +24,7 @@ class NightcapUpdater:
         self.updateFile = "update.zip"
         self.tmpUpdatePaths = []
         self.excludedPaths = []
-        self._excludeExt = (".json", ".cfg")
+        self._excludeExt = (".json", ".cfg", ".md", "LICENSE")
         self.updateCalled = False
 
     def update(self):
