@@ -18,6 +18,7 @@ class NightcapUpdater:
     
     def __init__(self):
         print("Calling update for system")
+        print("Updater Instance Created")
         self.tmpdir = None
         self.currentDir = os.getcwd()
         self.updateFile = "update.zip"
