@@ -22,9 +22,17 @@ class Nightcap(NightcapDynamicOptions):
         NightcapSettings().cmdloop()
 
     def do_update(self, line):
+        '''\nUpdate the project. Usage: update [main|dev]. If no option is specified the default will be used.\n'''
         print("Updating system")
         try:
-            NightcapUpdater.instance().update()
+            if not line:
+                NightcapUpdater.instance().update(True)
+            else:
+                if str(line).lower() == "main":
+                    NightcapUpdater.instance().update(True)
+                elif str(line).lower() == "dev":
+                    NightcapUpdater.instance().update(False)
+            
         except Exception as e:
             print(e)
 

@@ -24,11 +24,14 @@ class NightcapUpdater:
         self.updateFile = "update.zip"
         self.tmpUpdatePaths = []
         self.excludedPaths = []
-        self._excludeExt = (".json")
+        self._excludeExt = (".json", ".pcapng")
         self.updateCalled = False
+        self.isMainBranch = None
 
-    def update(self):
+    def update(self, main: bool):
         self.updateCalled = True
+        self.isMainBranch = main
+
         try:
             self.__create_tmp()
             self.__get_update() # working just commented out for now
@@ -48,8 +51,12 @@ class NightcapUpdater:
         shutil.rmtree(self.tmpdir)
 
     def __get_update(self):
-        resp = requests.get("https://github.com/abaker2010/NightCAP/archive/main.zip", stream=True)
-        # resp = requests.get("https://github.com/abaker2010/NightCAP/archive/Dev.zip", stream=True)
+        if self.isMainBranch:
+            print("Using main branch")
+            resp = requests.get("https://github.com/abaker2010/NightCAP/archive/main.zip", stream=True)
+        else:
+            print("Using dev branch")
+            resp = requests.get("https://github.com/abaker2010/NightCAP/archive/Dev.zip", stream=True)
         total = int(resp.headers.get('content-length', 0))
         with open(os.path.join(self.tmpdir,self.updateFile), 'wb') as file, tqdm(
             desc="update.zip",
@@ -66,6 +73,7 @@ class NightcapUpdater:
         with ZipFile(os.path.join(self.tmpdir,self.updateFile), 'r') as zip: 
             print('Extracting all the files now...') 
             zip.extractall(self.tmpdir) 
+            print(self.tmpdir)
             print('Done!')
 
     def __move_file(self, tmpPath: str, installPath: str):
@@ -74,15 +82,20 @@ class NightcapUpdater:
         # print("*" * 10)
     
     def __move_data(self):
-        # print("Listing of files in tmp dir")
+        print("Listing of files in tmp dir")
 
-        tmpUpdateLocation = os.path.join(self.tmpdir, "NightCAP-main")
-        installLocation = os.getcwd()
+        tmpUpdateLocation = os.path.join(self.tmpdir, "NightCAP-dev")
+        # installLocation = os.getcwd()
+        installLocation = os.path.dirname(__file__).split('/application')[0]
+
+        print(tmpUpdateLocation)
+        print(installLocation)
+        print(os.path.dirname(__file__).split('/application')[0])
 
         for path, subdirs, files in os.walk(tmpUpdateLocation):
             for name in files:
-                if name.endswith(self._excludeExt):
-                #    print(os.path.join(path, name)) 
+                print(os.path.join(path, name)) 
+                if str(name).endswith(self._excludeExt):
                    self.excludedPaths.append(os.path.join(path, name))
                 else:
                     self.tmpUpdatePaths.append(os.path.join(path, name))
