@@ -31,23 +31,25 @@ class NightcapUpdater:
         self.tmpUpdateLocation = None
         self.installLocation = os.path.dirname(__file__).split('/application')[0]
 
+    #region Main Updater Function: does all of the heavy lifting
     def update(self, main: bool):
         self.updateCalled = True
         self.isMainBranch = main
-
         try:
             self.__create_tmp()
             self.__get_update() # working just commented out for now
             self.__unpackupdate() # working just commented out for now 
             self.__move_data()
+            self.__change_permission()
+            self.__combine_db_files()
+            self.__remove_tmp()
         except KeyboardInterrupt as e:
             print("User terminated")
             self.__remove_tmp()
             self.updateCalled = False
+    #endregion
 
-    def __change_permission(self):
-        os.chmod(os.path.join(self.installLocation, "nightcap.py"), 0o755)
-
+    #region Tmp dir functions
     def __create_tmp(self):
         self.tmpdir = tempfile.mkdtemp()
         print("Creating tmp dir: ", self.tmpdir)
@@ -55,7 +57,9 @@ class NightcapUpdater:
     def __remove_tmp(self):
         print("Removing tmp dir")
         shutil.rmtree(self.tmpdir)
+    #endregion
 
+    #region Get update from Github
     def __get_update(self):
         if self.isMainBranch:
             print("Using main branch")
@@ -76,24 +80,30 @@ class NightcapUpdater:
             for data in resp.iter_content(chunk_size=1024):
                 size = file.write(data)
                 bar.update(size)
+    #endregion
 
+    #region Unpacking Github update 
     def __unpackupdate(self):
         with ZipFile(os.path.join(self.tmpdir,self.updateFile), 'r') as zip: 
             print('Extracting all the files now...') 
             zip.extractall(self.tmpdir) 
             print(self.tmpdir)
-            print('Done!')
-
-    def __move_file(self, tmpPath: str, installPath: str):
-        print("Moving file from", tmpPath, "->", installPath)
-        os.replace(tmpPath, installPath)
-        print("*" * 10)
+        print('Done!')
+    #endregion
     
+    #region Change Permissions 
+    def __change_permission(self):
+        os.chmod(os.path.join(self.installLocation, "nightcap.py"), 0o755)
+    #endregion 
+
+    #region Moving/Combining Files 
+    def __combine_db_files(self):
+        print("Trying to combine the db files")
+
     def __move_data(self):
         print("Listing of files in tmp dir")
         print(self.tmpUpdateLocation)
         print(self.installLocation)
-
         for path, subdirs, files in os.walk(self.tmpUpdateLocation):
             for name in files:
                 print(os.path.join(path, name)) 
@@ -106,16 +116,19 @@ class NightcapUpdater:
         for tpath in self.tmpUpdatePaths:
             self.__move_file(tpath, newPath(tpath))
 
-        self.__change_permission()
-            
+    def __move_file(self, tmpPath: str, installPath: str):
+        print("Moving file from", tmpPath, "->", installPath)
+        os.replace(tmpPath, installPath)
+        print("*" * 10)
+    #endregion
+        
+    #region OnClose modifications 
     def onCloseModifications(self):
         newPath = lambda s: re.sub(self.tmpUpdateLocation, self.installLocation, s)
-        
         print("Files to exclude")
         for tpath in self.excludedPaths:
             print(tpath)
             print(newPath(tpath))
             print("*" * 10)
-
-        # Right here is where the excluded json files will need to be merged with the existing files 
-        self.__remove_tmp()
+        # self.__remove_tmp()
+    #endregion
