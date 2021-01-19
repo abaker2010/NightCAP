@@ -24,7 +24,7 @@ class NightcapUpdater:
         self.updateFile = "update.zip"
         self.tmpUpdatePaths = []
         self.excludedPaths = []
-        self._excludeExt = (".json", ".pcapng")
+        self._excludeExt = (".json", ".pcapng", "LICENSE", ".md")
         self.updateCalled = False
         self.isMainBranch = None
         self.tmpUpdateLocation = None
