@@ -27,6 +27,8 @@ class NightcapUpdater:
         self._excludeExt = (".json", ".pcapng")
         self.updateCalled = False
         self.isMainBranch = None
+        self.tmpUpdateLocation = None
+        self.installLocation = os.path.dirname(__file__).split('/application')[0]
 
     def update(self, main: bool):
         self.updateCalled = True
@@ -54,9 +56,11 @@ class NightcapUpdater:
         if self.isMainBranch:
             print("Using main branch")
             resp = requests.get("https://github.com/abaker2010/NightCAP/archive/main.zip", stream=True)
+            self.tmpUpdateLocation = os.path.join(self.tmpdir, "NightCAP-main")
         else:
             print("Using dev branch")
             resp = requests.get("https://github.com/abaker2010/NightCAP/archive/Dev.zip", stream=True)
+            self.tmpUpdateLocation = os.path.join(self.tmpdir, "NightCAP-dev")
         total = int(resp.headers.get('content-length', 0))
         with open(os.path.join(self.tmpdir,self.updateFile), 'wb') as file, tqdm(
             desc="update.zip",
@@ -77,22 +81,16 @@ class NightcapUpdater:
             print('Done!')
 
     def __move_file(self, tmpPath: str, installPath: str):
-        # print("Moving file from", tmpPath, "->", installPath)
+        print("Moving file from", tmpPath, "->", installPath)
         os.replace(tmpPath, installPath)
-        # print("*" * 10)
+        print("*" * 10)
     
     def __move_data(self):
         print("Listing of files in tmp dir")
+        print(self.tmpUpdateLocation)
+        print(self.installLocation)
 
-        tmpUpdateLocation = os.path.join(self.tmpdir, "NightCAP-dev")
-        # installLocation = os.getcwd()
-        installLocation = os.path.dirname(__file__).split('/application')[0]
-
-        print(tmpUpdateLocation)
-        print(installLocation)
-        print(os.path.dirname(__file__).split('/application')[0])
-
-        for path, subdirs, files in os.walk(tmpUpdateLocation):
+        for path, subdirs, files in os.walk(self.tmpUpdateLocation):
             for name in files:
                 print(os.path.join(path, name)) 
                 if str(name).endswith(self._excludeExt):
@@ -100,22 +98,12 @@ class NightcapUpdater:
                 else:
                     self.tmpUpdatePaths.append(os.path.join(path, name))
                     
-
-        # print("Tmp path:", tmpUpdateLocation)
-        # print(installLocation)
-        newPath = lambda s: re.sub(tmpUpdateLocation, installLocation, s)
-
-        # print("Files to move")
+        newPath = lambda s: re.sub(self.tmpUpdateLocation, self.installLocation, s)
         for tpath in self.tmpUpdatePaths:
             self.__move_file(tpath, newPath(tpath))
             
-        
-    
     def onCloseModifications(self):
-        
-        tmpUpdateLocation = os.path.join(self.tmpdir, "NightCAP-main")
-        installLocation = os.getcwd()
-        newPath = lambda s: re.sub(tmpUpdateLocation, installLocation, s)
+        newPath = lambda s: re.sub(self.tmpUpdateLocation, self.installLocation, s)
         
         print("Files to exclude")
         for tpath in self.excludedPaths:
