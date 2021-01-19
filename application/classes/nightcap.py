@@ -23,6 +23,9 @@ class Nightcap(NightcapDynamicOptions):
 
     def do_update(self, line):
         print("Updating system")
-        NightcapUpdater.instance().update()
+        try:
+            NightcapUpdater.instance().update()
+        except Exception as e:
+            print(e)
 
 #endregion

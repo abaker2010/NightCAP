@@ -1,3 +1,4 @@
+#!/usr/bin/env python3.8
 # Copyright 2020 by Aaron Baker.
 # All rights reserved.
 # This file is part of the Nightcap Project,
