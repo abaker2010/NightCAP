@@ -8,6 +8,7 @@ import requests
 from tqdm.auto import tqdm
 from zipfile import ZipFile
 import os
+import stat
 import tempfile
 import re
 import shutil
@@ -43,6 +44,9 @@ class NightcapUpdater:
             print("User terminated")
             self.__remove_tmp()
             self.updateCalled = False
+
+    def __change_permission(self):
+        os.chmod(os.path.join(self.installLocation, "nightcap.py"), 0o755)
 
     def __create_tmp(self):
         self.tmpdir = tempfile.mkdtemp()
@@ -101,6 +105,8 @@ class NightcapUpdater:
         newPath = lambda s: re.sub(self.tmpUpdateLocation, self.installLocation, s)
         for tpath in self.tmpUpdatePaths:
             self.__move_file(tpath, newPath(tpath))
+
+        self.__change_permission()
             
     def onCloseModifications(self):
         newPath = lambda s: re.sub(self.tmpUpdateLocation, self.installLocation, s)
