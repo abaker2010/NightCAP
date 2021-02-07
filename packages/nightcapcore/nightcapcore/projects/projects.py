@@ -44,9 +44,7 @@ class NightcapCoreProject(object):
         self.projects_db.insert(line)
 
     def update(self,updatedb: TinyDB):
-        # print("\t","updating db: projects_db.json")
+    
         self.printer.item_2(text="updating db", optionalText='projects_db.json')
-        self.printer.item_2(text=str(updatedb.tables()))
+        self.printer.item_2(text=str(updatedb.table("projects").all()))
         self.printer.item_2(text=str(self.projects_db.all()))
-        # print("\t","updater tables:", updatedb.tables())
-        # print("\t","user tables:", self.projects_db.all())
