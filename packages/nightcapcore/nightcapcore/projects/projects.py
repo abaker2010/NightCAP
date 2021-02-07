@@ -4,6 +4,7 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 from nightcapcore.remotedocs.remote_docs import NightcapCoreRemoteDocs
+from nightcapcore.printers.print import Printer
 import os
 from tinydb import TinyDB
 from tinydb.queries import Query
@@ -11,6 +12,7 @@ from tinydb.queries import Query
 class NightcapCoreProject(object):
     def __init__(self):
         self.projects_db = TinyDB(os.path.join(os.path.dirname(__file__), "..", "database", "projects_db.json")).table("projects")
+        self.printer = Printer()
 
     def projects(self):
         '''List all projects'''
@@ -42,6 +44,9 @@ class NightcapCoreProject(object):
         self.projects_db.insert(line)
 
     def update(self,updatedb: TinyDB):
-        print("\t","updating db: projects_db.json")
-        print("\t","updater tables:", updatedb.tables())
-        print("\t","user tables:", self.projects_db.all())
+        # print("\t","updating db: projects_db.json")
+        self.printer.item_2(text="updating db", optionalText='projects_db.json')
+        self.printer.item_2(text=str(updatedb.tables()))
+        self.printer.item_2(text=str(self.projects_db.all()))
+        # print("\t","updater tables:", updatedb.tables())
+        # print("\t","user tables:", self.projects_db.all())

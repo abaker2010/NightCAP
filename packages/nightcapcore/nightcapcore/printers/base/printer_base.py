@@ -5,7 +5,6 @@
 # file that should have been included as part of this package.
 from colorama import Fore, Back, Style
 
-
 class PrinterBase:
     def __init__(self):
         return

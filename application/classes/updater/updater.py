@@ -4,8 +4,9 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 # from application.classes.helpers.printers.subprinters.errors import ErrorPrinter
-from application.classes.helpers.printers.print import Printer
+# from application.classes.helpers.printers.print import Printer
 from colorama import Fore, Style
+from nightcapcore.printers.print import Printer
 from nightcapcore.projects.projects import NightcapCoreProject
 from nightcapcore.remotedocs.remote_docs import NightcapCoreRemoteDocs
 from nightcappackages.classes.packages import NightcapPackages
@@ -60,14 +61,14 @@ class NightcapUpdater:
             # self.__move_data()
             # self.__change_permission()
             self.__combine_db_files()
-            self.__remove_tmp()
+            # self.__remove_tmp()
         except KeyboardInterrupt as e:
             print("User terminated")
-            self.__remove_tmp()
+            # self.__remove_tmp()
             self.updateCalled = False
         except Exception as ee:
             print("Error:", ee)
-            self.__remove_tmp()
+            # self.__remove_tmp()
     #endregion
 
     #region Tmp dir functions
@@ -142,10 +143,10 @@ class NightcapUpdater:
         for udb in self.dbPaths:
             try:
                 if(self.verbose):
-                    self.printer.item_1(text="Updater file", optionalText=str(udb).replace(self.tmpdir, "{tmp}"))
+                    self.printer.item_1(text="Updater file", optionalText=str(udb).replace(self.tmpdir, "{tmp}"), leadingBreaks=1)
                 if(str(udb).endswith("projects_db.json")):
                     self.printer.print_formatted_check("Skipping", leadingTab=3)
-                #     # NightcapCoreProject().update(TinyDB(udb))
+                    NightcapCoreProject().update(TinyDB(udb))
                 #     if(self.verbose):
                 #         print("Skipping DB:", "Projects_DB")
                 #         print("*"*20,"\n")

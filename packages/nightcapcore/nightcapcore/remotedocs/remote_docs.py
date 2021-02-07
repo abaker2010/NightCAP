@@ -4,9 +4,10 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 
-from application.classes.helpers.printers.print import Printer
+# from application.classes.helpers.printers.print import Printer
 import os
 from typing import Mapping
+from nightcapcore.printers.print import Printer
 from tinydb import TinyDB
 from tinydb.queries import Query
 

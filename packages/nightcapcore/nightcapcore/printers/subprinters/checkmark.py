@@ -3,7 +3,8 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-from application.classes.helpers.printers.base.printer_base import PrinterBase
+# from application.classes.helpers.printers.base.printer_base import PrinterBase
+from nightcapcore.printers.base.printer_base import PrinterBase
 from colorama import Fore, Back, Style
 
 class CheckMarkPrinter(PrinterBase):
