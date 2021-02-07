@@ -57,7 +57,7 @@ class NightcapCoreProject(object):
 
     def update(self,updatedb: TinyDB):
         self.printer.item_2(text="updating db", optionalText='projects_db.json')
-        self.printer.item_2(text="Checking entries", leadingText='~')
+        self.printer.item_2(text="Checking entries: from update", leadingText='~')
 
         for _proj in updatedb.table("projects").all():
             _there = self.__has_project(_proj['project_name'])

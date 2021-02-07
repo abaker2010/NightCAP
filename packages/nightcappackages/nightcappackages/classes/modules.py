@@ -4,16 +4,16 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 from typing import Mapping
+from nightcapcore.printers.print import Printer
 from nightcappackages.classes.paths.pathsenum import NightcapPackagesPathsEnum
 from nightcappackages.classes.paths.paths import NightcapPackagesPaths
-# from nightcappackages.classes.submodules import NightcapSubModule
-
 from tinydb import TinyDB, Query
 
 class NightcapModules():
     def __init__(self):
         self.db_modules = TinyDB(NightcapPackagesPaths().generate_path(NightcapPackagesPathsEnum.Databases, ['modules.json']))
-    
+        self.printer = Printer()
+        
     def insert(self, obj: Mapping):
         self.db_modules.table("modules").insert(obj)
 
@@ -50,19 +50,27 @@ class NightcapModules():
         return self.db_modules.table("modules").search(Query()["type"] == module)
 
     def update(self,updatedb: TinyDB):
-        print("\t","updating db: projects_db.json")
-        print("\t","updater tables:", updatedb.tables())
-        modules = updatedb.table('modules').all()
-        if(modules == []):
-            print("No Modules to add")
-        else:
-            for module in updatedb.table('modules').all():
-                print(module)
-                if(self.__has_module(module['type']) == []):
-                    self.insert(module)
-                else:
-                    print("Not inserting module")
-        print("\t","user tables:", self.db_modules.tables())
+        self.printer.item_2(text="updating db", optionalText='projects_db.json')
+        self.printer.item_2(text="Checking entries: from update", leadingText='~')
+
+        for _module in updatedb.table("modules").all():
+            self.printer.item_3(text=_module)
+
+        for _module in self.db_modules.table("modules").all():
+            self.printer.item_3(text=_module)
+        # print("\t","updating db: projects_db.json")
+        # print("\t","updater tables:", updatedb.tables())
+        # modules = updatedb.table('modules').all()
+        # if(modules == []):
+        #     print("No Modules to add")
+        # else:
+        #     for module in updatedb.table('modules').all():
+        #         print(module)
+        #         if(self.__has_module(module['type']) == []):
+        #             self.insert(module)
+        #         else:
+        #             print("Not inserting module")
+        # print("\t","user tables:", self.db_modules.tables())
 
         # for module in self.db_modules.table('modules').all():
         #     print(module)

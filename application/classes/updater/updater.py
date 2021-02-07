@@ -162,20 +162,10 @@ class NightcapUpdater:
                 #     if(self.verbose):
                 #         print("Skipping DB:", "Submodules")
                 elif(str(udb).endswith("modules.json")):
-                    self.printer.print_formatted_check("Skipping", leadingTab=3)
-                #     if(self.verbose):
-                #         print("Skipping DB:", "Modules")
-                #         # NightcapModules().update(TinyDB(udb))
-                #         print("*"*20,"\n")
-                # el
+                    # self.printer.print_formatted_check("Skipping", leadingTab=3)
+                    NightcapModules().update(TinyDB(udb))
                 elif(str(udb).endswith("protocol_links.json")):
                     NightcapCoreRemoteDocs().update(TinyDB(udb))
-                # elif(str(udb).endswith("projects.json")):
-                #     self.printer.print_formatted_item("Updating DB", optionaltext='projects.json')
-                #     self.printCheckmark.print_formatted_check("Skipping")
-                #     if(self.verbose):
-                #         print("Skipping DB:", "Projects")
-                #         print("*"*20,"\n")
                 else:
                     raise Exception("Error with file" + str(udb).replace(self.tmpdir, "Tmp -> "))
                     # try:
