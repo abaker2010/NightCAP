@@ -14,7 +14,7 @@ class PrinterBase:
                     optionalTextColor=Fore.LIGHTGREEN_EX, breakTextColor=Fore.LIGHTMAGENTA_EX, styleRest=Style.RESET_ALL):
         _start = ("\v"*vtabs ) + ('\n'*leadingBreaks)
         _leading = ("\t" * leadingTab) + ' ' + leadingColor + leadingText
-        _text = (textColor + text)
+        _text = (textColor + str(text))
         _optional = (breakTextColor + seperator + optionalTextColor +
                      optionalText) if len(optionalText) != 0 else ''
         _end = (styleRest + ('\n'*endingBreaks))

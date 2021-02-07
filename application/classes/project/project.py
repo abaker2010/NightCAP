@@ -111,16 +111,8 @@ class NightcapProjects(NightcapBaseCMD):
     #region Create Project
     def do_create(self,line):
         '''\n\tCreate a project\n\t\tUsage: create [project_name]\n'''
-        _id = []
-        for p in self.projects_db.projects():
-            _id.append(p['project_number'])
         try:
-            if(len(_id) != 0):
-                proj_num = max(_id) + 1
-            else:
-                proj_num = 1
-
-            self.projects_db.create({"project_number" : proj_num, "project_name" : line})
+            self.projects_db.create(line)
         except Exception as e:
             self.console_output.output(e, level=6)
     #endregion

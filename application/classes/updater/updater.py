@@ -145,7 +145,7 @@ class NightcapUpdater:
                 if(self.verbose):
                     self.printer.item_1(text="Updater file", optionalText=str(udb).replace(self.tmpdir, "{tmp}"), leadingBreaks=1)
                 if(str(udb).endswith("projects_db.json")):
-                    self.printer.print_formatted_check("Skipping", leadingTab=3)
+                    # self.printer.print_formatted_check("Skipping", leadingTab=3)
                     NightcapCoreProject().update(TinyDB(udb))
                 #     if(self.verbose):
                 #         print("Skipping DB:", "Projects_DB")

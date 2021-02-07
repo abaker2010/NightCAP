@@ -41,10 +41,28 @@ class NightcapCoreProject(object):
     def create(self,line):
         '''\n\tCreate a project\n\t\tUsage: create [project_name]\n'''
         # proj_num = len(self.projects_db.all()) + 1
-        self.projects_db.insert(line)
+        _id = []
+        for p in self.projects():
+            _id.append(p['project_number'])
+
+        if(len(_id) != 0):
+            proj_num = max(_id) + 1
+        else:
+            proj_num = 1
+        self.projects_db.insert({"project_number" : proj_num, "project_name" : line})
+
+    def __has_project(self, project_name):
+        found = self.projects_db.search(Query()["project_name"] == project_name)
+        return found
 
     def update(self,updatedb: TinyDB):
-    
         self.printer.item_2(text="updating db", optionalText='projects_db.json')
-        self.printer.item_2(text=str(updatedb.table("projects").all()))
-        self.printer.item_2(text=str(self.projects_db.all()))
+        self.printer.item_2(text="Checking entries", leadingText='~')
+
+        for _proj in updatedb.table("projects").all():
+            _there = self.__has_project(_proj['project_name'])
+            if(_there == []):
+                self.printer.print_formatted_additional(text="Adding: " + _proj['project_name'], leadingTab=4)
+                self.create(_proj['project_name'])
+            else:
+                self.printer.print_formatted_check(text=_proj['project_name'], leadingTab=4)
