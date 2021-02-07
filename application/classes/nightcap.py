@@ -23,17 +23,46 @@ class Nightcap(NightcapDynamicOptions):
 
     def do_update(self, line):
         '''\nUpdate the project. Usage: update [main|dev]. If no option is specified the default will be used.\n'''
-        print("Updating system")
+        sline = str(line).lstrip().split(' ')
+        print("Line: ", str(line).split(" "))
         try:
-            if not line:
-                NightcapUpdater.instance().update(True)
-            else:
-                if str(line).lower() == "main":
+            if(len(sline) == 1):
+                print("No Verbose")
+                if(sline[0] == ''):
+                    print("using default / no verbose")
                     NightcapUpdater.instance().update(True)
-                elif str(line).lower() == "dev":
+                elif(sline[0] == 'dev'):
+                    print("using dev / no verbose")
                     NightcapUpdater.instance().update(False)
-            
+                elif(sline[0] == 'main'):
+                    print("Using main / no verbose")
+                    NightcapUpdater.instance().update(True)
+                else:
+                    print("Not an option")
+            elif(len(sline) == 2):
+                print("Verbose")
+                if(sline[0] == 'dev'):
+                    print("using dev / verbose")
+                    NightcapUpdater.instance().update(False, True)
+                elif(sline[0] == 'main'):
+                    print("Using main / verbose")
+                    NightcapUpdater.instance().update(True, True)
+                else:
+                    print("Error with verbose")
+            else:
+                print("To many arguments")
         except Exception as e:
-            print(e)
+            print("Exception:",e)
+        # try:
+        #     if not line:
+        #         NightcapUpdater.instance().update(True)
+        #     else:
+        #         if str(line).lower() == "main":
+        #             NightcapUpdater.instance().update(True)
+        #         elif str(line).lower() == "dev":
+        #             NightcapUpdater.instance().update(False)
+            
+        # except Exception as e:
+        #     print(e)
 
 #endregion

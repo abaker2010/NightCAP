@@ -3,8 +3,14 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
+# from application.classes.helpers.printers.subprinters.errors import ErrorPrinter
+from application.classes.helpers.printers.print import Printer
 from colorama import Fore, Style
+from nightcapcore.projects.projects import NightcapCoreProject
+from nightcapcore.remotedocs.remote_docs import NightcapCoreRemoteDocs
+from nightcappackages.classes.packages import NightcapPackages
 import requests
+from tinydb.database import TinyDB
 from tqdm.auto import tqdm
 from zipfile import ZipFile
 import os
@@ -13,10 +19,11 @@ import tempfile
 import re
 import shutil
 from nightcapcore.decorators.singleton import Singleton 
+from nightcappackages import *
 
 @Singleton
 class NightcapUpdater:
-    
+    #region Init
     def __init__(self):
         print("Calling update for system")
         print("Updater Instance Created")
@@ -25,53 +32,78 @@ class NightcapUpdater:
         self.updateFile = "update.zip"
         self.tmpUpdatePaths = []
         self.excludedPaths = []
+        self.dbPaths = []
         self._excludeExt = (".json", ".pcapng", "LICENSE", ".md")
+        self._dbExt = (".json")
+        self._dbExclude = "EXAMPLE_MODULE"
         self.updateCalled = False
         self.isMainBranch = None
         self.tmpUpdateLocation = None
         self.installLocation = os.path.dirname(__file__).split('/application')[0]
+        self.printer = Printer()
+        self.verbose = False
+    #endregion
 
     #region Main Updater Function: does all of the heavy lifting
-    def update(self, main: bool):
+    def update(self, main: bool, verbose: bool = False):
         self.updateCalled = True
         self.isMainBranch = main
+        self.verbose = verbose
         try:
+            self.printer.print_underlined_header(text="Updating NightCAP", underline="*", endingBreaks=1, leadingText='')
+            if(self.verbose == False):
+                print(Fore.LIGHTGREEN_EX, "\t[-] Please wait...")
             self.__create_tmp()
             self.__get_update() # working just commented out for now
             self.__unpackupdate() # working just commented out for now 
-            self.__move_data()
-            self.__change_permission()
+            self.__prepare_data()
+            # self.__move_data()
+            # self.__change_permission()
             self.__combine_db_files()
             self.__remove_tmp()
         except KeyboardInterrupt as e:
             print("User terminated")
             self.__remove_tmp()
             self.updateCalled = False
+        except Exception as ee:
+            print("Error:", ee)
+            self.__remove_tmp()
     #endregion
 
     #region Tmp dir functions
     def __create_tmp(self):
         self.tmpdir = tempfile.mkdtemp()
-        print("Creating tmp dir: ", self.tmpdir)
+        if(self.verbose):
+            self.printer.print_underlined_header(text="Preparing")
+            self.printer.item_1(text="Creating tmp dir " + self.tmpdir)
+            
+        
 
     def __remove_tmp(self):
-        print("Removing tmp dir")
+        self.printer.print_underlined_header(text="Clean Up")
+        if(self.verbose):
+            self.printer.print_header(text="Removing tmp dir")
         shutil.rmtree(self.tmpdir)
+        self.tmpUpdatePaths = []
+        self.tmpUpdateLocation = None
     #endregion
 
     #region Get update from Github
     def __get_update(self):
+        if(self.verbose):
+            self.printer.item_1(text="Downloading Update")
+            self.printer.print_header(text="Progress",leadingText='[+]', endingBreaks=1)
         if self.isMainBranch:
-            print("Using main branch")
             resp = requests.get("https://github.com/abaker2010/NightCAP/archive/main.zip", stream=True)
             self.tmpUpdateLocation = os.path.join(self.tmpdir, "NightCAP-main")
         else:
-            print("Using dev branch")
             resp = requests.get("https://github.com/abaker2010/NightCAP/archive/Dev.zip", stream=True)
             self.tmpUpdateLocation = os.path.join(self.tmpdir, "NightCAP-dev")
         total = int(resp.headers.get('content-length', 0))
+
+        description = Fore.LIGHTMAGENTA_EX + "[-] Using main branch: update.zip" if self.isMainBranch else Fore.LIGHTMAGENTA_EX + "[-] Using dev branch"
         with open(os.path.join(self.tmpdir,self.updateFile), 'wb') as file, tqdm(
-            desc="update.zip",
+            desc=description,
             total=total,
             unit='iB',
             unit_scale=True,
@@ -85,10 +117,13 @@ class NightcapUpdater:
     #region Unpacking Github update 
     def __unpackupdate(self):
         with ZipFile(os.path.join(self.tmpdir,self.updateFile), 'r') as zip: 
-            print('Extracting all the files now...') 
+            if(self.verbose):
+                self.printer.print_underlined_header(text="Extracting Files", leadingBreaks=2)
             zip.extractall(self.tmpdir) 
-            print(self.tmpdir)
-        print('Done!')
+            self.printer.item_1(text="tmp -> " + self.tmpdir)
+        if(self.verbose):
+            self.printer.item_1(text="Done extracting")
+        
     #endregion
     
     #region Change Permissions 
@@ -96,26 +131,89 @@ class NightcapUpdater:
         os.chmod(os.path.join(self.installLocation, "nightcap.py"), 0o755)
     #endregion 
 
-    #region Moving/Combining Files 
+    #region Combining Files 
     def __combine_db_files(self):
-        print("Trying to combine the db files")
+        self.printer.print_underlined_header(text="Trying to combine the db files")
 
-    def __move_data(self):
-        print("Listing of files in tmp dir")
-        print(self.tmpUpdateLocation)
-        print(self.installLocation)
+        # the best way to do this would be to make the db's allow for a new file to be passed to it and 
+        # make it do the heavy lifting 
+        # could do a custom Object += Object for the db's
+
+        for udb in self.dbPaths:
+            try:
+                if(self.verbose):
+                    self.printer.item_1(text="Updater file", optionalText=str(udb).replace(self.tmpdir, "{tmp}"))
+                if(str(udb).endswith("projects_db.json")):
+                    self.printer.print_formatted_check("Skipping", leadingTab=3)
+                #     # NightcapCoreProject().update(TinyDB(udb))
+                #     if(self.verbose):
+                #         print("Skipping DB:", "Projects_DB")
+                #         print("*"*20,"\n")
+                elif(str(udb).endswith("packages.json")):
+                    self.printer.print_formatted_check("Skipping", leadingTab=3)
+                #     # NightcapPackages().update(TinyDB(udb))
+                #     if(self.verbose):
+                #         print("Skipping DB:", "Packages")
+                #         print("*"*20,"\n")
+                elif(str(udb).endswith("submodules.json")):
+                    self.printer.print_formatted_check("Skipping", leadingTab=3)
+                #     # print("Updater needed")
+                #     if(self.verbose):
+                #         print("Skipping DB:", "Submodules")
+                elif(str(udb).endswith("modules.json")):
+                    self.printer.print_formatted_check("Skipping", leadingTab=3)
+                #     if(self.verbose):
+                #         print("Skipping DB:", "Modules")
+                #         # NightcapModules().update(TinyDB(udb))
+                #         print("*"*20,"\n")
+                # el
+                elif(str(udb).endswith("protocol_links.json")):
+                    NightcapCoreRemoteDocs().update(TinyDB(udb))
+                # elif(str(udb).endswith("projects.json")):
+                #     self.printer.print_formatted_item("Updating DB", optionaltext='projects.json')
+                #     self.printCheckmark.print_formatted_check("Skipping")
+                #     if(self.verbose):
+                #         print("Skipping DB:", "Projects")
+                #         print("*"*20,"\n")
+                else:
+                    raise Exception("Error with file" + str(udb).replace(self.tmpdir, "Tmp -> "))
+                    # try:
+                    #     raise  ValueError('A very specific bad thing happened.')
+                    # except Exception as e:
+                    #     self.errorPrinter.print_error(exception=e, msgColor=Fore.MAGENTA)
+                        # self.errorPrinter.print_error(exception=e)
+                    # self.errorPrinter.print_error("Error with file:", optionaltext=str(udb).replace(self.tmpdir, "Tmp -> "))
+            except Exception as e:
+                self.printer.print_error(exception=e, errColor=Fore.LIGHTRED_EX)
+    #endregion
+
+    #region prepare data Files 
+    def __prepare_data(self):
         for path, subdirs, files in os.walk(self.tmpUpdateLocation):
             for name in files:
-                print(os.path.join(path, name)) 
-                if str(name).endswith(self._excludeExt):
-                   self.excludedPaths.append(os.path.join(path, name))
+                full_path = os.path.join(path, name)
+                if str(name).endswith(self._dbExt):
+                    if self._dbExclude not in str(full_path):
+                        self.dbPaths.append(full_path)
+                elif str(name).endswith(self._excludeExt):
+                   self.excludedPaths.append(full_path)
+                # elif str(name).endswith(self._dbExt):
+                #     self.dbPaths.append(os.path.join(path, name))
                 else:
-                    self.tmpUpdatePaths.append(os.path.join(path, name))
-                    
+                    self.tmpUpdatePaths.append(full_path)
+    #endregion
+
+    #region move data
+    def __move_data(self):
+        print("Moving data")
+        print(self.tmpUpdateLocation)
+        print(self.installLocation)  
         newPath = lambda s: re.sub(self.tmpUpdateLocation, self.installLocation, s)
         for tpath in self.tmpUpdatePaths:
             self.__move_file(tpath, newPath(tpath))
+    #endregion
 
+    #region move Files 
     def __move_file(self, tmpPath: str, installPath: str):
         print("Moving file from", tmpPath, "->", installPath)
         os.replace(tmpPath, installPath)

@@ -109,4 +109,37 @@ class NightcapPackages():
 
     #endregion
 
+
+    def update(self,updatedb: TinyDB):
+        print("\t","updating db")
+        print("\t","updater tables:", updatedb.tables())
+        print("\t","user tables:", self.db_packages.tables())
+
         
+# DB file to be used for update:  <nightcappackages.classes.packages.NightcapPackages object at 0x7fe63624c9a0>
+# DB file to be used to add global:  /var/folders/xk/95x183fd35bdp7069kx3wkx40000gn/T/tmp6_aib3q3/NightCAP-dev/EXAMPLE_MODULE/test_module/package_info.json
+# /var/folders/xk/95x183fd35bdp7069kx3wkx40000gn/T/tmp6_aib3q3/NightCAP-dev/packages/nightcapcore/nightcapcore/database/projects_db.json updater file
+# adding
+# DB file to be used for update:  <nightcappackages.classes.packages.NightcapPackages object at 0x7fe63626f280>
+# DB file to be used to add global:  /var/folders/xk/95x183fd35bdp7069kx3wkx40000gn/T/tmp6_aib3q3/NightCAP-dev/packages/nightcapcore/nightcapcore/database/projects_db.json
+# /var/folders/xk/95x183fd35bdp7069kx3wkx40000gn/T/tmp6_aib3q3/NightCAP-dev/packages/nightcapcore/nightcapcore/database/protocol_links.json updater file
+# adding
+# DB file to be used for update:  <nightcappackages.classes.packages.NightcapPackages object at 0x7fe63624c9a0>
+# DB file to be used to add global:  /var/folders/xk/95x183fd35bdp7069kx3wkx40000gn/T/tmp6_aib3q3/NightCAP-dev/packages/nightcapcore/nightcapcore/database/protocol_links.json
+# /var/folders/xk/95x183fd35bdp7069kx3wkx40000gn/T/tmp6_aib3q3/NightCAP-dev/packages/nightcappackages/nightcappackages/classes/databases/submodules.json updater file
+# adding
+# DB file to be used for update:  <nightcappackages.classes.packages.NightcapPackages object at 0x7fe63626f280>
+# DB file to be used to add global:  /var/folders/xk/95x183fd35bdp7069kx3wkx40000gn/T/tmp6_aib3q3/NightCAP-dev/packages/nightcappackages/nightcappackages/classes/databases/submodules.json
+# /var/folders/xk/95x183fd35bdp7069kx3wkx40000gn/T/tmp6_aib3q3/NightCAP-dev/packages/nightcappackages/nightcappackages/classes/databases/packages.json updater file
+# adding
+# DB file to be used for update:  <nightcappackages.classes.packages.NightcapPackages object at 0x7fe63624c9a0>
+# DB file to be used to add global:  /var/folders/xk/95x183fd35bdp7069kx3wkx40000gn/T/tmp6_aib3q3/NightCAP-dev/packages/nightcappackages/nightcappackages/classes/databases/packages.json
+# /var/folders/xk/95x183fd35bdp7069kx3wkx40000gn/T/tmp6_aib3q3/NightCAP-dev/packages/nightcappackages/nightcappackages/classes/databases/modules.json updater file
+# adding
+# DB file to be used for update:  <nightcappackages.classes.packages.NightcapPackages object at 0x7fe63626f280>
+# DB file to be used to add global:  /var/folders/xk/95x183fd35bdp7069kx3wkx40000gn/T/tmp6_aib3q3/NightCAP-dev/packages/nightcappackages/nightcappackages/classes/databases/modules.json
+# /var/folders/xk/95x183fd35bdp7069kx3wkx40000gn/T/tmp6_aib3q3/NightCAP-dev/application/classes/database/projects.json updater file
+# adding
+# DB file to be used for update:  <nightcappackages.classes.packages.NightcapPackages object at 0x7fe63624c9a0>
+# DB file to be used to add global:  /var/folders/xk/95x183fd35bdp7069kx3wkx40000gn/T/tmp6_aib3q3/NightCAP-dev/application/classes/database/projects.json
+# Removing tmp dir

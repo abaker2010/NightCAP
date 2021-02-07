@@ -45,5 +45,27 @@ class NightcapModules():
     def module_try_unintall(self, module: str):
         _moduleexists = self.db_modules.table('modules').search((Query()['type'] == module))
         self.db_modules.table('modules').remove(doc_ids=[_moduleexists[0].doc_id])
+        
+    def __has_module(self, module: str):
+        return self.db_modules.table("modules").search(Query()["type"] == module)
+
+    def update(self,updatedb: TinyDB):
+        print("\t","updating db: projects_db.json")
+        print("\t","updater tables:", updatedb.tables())
+        modules = updatedb.table('modules').all()
+        if(modules == []):
+            print("No Modules to add")
+        else:
+            for module in updatedb.table('modules').all():
+                print(module)
+                if(self.__has_module(module['type']) == []):
+                    self.insert(module)
+                else:
+                    print("Not inserting module")
+        print("\t","user tables:", self.db_modules.tables())
+
+        # for module in self.db_modules.table('modules').all():
+        #     print(module)
+        #     print(self.__has_module(module['type']))
     
     

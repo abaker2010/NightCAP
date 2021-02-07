@@ -3,6 +3,7 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
+from tinydb.database import TinyDB
 from application.classes.configuration.configuration import Configuration
 from nightcapcore import NightcapCoreBase, NightcapPaths, NightcapPathsEnum, NightcapCoreConsoleOutput, NightcapCoreProject
 from application.classes.base_cmd.base_cmd import NightcapBaseCMD
@@ -123,3 +124,9 @@ class NightcapProjects(NightcapBaseCMD):
         except Exception as e:
             self.console_output.output(e, level=6)
     #endregion
+
+    def update(self,updatedb: TinyDB):
+        print("\t","updating db: projects_db.json")
+        print("\t","updater tables:", updatedb.tables())
+        # print("\t","user tables:", self.projects_db.table())
+        self.projects_db.update(updatedb)

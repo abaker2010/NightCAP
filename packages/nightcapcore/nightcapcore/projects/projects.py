@@ -40,3 +40,8 @@ class NightcapCoreProject(object):
         '''\n\tCreate a project\n\t\tUsage: create [project_name]\n'''
         # proj_num = len(self.projects_db.all()) + 1
         self.projects_db.insert(line)
+
+    def update(self,updatedb: TinyDB):
+        print("\t","updating db: projects_db.json")
+        print("\t","updater tables:", updatedb.tables())
+        print("\t","user tables:", self.projects_db.all())
