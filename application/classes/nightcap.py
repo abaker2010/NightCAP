@@ -30,25 +30,28 @@ class Nightcap(NightcapDynamicOptions):
                 print("No Verbose")
                 if(sline[0] == ''):
                     print("using default / no verbose")
-                    NightcapUpdater.instance().update(True)
+                    NightcapUpdater().update(True)
                 elif(sline[0] == 'dev'):
                     print("using dev / no verbose")
-                    NightcapUpdater.instance().update(False)
+                    NightcapUpdater().update(False)
                 elif(sline[0] == 'main'):
                     print("Using main / no verbose")
-                    NightcapUpdater.instance().update(True)
+                    NightcapUpdater().update(True)
                 else:
                     print("Not an option")
             elif(len(sline) == 2):
                 print("Verbose")
-                if(sline[0] == 'dev'):
-                    print("using dev / verbose")
-                    NightcapUpdater.instance().update(False, True)
-                elif(sline[0] == 'main'):
-                    print("Using main / verbose")
-                    NightcapUpdater.instance().update(True, True)
+                if sline[1] == '-v':
+                    if(sline[0] == 'dev'):
+                        print("using dev / verbose")
+                        NightcapUpdater().update(False, True)
+                    elif(sline[0] == 'main'):
+                        print("Using main / verbose")
+                        NightcapUpdater().update(True, True)
+                    else:
+                        print("Error with verbose")
                 else:
-                    print("Error with verbose")
+                    print("Error with verbose option")
             else:
                 print("To many arguments")
         except Exception as e:

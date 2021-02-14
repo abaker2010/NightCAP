@@ -61,10 +61,10 @@ if __name__ == '__main__':
     except Exception as e:
         print(e)
     finally:  
-        NighcapCoreSimpleServer.instance().shutdown()   
-        if(NightcapUpdater.instance().updateCalled):
-            print("Changes need to be made:", "Updater called")
-            print("Files that need modified")
-            NightcapUpdater.instance().onCloseModifications()
+        # NighcapCoreSimpleServer.instance().shutdown()   
+        # if(NightcapUpdater.instance().updateCalled):
+        #     print("Changes need to be made:", "Updater called")
+        #     print("Files that need modified")
+        #     NightcapUpdater.instance().onCloseModifications()
         exit()
 #endregion

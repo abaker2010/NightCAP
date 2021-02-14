@@ -3,13 +3,16 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
+from nightcapcore.updater.updater_base import NightcapCoreUpdaterBase
+from nightcapcore.updater.updater_rules import NightcapCoreUpaterRules
 from tinydb import TinyDB, Query
 from colorama import Fore, Style
 from nightcapcore import *
 from .paths import NightcapPackagesPathsEnum, NightcapPackagesPaths
 
-class NightcapPackages(): 
+class NightcapPackages(NightcapCoreUpdaterBase): 
     def __init__(self):
+        super().__init__()
         self.__package_paths = NightcapPackagesPaths()
         self.db_packages = TinyDB(NightcapPackagesPaths().generate_path(NightcapPackagesPathsEnum.Databases, ['packages.json']))
         self.output = NightcapCoreConsoleOutput()
@@ -111,9 +114,7 @@ class NightcapPackages():
 
 
     def update(self,updatedb: TinyDB):
-        print("\t","updating db")
-        print("\t","updater tables:", updatedb.tables())
-        print("\t","user tables:", self.db_packages.tables())
+        super().update(updatetable=updatedb.table('packages'),localtable=self.db_packages.table('packages'),checkonrow='package_information',checkonrowtwo='uid', updaterrule=NightcapCoreUpaterRules.Package)
 
         
 # DB file to be used for update:  <nightcappackages.classes.packages.NightcapPackages object at 0x7fe63624c9a0>

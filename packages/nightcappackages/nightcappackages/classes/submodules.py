@@ -3,15 +3,20 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
+from nightcapcore.printers.print import Printer
+from nightcapcore.updater.updater_base import NightcapCoreUpdaterBase
+from nightcapcore.updater.updater_rules import NightcapCoreUpaterRules
 from tinydb import TinyDB
 from tinydb.queries import Query
 from nightcappackages.classes.paths.pathsenum import NightcapPackagesPathsEnum
 from nightcappackages.classes.paths.paths import NightcapPackagesPaths
  
-class NightcapSubModule():
+class NightcapSubModule(NightcapCoreUpdaterBase):
     def __init__(self):
+        super().__init__()
         self.db_submodules = TinyDB(NightcapPackagesPaths().generate_path(NightcapPackagesPathsEnum.Databases, ['submodules.json']))
-
+        self.printer = Printer()
+        
     def submodules(self):
         packags = list(map(lambda v : v['type'], self.db_submodules.table('submodules').all()))
         return packags
@@ -41,5 +46,7 @@ class NightcapSubModule():
         )
         self.db_submodules.table('submodules').remove(doc_ids=[_submoduleexists[0].doc_id])
 
-
-        
+    def update(self, updatedb: TinyDB):
+        super().update(updatetable=updatedb.table("submodules"),localtable=self.db_submodules.table("submodules"),checkonrow='module', checkonrowtwo='type', updaterrule=NightcapCoreUpaterRules.Submodule)
+        # self.printer.item_2(text="updating db", optionalText='submodules.json')
+        # self.printer.item_2(text="Checking entries: from update", leadingText='~')

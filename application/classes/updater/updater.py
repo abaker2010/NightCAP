@@ -19,10 +19,10 @@ import stat
 import tempfile
 import re
 import shutil
-from nightcapcore.decorators.singleton import Singleton 
+# from nightcapcore.decorators.singleton import Singleton 
 from nightcappackages import *
 
-@Singleton
+# @Singleton
 class NightcapUpdater:
     #region Init
     def __init__(self):
@@ -45,6 +45,9 @@ class NightcapUpdater:
         self.verbose = False
     #endregion
 
+    def __del__(self):
+        self.printer.print_formatted_check(text="Updater dest called")
+
     #region Main Updater Function: does all of the heavy lifting
     def update(self, main: bool, verbose: bool = False):
         self.updateCalled = True
@@ -61,7 +64,7 @@ class NightcapUpdater:
             # self.__move_data()
             # self.__change_permission()
             self.__combine_db_files()
-            # self.__remove_tmp()
+            self.__remove_tmp()
         except KeyboardInterrupt as e:
             print("User terminated")
             # self.__remove_tmp()
@@ -145,19 +148,20 @@ class NightcapUpdater:
                 if(self.verbose):
                     self.printer.item_1(text="Updater file", optionalText=str(udb).replace(self.tmpdir, "{tmp}"), leadingBreaks=1)
                 if(str(udb).endswith("projects_db.json")):
-                    # self.printer.print_formatted_check("Skipping", leadingTab=3)
-                    NightcapCoreProject().update(TinyDB(udb))
+                    self.printer.print_formatted_check("Skipping", leadingTab=3)
+                    # NightcapCoreProject().update(TinyDB(udb))
                 #     if(self.verbose):
                 #         print("Skipping DB:", "Projects_DB")
                 #         print("*"*20,"\n")
                 elif(str(udb).endswith("packages.json")):
-                    self.printer.print_formatted_check("Skipping", leadingTab=3)
-                #     # NightcapPackages().update(TinyDB(udb))
+                    # self.printer.print_formatted_check("Skipping", leadingTab=3)
+                    NightcapPackages().update(TinyDB(udb))
                 #     if(self.verbose):
                 #         print("Skipping DB:", "Packages")
                 #         print("*"*20,"\n")
                 elif(str(udb).endswith("submodules.json")):
-                    self.printer.print_formatted_check("Skipping", leadingTab=3)
+                    # self.printer.print_formatted_check("Skipping", leadingTab=3)
+                    NightcapSubModule().update(TinyDB(udb))
                 #     # print("Updater needed")
                 #     if(self.verbose):
                 #         print("Skipping DB:", "Submodules")

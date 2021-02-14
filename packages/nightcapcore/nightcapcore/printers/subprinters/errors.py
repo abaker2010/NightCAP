@@ -11,5 +11,5 @@ class ErrorPrinter(PrinterBase):
     def __init__(self):
         None
 
-    def print_error(self, exception: Exception, errColor = Fore.RED, msgColor = Fore.RED, leadingtab=3):
-        self.base_print(leadingText="[!]", text=str(exception), leadingColor=errColor, textColor=msgColor, leadingTab=leadingtab)
+    def print_error(self, exception: Exception, errColor = Fore.RED, msgColor = Fore.RED, leadingtab=3, optionalText: str = ''):
+        self.base_print(leadingText="[!]", text=optionalText + str(exception), leadingColor=errColor, textColor=msgColor, leadingTab=leadingtab)

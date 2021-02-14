@@ -5,12 +5,15 @@
 # file that should have been included as part of this package.
 from typing import Mapping
 from nightcapcore.printers.print import Printer
+from nightcapcore.updater.updater_base import NightcapCoreUpdaterBase
+from nightcapcore.updater.updater_rules import NightcapCoreUpaterRules
 from nightcappackages.classes.paths.pathsenum import NightcapPackagesPathsEnum
 from nightcappackages.classes.paths.paths import NightcapPackagesPaths
 from tinydb import TinyDB, Query
 
-class NightcapModules():
-    def __init__(self):
+class NightcapModules(NightcapCoreUpdaterBase):
+    def __init__(self) -> None:
+        super().__init__()
         self.db_modules = TinyDB(NightcapPackagesPaths().generate_path(NightcapPackagesPathsEnum.Databases, ['modules.json']))
         self.printer = Printer()
         
@@ -46,34 +49,8 @@ class NightcapModules():
         _moduleexists = self.db_modules.table('modules').search((Query()['type'] == module))
         self.db_modules.table('modules').remove(doc_ids=[_moduleexists[0].doc_id])
         
-    def __has_module(self, module: str):
-        return self.db_modules.table("modules").search(Query()["type"] == module)
-
-    def update(self,updatedb: TinyDB):
-        self.printer.item_2(text="updating db", optionalText='projects_db.json')
-        self.printer.item_2(text="Checking entries: from update", leadingText='~')
-
-        for _module in updatedb.table("modules").all():
-            self.printer.item_3(text=_module)
-
-        for _module in self.db_modules.table("modules").all():
-            self.printer.item_3(text=_module)
-        # print("\t","updating db: projects_db.json")
-        # print("\t","updater tables:", updatedb.tables())
-        # modules = updatedb.table('modules').all()
-        # if(modules == []):
-        #     print("No Modules to add")
-        # else:
-        #     for module in updatedb.table('modules').all():
-        #         print(module)
-        #         if(self.__has_module(module['type']) == []):
-        #             self.insert(module)
-        #         else:
-        #             print("Not inserting module")
-        # print("\t","user tables:", self.db_modules.tables())
-
-        # for module in self.db_modules.table('modules').all():
-        #     print(module)
-        #     print(self.__has_module(module['type']))
+    def update(self, updatedb: TinyDB):
+        super().update(updatetable=updatedb.table('modules'),localtable=self.db_modules.table('modules'),checkonrow='type', updaterrule=NightcapCoreUpaterRules.Module)
+    
     
     
