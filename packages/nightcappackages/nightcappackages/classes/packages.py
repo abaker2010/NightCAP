@@ -40,6 +40,12 @@ class NightcapPackages(NightcapCoreUpdaterBase):
             print("\n\n")
     #endregion
 
+    def check_package_path(self, path: list):
+        return self.db_packages.table('packages').search(
+            (Query()['package_for']['module'] == path[0])
+            & (Query()['package_for']['submodule'] == path[1])
+            & (Query()['package_information']['package_name'] == path[2]))   
+
     #region Get Packages
     def packages(self,parentmodules: list,isDetailed: bool = False):
         npackages = self.db_packages.table('packages').search(

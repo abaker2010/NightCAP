@@ -16,28 +16,24 @@ class NightcapCLIOptionsValidator():
         self.newSelectedList = []
         self.isvalid = self._validate(options, selectedList)
         
-    def _check_module_types(self, line):
-        # print("Trying to find", line)
-        if(line in self.modules_db.module_types()):
-            ScreenHelper().clearScr()
-            return True
-        else:
-            return False
+    def _check_module_types(self, path: list):
+        return False if self.modules_db.check_module_path(path) == [] else True
 
-    def _check_sub_module(self, line):
-        if(line in self.submodules_db.submodules()):
-            ScreenHelper().clearScr()
-            return True
-        else:
-            return False
+    def _check_sub_module(self, path: list):
+        return False if self.submodules_db.check_submodule_path(path) == [] else True
 
-    def _check_packages(self, line, selected):
-        print(self.packages_db.packages(selected))
-        if(line in self.packages_db.packages(selected)):
-            ScreenHelper().clearScr()
-            return True
-        else:
-            return False
+    def _check_packages(self, selected):
+        return False if self.packages_db.check_package_path(selected) == [] else True
+
+    def _check_current_path(self, path: list):
+        if(len(path) == 1):
+            return self._check_module_types(path)
+        elif(len(path) == 2):
+            print(self._check_sub_module(path))
+            return self._check_module_types(path) & self._check_sub_module(path)
+        elif(len(path) == 3):
+            return self._check_module_types(path) & self._check_sub_module(path) & self._check_packages(path)
+        return False
 
     def _validate(self, line: str, selected: list):
 
@@ -72,17 +68,17 @@ class NightcapCLIOptionsValidator():
             print("*" * 10, end="\n\n")
             
             print("Has empty", _hasEmpty)
+
+            _validCommand  = False
+            _tmpNewList = []
+
             if len(_cleanedItems) == 3:
                 print("3 sections")
                 if _splitCount == 2:
                     print("Valid command")
                     if(len(_cleanedItems) <= 3):
-                        self.newSelectedList = _cleanedItems
-                        return True
-                    else:
-                        return False
-                else:
-                    return False
+                        _tmpNewList = _cleanedItems
+                        _validCommand = True
             elif len(_cleanedItems) == 2:
                 print("2 sections")
                 if _splitCount == 2:
@@ -90,65 +86,56 @@ class NightcapCLIOptionsValidator():
                     print("Split count 2")
                     if(_emptyFront):
                         if(len(_combined) <=3):
-                            self.newSelectedList =  _combined
-                            return True
-                        else:
-                            print("To long")
-                            return False
+                            _tmpNewList =  _combined
+                            _validCommand = True
                     else:
                         print("Not empty front needs done")
                         if(len(_cleanedItems) <= 3):
-                            self.newSelectedList = _cleanedItems
-                            return True
-                        else:
-                            return False
+                            _tmpNewList = _cleanedItems
+                            _validCommand =  True
                 elif _splitCount == 1:
                     print("valid command")
                     print("Split count 1")
                     if(_emptyFront):
                         if(len(_combined) <=3):
-                            self.newSelectedList =  _combined
-                            return True
-                        else:
-                            print("To long")
-                            return False
+                            _tmpNewList =  _combined
+                            _validCommand =  True
                     else:
                         print("Not empty front needs done")
                         if(len(_cleanedItems) <= 3):
-                            self.newSelectedList = _cleanedItems
-                            return True
-                        else:
-                            return False
-                else:
-                    print("Split count 0")
-                    return False
+                            _tmpNewList = _cleanedItems
+                            _validCommand =  True
             elif len(_cleanedItems) == 1:
                 print("1 section")
                 if _splitCount == 1:
                     print("valid command")
                     if(_hasEmpty):
                         if(_emptyBack):
-                            self.newSelectedList = _cleanedItems
-                            return True
+                            _tmpNewList = _cleanedItems
+                            _validCommand =  True
                         elif(_emptyFront):
                             if(len(_combined) <= 3):
-                                self.newSelectedList = _combined
-                                return True
-                            else:
-                                return False
+                                _tmpNewList = _combined
+                                _validCommand =  True
                 elif _splitCount == 0:
                     print("valid command")
                     if(len(_combined) <= 3):
-                        self.newSelectedList = _combined
-                        return True
-                    else:
-                        print("To many selected")
-                        return False
+                        _tmpNewList = _combined
+                        _validCommand =  True
+            else:
+                return False
+
+            print("Valid command 1", _validCommand)
+            print("Tmp list to check", _tmpNewList)
+            if(_validCommand):
+                if(self._check_current_path(_tmpNewList)):
+                    self.newSelectedList = _tmpNewList
+                    return True
                 else:
+                    print("Error with path")
                     return False
             else:
                 return False
-            return False
         except Exception as e:
             print("Error eith options validation", e)
             return False

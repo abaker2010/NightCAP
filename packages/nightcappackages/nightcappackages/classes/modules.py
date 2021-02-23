@@ -27,6 +27,11 @@ class NightcapModules(NightcapCoreUpdaterBase):
         types = list(map(lambda v : v['type'], self.db_modules.table('modules').all()))
         return types 
 
+    def check_module_path(self, path: list):
+        return self.db_modules.table("modules").search(
+            (Query()['type'] == path[0])
+        )
+
     def get_all_modules(self):
         return self.db_modules.table("modules").all()
 

@@ -21,6 +21,12 @@ class NightcapSubModule(NightcapCoreUpdaterBase):
         packags = list(map(lambda v : v['type'], self.db_submodules.table('submodules').all()))
         return packags
 
+    def check_submodule_path(self, path: list):
+        sub = list(map(lambda v : v, self.db_submodules.table('submodules').search(
+            (Query()['module'] == path[0]) & (Query()['type'] == path[1])
+        )))
+        return sub
+
     def find_submodules(self, module: str):
         subs = list(map(lambda v : v, self.db_submodules.table('submodules').search(
             Query()['module'] == module
