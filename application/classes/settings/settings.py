@@ -9,19 +9,12 @@ from application.classes.helpers.screen.screen_helper import ScreenHelper
 from application.classes.settings.install_package.install import NightcapInstallPackage
 from application.classes.settings.remove_package.remove import NightcapRemovePackage
 from application.classes.settings.dev_options.dev_options import NightcapDevOptions
+from application.classes.updater.updater import  NightcapUpdater
 from colorama import Fore, Style
 
 class NightcapSettings(NightcapBaseCMD):
     def __init__(self):
         NightcapBaseCMD.__init__(self,["settings"], None)
-
-    def do_exit(self,line):
-        ScreenHelper().clearScr()
-        try:
-            self.selectedList.remove(self.selectedList[-1])
-        except Exception as e:
-            pass
-        return True
 
     #region 
     def do_devoptions(self, line):
@@ -59,5 +52,43 @@ class NightcapSettings(NightcapBaseCMD):
          %s %s
         ''' % ((Fore.GREEN + h1),(Fore.YELLOW + h2 + Style.RESET_ALL))
         print(h)
+    #endregion
+
+    #region Update
+    def do_update(self, line):
+        '''\nUpdate the project. Usage: update [main|dev]. If no option is specified the default will be used.\n'''
+        sline = str(line).lstrip().split(' ')
+        print("Line: ", str(line).split(" "))
+        try:
+            if(len(sline) == 1):
+                print("No Verbose")
+                if(sline[0] == ''):
+                    print("using default / no verbose")
+                    NightcapUpdater().update(True)
+                elif(sline[0] == 'dev'):
+                    print("using dev / no verbose")
+                    NightcapUpdater().update(False)
+                elif(sline[0] == 'main'):
+                    print("Using main / no verbose")
+                    NightcapUpdater().update(True)
+                else:
+                    print("Not an option")
+            elif(len(sline) == 2):
+                print("Verbose")
+                if sline[1] == '-v':
+                    if(sline[0] == 'dev'):
+                        print("using dev / verbose")
+                        NightcapUpdater().update(False, True)
+                    elif(sline[0] == 'main'):
+                        print("Using main / verbose")
+                        NightcapUpdater().update(True, True)
+                    else:
+                        print("Error with verbose")
+                else:
+                    print("Error with verbose option")
+            else:
+                print("To many arguments")
+        except Exception as e:
+            print("Exception:",e)
     #endregion
         

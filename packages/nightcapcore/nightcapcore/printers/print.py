@@ -15,4 +15,4 @@ from colorama import Fore, Back, Style
 
 class Printer(CheckMarkPrinter, ErrorPrinter, HeaderPrinter, ItemPrinter):
     def __init__(self):
-        super().__init__()
+        super(Printer, self).__init__()

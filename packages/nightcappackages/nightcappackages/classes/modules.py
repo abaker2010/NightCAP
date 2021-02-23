@@ -13,7 +13,7 @@ from tinydb import TinyDB, Query
 
 class NightcapModules(NightcapCoreUpdaterBase):
     def __init__(self) -> None:
-        super().__init__()
+        super(NightcapModules, self).__init__()
         self.db_modules = TinyDB(NightcapPackagesPaths().generate_path(NightcapPackagesPathsEnum.Databases, ['modules.json']))
         self.printer = Printer()
         

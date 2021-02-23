@@ -18,14 +18,6 @@ class NightcapDevOptions(NightcapBaseCMD):
         self.selectedList.append("dev")
         NightcapBaseCMD.__init__(self,self.selectedList)
 
-    def do_exit(self,line):
-        ScreenHelper().clearScr()
-        try:
-            self.selectedList.remove(self.selectedList[-1])
-        except Exception as e:
-            pass
-        return True
-
     #region 
     def do_genPackageUID(self,package_path: str):
         try:

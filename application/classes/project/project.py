@@ -19,16 +19,6 @@ class NightcapProjects(NightcapBaseCMD):
         self.config = conf
         self.output = NightcapCoreConsoleOutput()
 
-    #region Exit
-    def do_exit(self,line):
-        ScreenHelper().clearScr()
-        try:
-            self.selectedList.remove(self.selectedList[-1])
-        except Exception as e:
-            pass
-        return True
-    #endregion
-
     #region Delete Project
     def do_delete(self, line):
         '''Delete a project'''

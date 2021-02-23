@@ -13,7 +13,7 @@ from nightcappackages.classes.paths.paths import NightcapPackagesPaths
  
 class NightcapSubModule(NightcapCoreUpdaterBase):
     def __init__(self):
-        super().__init__()
+        super(NightcapSubModule, self).__init__()
         self.db_submodules = TinyDB(NightcapPackagesPaths().generate_path(NightcapPackagesPathsEnum.Databases, ['submodules.json']))
         self.printer = Printer()
         

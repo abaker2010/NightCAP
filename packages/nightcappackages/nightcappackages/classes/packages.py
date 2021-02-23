@@ -12,7 +12,7 @@ from .paths import NightcapPackagesPathsEnum, NightcapPackagesPaths
 
 class NightcapPackages(NightcapCoreUpdaterBase): 
     def __init__(self):
-        super().__init__()
+        super(NightcapPackages, self).__init__()
         self.__package_paths = NightcapPackagesPaths()
         self.db_packages = TinyDB(NightcapPackagesPaths().generate_path(NightcapPackagesPathsEnum.Databases, ['packages.json']))
         self.output = NightcapCoreConsoleOutput()
