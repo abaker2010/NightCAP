@@ -8,8 +8,8 @@ from nightcapcore import NightcapCoreBase, configuration
 from nightcapcore import NightcapCoreConsoleOutput
 from nightcapcore.printers.print import Printer
 from application.classes.helpers.screen.screen_helper import ScreenHelper
-from application.classes.banners.nightcap_banner import NightcapBanner
 from nightcapcore import NighcapCoreSimpleServer
+from application.classes.banners.nightcap_banner import NightcapBanner
 from nightcappackages import *
 import cmd
 from colorama import Fore, Style
@@ -33,7 +33,7 @@ class _NightcapBaseCMD_Config(cmd.Cmd):
         
 
 class NightcapBaseCMD(_NightcapBaseCMD_Config):
-    def __init__(self, selectedList, configuration: configuration, packagebase: NightcapCoreBase = None) -> None:
+    def __init__(self, selectedList, configuration: configuration, packagebase: NightcapCoreBase = None):
         super(NightcapBaseCMD, self).__init__(selectedList)
         # region 
         self.config = configuration
@@ -55,10 +55,6 @@ class NightcapBaseCMD(_NightcapBaseCMD_Config):
         return True
     #endregion
 
-    def do_banner(self, line):
-        ScreenHelper().clearScr()
-        NightcapBanner(self.config).Banner()
-
 
     #region Update Server
     def do_server(self,line):
@@ -74,11 +70,6 @@ class NightcapBaseCMD(_NightcapBaseCMD_Config):
             print(e)
     #endregion
 
-    #region Shell
-    def do_shell(self, line):
-        "\n\tRun a shell command, becareful with this. This feature is still in beta\n"
-        output = os.popen(line).read()
-        print("\n{0}{1}{2}".format(Fore.LIGHTGREEN_EX,output, Style.RESET_ALL))
-        self.last_output = output
-    #endregion
-        
+    def do_banner(self, line):
+        ScreenHelper().clearScr()
+        NightcapBanner(self.config).Banner()
