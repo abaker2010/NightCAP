@@ -4,9 +4,9 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 #region Import
+from application.classes.base_cmd.settings_cmd import NightcapSettingsCMD
 from application.classes.options.cli_options_selector import NightcapCLIOptionsSelector
 from application.classes.configuration.configuration import Configuration
-from application.classes.settings.settings import NightcapSettings
 from application.classes.helpers.screen.screen_helper import ScreenHelper
 #endregion
 
@@ -17,5 +17,5 @@ class Nightcap(NightcapCLIOptionsSelector):
     def do_settings(self, line):
         print("Settings here")
         ScreenHelper().clearScr()
-        NightcapSettings().cmdloop()
+        NightcapSettingsCMD().cmdloop()
 #endregion
