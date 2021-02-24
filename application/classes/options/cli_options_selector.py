@@ -19,12 +19,7 @@ class NightcapCLIOptionsSelector(NightcapCLIUseCMDMixIn):
         NightcapCLIUseCMDMixIn.__init__(self, selectedList, configuration,packagebase,NightcapCLIOptionsSelector)
 
     def do_use(self, line):
-        _validator = NightcapCLIOptionsValidator(line, self.selectedList)
-        if _validator.isvalid:
-            print("New list being used", _validator.newSelectedList)
-            NightcapCLIOption_MixIn_Use.do_use(self, _validator.newSelectedList,override=NightcapCLIOptionsPackage)
-        else:
-            self.printer.print_error(Exception("Not a valid option. Use [options] for help"))
+        NightcapCLIOption_MixIn_Use.do_use(self, line, override=NightcapCLIOptionsPackage)
         
 
     
