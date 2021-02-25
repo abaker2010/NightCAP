@@ -7,7 +7,7 @@
 from nightcapcore import NightcapCoreBase, configuration
 from nightcapcore.printers.print import Printer
 from application.classes.helpers.screen.screen_helper import ScreenHelper
-from nightcapcore import NighcapCoreSimpleServer
+
 from application.classes.banners.nightcap_banner import NightcapBanner
 from nightcappackages import *
 import cmd
@@ -53,20 +53,21 @@ class NightcapBaseCMD(_NightcapBaseCMD_Config):
         return True
     #endregion
 
-
-    #region Update Server
-    def do_server(self,line):
-        '''\n\tControll the update server\n\n\t\tOptions: status, start, stop'''
+    def do_help(self, line):
         try:
-            if(line == "start"):
-                NighcapCoreSimpleServer.instance().start()
-            elif(line == "stop"):
-                NighcapCoreSimpleServer.instance().shutdown()
-            elif (line == "status"):
-                print(NighcapCoreSimpleServer.instance().get_status())
+            if(len(line) == 0):
+                if(self.package_base.project != None):
+                    self.printer.print_underlined_header_undecorated(text="System settings")
+                    self.printer.item_1(text="Current Project", optionalText=str(self.package_base.project['project_number']) + ' : ' + str(self.package_base.project['project_name']))
+                else:
+                    self.printer.print_underlined_header_undecorated(text="System settings")
+                    self.printer.item_1(text="Current Project", optionalText='None')
         except Exception as e:
-            print(e)
-    #endregion
+            # self.printer.print_error(exception=e)
+            pass
+
+        super(NightcapBaseCMD, self).do_help(line)
+
 
     def do_banner(self, line):
         ScreenHelper().clearScr()

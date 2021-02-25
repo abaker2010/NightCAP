@@ -12,6 +12,7 @@ class NightcapCLIOption_MixIn_Options():
         self.selectedList = selectedList
         
     def do_options(self, line):
+        '''\nSee what options are available to use\n'''
         if(len(line) == 0):
             NightcapOptionGenerator(self.selectedList).options()
         elif(line == "detailed"):

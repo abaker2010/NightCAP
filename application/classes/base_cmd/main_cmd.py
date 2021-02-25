@@ -3,9 +3,11 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-from application.classes.project.project import NightcapProjects
+
+from application.classes.base_cmd.projects_cmd import NightcapProjectsCMD
 from nightcapcore.base import NightcapCoreBase
 from nightcapcore.configuration import configuration
+from nightcapcore import NighcapCoreSimpleServer
 from application.classes.base_cmd.base_cmd import NightcapBaseCMD
 from colorama import Fore, Style
 import os
@@ -23,9 +25,23 @@ class NightcapMainCMD(NightcapBaseCMD):
         self.last_output = output
     #endregion
 
+    #region Update Server
+    def do_server(self,line):
+        '''\n\tControll the update server\n\n\t\tOptions: status, start, stop'''
+        try:
+            if(line == "start"):
+                NighcapCoreSimpleServer.instance().start()
+            elif(line == "stop"):
+                NighcapCoreSimpleServer.instance().shutdown()
+            elif (line == "status"):
+                print(NighcapCoreSimpleServer.instance().get_status())
+        except Exception as e:
+            print(e)
+    #endregion
+
     def do_projects(self, line):
         '''\n\nChange current project'''
         try:
-            NightcapProjects(self.package_base, self.config).cmdloop()
+            NightcapProjectsCMD(self.package_base, self.config).cmdloop()
         except Exception as e:
             print(e)

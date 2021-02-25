@@ -11,7 +11,7 @@ from application.classes.helpers.screen.screen_helper import ScreenHelper
 from colorama import Fore, Style
 import shutil
 
-class NightcapProjects(NightcapBaseCMD):
+class NightcapProjectsCMD(NightcapBaseCMD):
     def __init__(self, packagebase: NightcapCoreBase, conf: Configuration):
         NightcapBaseCMD.__init__(self,["projects"], packagebase)
         self.projects_db = NightcapCoreProject()
@@ -62,7 +62,7 @@ class NightcapProjects(NightcapBaseCMD):
     #endregion
 
     #region List Projects
-    def do_projects(self, line):
+    def do_list(self, line):
         '''List all projects'''
         print(Fore.LIGHTGREEN_EX, "\n\n\tCurrent Projects", Style.RESET_ALL)
         print(Fore.LIGHTYELLOW_EX, "\t", "-"*len("Current Projects"), Style.RESET_ALL, sep="")
