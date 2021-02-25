@@ -6,7 +6,7 @@
 import os
 import base64 
 from nightcapcore.remotedocs.remote_docs import NightcapCoreRemoteDocs
-from nightcapcore.configuration.configuration import NighcapCoreConfiguration
+from nightcapcore.configuration import NighcapCoreConfiguration
 from nightcapcore.projects.projects import NightcapCoreProject
 from nightcapcore.remotedocs.remote_docs import NightcapCoreRemoteDocs
 from nightcapcore.paths.paths import NightcapPaths

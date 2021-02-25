@@ -4,8 +4,7 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 
-from nightcapcore import NightcapCoreBase, configuration
-from nightcapcore.printers.print import Printer
+from nightcapcore import NightcapCoreBase, configuration, Printer
 from application.classes.helpers.screen.screen_helper import ScreenHelper
 
 from application.classes.banners.nightcap_banner import NightcapBanner

@@ -4,7 +4,7 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 # region Import
-from nightcapcore.printers.print import Printer
+from nightcapcore import Printer
 from application.classes.options.cli_options_validator import NightcapCLIOptionsValidator
 from nightcapcore import configuration
 from nightcapcore.base import NightcapCoreBase

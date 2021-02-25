@@ -6,7 +6,7 @@
 from application.classes.helpers.screen.screen_helper import ScreenHelper
 import os
 import json
-from nightcapcore.printers.print import Printer
+# from nightcapcore import Printer
 from nightcappackages import *
 from colorama import Fore, Style
 from nightcapcore import *

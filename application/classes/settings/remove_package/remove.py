@@ -6,7 +6,6 @@
 from nightcappackages import *
 from colorama import Fore, Style
 from nightcapcore import *
-from nightcapcore.printers.print import Printer
 
 class NightcapRemovePackage():
     def __init__(self):

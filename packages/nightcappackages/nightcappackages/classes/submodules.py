@@ -3,7 +3,7 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-from nightcapcore.printers.print import Printer
+from nightcapcore.printers import Printer
 from nightcapcore import NightcapCoreUpdaterBase, NightcapCoreUpaterRules
 from tinydb import TinyDB
 from tinydb.queries import Query

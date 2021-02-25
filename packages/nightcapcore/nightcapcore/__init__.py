@@ -13,6 +13,8 @@ from .report.simplereport import NightcapSimpleReport
 from .paths import NightcapPaths, NightcapPathsEnum, NightcapPathCleaner
 from .updater import NightcapCoreUpaterRules, NightcapCoreUpdaterBase
 from .files import NightcapCoreFiles
+from .printers import Printer
+from .configuration import NighcapCoreConfiguration
 
 __all__ = [
     "NightcapCoreBase", "NightcapCore", 
@@ -20,7 +22,7 @@ __all__ = [
     "NightcapCoreServerReportingBase", "NighcapCoreSimpleServer",
     "NightcapCoreProject", "NightcapSimpleReport", "NightcapPaths",
     "NightcapPathsEnum", "NightcapPathCleaner", "NightcapCoreUpdaterBase",
-    "NightcapCoreUpaterRules", "NightcapCoreFiles"
+    "NightcapCoreUpaterRules", "NightcapCoreFiles", "Printer", "NighcapCoreConfiguration"
     ]
 
 __version__ = '0.0.1'

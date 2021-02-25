@@ -6,7 +6,7 @@
 # from application.classes.helpers.printers.subprinters.errors import ErrorPrinter
 # from application.classes.helpers.printers.print import Printer
 from colorama import Fore, Style
-from nightcapcore.printers.print import Printer
+from nightcapcore import Printer
 from nightcapcore.projects.projects import NightcapCoreProject
 from nightcapcore.remotedocs.remote_docs import NightcapCoreRemoteDocs
 from nightcappackages.classes.packages import NightcapPackages

@@ -5,7 +5,7 @@
 # file that should have been included as part of this package.
 import os
 from colorama import Fore, Style
-from nightcapcore.printers.print import Printer
+from nightcapcore.printers import Printer
 
 class NightcapDynamicParams(object):
     def __init__(self,params: dict = None,verboselevel: int = 0):

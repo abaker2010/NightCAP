@@ -4,7 +4,7 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 from colorama import Fore
-from nightcapcore.printers.print import Printer
+from nightcapcore.printers import Printer
 from nightcappackages.classes.modules import NightcapModules
 from nightcappackages.classes.submodules import NightcapSubModule
 from ..paths import NightcapPackagesPathsEnum, NightcapPackagesPaths

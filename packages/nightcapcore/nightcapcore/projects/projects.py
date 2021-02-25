@@ -4,7 +4,7 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 from nightcapcore.remotedocs.remote_docs import NightcapCoreRemoteDocs
-from nightcapcore.printers.print import Printer
+from nightcapcore.printers import Printer
 import os
 from tinydb import TinyDB
 from tinydb.queries import Query

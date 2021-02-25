@@ -11,7 +11,7 @@ import base64
 from colorama import Fore, Style
 from .base import *
 from nightcapcore import NightcapDynamicParams
-from nightcapcore.printers.print import Printer
+from nightcapcore.printers import Printer
 
 class NightcapSimpleReport(NightcapCoreReportBase):
 

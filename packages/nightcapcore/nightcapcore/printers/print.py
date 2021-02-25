@@ -7,11 +7,7 @@
 # from application.classes.helpers.printers.subprinters.headerpy import HeaderPrinter
 # from application.classes.helpers.printers.subprinters.errors import ErrorPrinter
 # from application.classes.helpers.printers.subprinters.checkmark import CheckMarkPrinter
-from nightcapcore.printers.subprinters.input import InputPrinter
-from nightcapcore.printers.subprinters.item import ItemPrinter
-from nightcapcore.printers.subprinters.headerpy import HeaderPrinter
-from nightcapcore.printers.subprinters.errors import ErrorPrinter
-from nightcapcore.printers.subprinters.checkmark import CheckMarkPrinter
+from nightcapcore.printers import InputPrinter, ItemPrinter, HeaderPrinter, ErrorPrinter, CheckMarkPrinter
 from colorama import Fore, Back, Style
 
 class Printer(CheckMarkPrinter, ErrorPrinter, HeaderPrinter, ItemPrinter, InputPrinter):
