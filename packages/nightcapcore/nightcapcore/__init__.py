@@ -11,13 +11,16 @@ from .server.server import NighcapCoreSimpleServer
 from .projects.projects import NightcapCoreProject
 from .report.simplereport import NightcapSimpleReport
 from .paths import NightcapPaths, NightcapPathsEnum, NightcapPathCleaner
+from .updater import NightcapCoreUpaterRules, NightcapCoreUpdaterBase
+from .files import NightcapCoreFiles
 
 __all__ = [
     "NightcapCoreBase", "NightcapCore", 
     "NightcapDynamicParams",
     "NightcapCoreServerReportingBase", "NighcapCoreSimpleServer",
     "NightcapCoreProject", "NightcapSimpleReport", "NightcapPaths",
-    "NightcapPathsEnum", "NightcapPathCleaner"
+    "NightcapPathsEnum", "NightcapPathCleaner", "NightcapCoreUpdaterBase",
+    "NightcapCoreUpaterRules", "NightcapCoreFiles"
     ]
 
 __version__ = '0.0.1'

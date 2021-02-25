@@ -5,8 +5,8 @@
 # file that should have been included as part of this package.
 from typing import Mapping
 from nightcapcore.printers.print import Printer
-from nightcapcore.updater.updater_base import NightcapCoreUpdaterBase
-from nightcapcore.updater.updater_rules import NightcapCoreUpaterRules
+from nightcapcore import NightcapCoreUpdaterBase
+from nightcapcore import NightcapCoreUpaterRules
 from nightcappackages.classes.paths.pathsenum import NightcapPackagesPathsEnum
 from nightcappackages.classes.paths.paths import NightcapPackagesPaths
 from tinydb import TinyDB, Query

@@ -3,13 +3,13 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
+from nightcapcore.files.files import NightcapCoreFiles
 from nightcapcore.paths.paths import NightcapPaths
 from nightcapcore.paths.pathsenum import NightcapPathsEnum
 import os
 import base64
 from colorama import Fore, Style
 from .base import *
-from ..files.files import NightcapCoreFiles
 from nightcapcore import NightcapDynamicParams
 from nightcapcore.printers.print import Printer
 

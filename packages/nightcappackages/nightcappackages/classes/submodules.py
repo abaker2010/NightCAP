@@ -4,8 +4,7 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 from nightcapcore.printers.print import Printer
-from nightcapcore.updater.updater_base import NightcapCoreUpdaterBase
-from nightcapcore.updater.updater_rules import NightcapCoreUpaterRules
+from nightcapcore import NightcapCoreUpdaterBase, NightcapCoreUpaterRules
 from tinydb import TinyDB
 from tinydb.queries import Query
 from nightcappackages.classes.paths.pathsenum import NightcapPackagesPathsEnum
