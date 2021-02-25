@@ -5,7 +5,7 @@
 # file that should have been included as part of this package.
 from tinydb.database import TinyDB
 from application.classes.configuration.configuration import Configuration
-from nightcapcore import NightcapCoreBase, NightcapPaths, NightcapPathsEnum, NightcapCoreConsoleOutput, NightcapCoreProject
+from nightcapcore import NightcapCoreBase, NightcapPaths, NightcapPathsEnum, NightcapCoreProject
 from application.classes.base_cmd.base_cmd import NightcapBaseCMD
 from application.classes.helpers.screen.screen_helper import ScreenHelper
 from colorama import Fore, Style
@@ -17,7 +17,6 @@ class NightcapProjects(NightcapBaseCMD):
         self.projects_db = NightcapCoreProject()
         self.base = packagebase
         self.config = conf
-        self.output = NightcapCoreConsoleOutput()
 
     #region Delete Project
     def do_delete(self, line):
@@ -28,7 +27,7 @@ class NightcapProjects(NightcapBaseCMD):
         try:
             try:
                 if(_confirm in yes_options):
-                    self.output.output("DELETING PROJECT", level=6)
+                    self.printer.print_formatted_check(text="DELETING PROJECT")
 
                     pro_id = int(line)
                     proj = self.projects_db.select(pro_id)[0]
@@ -52,7 +51,8 @@ class NightcapProjects(NightcapBaseCMD):
                         # remove files
                         shutil.rmtree(NightcapPaths().generate_path(NightcapPathsEnum.Reporting, [pro_id]))
                     except:
-                        self.output.output("There was no reports to delete")
+                        self.printer.print_formatted_check(text="There was no reports to delete")
+                        # self.output.output("There was no reports to delete")
 
             except ValueError as ar:
                 raise Exception("Please enter a project ID Numder")
@@ -82,7 +82,8 @@ class NightcapProjects(NightcapBaseCMD):
         try:
             found = self.projects_db.select(line)
             self.base.project = found[0]
-            self.output.output(Fore.YELLOW + "Selecting project ~ " + Fore.GREEN + found[0]["project_name"])
+            self.printer.print_formatted_additional(text="Selecting project",optionaltext=found[0]["project_name"])
+            # self.output.output(Fore.YELLOW + "Selecting project ~ " + Fore.GREEN + found[0]["project_name"])
             # print("\n\t", Fore.YELLOW, "Selecting project ~", Fore.GREEN, found[0]["project_name"], Style.RESET_ALL, end="\n\n")
         except Exception as e:
             print("\nPlease check the param and try again. Note: Must use project number for selection")
@@ -93,9 +94,11 @@ class NightcapProjects(NightcapBaseCMD):
         '''\n\tUnselect a project\n\t\tUsage: unselect\n'''
         try:
             self.base.project = None
-            self.output.output("[+] Unselected project")
+            # self.output.output("[+] Unselected project")
+            self.printer.print_formatted_check("Unselected project")
         except Exception as e:
-            self.output.output(str(e), level=6)
+            # self.output.output(str(e), level=6)
+            self.printer.print_error(exception=e)
     #endregion
 
     #region Create Project

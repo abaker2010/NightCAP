@@ -51,6 +51,7 @@ class NightcapSubModule(NightcapCoreUpdaterBase):
             (Query()['type'] == submodule) & (Query()['module'] == module)
         )
         self.db_submodules.table('submodules').remove(doc_ids=[_submoduleexists[0].doc_id])
+        self.printer.print_formatted_check(text="Deleted package entry")
 
     def update(self, updatedb: TinyDB):
         super().update(updatetable=updatedb.table("submodules"),localtable=self.db_submodules.table("submodules"),checkonrow='module', checkonrowtwo='type', updaterrule=NightcapCoreUpaterRules.Submodule)

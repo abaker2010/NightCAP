@@ -3,16 +3,12 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
+from application.classes.project.project import NightcapProjects
 from nightcapcore.base import NightcapCoreBase
 from nightcapcore.configuration import configuration
 from application.classes.base_cmd.base_cmd import NightcapBaseCMD
 from colorama import Fore, Style
-
-try:
-    from subprocess import DEVNULL # py3k
-except ImportError:
-    import os
-    DEVNULL = open(os.devnull, 'wb')
+import os
 
 class NightcapMainCMD(NightcapBaseCMD):
     def __init__(self, selectedList, configuration: configuration, packagebase: NightcapCoreBase = None):
@@ -26,3 +22,10 @@ class NightcapMainCMD(NightcapBaseCMD):
         print("\n{0}{1}{2}".format(Fore.LIGHTGREEN_EX,output, Style.RESET_ALL))
         self.last_output = output
     #endregion
+
+    def do_projects(self, line):
+        '''\n\nChange current project'''
+        try:
+            NightcapProjects(self.package_base, self.config).cmdloop()
+        except Exception as e:
+            print(e)

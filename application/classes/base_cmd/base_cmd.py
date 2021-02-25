@@ -5,7 +5,6 @@
 # file that should have been included as part of this package.
 
 from nightcapcore import NightcapCoreBase, configuration
-from nightcapcore import NightcapCoreConsoleOutput
 from nightcapcore.printers.print import Printer
 from application.classes.helpers.screen.screen_helper import ScreenHelper
 from nightcapcore import NighcapCoreSimpleServer
@@ -41,7 +40,6 @@ class NightcapBaseCMD(_NightcapBaseCMD_Config):
         self.packages_db = NightcapPackages()
         self.submodules_db = NightcapSubModule()
         self.package_base = packagebase
-        self.console_output = NightcapCoreConsoleOutput()
         self.printer = Printer()
         #endregion
 

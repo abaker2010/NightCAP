@@ -15,7 +15,6 @@ class NightcapPackages(NightcapCoreUpdaterBase):
         super(NightcapPackages, self).__init__()
         self.__package_paths = NightcapPackagesPaths()
         self.db_packages = TinyDB(NightcapPackagesPaths().generate_path(NightcapPackagesPathsEnum.Databases, ['packages.json']))
-        self.output = NightcapCoreConsoleOutput()
 
     #region Find Packages
     def find_packages(self, module: str, submodule: str):

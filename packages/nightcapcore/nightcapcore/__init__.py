@@ -6,7 +6,6 @@
 from .base import NightcapCoreBase
 from .core import NightcapCore
 from .params import NightcapDynamicParams
-from .output.console_output import NightcapCoreConsoleOutput
 from .server.reporting_server_base import NightcapCoreServerReportingBase
 from .server.server import NighcapCoreSimpleServer
 from .projects.projects import NightcapCoreProject
@@ -15,7 +14,7 @@ from .paths import NightcapPaths, NightcapPathsEnum, NightcapPathCleaner
 
 __all__ = [
     "NightcapCoreBase", "NightcapCore", 
-    "NightcapDynamicParams", "NightcapCoreConsoleOutput",
+    "NightcapDynamicParams",
     "NightcapCoreServerReportingBase", "NighcapCoreSimpleServer",
     "NightcapCoreProject", "NightcapSimpleReport", "NightcapPaths",
     "NightcapPathsEnum", "NightcapPathCleaner"

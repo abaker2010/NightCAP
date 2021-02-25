@@ -42,9 +42,7 @@ class NightcapCLIOptionsPackage(NightcapBaseCMD):
 
         if(len(line) == 0):
             title1 = "Base Params"
-            self.console_output.output("\n")
-            self.console_output.output(title1, color=Fore.CYAN)
-            self.console_output.output("-"*(len(title1)*2), color=Fore.LIGHTYELLOW_EX)
+            self.printer.print_underlined_header(text=title1, leadingText='', titleColor=Fore.LIGHTYELLOW_EX)
             self.package_base.show_params()
         
 

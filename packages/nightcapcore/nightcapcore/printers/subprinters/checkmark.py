@@ -22,3 +22,9 @@ class CheckMarkPrinter(PrinterBase):
         self.base_print(leadingText='[>]', text=text, optionalText=optionaltext, leadingTab=leadingTab,
                          leadingBreaks=leadingBreaks, endingBreaks=endingBreaks, vtabs=vtabs, leadingColor=leadingColor,
                          optionalTextColor=optionalTextColor, textColor=textColor, breakTextColor=breakTextColor)
+
+    def print_formatted_delete(self, text, optionaltext="", leadingBreaks=0, endingBreaks=0, vtabs=0, leadingTab=2,leadingColor=Fore.RED, textColor=Fore.LIGHTYELLOW_EX,
+                              optionalTextColor=Fore.LIGHTBLACK_EX, breakTextColor=Fore.LIGHTBLACK_EX):
+        self.base_print(leadingText='[x]', text=text, optionalText=optionaltext, leadingTab=leadingTab,
+                         leadingBreaks=leadingBreaks, endingBreaks=endingBreaks, vtabs=vtabs, leadingColor=leadingColor,
+                         optionalTextColor=optionalTextColor, textColor=textColor, breakTextColor=breakTextColor)

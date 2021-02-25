@@ -6,10 +6,13 @@
 from nightcapcore.printers.base.printer_base import PrinterBase
 from colorama import Fore, Back, Style
 
+class InputPrinter(PrinterBase):
 
-class ErrorPrinter(PrinterBase):
     def __init__(self):
         super().__init__()
 
-    def print_error(self, exception: Exception, errColor = Fore.RED, msgColor = Fore.RED, leadingtab=1, optionalText: str = '', vtab=1, endtab=1):
-        self.base_print(leadingText="[!]", text=optionalText + str(exception), leadingColor=errColor, textColor=msgColor, leadingTab=leadingtab, vtabs=vtab, endingBreaks=endtab)
+    def input(self, text: str, questionColor: Fore = Fore.LIGHTGREEN_EX,inputcolor: Fore = Fore.CYAN, width: int = 5,sep: str = ' ', vtab=1, etab=1):
+        print('\n'*vtab)
+        _input =  input(questionColor + str(text).center(width,sep) + inputcolor)
+        print('\n'*etab)
+        return _input

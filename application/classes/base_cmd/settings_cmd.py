@@ -9,6 +9,7 @@ from application.classes.settings.install_package.install import NightcapInstall
 from application.classes.settings.remove_package.remove import NightcapRemovePackage
 from application.classes.settings.dev_options.dev_options import NightcapDevOptions
 from application.classes.updater.updater import  NightcapUpdater
+from application.classes.helpers.screen.screen_helper import ScreenHelper
 from colorama import Fore, Style
 
 class NightcapSettingsCMD(NightcapBaseCMD):
@@ -36,6 +37,8 @@ class NightcapSettingsCMD(NightcapBaseCMD):
 
     #region List Packages
     def do_list(self, line):
+        '''\nList the packages that are installed\n'''
+        ScreenHelper().clearScr()
         NightcapListPackages().list_packages()
 
     #endregion

@@ -10,7 +10,8 @@ import base64
 from colorama import Fore, Style
 from .base import *
 from ..files.files import NightcapCoreFiles
-from nightcapcore import NightcapDynamicParams, NightcapCoreConsoleOutput 
+from nightcapcore import NightcapDynamicParams
+from nightcapcore.printers.print import Printer
 
 class NightcapSimpleReport(NightcapCoreReportBase):
 
@@ -23,7 +24,8 @@ class NightcapSimpleReport(NightcapCoreReportBase):
     def __init__(self, scriptpath: str = None, params: NightcapDynamicParams = None):
         NightcapCoreReportBase.__init__(self)
         self.spath = (os.sep).join(os.path.normpath(scriptpath).split(os.sep)[-4:])
-        self.console = NightcapCoreConsoleOutput()
+ 
+        self.printer = Printer()
         self.params = params
 
     #region Print Report to console
@@ -39,17 +41,20 @@ class NightcapSimpleReport(NightcapCoreReportBase):
         #       'data': [{'name': 'para name', 'format': 'paragraph_default'}]}, 
         # 1: {'name': 'header name two', 'format': 'header_default', 'data': []}
         # }
-        for k in self.data.keys():
-            self.console.output('\n')
-            self.console.output("\t" + '-'*len(self.data[k].name), level=5)
-            self.console.output("\t" + self.data[k].name, level=5)
-            self.console.output("\t" + '-'*len(self.data[k].name), level=5)
-            for d in self.data[k].data:
-                self.console.output("\t" + "  ~ " + d.text)
 
-        self.console.output("\n")
-        self.console.output("\t  " + "** END OF REPORT **", color=Fore.RED)
-        self.console.output("\n")
+        # #region working but needs replaced with print
+        # for k in self.data.keys():
+        #     self.console.output('\n')
+        #     self.console.output("\t" + '-'*len(self.data[k].name), level=5)
+        #     self.console.output("\t" + self.data[k].name, level=5)
+        #     self.console.output("\t" + '-'*len(self.data[k].name), level=5)
+        #     for d in self.data[k].data:
+        #         self.console.output("\t" + "  ~ " + d.text)
+
+        # self.console.output("\n")
+        # self.console.output("\t  " + "** END OF REPORT **", color=Fore.RED)
+        # self.console.output("\n")
+        # #endregion
     #endregion
 
 
@@ -57,10 +62,13 @@ class NightcapSimpleReport(NightcapCoreReportBase):
     def save(self):
         '''This is meant for saving html files'''
 
-        self.console.output("Trying to save report (HTML)", level=7)
-        self.console.output("Params: " + str(self.params), level=2)
-        self.console.output("Project Name: " + str(self.params['project']), level=2)
-        self.console.output("Custom style sheet needs to be used: " + str(self.custom_style_sheets), level=2)
+        # #region Working but needs replaced with print
+        # self.console.output("Trying to save report (HTML)", level=7)
+        # self.console.output("Params: " + str(self.params), level=2)
+        # self.console.output("Project Name: " + str(self.params['project']), level=2)
+        # self.console.output("Custom style sheet needs to be used: " + str(self.custom_style_sheets), level=2)
+        # #endregion
+
         # print("\n\n")
         # print("Params:", self.params)
         # print("Project Name:", self.params['project'])

@@ -53,6 +53,7 @@ class NightcapModules(NightcapCoreUpdaterBase):
     def module_try_unintall(self, module: str):
         _moduleexists = self.db_modules.table('modules').search((Query()['type'] == module))
         self.db_modules.table('modules').remove(doc_ids=[_moduleexists[0].doc_id])
+        self.printer.print_formatted_additional(text="Deleted module entry", leadingTab=3)
         
     def update(self, updatedb: TinyDB):
         super().update(updatetable=updatedb.table('modules'),localtable=self.db_modules.table('modules'),checkonrow='type', updaterrule=NightcapCoreUpaterRules.Module)

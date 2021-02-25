@@ -5,7 +5,7 @@
 # file that should have been included as part of this package.
 import os
 from colorama import Fore, Style
-from nightcapcore.output import NightcapCoreConsoleOutput
+from nightcapcore.printers.print import Printer
 
 class NightcapDynamicParams(object):
     def __init__(self,params: dict = None,verboselevel: int = 0):
@@ -21,19 +21,18 @@ class NightcapDynamicParams(object):
             self.filename = "xmrig2.pcapng"
             self.project = None
         self.verboselevel = verboselevel
-
-        self.output = NightcapCoreConsoleOutput()
+        self.printer = Printer()
 
     def show_params(self):
 
         if(self.project == None):
-            proj = (Fore.LIGHTYELLOW_EX+'None')
+            proj = ('None')
         else:
-            proj = (Fore.LIGHTRED_EX+'('+str(self.project['project_number'])+') '+Fore.LIGHTYELLOW_EX+str(self.project['project_name']))
-        self.output.output("PROJECT = " + proj)
-        self.output.output(Fore.LIGHTGREEN_EX+"\tFILENAME = "+Fore.LIGHTYELLOW_EX+str(self.filename))
-        self.output.output(Fore.LIGHTGREEN_EX+"ISDIR = "+Fore.LIGHTYELLOW_EX+str(self.isDir))
-        self.output.output("\t\t\tPATH = "+Fore.LIGHTYELLOW_EX+str(self.dir))        
+            proj = ('('+str(self.project['project_number'])+') '+Fore.LIGHTYELLOW_EX+str(self.project['project_name']))
+        self.printer.item_2(text="  PROJECT", optionalText=proj, leadingTab=1, leadingText='', textColor=Fore.LIGHTGREEN_EX)
+        self.printer.item_2(text="  FILENAME", optionalText=str(self.filename), leadingTab=1, leadingText='', textColor=Fore.LIGHTGREEN_EX)
+        self.printer.item_2(text="  ISDIR", optionalText=str(self.isDir), leadingTab=1, leadingText='', textColor=Fore.LIGHTGREEN_EX)
+        self.printer.item_2(text="  PATH", optionalText=str(self.dir), leadingTab=1, leadingText='', textColor=Fore.LIGHTGREEN_EX, endingBreaks=1)   
 
     def toJson(self):
         js = {

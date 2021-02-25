@@ -3,17 +3,19 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-from nightcapcore.output.console_output import NightcapCoreConsoleOutput
+from colorama import Fore
+from nightcapcore.printers.print import Printer
 from nightcappackages.classes.modules import NightcapModules
 from nightcappackages.classes.submodules import NightcapSubModule
 from ..paths import NightcapPackagesPathsEnum, NightcapPackagesPaths
+from application.classes.helpers.screen.screen_helper import ScreenHelper
 from tinydb import TinyDB, Query
 import shutil
 
 class NightcapPackageUninstaller():
     def __init__(self, package_path: str):
         self.db_packages = TinyDB(NightcapPackagesPaths().generate_path(NightcapPackagesPathsEnum.Databases, ['packages.json']))
-        self.output = NightcapCoreConsoleOutput()
+        self.printer = Printer()
         self.__package_paths = NightcapPackagesPaths()
         
         try:
@@ -25,17 +27,20 @@ class NightcapPackageUninstaller():
             )
             ##region Working DO NOT REMOVE
             if(len(packageExists) == 0):
-                self.output.output("Package does not exist", level=6)
+                ScreenHelper().clearScr()
+                self.printer.print_formatted_delete(text="Package does not exist")
             else:
                 uconfirm = self._confim_delete(package_path)
+                ScreenHelper().clearScr()
                 if(uconfirm.lower() == "y"):
+                    self.printer.print_underlined_header_undecorated(text="UNINSTALLED CONFIRMED")
                     packageExists[0].doc_id
                     try:
                         self.db_packages.table('packages').remove(doc_ids=[packageExists[0].doc_id])
                         self._delete(packageExists[0])
                         
                         if(self.db_packages.table('packages').contains(Query()['package_information']['uid'] == packageExists[0]["package_information"]["uid"]) is False):
-                            self.output.output("UNINSTALLED")
+                            
 
                             packages = self.db_packages.table('packages').search(
                                     (Query()['package_for']['module'] == split_package_path[0])
@@ -51,20 +56,23 @@ class NightcapPackageUninstaller():
                                     # print("remove module")
                                     NightcapModules().module_try_unintall(split_package_path[0])
 
+                            self.printer.print_formatted_check(text="UNINSTALLED", vtabs=1, endingBreaks=1)
+
                     except Exception as e:
-                        self.output.output('Didnt Delete: '+str(e), level=6)
+                        self.printer.print_error(exception=e)
             ##endregion 
 
         except Exception as e:
             raise Exception("Package not found")
 
     def _confim_delete(self, package_path: str):
-        return self.output.input("ARE YOU SURE YOU WANT TO UNINSTALL %s? [y/n]: " % (package_path)) 
+        return self.printer.input("Are you sure you want to uninstall: %s? [y/n]: " % (package_path), questionColor=Fore.RED)
        
 
     def _delete(self, pkt: dict):
         _path = self.__package_paths.generate_path(NightcapPackagesPathsEnum.PackagesBase, [pkt['package_for']['module'],pkt['package_for']['submodule'], pkt['package_information']['package_name']])
         try:
             shutil.rmtree(_path)
+            self.printer.print_formatted_check(text="Deleted Files")
         except OSError as e:
-            self.output.output("Error: %s - %s." % (e.filename, e.strerror), level=6)
+            self.printer.print_error(exception=Exception("Error: %s - %s." % (e.filename, e.strerror)))

@@ -4,14 +4,14 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 from nightcappackages import *
-from nightcapcore import NightcapCoreConsoleOutput
+from nightcapcore.printers.print import Printer
 from colorama import Fore, Style
 
 class NightcapOptionGenerator():
     def __init__(self, selectedList):
         self.selectedList = selectedList
         self.option_number = len(self.selectedList)
-        self.console_output = NightcapCoreConsoleOutput()
+        self.printer = Printer()
 
     def options(self, isDetailed=False):
         
@@ -26,10 +26,9 @@ class NightcapOptionGenerator():
         else:
             opt = False
         if(opt):
+            self.printer
             title1 = "Available Options"
-            self.console_output.output("\n")
-            self.console_output.output(title1, color=Fore.CYAN)
-            self.console_output.output("-"*(len(title1)*2), color=Fore.LIGHTYELLOW_EX)
+            self.printer.print_underlined_header(text=title1,leadingText='', titleColor=Fore.LIGHTYELLOW_EX)
         
             if(isDetailed):
                 for v in vals:
@@ -51,10 +50,9 @@ class NightcapOptionGenerator():
                 else:
                     _cvals.append("No Pacakges Installed")
 
-                self.console_output.output("".join(_cvals))
-            self.console_output.output('\n\n')
+                self.printer.item_1(text="".join(_cvals), leadingText='', leadingTab=1, vtabs=1, endingBreaks=1)
         else:
-            self.console_output.output("No Options Available", level=6)
+            self.printer.print_error(exception=Exception("Error No Option Available"))
         
     def option_help(self):
         print(
