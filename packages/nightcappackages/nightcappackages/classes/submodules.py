@@ -3,12 +3,10 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-from nightcapcore.printers import Printer
-from nightcapcore import NightcapCoreUpdaterBase, NightcapCoreUpaterRules
+from nightcapcore import NightcapCoreUpdaterBase, NightcapCoreUpaterRules, Printer
 from tinydb import TinyDB
 from tinydb.queries import Query
-from nightcappackages.classes.paths.pathsenum import NightcapPackagesPathsEnum
-from nightcappackages.classes.paths.paths import NightcapPackagesPaths
+from nightcappackages.classes.paths import NightcapPackagesPathsEnum, NightcapPackagesPaths
  
 class NightcapSubModule(NightcapCoreUpdaterBase):
     def __init__(self):

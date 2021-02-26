@@ -15,6 +15,7 @@ from .updater import NightcapCoreUpaterRules, NightcapCoreUpdaterBase
 from .files import NightcapCoreFiles
 from .printers import Printer
 from .configuration import NighcapCoreConfiguration
+from .remotedocs import NightcapCoreRemoteDocs
 
 __all__ = [
     "NightcapCoreBase", "NightcapCore", 
@@ -22,7 +23,7 @@ __all__ = [
     "NightcapCoreServerReportingBase", "NighcapCoreSimpleServer",
     "NightcapCoreProject", "NightcapSimpleReport", "NightcapPaths",
     "NightcapPathsEnum", "NightcapPathCleaner", "NightcapCoreUpdaterBase",
-    "NightcapCoreUpaterRules", "NightcapCoreFiles", "Printer", "NighcapCoreConfiguration"
+    "NightcapCoreUpaterRules", "NightcapCoreFiles", "Printer", "NighcapCoreConfiguration", "NightcapCoreRemoteDocs"
     ]
 
 __version__ = '0.0.1'

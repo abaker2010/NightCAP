@@ -4,10 +4,10 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 from colorama import Fore
-from nightcapcore.printers import Printer
+from nightcapcore import Printer
 from nightcappackages.classes.modules import NightcapModules
+from nightcappackages.classes.paths import NightcapPackagesPaths, NightcapPackagesPathsEnum
 from nightcappackages.classes.submodules import NightcapSubModule
-from ..paths import NightcapPackagesPathsEnum, NightcapPackagesPaths
 from application.classes.helpers.screen.screen_helper import ScreenHelper
 from tinydb import TinyDB, Query
 import shutil

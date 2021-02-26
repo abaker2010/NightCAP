@@ -8,7 +8,7 @@ from application.classes.options.cli_options_package import NightcapCLIOptionsPa
 from application.classes.options.mixin.mixin_use import NightcapCLIOption_MixIn_Use
 from application.classes.options.mixin.mixin_usecmd import NightcapCLIUseCMDMixIn
 from application.classes.options.cli_options_validator import NightcapCLIOptionsValidator
-from nightcapcore.base import NightcapCoreBase
+from nightcapcore import NightcapCoreBase
 from application.classes.configuration.configuration import Configuration
 #endregion
 

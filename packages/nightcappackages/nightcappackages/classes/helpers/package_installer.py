@@ -3,11 +3,9 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
+from nightcappackages.classes.paths import NightcapPackagesPathsEnum, NightcapPackagesPaths
 from application.classes.helpers.screen.screen_helper import ScreenHelper
-from nightcapcore.printers import Printer
-from nightcappackages.classes.submodules import NightcapSubModule
-from nightcappackages.classes.modules import NightcapModules
-from ..packages import NightcapPackagesPathsEnum, NightcapPackagesPaths
+from nightcappackages.classes import NightcapModules, NightcapSubModule
 from nightcapcore import *
 from tinydb import TinyDB, Query
 from colorama import Fore, Style

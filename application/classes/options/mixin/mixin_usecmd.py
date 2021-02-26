@@ -9,7 +9,7 @@ from application.classes.base_cmd.main_cmd import NightcapMainCMD
 from application.classes.options.mixin.mixin_use import NightcapCLIOption_MixIn_Use
 from application.classes.options.mixin.mixin_options import NightcapCLIOption_MixIn_Options
 from application.classes.configuration.configuration import Configuration
-from nightcapcore.base import NightcapCoreBase
+from nightcapcore import NightcapCoreBase
 # endregion
 
 class NightcapCLIUseCMDMixIn(NightcapMainCMD, NightcapCLIOption_MixIn_Options, NightcapCLIOption_MixIn_Use):

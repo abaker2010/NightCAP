@@ -4,10 +4,8 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 # region Import
-from nightcapcore import Printer
+from nightcapcore import Printer, configuration, NightcapCoreBase
 from application.classes.options.cli_options_validator import NightcapCLIOptionsValidator
-from nightcapcore import configuration
-from nightcapcore.base import NightcapCoreBase
 from application.classes.banners.nightcap_banner import NightcapBanner
 from application.classes.helpers.screen.screen_helper import ScreenHelper
 from colorama import Fore, Style

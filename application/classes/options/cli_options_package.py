@@ -6,9 +6,7 @@
 import os
 import copy
 import json
-from nightcapcore import configuration
-from nightcapcore.base import NightcapCoreBase
-from nightcapcore.params import NightcapDynamicParams
+from nightcapcore import configuration, NightcapCoreBase
 from application.classes.base_cmd.base_cmd import NightcapBaseCMD
 from colorama import Fore, Style
 
