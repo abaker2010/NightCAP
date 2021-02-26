@@ -16,5 +16,13 @@ class NightcapInstalledPackageCounter():
             _count += len(list(map(lambda v : v, NightcapPackages().find_packages(module, _sm))))
         return _count
 
-    def count_from_selected_submodule(self, module: str, submodule: str):
-        return len(list(map(lambda v : v, NightcapPackages().find_packages(module, submodule))))
+    def count_from_selected_submodule(self, path: list):
+        try:
+            print("list to use to find submodule", path)
+
+            return len(list(map(lambda v : v, NightcapPackages().find_packages(path[0], path[1]))))
+            
+        except Exception as e:
+            print(e)
+            return []
+        # return len(list(map(lambda v : v, NightcapPackages().find_packages(path[0], path[1]))))

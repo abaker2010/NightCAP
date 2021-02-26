@@ -16,6 +16,7 @@ class NightcapPackages(NightcapCoreUpdaterBase):
 
     #region Find Packages
     def find_packages(self, module: str, submodule: str):
+        print("Finding packages based on:", module, submodule)
         _packages = list(map(lambda v : v, self.db_packages.table('packages').search(
             (Query()['package_for']['module'] == module) & (Query()['package_for']['submodule'] == submodule)
         )))

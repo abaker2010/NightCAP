@@ -10,34 +10,33 @@ from colorama import Fore, Style
 class NightcapOptionGenerator():
     def __init__(self, selectedList):
         self.selectedList = selectedList
-        self.option_number = len(self.selectedList)
         self.printer = Printer()
 
     def options(self, isDetailed=False):
         
         vals = []
         opt = True
-        if(self.option_number == 0):
-            vals = list(map(lambda v: v + Fore.LIGHTMAGENTA_EX + " (" + str(NightcapInstalledPackageCounter().count_from_selected_module(v)) + ")" + Style.RESET_ALL, NightcapModules().module_types()))
-        elif(self.option_number == 1):
-            vals = list(map(lambda v: v + Fore.LIGHTMAGENTA_EX + " (" + str(NightcapInstalledPackageCounter().count_from_selected_submodule(self.selectedList[0], v)) + ")" + Style.RESET_ALL, NightcapSubModule().submodules()))
-        elif(self.option_number == 2):
-            vals = NightcapPackages().packages(self.selectedList,isDetailed)   
+        print("List to use to find m/sm/p:", self.selectedList)
+
+        if(len(self.selectedList) == 0):
+            print("finding options")
+            vals = list(map(lambda v: v['type'] + Fore.LIGHTMAGENTA_EX + " (" + str(NightcapInstalledPackageCounter().count_from_selected_module(v['type'])) + ")" + Style.RESET_ALL, NightcapModules().get_all_modules()))
+        elif(len(self.selectedList) == 1):
+            print("finding with", self.selectedList)
+            vals = list(map(lambda v: v['type'] + Fore.LIGHTMAGENTA_EX + " (" + str(NightcapInstalledPackageCounter().count_from_selected_submodule([self.selectedList[0], v['type']])) + ")" + Style.RESET_ALL, NightcapSubModule().find_submodules(self.selectedList[0])))
+        elif(len(self.selectedList) == 2):
+            vals = NightcapPackages().packages(self.selectedList,isDetailed)
+
+        _cvals = []
+        if(len(vals) == 0):
+            _cvals.append("No Pacakges Installed")
         else:
-            opt = False
-        if(opt):
-            self.printer
-            title1 = "Available Options"
-            self.printer.print_underlined_header(text=title1,leadingText='', titleColor=Fore.LIGHTYELLOW_EX)
-        
             if(isDetailed):
                 for v in vals:
                     print("\t", v)
             else:
                 _join = Fore.YELLOW + " | " + Style.RESET_ALL
                 _vals = list(map(lambda v: Fore.CYAN + v + Style.RESET_ALL, vals))
-                
-                _cvals = []
                 if(len(vals) != 0):
                     if(len(vals) > 1):
                         for v in _vals:
@@ -47,12 +46,8 @@ class NightcapOptionGenerator():
                     else:
                         for v in _vals:
                             _cvals.append(v)
-                else:
-                    _cvals.append("No Pacakges Installed")
 
-                self.printer.item_1(text="".join(_cvals), leadingText='', leadingTab=1, vtabs=1, endingBreaks=1)
-        else:
-            self.printer.print_error(exception=Exception("Error No Option Available"))
+        self.printer.item_1(text="".join(_cvals), leadingText='', leadingTab=1, vtabs=1, endingBreaks=1)
         
     def option_help(self):
         print(
