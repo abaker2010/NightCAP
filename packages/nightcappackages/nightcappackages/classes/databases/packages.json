@@ -1,1 +1,1 @@
-{"packages": {}}
+{"packages": {"1": {"author_info": {"creator": "Aaron Baker"}, "package_for": {"module": "test", "submodule": "navy"}, "package_information": {"package_name": "usb", "version": "1.0", "date": "10/13/2020", "imports": {}, "details": "analysis usb protocol in pcap file", "entry_file": "test_module.py", "entry_file_optional_params": {}, "uid": "75585e8ef70f3e046eba9ade640b0ea21425063bf67cb40c1044324ff138ceb5"}}}}

@@ -12,7 +12,7 @@ DEVNULL = open(os.devnull, 'wb')
 @Singleton
 class NighcapCoreSimpleServer(object):
     def __init__(self):
-        self.config = NighcapCoreConfiguration().Config()
+        self.config = NighcapCoreConfiguration().currentConfig
         self.ip = self.config["REPORTINGSERVER"]["ip"]
         self.port = int(self.config["REPORTINGSERVER"]["port"])
         self.proc = self.config["REPORTINGSERVER"]["proc"]

@@ -5,20 +5,22 @@
 # file that should have been included as part of this package.
 import os
 import configparser
+from nightcapcore.singleton.singleton import Singleton
 
-class NighcapCoreConfiguration():
+class NighcapCoreConfiguration(metaclass=Singleton):
 
     def __init__(self):
         self.installationDir = os.path.dirname(os.path.abspath(__file__)) + '/'
         self.configFile = self.installationDir + "nightcapcore.cfg"
         self.configParser = configparser.RawConfigParser()
         self.currentConfig = None
-
-    def Config(self):
+        self._config()
+        
+    def _config(self):
         conf = configparser.RawConfigParser()
         conf.read(self.configFile)
         self.currentConfig = conf
-        return self.currentConfig
+        
 
     def Save(self):
         conf = configparser.RawConfigParser()

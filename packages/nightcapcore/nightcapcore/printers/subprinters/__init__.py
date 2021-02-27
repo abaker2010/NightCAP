@@ -8,5 +8,6 @@ from .errors import ErrorPrinter
 from .headerpy import HeaderPrinter
 from .input import InputPrinter
 from .item import ItemPrinter
+from .waiting import WaitingPrinter
 
-__all__ = ["CheckMarkPrinter", "ErrorPrinter", "HeaderPrinter", "InputPrinter", "ItemPrinter"]
+__all__ = ["CheckMarkPrinter", "ErrorPrinter", "HeaderPrinter", "InputPrinter", "ItemPrinter", "WaitingPrinter"]

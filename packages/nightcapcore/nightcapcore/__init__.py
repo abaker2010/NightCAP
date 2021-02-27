@@ -16,14 +16,16 @@ from .files import NightcapCoreFiles
 from .printers import Printer
 from .configuration import NighcapCoreConfiguration
 from .remotedocs import NightcapCoreRemoteDocs
+from .singleton import Singleton
 
 __all__ = [
-    "NightcapCoreBase", "NightcapCore", 
+    "NightcapCoreBase", "NightcapCore",
     "NightcapDynamicParams",
     "NightcapCoreServerReportingBase", "NighcapCoreSimpleServer",
     "NightcapCoreProject", "NightcapSimpleReport", "NightcapPaths",
     "NightcapPathsEnum", "NightcapPathCleaner", "NightcapCoreUpdaterBase",
-    "NightcapCoreUpaterRules", "NightcapCoreFiles", "Printer", "NighcapCoreConfiguration", "NightcapCoreRemoteDocs"
-    ]
+    "NightcapCoreUpaterRules", "NightcapCoreFiles", "Printer", 
+    "NighcapCoreConfiguration", "NightcapCoreRemoteDocs", "Singleton"
+]
 
 __version__ = '0.0.1'

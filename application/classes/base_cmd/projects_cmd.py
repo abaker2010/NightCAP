@@ -3,8 +3,8 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
+from nightcapcore.configuration.configuration import NighcapCoreConfiguration
 from tinydb.database import TinyDB
-from application.classes.configuration.configuration import Configuration
 from nightcapcore import NightcapCoreBase, NightcapPaths, NightcapPathsEnum, NightcapCoreProject
 from application.classes.base_cmd.base_cmd import NightcapBaseCMD
 from application.classes.helpers.screen.screen_helper import ScreenHelper
@@ -12,7 +12,7 @@ from colorama import Fore, Style
 import shutil
 
 class NightcapProjectsCMD(NightcapBaseCMD):
-    def __init__(self, packagebase: NightcapCoreBase, conf: Configuration):
+    def __init__(self, packagebase: NightcapCoreBase, conf: NighcapCoreConfiguration):
         NightcapBaseCMD.__init__(self,["projects"], packagebase)
         self.projects_db = NightcapCoreProject()
         self.base = packagebase
@@ -22,7 +22,7 @@ class NightcapProjectsCMD(NightcapBaseCMD):
     def do_delete(self, line):
         '''Delete a project'''
         _confirm = input((Fore.RED + ("Project with ID: %s will be DELETED used would you like to continue? [Y/n]: " % (line)) + Fore.GREEN))
-        yes_options = self.config.Config()["NIGHTCAP"]["yes"].split(" ")
+        yes_options = self.config.currentConfig["NIGHTCAPCORE"]["yes"].split(" ")
         
         try:
             try:

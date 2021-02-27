@@ -5,6 +5,7 @@
 # file that should have been included as part of this package.
 #region Import
 from nightcapcore import Printer
+from nightcappackages.classes.databases.mogo.mogo_modules import MogoModuleDatabase
 from application.classes.options.option_generator import NightcapOptionGenerator
 #endregion
 
@@ -15,6 +16,8 @@ class NightcapCLIOption_MixIn_Options():
         
     def do_options(self, line):
         '''\nSee what options are available to use. Use -d on packages to see detailed information\n'''
+        _moduleDB = MogoModuleDatabase()
+        print(_moduleDB)
         if(len(line) == 0):
             NightcapOptionGenerator(self.selectedList).options()
         elif(line == "-d"):

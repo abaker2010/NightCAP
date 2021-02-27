@@ -56,7 +56,7 @@ class NightcapCoreServerReportingBase(NighcapCoreConfiguration):
 
     def _generate_report_template_page(self, basepath: str, data: str):
         base_page = open(os.path.join(basepath, "simple_report.html")).readlines()
-        replacement = NighcapCoreConfiguration().Config().get("REPORTINGREPLACEMENTS", "report_data_replacement")
+        replacement = NighcapCoreConfiguration().currentConfig.get("REPORTINGREPLACEMENTS", "report_data_replacement")
         
         n_lines = []
         for line in base_page:
@@ -79,7 +79,7 @@ class NightcapCoreServerReportingBase(NighcapCoreConfiguration):
     #region Standard Tempplate 
     def _generate_standard_template_page(self, basepath: str, data: str):
         base_page = open(os.path.join(basepath, "base.html")).readlines()
-        replacement = NighcapCoreConfiguration().Config().get("REPORTINGREPLACEMENTS", "base_data_replacement")
+        replacement = NighcapCoreConfiguration().currentConfig.get("REPORTINGREPLACEMENTS", "base_data_replacement")
         n_lines = []
         for line in base_page:
             n_line = ""
@@ -96,7 +96,7 @@ class NightcapCoreServerReportingBase(NighcapCoreConfiguration):
     def _generate_home_page(self, path):
         data = open(path).readlines()
         print("Data for home page: ", data)
-        proj_replace = NighcapCoreConfiguration().Config().get("REPORTINGREPLACEMENTS", "project_list_replacement")
+        proj_replace = NighcapCoreConfiguration().currentConfig.get("REPORTINGREPLACEMENTS", "project_list_replacement")
         ndata = []
         for l in data:
             if proj_replace in l:
@@ -157,8 +157,8 @@ class NightcapCoreServerReportingBase(NighcapCoreConfiguration):
     def _format_list_page(self, header: str, path: str, route: str, opts: list):
         t_data = []
         
-        list_replacement = '[' + self.Config().get('REPORTINGREPLACEMENTS', 'list_item_replacement') + ']'
-        header_replacement = '[' + self.Config().get('REPORTINGREPLACEMENTS', 'header_replacement') + ']'
+        list_replacement = '[' + self.currentConfig.get('REPORTINGREPLACEMENTS', 'list_item_replacement') + ']'
+        header_replacement = '[' + self.currentConfig.get('REPORTINGREPLACEMENTS', 'header_replacement') + ']'
 
         template_file = NightcapPaths().generate_path(NightcapPathsEnum.ReportingTemplates, ['list_template.html'])
         # template_folder = (self.Config().get('REPORTINGPATHS', 'reporting_templates') + '/list_template.html').replace('/', os.sep)

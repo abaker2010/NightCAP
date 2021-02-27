@@ -9,3 +9,4 @@ art==5.1
 nightcapcore==0.0.1
 nightcappackages==0.0.1
 tqdm==4.55.0
+pymongo==3.11.3

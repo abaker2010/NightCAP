@@ -5,12 +5,13 @@
 # file that should have been included as part of this package.
 from typing import Mapping
 from nightcapcore import Printer, NightcapCoreUpdaterBase, NightcapCoreUpaterRules
+from nightcapcore.decorators import Singleton
 from nightcappackages.classes.paths import NightcapPackagesPathsEnum, NightcapPackagesPaths
 from tinydb import TinyDB, Query
 
 class NightcapModules(NightcapCoreUpdaterBase):
-    def __init__(self) -> None:
-        super(NightcapModules, self).__init__()
+    def __init__(self):
+        super(NightcapCoreUpdaterBase, self).__init__()
         self.db_modules = TinyDB(NightcapPackagesPaths().generate_path(NightcapPackagesPathsEnum.Databases, ['modules.json']))
         self.printer = Printer()
         

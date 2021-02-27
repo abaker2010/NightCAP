@@ -6,12 +6,13 @@
 import os
 import copy
 import json
-from nightcapcore import configuration, NightcapCoreBase
+from nightcapcore import NightcapCoreBase
+from nightcapcore.configuration.configuration import NighcapCoreConfiguration
 from application.classes.base_cmd.base_cmd import NightcapBaseCMD
 from colorama import Fore, Style
 
 class NightcapCLIOptionsPackage(NightcapBaseCMD):
-    def __init__(self,selectedList: list, configuration: configuration, packagebase: NightcapCoreBase = NightcapCoreBase()):
+    def __init__(self,selectedList: list, configuration: NighcapCoreConfiguration, packagebase: NightcapCoreBase = NightcapCoreBase()):
         NightcapBaseCMD.__init__(self, selectedList, configuration, packagebase)
         self.config = configuration
         try:
@@ -51,7 +52,7 @@ class NightcapCLIOptionsPackage(NightcapBaseCMD):
         if(self.package_base.project == None):
             force = input((Fore.YELLOW + "Project not selected to be used would you like to continue? [Y/n]: " + Fore.GREEN))
             print(Style.RESET_ALL, Fore.LIGHTCYAN_EX)
-            yes_options = self.config.Config()["NIGHTCAP"]["yes"].split(" ")
+            yes_options = self.config.currentConfig["NIGHTCAPCORE"]["yes"].split(" ")
             if(force == None):
                 force = False
             else:

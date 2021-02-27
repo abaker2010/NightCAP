@@ -20,7 +20,7 @@ class NightcapCoreBase(NightcapDynamicParams):
             if(self.isDir):
                 self.pcapFiles = []
 
-                exts = config.Config()["NIGHTCAPCORE"]["extentions"].split(' ')
+                exts = config.currentConfig["NIGHTCAPCORE"]["extentions"].split(' ')
 
                 for root, dirs, files in os.walk(self.dir, topdown=False):
                     for name in files:

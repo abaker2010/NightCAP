@@ -10,7 +10,7 @@ from tinydb.queries import where
 from tinydb.table import Table
 
 class NightcapCoreUpdaterBase:
-    def __init__(self) -> None:
+    def __init__(self):
         self.printer = Printer()
         pass
 

@@ -7,8 +7,8 @@ from .modules import NightcapModules
 from .packages import NightcapPackages
 from .submodules import NightcapSubModule
 from .helpers import NightcapPackageInstaller, NightcapPackageUninstaller, NightcapInstalledPackageCounter
-
+from .databases import MongoDatabaseInterface
 __all__ = ["NightcapModules", "NightcapPackages", "NightcapSubModule", 
             "NightcapPackageInstaller", "NightcapPackageUninstaller", 
-            "NightcapInstalledPackageCounter"
+            "NightcapInstalledPackageCounter", "MongoDatabaseInterface"
         ]

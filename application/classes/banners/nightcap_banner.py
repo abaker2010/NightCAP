@@ -4,20 +4,19 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 #region imports
-from application.classes.configuration.configuration import Configuration
 from random import randint
 from art import *
 from colorama import Style,Fore
+from nightcapcore.configuration.configuration import NighcapCoreConfiguration
 from application.classes.colors.nightcap_colors import NightcapColors
-from application.classes.configuration.configuration import Configuration
 from nightcapcore import NighcapCoreSimpleServer
 #endregion
 
 class NightcapBanner():
-    def __init__(self, configuration: Configuration):
+    def __init__(self, configuration: NighcapCoreConfiguration):
         self.config = configuration
-        self.build_version = self.config.Config()["BUILD_DATA"]["version"]
-        self.build_number= self.config.Config()["BUILD_DATA"]["build"]
+        self.build_version = self.config.currentConfig["BUILD_DATA"]["version"]
+        self.build_number= self.config.currentConfig["BUILD_DATA"]["build"]
 
     def _randomColor(self):
         random = randint(0,11)
