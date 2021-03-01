@@ -29,7 +29,7 @@ class NightcapCLIOption_MixIn_Use():
         if _validator.isvalid:
             try:
                 if len(_validator.newSelectedList) == 3:
-                    override(_validator.newSelectedList, self.config, self.package_base).cmdloop() 
+                    override(_validator.newSelectedList, self.config, self.package_base, _validator.get_package_config(_validator.newSelectedList)).cmdloop() 
                 else:
                     self.pageobjct(_validator.newSelectedList, self.config, self.package_base).cmdloop() 
                 

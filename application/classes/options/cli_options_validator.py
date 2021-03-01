@@ -5,25 +5,36 @@
 # file that should have been included as part of this package.
 # region Import 
 from nightcappackages import *
+from nightcappackages.classes.databases.mogo.mongo_modules import MogoModuleDatabase
+from nightcappackages.classes.databases.mogo.mongo_packages import MogoPackagesDatabase
+from nightcappackages.classes.databases.mogo.mongo_submodules import MogoSubModuleDatabase
 from application.classes.helpers.screen.screen_helper import ScreenHelper
 # endregion
 
 class NightcapCLIOptionsValidator():
     def __init__(self, options, selectedList):
-        self.modules_db = NightcapModules()
-        self.submodules_db = NightcapSubModule()
-        self.packages_db = NightcapPackages()
+        self.modules_db = MogoModuleDatabase.instance()
+        self.submodules_db = MogoSubModuleDatabase.instance()
+        self.packages_db = MogoPackagesDatabase.instance()
         self.newSelectedList = []
         self.isvalid = self._validate(options, selectedList)
+        self.pkg_conf = None
+
+    def get_package_config(self, path: list):
+        self.pkg_conf = self.packages_db.get_package_config(path)
+        print("Found pkg config", self.pkg_conf)
+        return self.pkg_conf
         
     def _check_module_types(self, path: list):
-        return False if self.modules_db.check_module_path(path) == [] else True
+        return False if self.modules_db.check_module_path(path).count() == 0 else True
 
     def _check_sub_module(self, path: list):
-        return False if self.submodules_db.check_submodule_path(path) == [] else True
+        print("Checking submodule", path)
+        return False if self.submodules_db.check_submodule_path(path).count() == 0 else True
 
     def _check_packages(self, selected):
-        return False if self.packages_db.check_package_path(selected) == [] else True
+        print("Checking package")
+        return self.packages_db.check_package_path(selected)
 
     def _check_current_path(self, path: list):
         if(len(path) == 1):
@@ -137,5 +148,5 @@ class NightcapCLIOptionsValidator():
             else:
                 return False
         except Exception as e:
-            print("Error eith options validation", e)
+            print("Error with options validation", e)
             return False

@@ -35,9 +35,8 @@ class NightcapBaseCMD(_NightcapBaseCMD_Config):
         super(NightcapBaseCMD, self).__init__(selectedList)
         # region 
         self.config = configuration
-        self.modules_db = NightcapModules()
+        
         self.packages_db = NightcapPackages()
-        self.submodules_db = NightcapSubModule()
         self.package_base = packagebase
         self.printer = Printer()
         #endregion

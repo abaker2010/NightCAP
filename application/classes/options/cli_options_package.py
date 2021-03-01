@@ -12,12 +12,16 @@ from application.classes.base_cmd.base_cmd import NightcapBaseCMD
 from colorama import Fore, Style
 
 class NightcapCLIOptionsPackage(NightcapBaseCMD):
-    def __init__(self,selectedList: list, configuration: NighcapCoreConfiguration, packagebase: NightcapCoreBase = NightcapCoreBase()):
+    def __init__(self,selectedList: list, configuration: NighcapCoreConfiguration, packagebase: NightcapCoreBase = NightcapCoreBase(), pkg_config: dict = None):
         NightcapBaseCMD.__init__(self, selectedList, configuration, packagebase)
         self.config = configuration
+        print("Pkg config", pkg_config)
+        print("Pkg config", type(pkg_config))
         try:
-            self.package_params = copy.deepcopy(self.packages_db.package_params(self.selectedList))
+            self.package_params = copy.deepcopy(pkg_config["package_information"]["entry_file_optional_params"])
+            print("Deep copied params", self.package_params)
         except Exception as e:
+            self.printer.print_error(exception=e)
             self.package_params = None
 
     def help_params(self):

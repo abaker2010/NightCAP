@@ -3,7 +3,7 @@
         "creator": "Aaron Baker"
     },
     "package_for": {
-        "module": "test",
+        "module": "tests",
         "submodule": "navy"
     },
     "package_information": {

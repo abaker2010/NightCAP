@@ -16,7 +16,7 @@ class NightcapPackages(NightcapCoreUpdaterBase):
 
     #region Find Packages
     def find_packages(self, module: str, submodule: str):
-        print("Finding packages based on:", module, submodule)
+        # print("Finding packages based on:", module, submodule)
         _packages = list(map(lambda v : v, self.db_packages.table('packages').search(
             (Query()['package_for']['module'] == module) & (Query()['package_for']['submodule'] == submodule)
         )))
@@ -25,66 +25,6 @@ class NightcapPackages(NightcapCoreUpdaterBase):
 
     #endregion
 
-    #region Get All Packages
-    def get_all_packages(self):
-        _packages = list(map(lambda v : v, self.db_packages.table('packages').all()))
-        if(_packages == []):
-            print("\t\tNo Packages Installed\n")
-        else:
-            # print(_packages, "\n\n\n")
-            for p in _packages:
-                print(Fore.YELLOW,'\t- ', p['package_for']['module'],'/',p['package_for']['submodule'],'/',p['package_information']['package_name'], Fore.LIGHTCYAN_EX, "\tver: ",p['package_information']['version'], Fore.LIGHTMAGENTA_EX, "  author: ",p['author_info']['creator'], sep='')
-                print(Fore.GREEN, '\t\t', p['package_information']['details'],"\n")
-            print("\n\n")
-    #endregion
-
-    def check_package_path(self, path: list):
-        return self.db_packages.table('packages').search(
-            (Query()['package_for']['module'] == path[0])
-            & (Query()['package_for']['submodule'] == path[1])
-            & (Query()['package_information']['package_name'] == path[2]))   
-
-    #region Get Packages
-    def packages(self,parentmodules: list,isDetailed: bool = False):
-        npackages = self.db_packages.table('packages').search(
-            (Query()['package_for']['module'] == parentmodules[0])
-            & (Query()['package_for']['submodule'] == parentmodules[1]))   
-
-        if(isDetailed):
-            _packages = list(map(lambda v : v, npackages))
-            packages = []
-            h = '''%s (%s) %s|%s %s %s| %s''' % (
-                    (Fore.GREEN + "Package Name" + Fore.CYAN),
-                    ("Version"),
-                    (Fore.BLUE),
-                    (Fore.CYAN),
-                    ("Developer"),
-                    (Fore.BLUE),
-                    (Fore.YELLOW + "Details" + Style.RESET_ALL),
-                )
-            h1 = (Fore.CYAN + "-"*len(h) +Style.RESET_ALL)
-            packages.append("\n")
-            packages.append(h)
-            packages.append(h1)
-            for pkt in _packages:
-                h1 = pkt['package_information']['package_name']
-                h2 = pkt['package_information']['details']
-                h3 = pkt['package_information']['version']
-                h4 = pkt['author_info']['creator']
-                p = '''\t%s (%s) %s|%s %s %s| %s''' % (
-                    (Fore.GREEN + h1 + Fore.CYAN),
-                    (h3),
-                    (Fore.BLUE),
-                    (Fore.CYAN),
-                    (h4),
-                    (Fore.BLUE),
-                    (Fore.YELLOW + h2 + Style.RESET_ALL),
-                )
-                packages.append(p)
-        else:
-            packages = list(map(lambda v : v['package_information']['package_name'], npackages))
-        return packages
-    #endregion
 
     #region Package Params
     def package_params(self,selected: list):
@@ -95,13 +35,13 @@ class NightcapPackages(NightcapCoreUpdaterBase):
         )   
         return npackages[0]["package_information"]["entry_file_optional_params"]
 
-    def get_package(self, package_path: list):
-        npackages = self.db_packages.table('packages').search(
-            (Query()['package_for']['module'] == package_path[0])
-            & (Query()['package_for']['submodule'] == package_path[1])
-            & (Query()['package_information']['package_name'] == package_path[2])
-        )   
-        return npackages[0]
+    # def get_package(self, package_path: list):
+    #     npackages = self.db_packages.table('packages').search(
+    #         (Query()['package_for']['module'] == package_path[0])
+    #         & (Query()['package_for']['submodule'] == package_path[1])
+    #         & (Query()['package_information']['package_name'] == package_path[2])
+    #     )   
+    #     return npackages[0]
 
     def get_package_run_path(self, package: list):
         npackages = self.db_packages.table('packages').search(
@@ -115,12 +55,7 @@ class NightcapPackages(NightcapCoreUpdaterBase):
         return _path
 
     #endregion
-
-
-    def update(self,updatedb: TinyDB):
-        super().update(updatetable=updatedb.table('packages'),localtable=self.db_packages.table('packages'),checkonrow='package_information',checkonrowtwo='uid', updaterrule=NightcapCoreUpaterRules.Package)
-
-        
+ 
 # DB file to be used for update:  <nightcappackages.classes.packages.NightcapPackages object at 0x7fe63624c9a0>
 # DB file to be used to add global:  /var/folders/xk/95x183fd35bdp7069kx3wkx40000gn/T/tmp6_aib3q3/NightCAP-dev/EXAMPLE_MODULE/test_module/package_info.json
 # /var/folders/xk/95x183fd35bdp7069kx3wkx40000gn/T/tmp6_aib3q3/NightCAP-dev/packages/nightcapcore/nightcapcore/database/projects_db.json updater file

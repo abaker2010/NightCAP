@@ -5,23 +5,27 @@
 # file that should have been included as part of this package.
 # region Import
 # from application.classes.base_cmd.base_cmd import NightcapBaseCMD
-
-from nightcapcore.singleton.singleton import Singleton
+from nightcapcore.configuration.configuration import NighcapCoreConfiguration
+from nightcapcore.decorators.singleton import Singleton
 from nightcappackages.classes.databases.mogo.interfaces.mongo_network import MongoDatabaseInterface
 from pymongo.errors import ServerSelectionTimeoutError
 
-class MogoModuleDatabase(MongoDatabaseInterface):
-    def __init__(self, ip: str = None, port: str = None):
-        
+class MongoDatabaseConnection(MongoDatabaseInterface):
+    def __init__(self):
+        self.conf = NighcapCoreConfiguration()
+        ip = self.conf.currentConfig["MONGOSERVER"]["ip"]
+        port = self.conf.currentConfig["MONGOSERVER"]["port"]
+        _db_name = self.conf.currentConfig["MONGOSERVER"]["db_name"]
+        self.name = None
         if ip == None:
             raise Exception("Mongo Server IP not set")
         if port == None:
             raise Exception("Mongo Server Port not set")
+        if _db_name == None:
+            raise Exception("Mongo Server DB_Name not set")
+        else:
+            self.db_name = _db_name
         try:
             super().__init__(ip, port)
         except ServerSelectionTimeoutError as e:
             raise e
-        # print("Connected to Mongo Server", MongoDatabaseInterface.connect(self))
-
-    def test(self):
-        print("Called testing")

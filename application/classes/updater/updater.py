@@ -8,6 +8,7 @@
 from colorama import Fore, Style
 from nightcapcore import Printer, NightcapCoreRemoteDocs
 from nightcappackages import NightcapPackages
+from nightcappackages.classes.databases.mogo.mongo_packages import MogoPackagesDatabase
 import requests
 from tinydb.database import TinyDB
 from tqdm.auto import tqdm
@@ -151,20 +152,20 @@ class NightcapUpdater:
                 #         print("Skipping DB:", "Projects_DB")
                 #         print("*"*20,"\n")
                 elif(str(udb).endswith("packages.json")):
-                    # self.printer.print_formatted_check("Skipping", leadingTab=3)
-                    NightcapPackages().update(TinyDB(udb))
+                    self.printer.print_formatted_check("Skipping: Mongo Updater Needed", leadingTab=3)
+                    # MogoPackagesDatabase.instance().update()
                 #     if(self.verbose):
                 #         print("Skipping DB:", "Packages")
                 #         print("*"*20,"\n")
                 elif(str(udb).endswith("submodules.json")):
-                    # self.printer.print_formatted_check("Skipping", leadingTab=3)
-                    NightcapSubModule().update(TinyDB(udb))
+                    self.printer.print_formatted_check("Skipping: Mongo Updater Needed", leadingTab=3)
+                    # NightcapSubModule().update(TinyDB(udb))
                 #     # print("Updater needed")
                 #     if(self.verbose):
                 #         print("Skipping DB:", "Submodules")
                 elif(str(udb).endswith("modules.json")):
-                    # self.printer.print_formatted_check("Skipping", leadingTab=3)
-                    NightcapModules().update(TinyDB(udb))
+                    self.printer.print_formatted_check("Skipping: Mongo update needed", leadingTab=3)
+                    # NightcapModules().update(TinyDB(udb))
                 elif(str(udb).endswith("protocol_links.json")):
                     NightcapCoreRemoteDocs().update(TinyDB(udb))
                 else:
