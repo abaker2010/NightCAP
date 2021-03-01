@@ -5,7 +5,7 @@
 # file that should have been included as part of this package.
 #region Import
 from nightcapcore import Printer
-from nightcappackages.classes.databases.mogo.mongo_modules import MogoModuleDatabase
+from nightcappackages.classes.databases.mogo.mongo_modules import MongoModuleDatabase
 from application.classes.options.option_generator import NightcapOptionGenerator
 #endregion
 

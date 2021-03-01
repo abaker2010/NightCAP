@@ -5,8 +5,8 @@
 # file that should have been included as part of this package.
 from colorama import Fore
 from nightcapcore import Printer
-from nightcappackages.classes.databases.mogo.mongo_modules import MogoModuleDatabase
-from nightcappackages.classes.databases.mogo.mongo_submodules import MogoSubModuleDatabase
+from nightcappackages.classes.databases.mogo.mongo_modules import MongoModuleDatabase
+from nightcappackages.classes.databases.mogo.mongo_submodules import MongoSubModuleDatabase
 from nightcappackages.classes.paths import NightcapPackagesPaths, NightcapPackagesPathsEnum
 from application.classes.helpers.screen.screen_helper import ScreenHelper
 from tinydb import TinyDB, Query
@@ -50,11 +50,11 @@ class NightcapPackageUninstaller():
                             # If there are no packages then remove the submodule
                             if(len(packages) == 0):
                                 # print("No packages left in module/submodule")
-                                MogoSubModuleDatabase.instance().submodule_try_uninstall(split_package_path[0], split_package_path[1])
+                                MongoSubModuleDatabase.instance().submodule_try_uninstall(split_package_path[0], split_package_path[1])
                                 # If there are no submodules then remove the module
-                                if(MogoSubModuleDatabase.instance().find_submodules(split_package_path[0]).count() == 0):
+                                if(MongoSubModuleDatabase.instance().find_submodules(split_package_path[0]).count() == 0):
                                     # print("remove module")
-                                    MogoModuleDatabase.instance().module_try_unintall(split_package_path[0])
+                                    MongoModuleDatabase.instance().module_try_unintall(split_package_path[0])
 
                             self.printer.print_formatted_check(text="UNINSTALLED", vtabs=1, endingBreaks=1)
 

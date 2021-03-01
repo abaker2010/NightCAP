@@ -13,7 +13,7 @@ from nightcapcore import *
 
 class NightcapInstallPackage():
     def __init__(self):
-        self.packages_db = NightcapPackages()
+        # self.packages_db = NightcapPackages()
         self.printer = Printer()
 
     def install_package(self, package_path: str):

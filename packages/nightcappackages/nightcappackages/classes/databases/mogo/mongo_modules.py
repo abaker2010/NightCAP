@@ -10,7 +10,7 @@ from nightcappackages.classes.databases.mogo.mongo_connection import MongoDataba
 from nightcapcore.decorators.singleton import Singleton
 
 @Singleton
-class MogoModuleDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInterface):
+class MongoModuleDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInterface):
     def __init__(self):
         MongoDatabaseConnection.__init__(self)
         MongoDatabaseOperationsInterface.__init__(self)

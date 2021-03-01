@@ -67,15 +67,17 @@ class NightcapCLIOptionsPackage(NightcapBaseCMD):
 
         if(force == True):
             if(len(self.selectedList) == 3):
-                exe_path = self.packages_db.get_package_run_path(self.selectedList)
-                dat = {}
-                dat[0] = self.package_base.toJson()
-                dat[1] = self.package_params
-                print("data before passing: ", dat)
+                print("List to be used to find run path", self.selectedList)
+                # needs to be set up with the NightCap Mongo Packages instance
+                # exe_path = self.packages_db.get_package_run_path(self.selectedList)
+                # dat = {}
+                # dat[0] = self.package_base.toJson()
+                # dat[1] = self.package_params
+                # print("data before passing: ", dat)
                 
-                call = "python3.8 %s --data '%s'" % (exe_path, json.dumps(dat))
+                # call = "python3.8 %s --data '%s'" % (exe_path, json.dumps(dat))
                 
-                os.system(call)
+                # os.system(call)
             else:
                 print("Package not selected to be used")
         else:

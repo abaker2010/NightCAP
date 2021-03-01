@@ -14,7 +14,7 @@ import subprocess
 import pkg_resources
 
 @Singleton
-class MogoPackagesDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInterface):
+class MongoPackagesDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInterface):
     def __init__(self):
         MongoDatabaseConnection.__init__(self)
         MongoDatabaseOperationsInterface.__init__(self)
@@ -33,6 +33,16 @@ class MogoPackagesDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInter
     def delete(self):
         pass
 
+    # def get_package_run_path(self, package: list):
+    #     npackages = self.db_packages.table('packages').search(
+    #         (Query()['package_for']['module'] == package[0])
+    #         & (Query()['package_for']['submodule'] == package[1])
+    #         & (Query()['package_information']['package_name'] == package[2])
+    #     )
+    #     pkt = npackages[0]
+    #     _path = self.__package_paths.generate_path(NightcapPackagesPathsEnum.PackagesBase, [pkt["package_for"]["module"],pkt["package_for"]["submodule"], \
+    #     pkt["package_information"]["package_name"],pkt["package_information"]["entry_file"]])
+    #     return _path
 
     def check_package_path(self, path: list):
         # return self.db_packages.table('packages').search(
@@ -55,6 +65,11 @@ class MogoPackagesDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInter
     def package_params(self,selected: list):
         _module = selected[0]
         _submodule = selected[1]
+        _package = selected[2]
+        print("Finding package params")
+        print(_module)
+        print(_submodule)
+        print(_package)
         # __package__
         _npackages = self._db.find({
             "$and" : [{
@@ -81,6 +96,8 @@ class MogoPackagesDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInter
             "package_for.submodule" : {'$eq' : _submodule},
             "package_information.package_name" : {'$eq' : _package}
         }]})
+
+    
 
     #region Get Options Packages
     def packages(self,parentmodules: list,isDetailed: bool = False):
@@ -132,9 +149,18 @@ class MogoPackagesDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInter
         return packages
     #endregion
 
-    #region Find Packages
+    #region Find Package
     def find_package(self, package: dict = None):
         return self._db.find_one(package)
+    #endregion
+
+    #region Find Packages
+    def find_packages(self, module: str = None, submodule: str = None):
+        return self._db.find({
+            "$and" : [{
+            "package_for.module" : {'$eq': module},
+            "package_for.submodule" : {'$eq' : submodule}
+        }]})
     #endregion
 
     #region Install

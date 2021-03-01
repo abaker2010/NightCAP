@@ -5,17 +5,17 @@
 # file that should have been included as part of this package.
 # region Import 
 from nightcappackages import *
-from nightcappackages.classes.databases.mogo.mongo_modules import MogoModuleDatabase
-from nightcappackages.classes.databases.mogo.mongo_packages import MogoPackagesDatabase
-from nightcappackages.classes.databases.mogo.mongo_submodules import MogoSubModuleDatabase
+from nightcappackages.classes.databases.mogo.mongo_modules import MongoModuleDatabase
+from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
+from nightcappackages.classes.databases.mogo.mongo_submodules import MongoSubModuleDatabase
 from application.classes.helpers.screen.screen_helper import ScreenHelper
 # endregion
 
 class NightcapCLIOptionsValidator():
     def __init__(self, options, selectedList):
-        self.modules_db = MogoModuleDatabase.instance()
-        self.submodules_db = MogoSubModuleDatabase.instance()
-        self.packages_db = MogoPackagesDatabase.instance()
+        self.modules_db = MongoModuleDatabase.instance()
+        self.submodules_db = MongoSubModuleDatabase.instance()
+        self.packages_db = MongoPackagesDatabase.instance()
         self.newSelectedList = []
         self.isvalid = self._validate(options, selectedList)
         self.pkg_conf = None

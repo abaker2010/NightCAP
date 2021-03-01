@@ -7,8 +7,8 @@
 # from application.classes.helpers.printers.print import Printer
 from colorama import Fore, Style
 from nightcapcore import Printer, NightcapCoreRemoteDocs
-from nightcappackages import NightcapPackages
-from nightcappackages.classes.databases.mogo.mongo_packages import MogoPackagesDatabase
+# from nightcappackages import NightcapPackages
+from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
 import requests
 from tinydb.database import TinyDB
 from tqdm.auto import tqdm

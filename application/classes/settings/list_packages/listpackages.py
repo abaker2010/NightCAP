@@ -6,11 +6,11 @@
 from nightcappackages import *
 from colorama import Fore, Style
 from nightcapcore import *
-from nightcappackages.classes.databases.mogo.mongo_packages import MogoPackagesDatabase
+from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
 
 class NightcapListPackages():
     def __init__(self):
-        self.packages_db = MogoPackagesDatabase.instance()
+        self.packages_db = MongoPackagesDatabase.instance()
         self.priner = Printer()
 
     def list_packages(self):

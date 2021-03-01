@@ -6,9 +6,9 @@
 from nightcappackages import *
 from nightcapcore import Printer
 from colorama import Fore, Style
-from nightcappackages.classes.databases.mogo.mongo_modules import MogoModuleDatabase
-from nightcappackages.classes.databases.mogo.mongo_packages import MogoPackagesDatabase
-from nightcappackages.classes.databases.mogo.mongo_submodules import MogoSubModuleDatabase
+from nightcappackages.classes.databases.mogo.mongo_modules import MongoModuleDatabase
+from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
+from nightcappackages.classes.databases.mogo.mongo_submodules import MongoSubModuleDatabase
 
 class NightcapOptionGenerator():
     def __init__(self, selectedList):
@@ -23,13 +23,13 @@ class NightcapOptionGenerator():
 
         if(len(self.selectedList) == 0):
             # print("finding options")
-            vals = list(map(lambda v: v['type'] + Fore.LIGHTMAGENTA_EX + " (" + str(NightcapInstalledPackageCounter().count_from_selected_module(v['type'])) + ")" + Style.RESET_ALL, MogoModuleDatabase.instance().get_all_modules()))
+            vals = list(map(lambda v: v['type'] + Fore.LIGHTMAGENTA_EX + " (" + str(NightcapInstalledPackageCounter().count_from_selected_module(v['type'])) + ")" + Style.RESET_ALL, MongoModuleDatabase.instance().get_all_modules()))
         elif(len(self.selectedList) == 1):
             # print("finding with", self.selectedList)
-            vals = list(map(lambda v: v['type'] + Fore.LIGHTMAGENTA_EX + " (" + str(NightcapInstalledPackageCounter().count_from_selected_submodule([self.selectedList[0], v['type']])) + ")" + Style.RESET_ALL, MogoSubModuleDatabase.instance().find_submodules(self.selectedList[0])))
+            vals = list(map(lambda v: v['type'] + Fore.LIGHTMAGENTA_EX + " (" + str(NightcapInstalledPackageCounter().count_from_selected_submodule(self.selectedList[0], v['type'])) + ")" + Style.RESET_ALL, MongoSubModuleDatabase.instance().find_submodules(self.selectedList[0])))
         elif(len(self.selectedList) == 2):
             # print("Trying to find submodule options")
-            vals = MogoPackagesDatabase.instance().packages(self.selectedList, isDetailed)#NightcapPackages().packages(self.selectedList,isDetailed)
+            vals = MongoPackagesDatabase.instance().packages(self.selectedList, isDetailed)
         else:
             print("should be for packages")
 

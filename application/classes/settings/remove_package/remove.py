@@ -9,7 +9,7 @@ from nightcapcore import *
 
 class NightcapRemovePackage():
     def __init__(self):
-        self.packages_db = NightcapPackages()
+        # self.packages_db = NightcapPackages()
         self.printer = Printer()
 
     def remove_package(self, package_path: str):

@@ -3,9 +3,9 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-from nightcappackages.classes.databases.mogo.mongo_modules import MogoModuleDatabase
-from nightcappackages.classes.databases.mogo.mongo_packages import MogoPackagesDatabase
-from nightcappackages.classes.databases.mogo.mongo_submodules import MogoSubModuleDatabase
+from nightcappackages.classes.databases.mogo.mongo_modules import MongoModuleDatabase
+from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
+from nightcappackages.classes.databases.mogo.mongo_submodules import MongoSubModuleDatabase
 from nightcappackages.classes.paths import NightcapPackagesPathsEnum, NightcapPackagesPaths
 from application.classes.helpers.screen.screen_helper import ScreenHelper
 from nightcapcore import *
@@ -30,19 +30,19 @@ class NightcapPackageInstaller():
 
         try:
             
-            MogoModuleDatabase.instance().module_install(package['package_for']['module'])
+            MongoModuleDatabase.instance().module_install(package['package_for']['module'])
         except  Exception as e:
             self.printer.print_error(exception=e)
             # self.output.output("Error with module: " + str(e), level=6)
         try:
-            MogoSubModuleDatabase.instance().submodule_install(package['package_for']['module'], package['package_for']['submodule'])
+            MongoSubModuleDatabase.instance().submodule_install(package['package_for']['module'], package['package_for']['submodule'])
         except  Exception as e:
             self.printer.print_error(exception=e)
             # self.output.output("Error with submodule: " + str(e), level=6)
             exit
     
     #region Checking for package in db
-        MogoPackagesDatabase.instance().install(package)
+        MongoPackagesDatabase.instance().install(package)
         # packageExists = self.db_packages.table('packages').search(
         #     (Query()['package_information']['uid'] == npuid)
         # )

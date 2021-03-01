@@ -10,7 +10,7 @@ from nightcappackages.classes.databases.mogo.mongo_connection import MongoDataba
 from nightcapcore.decorators.singleton import Singleton
 
 @Singleton
-class MogoSubModuleDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInterface):
+class MongoSubModuleDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInterface):
     def __init__(self):
         MongoDatabaseConnection.__init__(self)
         MongoDatabaseOperationsInterface.__init__(self)
@@ -43,7 +43,8 @@ class MogoSubModuleDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInte
         return self._db.find_one({'module' : module, 'submodule' : submodule})
 
     def find_submodules(self, module: str = None):
-        return self._db.find({'module' : {"$eq" : module}})
+        print("Trying to find submodules in db", module)
+        return self._db.find({"module" : module})
 
     def check_submodule_path(self, path: list):
         # return self.find_one(path[0], path[1])

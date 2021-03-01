@@ -3,27 +3,20 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-from nightcappackages.classes import NightcapPackages
-from nightcappackages.classes.databases.mogo.mongo_submodules import MogoSubModuleDatabase
+# from nightcappackages.classes import NightcapPackages
+from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
+from nightcappackages.classes.databases.mogo.mongo_submodules import MongoSubModuleDatabase
 
 class NightcapInstalledPackageCounter():
     def __init__(self):
         pass
         
     def count_from_selected_module(self, module: str):
-        _count = 0
-        _submodules = list(map(lambda v : v['type'], MogoSubModuleDatabase.instance().find_submodules(module)))
-        for _sm in _submodules:
-            _count += len(list(map(lambda v : v, NightcapPackages().find_packages(module, _sm))))
-        return _count
+        return MongoSubModuleDatabase.instance().find_submodules(module).count()
 
-    def count_from_selected_submodule(self, path: list):
+    def count_from_selected_submodule(self, module: str, submodule: str):
         try:
-            # print("list to use to find submodule", path)
-
-            return len(list(map(lambda v : v, NightcapPackages().find_packages(path[0], path[1]))))
-            
+            return MongoPackagesDatabase.instance().find_packages(module, submodule).count()
         except Exception as e:
             print(e)
             return []
-        # return len(list(map(lambda v : v, NightcapPackages().find_packages(path[0], path[1]))))
