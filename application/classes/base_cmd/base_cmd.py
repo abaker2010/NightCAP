@@ -54,7 +54,7 @@ class NightcapBaseCMD(_NightcapBaseCMD_Config):
             if(len(line) == 0):
                 if(self.package_base.project != None):
                     self.printer.print_underlined_header_undecorated(text="System settings")
-                    self.printer.item_1(text="Current Project", optionalText=str(self.package_base.project['project_number']) + ' : ' + str(self.package_base.project['project_name']))
+                    self.printer.item_1(text="Current Project", optionalText=str(self.package_base.project['project_name']))
                 else:
                     self.printer.print_underlined_header_undecorated(text="System settings")
                     self.printer.item_1(text="Current Project", optionalText='None')
