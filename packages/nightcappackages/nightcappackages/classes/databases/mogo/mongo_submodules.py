@@ -43,19 +43,19 @@ class MongoSubModuleDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInt
         return self._db.find_one({'module' : module, 'submodule' : submodule})
 
     def find_submodules(self, module: str = None):
-        print("Trying to find submodules in db", module)
+        # print("Trying to find submodules in db", module)
         return self._db.find({"module" : module})
 
     def check_submodule_path(self, path: list):
         # return self.find_one(path[0], path[1])
-        print("submodule path to find", path)
+        # print("submodule path to find", path)
         _subpath = self._db.find({
             "$and" : [
                 {'module' : {"$eq" : path[0]}},
                 {'type' : {"$eq" : path[1]}}
             ]
         })
-        print("Submodules path", _subpath.count())
+        # print("Submodules path", _subpath.count())
         return _subpath
 
     def submodule_install(self, module: str, submodule: str):

@@ -7,7 +7,6 @@ import os
 import base64 
 from nightcapcore.remotedocs.remote_docs import NightcapCoreRemoteDocs
 from nightcapcore.configuration import NighcapCoreConfiguration
-from nightcapcore.projects.projects import NightcapCoreProject
 from nightcapcore.remotedocs.remote_docs import NightcapCoreRemoteDocs
 from nightcapcore.paths.paths import NightcapPaths
 from nightcapcore.paths.pathsenum import NightcapPathsEnum
@@ -100,7 +99,7 @@ class NightcapCoreServerReportingBase(NighcapCoreConfiguration):
         ndata = []
         for l in data:
             if proj_replace in l:
-                projs = NightcapCoreProject().projects()
+                projs = {} #NightcapCoreProject().projects()
                 print(type(projs))
                 print(projs)
                 for proj in projs:

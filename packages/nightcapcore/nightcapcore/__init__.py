@@ -8,7 +8,6 @@ from .core import NightcapCore
 from .params import NightcapDynamicParams
 from .server.reporting_server_base import NightcapCoreServerReportingBase
 from .server.server import NighcapCoreSimpleServer
-from .projects.projects import NightcapCoreProject
 from .report.simplereport import NightcapSimpleReport
 from .paths import NightcapPaths, NightcapPathsEnum, NightcapPathCleaner
 from .updater import NightcapCoreUpaterRules, NightcapCoreUpdaterBase
@@ -22,7 +21,7 @@ __all__ = [
     "NightcapCoreBase", "NightcapCore",
     "NightcapDynamicParams",
     "NightcapCoreServerReportingBase", "NighcapCoreSimpleServer",
-    "NightcapCoreProject", "NightcapSimpleReport", "NightcapPaths",
+    "NightcapSimpleReport", "NightcapPaths",
     "NightcapPathsEnum", "NightcapPathCleaner", "NightcapCoreUpdaterBase",
     "NightcapCoreUpaterRules", "NightcapCoreFiles", "Printer", 
     "NighcapCoreConfiguration", "NightcapCoreRemoteDocs", "Singleton"
