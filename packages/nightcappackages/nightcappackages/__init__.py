@@ -4,10 +4,10 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 # from .classes.packages import NightcapPackages
-from .classes.helpers import NightcapPackageInstallerCommand, NightcapPackageUninstaller, NightcapInstalledPackageCounter
+from .classes.helpers import NightcapPackageInstallerCommand, NightcapPackageUninstallerCommand, NightcapInstalledPackageCounter
 
 __all__ = [
-            "NightcapPackageInstallerCommand", "NightcapPackageUninstaller", 
+            "NightcapPackageInstallerCommand", "NightcapPackageUninstallerCommand", 
             "NightcapInstalledPackageCounter"
         ]
 

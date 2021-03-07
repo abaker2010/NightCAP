@@ -51,7 +51,7 @@ class MongoModuleDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInterf
 
     def module_try_unintall(self, module: str):
         _moduleexists = self.find_one(module)
-        print("module found", _moduleexists)
+        # print("module found", _moduleexists)
         self._db.remove(_moduleexists)
         self.printer.print_formatted_additional(text="Deleted module entry", leadingTab=3)
 

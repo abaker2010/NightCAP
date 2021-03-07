@@ -4,9 +4,9 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 from nightcappackages.classes.helpers.package_installer import NightcapPackageInstallerCommand
+from nightcappackages.classes.helpers.package_uninstaller import NightcapPackageUninstallerCommand
 from application.classes.settings.list_packages.listpackages import NightcapListPackages
 from application.classes.base_cmd.base_cmd import NightcapBaseCMD
-from application.classes.settings.remove_package.remove import NightcapRemovePackage
 from application.classes.settings.dev_options.dev_options import NightcapDevOptions
 from application.classes.updater.updater import  NightcapUpdater
 from application.classes.helpers.screen.screen_helper import ScreenHelper
@@ -51,8 +51,12 @@ class NightcapSettingsCMD(NightcapBaseCMD):
 
     #region Uninstall
     def do_uninstall(self,line):
-        print("Uninstall module:",line)
-        NightcapRemovePackage().remove_package(line) 
+        try:
+            invoker = Invoker()
+            invoker.set_on_start(NightcapPackageUninstallerCommand(line))
+            invoker.do_something_important()
+        except Exception as e:
+            self.printer.print_error(exception=e)
 
     def help_uninstall(self):
         h1 = "Uninstall a module example:"
