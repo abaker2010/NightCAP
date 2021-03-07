@@ -16,6 +16,8 @@ from .printers import Printer
 from .configuration import NighcapCoreConfiguration
 from .remotedocs import NightcapCoreRemoteDocs
 from .singleton import Singleton
+from .command import Command
+from .invoker import Invoker
 
 __all__ = [
     "NightcapCoreBase", "NightcapCore",
@@ -24,7 +26,8 @@ __all__ = [
     "NightcapSimpleReport", "NightcapPaths",
     "NightcapPathsEnum", "NightcapPathCleaner", "NightcapCoreUpdaterBase",
     "NightcapCoreUpaterRules", "NightcapCoreFiles", "Printer", 
-    "NighcapCoreConfiguration", "NightcapCoreRemoteDocs", "Singleton"
+    "NighcapCoreConfiguration", "NightcapCoreRemoteDocs", "Singleton", "Command",
+    "Invoker"
 ]
 
 __version__ = '0.0.1'

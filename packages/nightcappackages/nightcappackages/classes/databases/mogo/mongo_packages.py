@@ -10,9 +10,6 @@ from colorama.ansi import Fore, Style
 from nightcappackages.classes.databases.mogo.interfaces.mogo_operations import MongoDatabaseOperationsInterface
 from nightcappackages.classes.databases.mogo.mongo_connection import MongoDatabaseConnection
 from nightcapcore.decorators.singleton import Singleton
-import sys
-import subprocess
-import pkg_resources
 
 @Singleton
 class MongoPackagesDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInterface):
@@ -46,10 +43,6 @@ class MongoPackagesDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInte
     #     return _path
 
     def check_package_path(self, path: list):
-        # return self.db_packages.table('packages').search(
-        #     (Query()['package_for']['module'] == path[0])
-        #     & (Query()['package_for']['submodule'] == path[1])
-        #     & (Query()['package_information']['package_name'] == path[2])) 
         _module = path[0]
         _submodule = path[1]
         _package = path[2]
@@ -75,28 +68,17 @@ class MongoPackagesDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInte
             "package_for.module" : {'$eq': _module},
             "package_for.submodule" : {'$eq' : _submodule}
         }]})
-        # npackages = self.db_packages.table('packages').search(
-        #     (Query()['package_for']['module'] == selected[0])
-        #     & (Query()['package_for']['submodule'] == selected[1])
-        #     & (Query()['package_information']['package_name'] == selected[2])
-        # )   
-        # return npackages[0]["package_information"]["entry_file_optional_params"]
 
     def get_package_config(self,parentmodules: list):
         _module = parentmodules[0]
         _submodule = parentmodules[1]
         _package = parentmodules[2]
-        # print(_module)
-        # print(_submodule)
-        # print(_package)
         return self._db.find_one({
             "$and" : [{
             "package_for.module" : {'$eq': _module},
             "package_for.submodule" : {'$eq' : _submodule},
             "package_information.package_name" : {'$eq' : _package}
         }]})
-
-    
 
     #region Get Options Packages
     def packages(self,parentmodules: list,isDetailed: bool = False):
@@ -165,10 +147,8 @@ class MongoPackagesDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInte
     #region Install
     def install(self, package: dict = None):
         _puid = package['package_information']['uid']
-        # self.printer.print_formatted_check(text="Looking for puid: " + _puid)
         if(self.find_package(package) == None):
             try:
-                self._collect_imports(package)
                 self.create(package)
                 return True
             except Exception as e:
@@ -177,86 +157,6 @@ class MongoPackagesDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInte
         else:
             self.printer.print_formatted_check(text="Package Already Installed")
             return False
-    #endregion
-
-    #region Collect Imports
-    def _collect_imports(self, package: dict = None):
-        try:
-            _imports = list(package['package_information']['imports'])
-            # print("Imports needed for the program", _imports)
-            
-            if(_imports == []):
-                print("add package to db")
-            else:
-                self.printer.print_underlined_header_undecorated(text="Installing Required Packages")
-
-                installed_packages_dict = {}
-                installed_packages = pkg_resources.working_set
-                for i in installed_packages:
-                    installed_packages_dict[i.key] = {"version":i.version}
-
-                for pkg in _imports:
-
-                    _ver = None if pkg['version'] == '' else pkg['version']
-                    
-                    if pkg['package'] not in installed_packages_dict.keys():
-                        try:
-                            self._install_import(pkg)
-                        except Exception as e:
-                            self.printer.print_error(e)
-                    else:
-                        
-                        if(pkg['version'] != ''):
-                            _ver = str(installed_packages_dict[pkg['package']]['version'])
-                            _rver = str(pkg['version'])
-                            if(_rver == _ver):
-                                # print("version required is the same/older")
-                                self.printer.print_formatted_check(text="Installed: " + pkg['package'], optionaltext=str(pkg['version']))
-                            elif(_rver != _ver):
-                                # print("version required is the same/older")
-                                self.printer.print_formatted_additional(text="Collison: " + pkg['package'])
-                                self.printer.print_formatted_additional(text="Required Version", optionaltext=str(pkg['version']), leadingTab=3)
-                                self.printer.print_formatted_additional(text="Installed Version", optionaltext=str(installed_packages_dict[pkg['package']]['version']), leadingTab=3)
-                                agree = input(Fore.LIGHTGREEN_EX + "\n\t\tOverride package? (Y/n): " + Style.RESET_ALL).lower()
-                                yes = self.conf.currentConfig.get('NIGHTCAPCORE', 'yes').split()
-                                if agree in yes:
-                                    self.printer.print_formatted_delete(text="(Confirm) This will replace the currently installed pip package.")
-                                    self.printer.print_formatted_additional(text=("Existing: %s :: %s, Replacement: %s :: %s") % (str(pkg['package']), str(installed_packages_dict[pkg['package']]['version']),str(pkg['package']), str(pkg['version'])))
-                                    agree = input(Fore.RED + "\n\t\tContinue? (Y/n): " + Style.RESET_ALL).lower()
-                                    if agree in yes:
-                                        print("override package")
-                                        self._install_import(pkg)
-
-                            else:
-                                print("version required is greater")
-                print()
-        except Exception as e:
-            raise e
-    #endregion
-
-
-    #region install imports
-    def _install_import(self, imprt: dict = None, reinstall: bool = False):
-        _pkg = None
-        _ver = "Any" if imprt['version'] == '' else imprt['version']
-        if(imprt['version'] == ''):
-            _pkg = imprt['package']
-        else:
-            _pkg = imprt['package'] + "==" + imprt['version']
-        
-        self.printer.print_formatted_additional(text="Installing", optionaltext=imprt['package'] + " ver. " + _ver, textColor=Fore.LIGHTYELLOW_EX)
-        print("current command to use", _pkg)
-        
-        try:
-            python = sys.executable
-            if(reinstall):
-                subprocess.check_call(['sudo', python, '-m', 'pip', 'install', _pkg, '--force-reinstall'], stdout=subprocess.DEVNULL)
-            else:
-                subprocess.check_call(['sudo', python, '-m', 'pip', 'install', '--user','-Iv', _pkg], stdout=subprocess.DEVNULL)
-
-            
-        except Exception as e:
-            raise e
     #endregion
 
     #region get all packages

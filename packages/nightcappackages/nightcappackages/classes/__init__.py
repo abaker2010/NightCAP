@@ -4,9 +4,9 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 # from .packages import NightcapPackages
-from .helpers import NightcapPackageInstaller, NightcapPackageUninstaller, NightcapInstalledPackageCounter
+from .helpers import NightcapPackageInstallerCommand, NightcapPackageUninstaller, NightcapInstalledPackageCounter
 from .databases import MongoDatabaseInterface
 __all__ = [
-            "NightcapPackageInstaller", "NightcapPackageUninstaller", 
+            "NightcapPackageInstallerCommand", "NightcapPackageUninstaller", 
             "NightcapInstalledPackageCounter", "MongoDatabaseInterface"
         ]

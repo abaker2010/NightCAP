@@ -3,13 +3,14 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
+from nightcappackages.classes.helpers.package_installer import NightcapPackageInstallerCommand
 from application.classes.settings.list_packages.listpackages import NightcapListPackages
 from application.classes.base_cmd.base_cmd import NightcapBaseCMD
-from application.classes.settings.install_package.install import NightcapInstallPackage
 from application.classes.settings.remove_package.remove import NightcapRemovePackage
 from application.classes.settings.dev_options.dev_options import NightcapDevOptions
 from application.classes.updater.updater import  NightcapUpdater
 from application.classes.helpers.screen.screen_helper import ScreenHelper
+from nightcapcore import *
 from colorama import Fore, Style
 
 class NightcapSettingsCMD(NightcapBaseCMD):
@@ -24,7 +25,12 @@ class NightcapSettingsCMD(NightcapBaseCMD):
 
     #region Install
     def do_install(self, line):
-        NightcapInstallPackage().install_package(line)
+        try:
+            invoker = Invoker()
+            invoker.set_on_start(NightcapPackageInstallerCommand(line))
+            invoker.do_something_important()
+        except Exception as e:
+            self.printer.print_error(exception=e)
 
     def help_install(self):
         h1 = "Install a new module. Formatting for module creation can be found at:"
