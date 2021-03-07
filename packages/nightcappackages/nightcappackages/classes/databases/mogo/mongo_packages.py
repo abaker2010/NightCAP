@@ -5,6 +5,7 @@
 # file that should have been included as part of this package.
 # region Import
 # from application.classes.base_cmd.base_cmd import NightcapBaseCMD
+from bson.objectid import ObjectId
 from colorama.ansi import Fore, Style
 from nightcappackages.classes.databases.mogo.interfaces.mogo_operations import MongoDatabaseOperationsInterface
 from nightcappackages.classes.databases.mogo.mongo_connection import MongoDatabaseConnection
@@ -30,8 +31,8 @@ class MongoPackagesDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInte
         # super().update(updatetable=updatedb.table('packages'),localtable=self.db_packages.table('packages'),checkonrow='package_information',checkonrowtwo='uid', updaterrule=NightcapCoreUpaterRules.Package)
         pass
 
-    def delete(self):
-        pass
+    def delete(self, puid: ObjectId):
+        self._db.delete_one({'_id' : puid})
 
     # def get_package_run_path(self, package: list):
     #     npackages = self.db_packages.table('packages').search(
@@ -49,7 +50,6 @@ class MongoPackagesDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInte
         #     (Query()['package_for']['module'] == path[0])
         #     & (Query()['package_for']['submodule'] == path[1])
         #     & (Query()['package_information']['package_name'] == path[2])) 
-        print("Check package path needs done")
         _module = path[0]
         _submodule = path[1]
         _package = path[2]
@@ -59,7 +59,6 @@ class MongoPackagesDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInte
             "package_for.submodule" : {'$eq' : _submodule},
             "package_information.package_name" : {'$eq' : _package}
         }]})
-        print(_)
         return False if _ == None else True
 
     def package_params(self,selected: list):
@@ -87,9 +86,9 @@ class MongoPackagesDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInte
         _module = parentmodules[0]
         _submodule = parentmodules[1]
         _package = parentmodules[2]
-        print(_module)
-        print(_submodule)
-        print(_package)
+        # print(_module)
+        # print(_submodule)
+        # print(_package)
         return self._db.find_one({
             "$and" : [{
             "package_for.module" : {'$eq': _module},
@@ -171,10 +170,13 @@ class MongoPackagesDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInte
             try:
                 self._collect_imports(package)
                 self.create(package)
+                return True
             except Exception as e:
                 self.printer.print_error(e)
+                return False
         else:
             self.printer.print_formatted_check(text="Package Already Installed")
+            return False
     #endregion
 
     #region Collect Imports
@@ -192,6 +194,7 @@ class MongoPackagesDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInte
                 installed_packages = pkg_resources.working_set
                 for i in installed_packages:
                     installed_packages_dict[i.key] = {"version":i.version}
+
                 for pkg in _imports:
 
                     _ver = None if pkg['version'] == '' else pkg['version']
@@ -231,8 +234,9 @@ class MongoPackagesDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInte
             raise e
     #endregion
 
+
     #region install imports
-    def _install_import(self, imprt: dict = None):
+    def _install_import(self, imprt: dict = None, reinstall: bool = False):
         _pkg = None
         _ver = "Any" if imprt['version'] == '' else imprt['version']
         if(imprt['version'] == ''):
@@ -245,7 +249,12 @@ class MongoPackagesDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInte
         
         try:
             python = sys.executable
-            subprocess.check_call(['sudo', '-H', python, '-m', 'pip', 'install', _pkg, '--force-reinstall'], stdout=subprocess.DEVNULL)
+            if(reinstall):
+                subprocess.check_call(['sudo', python, '-m', 'pip', 'install', _pkg, '--force-reinstall'], stdout=subprocess.DEVNULL)
+            else:
+                subprocess.check_call(['sudo', python, '-m', 'pip', 'install', '--user','-Iv', _pkg], stdout=subprocess.DEVNULL)
+
+            
         except Exception as e:
             raise e
     #endregion

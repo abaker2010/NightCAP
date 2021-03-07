@@ -6,12 +6,10 @@
 
 from nightcapcore import NightcapCoreBase, configuration, Printer
 from application.classes.helpers.screen.screen_helper import ScreenHelper
-
 from application.classes.banners.nightcap_banner import NightcapBanner
 from nightcappackages import *
 import cmd
 from colorama import Fore, Style
-
 try:
     from subprocess import DEVNULL # py3k
 except ImportError:
@@ -59,9 +57,8 @@ class NightcapBaseCMD(_NightcapBaseCMD_Config):
                     self.printer.print_underlined_header_undecorated(text="System settings")
                     self.printer.item_1(text="Current Project", optionalText='None')
         except Exception as e:
-            # self.printer.print_error(exception=e)
-            pass
-
+            self.printer.print_error(exception=e)
+        
         super(NightcapBaseCMD, self).do_help(line)
 
 

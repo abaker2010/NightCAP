@@ -17,7 +17,7 @@ class NightcapRemovePackage():
             data = package_path.split("/")
             
             self.printer.print_underlined_header_undecorated(text="UNINSTALLING")
-            self.printer.print_formatted_additional(text="Package:", optionaltext=data[0] + "/" + data[1] + "/" + data[2])
+            # self.printer.print_formatted_additional(text="Package:", optionaltext=data[0] + "/" + data[1] + "/" + data[2])
 
             # dest = ("Package Usage: " + Fore.YELLOW + data[0] + "/" + data[1] + Fore.CYAN).center(75, ' ')
             # pname = ("Package Name: " + Fore.YELLOW + data[2] + Style.RESET_ALL).center(75, ' ')

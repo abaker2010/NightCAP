@@ -11,6 +11,12 @@ class CheckMarkPrinter(PrinterBase):
     def __init__(self):
         super().__init__()
 
+    def print_formatted_other(self, text, optionaltext="", leadingText='[*]', leadingBreaks=0, endingBreaks=0, vtabs=0, leadingTab=1,leadingColor=Fore.LIGHTGREEN_EX, textColor=Fore.LIGHTGREEN_EX,
+                              optionalTextColor=Fore.LIGHTBLACK_EX, breakTextColor=Fore.LIGHTBLACK_EX):
+        self.base_print(leadingText=leadingText, text=text, optionalText=optionaltext, leadingTab=leadingTab,
+                         leadingBreaks=leadingBreaks, endingBreaks=endingBreaks, vtabs=vtabs, leadingColor=leadingColor,
+                         optionalTextColor=optionalTextColor, textColor=textColor, breakTextColor=breakTextColor)
+
     def print_formatted_check(self, text, optionaltext="", leadingBreaks=0, endingBreaks=0, vtabs=0, leadingTab=2,leadingColor=Fore.LIGHTGREEN_EX, textColor=Fore.LIGHTGREEN_EX,
                               optionalTextColor=Fore.LIGHTBLACK_EX, breakTextColor=Fore.LIGHTBLACK_EX):
         self.base_print(leadingText='[✓]', text=text, optionalText=optionaltext, leadingTab=leadingTab,
