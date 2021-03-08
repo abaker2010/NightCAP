@@ -42,10 +42,20 @@ echo $OS
 echo $SEP
 SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
+# Installing nightcapcore plugin/requirements
+echo "python3.8 -m pip install -e "$SCRIPTPATH$SEP".."$SEP"packages"$SEP"nightcapcore"$SEP
 core_installer="python3.8 -m pip install -e "$SCRIPTPATH$SEP".."$SEP"packages"$SEP"nightcapcore"$SEP
 core_re_installer="python3.8 -m pip install -r "$SCRIPTPATH$SEP".."$SEP"packages"$SEP"nightcapcore"$SEP"requirements.txt"
+
+# Installing nightcappackages plugin/requirements
 packages_installer="python3.8 -m pip install -e "$SCRIPTPATH$SEP".."$SEP"packages"$SEP"nightcappackages"$SEP
 packages_re_installer="python3.8 -m pip install -r "$SCRIPTPATH$SEP".."$SEP"packages"$SEP"nightcappackages"$SEP"requirements.txt"
+
+# Installing nightcapserver plugin/requirements
+packages_installer="python3.8 -m pip install -e "$SCRIPTPATH$SEP".."$SEP"packages"$SEP"nightcapserver"$SEP
+packages_re_installer="python3.8 -m pip install -r "$SCRIPTPATH$SEP".."$SEP"packages"$SEP"nightcapserver"$SEP"requirements.txt"
+
+# Installing main requirements
 main_re_installer="python3.8 -m pip install -r "$SCRIPTPATH$SEP".."$SEP"requirements.txt"
 
 eval $core_installer
