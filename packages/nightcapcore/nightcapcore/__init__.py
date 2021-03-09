@@ -7,13 +7,13 @@ from .base import NightcapCoreBase
 from .core import NightcapCore
 from .params import NightcapDynamicParams
 # from .server.reporting_server_base import NightcapCoreServerReportingBase
-from .report.simplereport import NightcapSimpleReport
+# from .report.simplereport import NightcapSimpleReport
 from .paths import NightcapPaths, NightcapPathsEnum, NightcapPathCleaner
 from .updater import NightcapCoreUpaterRules, NightcapCoreUpdaterBase
 from .files import NightcapCoreFiles
 from .printers import Printer
 from .configuration import NighcapCoreConfiguration
-from .remotedocs import NightcapCoreRemoteDocs
+# from .remotedocs import NightcapCoreRemoteDocs
 from .singleton import Singleton
 from .command import Command
 from .invoker import Invoker
@@ -22,10 +22,10 @@ __all__ = [
     "NightcapCoreBase", "NightcapCore",
     "NightcapDynamicParams",
 
-    "NightcapSimpleReport", "NightcapPaths",
+    "NightcapPaths",
     "NightcapPathsEnum", "NightcapPathCleaner", "NightcapCoreUpdaterBase",
     "NightcapCoreUpaterRules", "NightcapCoreFiles", "Printer", 
-    "NighcapCoreConfiguration", "NightcapCoreRemoteDocs", "Singleton", "Command",
+    "NighcapCoreConfiguration", "Singleton", "Command",
     "Invoker"
 ]
 

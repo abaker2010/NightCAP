@@ -6,7 +6,7 @@
 # from application.classes.helpers.printers.subprinters.errors import ErrorPrinter
 # from application.classes.helpers.printers.print import Printer
 from colorama import Fore, Style
-from nightcapcore import Printer, NightcapCoreRemoteDocs
+from nightcapcore import Printer
 # from nightcappackages import NightcapPackages
 from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
 import requests
@@ -167,7 +167,8 @@ class NightcapUpdater:
                     self.printer.print_formatted_check("Skipping: Mongo update needed", leadingTab=3)
                     # NightcapModules().update(TinyDB(udb))
                 elif(str(udb).endswith("protocol_links.json")):
-                    NightcapCoreRemoteDocs().update(TinyDB(udb))
+                    print("protocol links")
+                    # NightcapCoreRemoteDocs().update(TinyDB(udb))
                 else:
                     raise Exception("Error with file" + str(udb).replace(self.tmpdir, "Tmp -> "))
                     # try:

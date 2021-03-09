@@ -4,7 +4,7 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 import os
-from nightcapcore.report.widgets import header
+# from nightcapcore.report.widgets import header
 from ..widgets import NightcapSimpleReportHeader, NightcapSimpleReportParagraph
 
 class NightcapCoreReportBase(object):

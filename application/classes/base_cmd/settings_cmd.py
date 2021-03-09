@@ -15,7 +15,7 @@ from colorama import Fore, Style
 
 class NightcapSettingsCMD(NightcapBaseCMD):
     def __init__(self):
-        NightcapBaseCMD.__init__(self,["settings"], None)
+        NightcapBaseCMD.__init__(self,["settings"],None)
 
     
     #region 
