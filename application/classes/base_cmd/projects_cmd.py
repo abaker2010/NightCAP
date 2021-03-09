@@ -94,7 +94,7 @@ class NightcapProjectsCMD(NightcapBaseCMD):
                 _puid = int(line)
                 _selected = self._db.select(_puid)
                 if _selected != None:
-                    self.base.project = _selected
+                    self.config.project = _selected
                     self.printer.print_formatted_check(text="Selected", optionaltext= _selected["project_name"])
                 else:
                     raise Exception()
@@ -108,7 +108,7 @@ class NightcapProjectsCMD(NightcapBaseCMD):
     def do_unselect(self, line):
         '''\n\tUnselect a project\n\t\tUsage: unselect\n'''
         try:
-            self.base.project = None
+            self.config.project = None
             # self.output.output("[+] Unselected project")
             self.printer.print_formatted_check("Unselected project")
         except Exception as e:

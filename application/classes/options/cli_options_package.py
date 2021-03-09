@@ -14,43 +14,42 @@ class NightcapCLIOptionsPackage(NightcapBaseCMD):
     def __init__(self,selectedList: list, configuration: NightcapCLIConfiguration, pkg_config: dict = None):
         NightcapBaseCMD.__init__(self, selectedList, configuration)
         self.config = configuration
-        print("Pkg config", pkg_config)
-        print("Pkg config", type(pkg_config))
+        self.pkg_config = pkg_config
+        # print("Pkg config", pkg_config)
+        # print("Pkg config", type(pkg_config))
         try:
             self.package_params = copy.deepcopy(pkg_config["package_information"]["entry_file_optional_params"])
-            print("Deep copied params", self.package_params)
+            # print("Deep copied params", self.package_params)
         except Exception as e:
             self.printer.print_error(exception=e)
             self.package_params = None
 
     def help_params(self):
-        h1 = "See all available parameters:"
-        h2 = "params"
-        h3 = "set param:\tparams [PARAM] [PARAMVALUE]"
-        p = '''
-         %s 
-         %s
-         %s
-        ''' % (
-            (Fore.GREEN + h1),
-            (Fore.YELLOW + h2 + Style.RESET_ALL),
-            (Fore.YELLOW + h3 + Style.RESET_ALL),
-            )
-        print(p)
-
+        self.printer.item_2(text="see parameters", optionalText="params", leadingTab=1, vtabs=1, leadingText='', textColor=Fore.LIGHTGREEN_EX)
+        self.printer.item_2(text="set parameters", optionalText="params [PARAM] [PARAMVALUE]", leadingTab=1,  endingBreaks=1, leadingText='', textColor=Fore.LIGHTGREEN_EX)
+ 
     def do_params(self, line):
-        print("Find out package params")
-        print("Base package")
+        # print("Find out package params")
+        # print("Base package")
 
+        title1 = "Base Params"
+        title2 = "Package Params"
         if(len(line) == 0):
-            title1 = "Base Params"
             self.printer.print_underlined_header(text=title1, leadingText='', titleColor=Fore.LIGHTYELLOW_EX)
             self.config.show_params()
-        
 
+        if(len(self.pkg_config['package_information']['entry_file_optional_params']) != 0):
+            self.printer.print_underlined_header(text=title2, leadingText='', titleColor=Fore.LIGHTYELLOW_EX)
+            for k,v in self.pkg_config['package_information']['entry_file_optional_params'].items():
+                v = "None" if v == "" else v
+                self.printer.item_2(text="~ %s" % k, optionalText=v, leadingTab=1, leadingText='', textColor=Fore.LIGHTGREEN_EX)
+        print()
+
+
+    def help_run(self):
+        self.printer.item_2(text="Run package", leadingTab=1, vtabs=1, endingBreaks=1, leadingText='', textColor=Fore.LIGHTGREEN_EX)
 
     def do_run(self,line):
-    
         force = False
         if(self.config.project == None):
             force = input((Fore.YELLOW + "Project not selected to be used would you like to continue? [Y/n]: " + Fore.GREEN))
@@ -80,4 +79,4 @@ class NightcapCLIOptionsPackage(NightcapBaseCMD):
             else:
                 print("Package not selected to be used")
         else:
-            self.console_output.output("Scan canceled by user\n", level=6)
+            self.printer.print_error(exception=Exception("Scan canceled by user"))

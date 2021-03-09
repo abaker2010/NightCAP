@@ -22,25 +22,25 @@ class NightcapCLIOptionsValidator():
 
     def get_package_config(self, path: list):
         self.pkg_conf = self.packages_db.get_package_config(path)
-        print("Found pkg config", self.pkg_conf)
+        # print("Found pkg config", self.pkg_conf)
         return self.pkg_conf
         
     def _check_module_types(self, path: list):
         return False if self.modules_db.check_module_path(path).count() == 0 else True
 
     def _check_sub_module(self, path: list):
-        print("Checking submodule", path)
+        # print("Checking submodule", path)
         return False if self.submodules_db.check_submodule_path(path).count() == 0 else True
 
     def _check_packages(self, selected):
-        print("Checking package")
+        # print("Checking package")
         return self.packages_db.check_package_path(selected)
 
     def _check_current_path(self, path: list):
         if(len(path) == 1):
             return self._check_module_types(path)
         elif(len(path) == 2):
-            print(self._check_sub_module(path))
+            # print(self._check_sub_module(path))
             return self._check_module_types(path) & self._check_sub_module(path)
         elif(len(path) == 3):
             return self._check_module_types(path) & self._check_sub_module(path) & self._check_packages(path)
@@ -69,57 +69,57 @@ class NightcapCLIOptionsValidator():
             _combined = selected + _cleanedItems
             ######
 
-            print("Options", _options)
-            print('Selected', selected)
-            print("_hasEmpty", _hasEmpty)
-            print("_emptyFront", _emptyFront)
-            print("_emptyBack", _emptyBack)
-            print("_cleanedItems selected", _cleanedItems)
-            print("_splitcount", _splitCount)
-            print("*" * 10, end="\n\n")
+            # print("Options", _options)
+            # print('Selected', selected)
+            # print("_hasEmpty", _hasEmpty)
+            # print("_emptyFront", _emptyFront)
+            # print("_emptyBack", _emptyBack)
+            # print("_cleanedItems selected", _cleanedItems)
+            # print("_splitcount", _splitCount)
+            # print("*" * 10, end="\n\n")
             
-            print("Has empty", _hasEmpty)
+            # print("Has empty", _hasEmpty)
 
             _validCommand  = False
             _tmpNewList = []
 
             if len(_cleanedItems) == 3:
-                print("3 sections")
+                # print("3 sections")
                 if _splitCount == 2:
-                    print("Valid command")
+                    # print("Valid command")
                     if(len(_cleanedItems) <= 3):
                         _tmpNewList = _cleanedItems
                         _validCommand = True
             elif len(_cleanedItems) == 2:
-                print("2 sections")
+                # print("2 sections")
                 if _splitCount == 2:
-                    print("valid command")
-                    print("Split count 2")
+                    # print("valid command")
+                    # print("Split count 2")
                     if(_emptyFront):
                         if(len(_combined) <=3):
                             _tmpNewList =  _combined
                             _validCommand = True
                     else:
-                        print("Not empty front needs done")
+                        # print("Not empty front needs done")
                         if(len(_cleanedItems) <= 3):
                             _tmpNewList = _cleanedItems
                             _validCommand =  True
                 elif _splitCount == 1:
-                    print("valid command")
-                    print("Split count 1")
+                    # print("valid command")
+                    # print("Split count 1")
                     if(_emptyFront):
                         if(len(_combined) <=3):
                             _tmpNewList =  _combined
                             _validCommand =  True
                     else:
-                        print("Not empty front needs done")
+                        # print("Not empty front needs done")
                         if(len(_cleanedItems) <= 3):
                             _tmpNewList = _cleanedItems
                             _validCommand =  True
             elif len(_cleanedItems) == 1:
-                print("1 section")
+                # print("1 section")
                 if _splitCount == 1:
-                    print("valid command")
+                    # print("valid command")
                     if(_hasEmpty):
                         if(_emptyBack):
                             _tmpNewList = _cleanedItems
@@ -129,21 +129,21 @@ class NightcapCLIOptionsValidator():
                                 _tmpNewList = _combined
                                 _validCommand =  True
                 elif _splitCount == 0:
-                    print("valid command")
+                    # print("valid command")
                     if(len(_combined) <= 3):
                         _tmpNewList = _combined
                         _validCommand =  True
             else:
                 return False
 
-            print("Valid command 1", _validCommand)
-            print("Tmp list to check", _tmpNewList)
+            # print("Valid command 1", _validCommand)
+            # print("Tmp list to check", _tmpNewList)
             if(_validCommand):
                 if(self._check_current_path(_tmpNewList)):
                     self.newSelectedList = _tmpNewList
                     return True
                 else:
-                    print("Error with path")
+                    # print("Error with path")
                     return False
             else:
                 return False
