@@ -1,0 +1,19 @@
+{
+    "author_info": {
+        "creator": "Aaron Baker"
+    },
+    "package_for": {
+        "module": "testing",
+        "submodule": "navy"
+    },
+    "package_information": {
+        "package_name": "usb",
+        "version": "1.0",
+        "date": "10/13/2020",
+        "imports": [{"package": "art", "version" : "5.1"}, {"package": "anyjson", "version" : "0.3.3"}],
+        "details": "analysis usb protocol in pcap file",
+        "entry_file": "test_module.py",
+        "entry_file_optional_params": {},
+        "uid": "75585e8ef70f3e046eba9ade640b0ea21425063bf67cb40c104432asdfasewe2"
+    }
+}

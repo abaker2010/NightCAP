@@ -27,6 +27,7 @@ class NightcapCLIOption_MixIn_Use():
         _validator = NightcapCLIOptionsValidator(line, self.selected)
         if _validator.isvalid:
             try:
+                ScreenHelper().clearScr()
                 if len(_validator.newSelectedList) == 3:
                     override(_validator.newSelectedList, self.config, _validator.get_package_config(_validator.newSelectedList)).cmdloop() 
                 else:
