@@ -5,14 +5,14 @@
 # file that should have been included as part of this package.
 # region Import
 # from application.classes.base_cmd.base_cmd import NightcapBaseCMD
-from nightcapcore.configuration.configuration import NighcapCoreConfiguration
+from nightcapcore.base import NightcapCLIConfiguration
 from nightcapcore.decorators.singleton import Singleton
 from nightcappackages.classes.databases.mogo.interfaces.mongo_network import MongoDatabaseInterface
 from pymongo.errors import ServerSelectionTimeoutError
 
 class MongoDatabaseConnection(MongoDatabaseInterface):
     def __init__(self):
-        self.conf = NighcapCoreConfiguration()
+        self.conf = NightcapCLIConfiguration()
         ip = self.conf.currentConfig["MONGOSERVER"]["ip"]
         port = self.conf.currentConfig["MONGOSERVER"]["port"]
         _db_name = self.conf.currentConfig["MONGOSERVER"]["db_name"]

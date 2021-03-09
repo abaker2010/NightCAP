@@ -7,13 +7,13 @@
 from random import randint
 from art import *
 from colorama import Style,Fore
-from nightcapcore.configuration.configuration import NighcapCoreConfiguration
+from nightcapcore.base import NightcapCLIConfiguration
 from application.classes.colors.nightcap_colors import NightcapColors
 from nightcapserver import NighcapCoreSimpleServer
 #endregion
 
 class NightcapBanner():
-    def __init__(self, configuration: NighcapCoreConfiguration):
+    def __init__(self, configuration: NightcapCLIConfiguration):
         self.config = configuration
         self.build_version = self.config.currentConfig["BUILD_DATA"]["version"]
         self.build_number= self.config.currentConfig["BUILD_DATA"]["build"]

@@ -8,7 +8,7 @@
 import sys
 import colorama 
 from colorama import Fore, Style
-from nightcapcore.configuration.configuration import NighcapCoreConfiguration
+from nightcapcore.base import NightcapCLIConfiguration
 from nightcapcore.printers.print import Printer
 from nightcappackages.classes.databases.mogo.mongo_database_checker import MongoDatabaseChecker
 from pymongo.errors import ServerSelectionTimeoutError
@@ -32,7 +32,7 @@ else:
 
 class Entry:
     def __init__(self):
-        self.conf = NighcapCoreConfiguration()
+        self.conf = NightcapCLIConfiguration()
         self.printer = Printer()
         self.yes = self.conf.currentConfig.get('NIGHTCAPCORE', 'yes').split()
         self.mongo_server = None

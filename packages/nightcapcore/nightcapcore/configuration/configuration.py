@@ -7,7 +7,7 @@ import os
 import configparser
 from nightcapcore.singleton.singleton import Singleton
 
-class NighcapCoreConfiguration(metaclass=Singleton):
+class NighcapCoreCLIBaseConfiguration(metaclass=Singleton):
 
     def __init__(self):
         self.installationDir = os.path.dirname(os.path.abspath(__file__)) + '/'

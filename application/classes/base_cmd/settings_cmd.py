@@ -14,8 +14,8 @@ from nightcapcore import *
 from colorama import Fore, Style
 
 class NightcapSettingsCMD(NightcapBaseCMD):
-    def __init__(self):
-        NightcapBaseCMD.__init__(self,["settings"],None)
+    def __init__(self, configuration: NightcapCLIConfiguration):
+        NightcapBaseCMD.__init__(self,["settings"],configuration)
 
     
     #region 

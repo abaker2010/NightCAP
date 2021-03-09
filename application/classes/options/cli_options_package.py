@@ -6,14 +6,13 @@
 import os
 import copy
 import json
-from nightcapcore import NightcapCoreBase
-from nightcapcore.configuration.configuration import NighcapCoreConfiguration
+from nightcapcore import NightcapCLIConfiguration
 from application.classes.base_cmd.base_cmd import NightcapBaseCMD
 from colorama import Fore, Style
 
 class NightcapCLIOptionsPackage(NightcapBaseCMD):
-    def __init__(self,selectedList: list, configuration: NighcapCoreConfiguration, packagebase: NightcapCoreBase = NightcapCoreBase(), pkg_config: dict = None):
-        NightcapBaseCMD.__init__(self, selectedList, configuration, packagebase)
+    def __init__(self,selectedList: list, configuration: NightcapCLIConfiguration, pkg_config: dict = None):
+        NightcapBaseCMD.__init__(self, selectedList, configuration)
         self.config = configuration
         print("Pkg config", pkg_config)
         print("Pkg config", type(pkg_config))
@@ -46,14 +45,14 @@ class NightcapCLIOptionsPackage(NightcapBaseCMD):
         if(len(line) == 0):
             title1 = "Base Params"
             self.printer.print_underlined_header(text=title1, leadingText='', titleColor=Fore.LIGHTYELLOW_EX)
-            self.package_base.show_params()
+            self.config.show_params()
         
 
 
     def do_run(self,line):
     
         force = False
-        if(self.package_base.project == None):
+        if(self.config.project == None):
             force = input((Fore.YELLOW + "Project not selected to be used would you like to continue? [Y/n]: " + Fore.GREEN))
             print(Style.RESET_ALL, Fore.LIGHTCYAN_EX)
             yes_options = self.config.currentConfig["NIGHTCAPCORE"]["yes"].split(" ")

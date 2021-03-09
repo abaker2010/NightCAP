@@ -5,15 +5,15 @@
 # file that should have been included as part of this package.
 import os
 import base64 
-from nightcapcore.remotedocs.remote_docs import NightcapCoreRemoteDocs
-from nightcapcore.configuration import NighcapCoreConfiguration
-from nightcapcore.remotedocs.remote_docs import NightcapCoreRemoteDocs
+# from nightcapcore.remotedocs.remote_docs import NightcapCoreRemoteDocs
+from nightcapcore.configuration import NighcapCoreCLIBaseConfiguration
+# from nightcapcore.remotedocs.remote_docs import NightcapCoreRemoteDocs
 from nightcapcore.paths.paths import NightcapPaths
 from nightcapcore.paths.pathsenum import NightcapPathsEnum
 
-class NightcapCoreServerReportingBase(NighcapCoreConfiguration):
+class NightcapCoreServerReportingBase(NighcapCoreCLIBaseConfiguration):
     def __init__(self, basepath: str = ""):
-        NighcapCoreConfiguration.__init__(self)
+        NighcapCoreCLIBaseConfiguration.__init__(self)
         self.basepath = basepath
         self.routes = {
             "/" : "index.html",
@@ -55,7 +55,7 @@ class NightcapCoreServerReportingBase(NighcapCoreConfiguration):
 
     def _generate_report_template_page(self, basepath: str, data: str):
         base_page = open(os.path.join(basepath, "simple_report.html")).readlines()
-        replacement = NighcapCoreConfiguration().currentConfig.get("REPORTINGREPLACEMENTS", "report_data_replacement")
+        replacement = NighcapCoreCLIBaseConfiguration().currentConfig.get("REPORTINGREPLACEMENTS", "report_data_replacement")
         
         n_lines = []
         for line in base_page:
@@ -78,7 +78,7 @@ class NightcapCoreServerReportingBase(NighcapCoreConfiguration):
     #region Standard Tempplate 
     def _generate_standard_template_page(self, basepath: str, data: str):
         base_page = open(os.path.join(basepath, "base.html")).readlines()
-        replacement = NighcapCoreConfiguration().currentConfig.get("REPORTINGREPLACEMENTS", "base_data_replacement")
+        replacement = NighcapCoreCLIBaseConfiguration().currentConfig.get("REPORTINGREPLACEMENTS", "base_data_replacement")
         n_lines = []
         for line in base_page:
             n_line = ""
@@ -95,7 +95,7 @@ class NightcapCoreServerReportingBase(NighcapCoreConfiguration):
     def _generate_home_page(self, path):
         data = open(path).readlines()
         print("Data for home page: ", data)
-        proj_replace = NighcapCoreConfiguration().currentConfig.get("REPORTINGREPLACEMENTS", "project_list_replacement")
+        proj_replace = NighcapCoreCLIBaseConfiguration().currentConfig.get("REPORTINGREPLACEMENTS", "project_list_replacement")
         ndata = []
         for l in data:
             if proj_replace in l:

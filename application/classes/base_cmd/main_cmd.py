@@ -4,17 +4,16 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 
+from nightcapcore.base import NightcapCLIConfiguration
 from application.classes.base_cmd.projects_cmd import NightcapProjectsCMD
-from nightcapcore import NightcapCoreBase, configuration
 from nightcapserver import NighcapCoreSimpleServer
 from application.classes.base_cmd.base_cmd import NightcapBaseCMD
 from colorama import Fore, Style
 import os
 
 class NightcapMainCMD(NightcapBaseCMD):
-    def __init__(self, selectedList, configuration: configuration, packagebase: NightcapCoreBase = None):
-        super(NightcapMainCMD, self).__init__(selectedList, configuration, packagebase)
-
+    def __init__(self, selectedList, configuration: NightcapCLIConfiguration):
+        super(NightcapMainCMD, self).__init__(selectedList, configuration)
 
     #region Shell
     def do_shell(self, line):
@@ -41,6 +40,6 @@ class NightcapMainCMD(NightcapBaseCMD):
     def do_projects(self, line):
         '''\n\nChange current project'''
         try:
-            NightcapProjectsCMD(self.package_base, self.config).cmdloop()
+            NightcapProjectsCMD(self.config).cmdloop()
         except Exception as e:
             print(e)

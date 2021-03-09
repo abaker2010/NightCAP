@@ -4,7 +4,7 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 
-from nightcapcore import NightcapCoreBase, configuration, Printer
+from nightcapcore import NightcapCLIConfiguration, Printer
 from application.classes.helpers.screen.screen_helper import ScreenHelper
 from application.classes.banners.nightcap_banner import NightcapBanner
 from nightcappackages import *
@@ -29,11 +29,10 @@ class _NightcapBaseCMD_Config(cmd.Cmd):
         
 
 class NightcapBaseCMD(_NightcapBaseCMD_Config):
-    def __init__(self, selectedList, configuration: configuration, packagebase: NightcapCoreBase = None):
+    def __init__(self, selectedList, configuration: NightcapCLIConfiguration):
         super(NightcapBaseCMD, self).__init__(selectedList)
         # region 
         self.config = configuration
-        self.package_base = packagebase
         self.printer = Printer()
         #endregion
 
@@ -50,9 +49,9 @@ class NightcapBaseCMD(_NightcapBaseCMD_Config):
     def do_help(self, line):
         try:
             if(len(line) == 0):
-                if(self.package_base.project != None):
+                if(self.config.project != None):
                     self.printer.print_underlined_header_undecorated(text="System settings")
-                    self.printer.item_1(text="Current Project", optionalText=str(self.package_base.project['project_name']))
+                    self.printer.item_1(text="Current Project", optionalText=str(self.config.project['project_name']))
                 else:
                     self.printer.print_underlined_header_undecorated(text="System settings")
                     self.printer.item_1(text="Current Project", optionalText='None')

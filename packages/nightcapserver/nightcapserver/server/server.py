@@ -3,7 +3,7 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-from nightcapcore.configuration import NighcapCoreConfiguration
+from nightcapcore.configuration import NighcapCoreCLIBaseConfiguration
 from nightcapcore.decorators.singleton import Singleton # Our http server handler for http requests
 from subprocess import Popen, PIPE, STDOUT
 import os
@@ -14,7 +14,7 @@ DEVNULL = open(os.devnull, 'wb')
 @Singleton
 class NighcapCoreSimpleServer(object):
     def __init__(self):
-        self.config = NighcapCoreConfiguration().currentConfig
+        self.config = NighcapCoreCLIBaseConfiguration().currentConfig
         self.ip = self.config["REPORTINGSERVER"]["ip"]
         self.port = int(self.config["REPORTINGSERVER"]["port"])
         self.proc = self.config["REPORTINGSERVER"]["proc"]

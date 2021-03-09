@@ -3,20 +3,18 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-from nightcapcore.configuration.configuration import NighcapCoreConfiguration
 from nightcappackages.classes.databases.mogo.mongo_projects import MongoProjectsDatabase
 from tinydb.database import TinyDB
-from nightcapcore import NightcapCoreBase
+from nightcapcore import NightcapCLIConfiguration
 from application.classes.base_cmd.base_cmd import NightcapBaseCMD
 from application.classes.helpers.screen.screen_helper import ScreenHelper
 from colorama import Fore, Style
 import shutil
 
 class NightcapProjectsCMD(NightcapBaseCMD):
-    def __init__(self, packagebase: NightcapCoreBase, conf: NighcapCoreConfiguration):
-        NightcapBaseCMD.__init__(self,["projects"], packagebase)
+    def __init__(self, conf: NightcapCLIConfiguration):
+        NightcapBaseCMD.__init__(self,["projects"], conf)
         self._db = MongoProjectsDatabase.instance()
-        self.base = packagebase
         self.config = conf
         self._count = 0
 

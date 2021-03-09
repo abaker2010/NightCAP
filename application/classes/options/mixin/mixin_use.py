@@ -4,7 +4,7 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 # region Import
-from nightcapcore import Printer, configuration, NightcapCoreBase
+from nightcapcore import Printer, configuration, NightcapCLIConfiguration
 from application.classes.options.cli_options_validator import NightcapCLIOptionsValidator
 from application.classes.banners.nightcap_banner import NightcapBanner
 from application.classes.helpers.screen.screen_helper import ScreenHelper
@@ -13,10 +13,9 @@ from colorama import Fore, Style
 
 class NightcapCLIOption_MixIn_Use():
     def __init__(self, selectedList: list, configuration: configuration,
-                 packagebase: NightcapCoreBase = NightcapCoreBase(),
+                 packagebase: NightcapCLIConfiguration = NightcapCLIConfiguration(),
                  pageobjct: object = None):
         self.config = configuration
-        self.package_base = packagebase
         self.pageobjct = pageobjct
         self.selected = selectedList
         self.printer = Printer()
@@ -29,9 +28,9 @@ class NightcapCLIOption_MixIn_Use():
         if _validator.isvalid:
             try:
                 if len(_validator.newSelectedList) == 3:
-                    override(_validator.newSelectedList, self.config, self.package_base, _validator.get_package_config(_validator.newSelectedList)).cmdloop() 
+                    override(_validator.newSelectedList, self.config, _validator.get_package_config(_validator.newSelectedList)).cmdloop() 
                 else:
-                    self.pageobjct(_validator.newSelectedList, self.config, self.package_base).cmdloop() 
+                    self.pageobjct(_validator.newSelectedList, self.config).cmdloop() 
                 
             except Exception as e:
                 ScreenHelper().clearScr()
