@@ -16,8 +16,6 @@ from application.classes.nightcap import Nightcap
 from application.classes.legal.legal import Legal
 from application.classes.banners.nightcap_banner import NightcapBanner
 from application.classes.helpers.screen.screen_helper import ScreenHelper
-from nightcapcore import NighcapCoreSimpleServer
-from application.classes.updater.updater import NightcapUpdater
         
 try:
     import readline

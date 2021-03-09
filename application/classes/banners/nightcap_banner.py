@@ -9,7 +9,7 @@ from art import *
 from colorama import Style,Fore
 from nightcapcore.configuration.configuration import NighcapCoreConfiguration
 from application.classes.colors.nightcap_colors import NightcapColors
-from nightcapcore import NighcapCoreSimpleServer
+from nightcapserver import NighcapCoreSimpleServer
 #endregion
 
 class NightcapBanner():

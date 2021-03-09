@@ -7,7 +7,7 @@ import argparse
 import os
 import socketserver
 from http.server import BaseHTTPRequestHandler
-from nightcapcore.server.reporting_server_base import NightcapCoreServerReportingBase
+from nightcapserver.server.reporting_server_base import NightcapCoreServerReportingBase
 
 class SimpleHttpRequestHandler(BaseHTTPRequestHandler):
     def do_HEAD(self):

@@ -5,7 +5,8 @@
 # file that should have been included as part of this package.
 
 from application.classes.base_cmd.projects_cmd import NightcapProjectsCMD
-from nightcapcore import NightcapCoreBase, configuration, NighcapCoreSimpleServer
+from nightcapcore import NightcapCoreBase, configuration
+from nightcapserver import NighcapCoreSimpleServer
 from application.classes.base_cmd.base_cmd import NightcapBaseCMD
 from colorama import Fore, Style
 import os

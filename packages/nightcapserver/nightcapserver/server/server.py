@@ -7,6 +7,8 @@ from nightcapcore.configuration import NighcapCoreConfiguration
 from nightcapcore.decorators.singleton import Singleton # Our http server handler for http requests
 from subprocess import Popen, PIPE, STDOUT
 import os
+import psutil
+import subprocess
 DEVNULL = open(os.devnull, 'wb')
  
 @Singleton
@@ -29,11 +31,17 @@ class NighcapCoreSimpleServer(object):
             return "UP"
 
     def start(self):
-        call = "python3.8 %s --ip %s --port %s" % (os.path.join(os.path.dirname(__file__), "_server.py"), str(self.ip), str(self.port))
-        print(call)
-        self.pproc = Popen(call, shell=True, stdin=PIPE, stdout=DEVNULL, stderr=STDOUT)
-        print("Process ID Created", self.pproc.pid)
-        self.status = "True"
+        # call = "python3.8 %s --ip %s --port %s" % (os.path.join(os.path.dirname(__file__), "_server.py"), str(self.ip), str(self.port))
+        os.environ['DJANGO_SETTINGS_MODULE'] = 'bar.settings'
+        # call = "python3.8 %s runserver" % (os.path.join(os.path.dirname(__file__), "../nightcapsite/manage.py"))
+        # subprocess.call(['python3.8', os.path.join(os.path.dirname(__file__), "../nightcapsite/manage.py"), 'runserver'], shell=True)
+
+        # print(call)
+        # self.pproc = Popen(call, shell=True, stdin=PIPE, stdout=DEVNULL, stderr=STDOUT)
+        # print("Process ID Created", self.pproc.pid)
+        # print("Starting Up Django Server")
+        # self.status = "True"
+
 
     def shutdown(self):
         self.status = False
