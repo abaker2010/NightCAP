@@ -13,7 +13,6 @@ from colorama import Fore, Style
 
 class NightcapCLIOption_MixIn_Use():
     def __init__(self, selectedList: list, configuration: configuration,
-                 packagebase: NightcapCLIConfiguration = NightcapCLIConfiguration(),
                  pageobjct: object = None):
         self.config = configuration
         self.pageobjct = pageobjct

@@ -15,4 +15,4 @@ class NightcapCLIUseCMDMixIn(NightcapMainCMD, NightcapCLIOption_MixIn_Options, N
     def __init__(self, selectedList: list, configuration: NightcapCLIConfiguration, nextobj: type = object):
         NightcapMainCMD.__init__(self, selectedList, configuration)
         NightcapCLIOption_MixIn_Options.__init__(self, selectedList)
-        NightcapCLIOption_MixIn_Use.__init__(self, selectedList, configuration, configuration, nextobj)
+        NightcapCLIOption_MixIn_Use.__init__(self, selectedList, configuration, nextobj)
