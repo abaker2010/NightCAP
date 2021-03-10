@@ -7,6 +7,7 @@ import os
 import copy
 import json
 from nightcapcore import NightcapCLIConfiguration
+from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
 from application.classes.base_cmd.base_cmd import NightcapBaseCMD
 from colorama import Fore, Style
 
@@ -15,6 +16,7 @@ class NightcapCLIOptionsPackage(NightcapBaseCMD):
         NightcapBaseCMD.__init__(self, selectedList, configuration)
         self.config = configuration
         self.pkg_config = pkg_config
+        self.db = MongoPackagesDatabase.instance()
         # print("Pkg config", pkg_config)
         # print("Pkg config", type(pkg_config))
         try:
@@ -31,18 +33,36 @@ class NightcapCLIOptionsPackage(NightcapBaseCMD):
     def do_params(self, line):
         # print("Find out package params")
         # print("Base package")
-
+        
         title1 = "Base Params"
         title2 = "Package Params"
+        _params = self.pkg_config['package_information']['entry_file_optional_params']
+
         if(len(line) == 0):
             self.printer.print_underlined_header(text=title1, leadingText='', titleColor=Fore.LIGHTYELLOW_EX)
             self.config.show_params()
 
-        if(len(self.pkg_config['package_information']['entry_file_optional_params']) != 0):
-            self.printer.print_underlined_header(text=title2, leadingText='', titleColor=Fore.LIGHTYELLOW_EX)
-            for k,v in self.pkg_config['package_information']['entry_file_optional_params'].items():
-                v = "None" if v == "" else v
-                self.printer.item_2(text="~ %s" % k, optionalText=v, leadingTab=1, leadingText='', textColor=Fore.LIGHTGREEN_EX)
+            if(len(_params) != 0):
+                self.printer.print_underlined_header(text=title2, leadingText='', titleColor=Fore.LIGHTYELLOW_EX)
+                for k,v in self.pkg_config['package_information']['entry_file_optional_params'].items():
+                    v = "None" if v == "" else v
+                    self.printer.item_2(text="~ %s" % k, optionalText=v, leadingTab=1, leadingText='', textColor=Fore.LIGHTGREEN_EX)
+        else:
+            print("Line for params:", line)
+            try:
+                _s = line.split(" ")
+                
+                if _s[0] in _params.keys():
+                    print("Contains key")
+                    _params[_s[0]] = _s[1]
+                else:
+                    print("dose not contain key")
+
+            except Exception as e:
+                self.printer.print_error(exception=e)
+                self.printer.print_error(exception=Exception("Error with setting parameter"))
+
+
         print()
 
 
@@ -67,15 +87,15 @@ class NightcapCLIOptionsPackage(NightcapBaseCMD):
             if(len(self.selectedList) == 3):
                 print("List to be used to find run path", self.selectedList)
                 # needs to be set up with the NightCap Mongo Packages instance
-                # exe_path = self.packages_db.get_package_run_path(self.selectedList)
-                # dat = {}
-                # dat[0] = self.package_base.toJson()
-                # dat[1] = self.package_params
-                # print("data before passing: ", dat)
-                
-                # call = "python3.8 %s --data '%s'" % (exe_path, json.dumps(dat))
-                
-                # os.system(call)
+                exe_path = self.db.get_package_run_path(self.pkg_config)
+                # exe_path = self.packages_db.get_package_run_path(self.pkg_config)
+                print(exe_path)
+                dat = {}
+                dat[0] = self.config.toJson()
+                dat[1] = self.package_params
+                print("data before passing: ", dat)
+                call = "python3.8 %s --data '%s'" % (exe_path, json.dumps(dat))
+                os.system(call)
             else:
                 print("Package not selected to be used")
         else:

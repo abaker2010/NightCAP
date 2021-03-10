@@ -10,6 +10,8 @@ from colorama.ansi import Fore, Style
 from nightcappackages.classes.databases.mogo.interfaces.mogo_operations import MongoDatabaseOperationsInterface
 from nightcappackages.classes.databases.mogo.mongo_connection import MongoDatabaseConnection
 from nightcapcore.decorators.singleton import Singleton
+from nightcappackages.classes.paths.pathsenum import NightcapPackagesPathsEnum
+from nightcappackages.classes.paths.paths import NightcapPackagesPaths
 
 @Singleton
 class MongoPackagesDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInterface):
@@ -31,6 +33,11 @@ class MongoPackagesDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInte
     def delete(self, puid: ObjectId):
         self._db.delete_one({'_id' : puid})
 
+    
+    def get_package_run_path(self, pkg_config: dict = None):
+        _path = NightcapPackagesPaths().generate_path(NightcapPackagesPathsEnum.PackagesBase, [pkg_config["package_for"]["module"],pkg_config["package_for"]["submodule"], \
+        pkg_config["package_information"]["package_name"],pkg_config["package_information"]["entry_file"]])
+        return _path
     # def get_package_run_path(self, package: list):
     #     npackages = self.db_packages.table('packages').search(
     #         (Query()['package_for']['module'] == package[0])
