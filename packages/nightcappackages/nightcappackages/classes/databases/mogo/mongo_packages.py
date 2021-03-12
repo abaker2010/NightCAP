@@ -38,16 +38,6 @@ class MongoPackagesDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInte
         _path = NightcapPackagesPaths().generate_path(NightcapPackagesPathsEnum.PackagesBase, [pkg_config["package_for"]["module"],pkg_config["package_for"]["submodule"], \
         pkg_config["package_information"]["package_name"],pkg_config["package_information"]["entry_file"]])
         return _path
-    # def get_package_run_path(self, package: list):
-    #     npackages = self.db_packages.table('packages').search(
-    #         (Query()['package_for']['module'] == package[0])
-    #         & (Query()['package_for']['submodule'] == package[1])
-    #         & (Query()['package_information']['package_name'] == package[2])
-    #     )
-    #     pkt = npackages[0]
-    #     _path = self.__package_paths.generate_path(NightcapPackagesPathsEnum.PackagesBase, [pkt["package_for"]["module"],pkt["package_for"]["submodule"], \
-    #     pkt["package_information"]["package_name"],pkt["package_information"]["entry_file"]])
-    #     return _path
 
     def check_package_path(self, path: list):
         _module = path[0]
