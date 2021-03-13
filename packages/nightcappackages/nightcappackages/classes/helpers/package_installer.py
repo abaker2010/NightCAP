@@ -9,7 +9,6 @@ from nightcappackages.classes.databases.mogo.mongo_modules import MongoModuleDat
 from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
 from nightcappackages.classes.databases.mogo.mongo_submodules import MongoSubModuleDatabase
 from nightcappackages.classes.paths import NightcapPackagesPathsEnum, NightcapPackagesPaths
-from application.classes.helpers.screen.screen_helper import ScreenHelper
 from nightcapcore import *
 from colorama import Fore, Style
 import sys

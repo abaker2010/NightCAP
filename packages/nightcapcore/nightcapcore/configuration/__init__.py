@@ -4,5 +4,6 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 from .configuration import NighcapCoreCLIBaseConfiguration
+from .base import NightcapCLIConfiguration
 
-__all__ = ["NighcapCoreCLIBaseConfiguration"]
+__all__ = ["NighcapCoreCLIBaseConfiguration", "NightcapCLIConfiguration"]

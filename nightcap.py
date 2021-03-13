@@ -8,15 +8,12 @@
 import sys
 import colorama 
 from colorama import Fore, Style
-from nightcapcore.base import NightcapCLIConfiguration
-from nightcapcore.printers.print import Printer
+from nightcapcore import ScreenHelper, Printer, NightcapCLIConfiguration, NightcapBanner
 from nightcappackages.classes.databases.mogo.mongo_database_checker import MongoDatabaseChecker
 from pymongo.errors import ServerSelectionTimeoutError
-from application.classes.nightcap import Nightcap
-from application.classes.legal.legal import Legal
-from application.classes.banners.nightcap_banner import NightcapBanner
-from application.classes.helpers.screen.screen_helper import ScreenHelper
-        
+from application.nightcap import Nightcap
+from application.legal.legal import Legal
+
 try:
     import readline
     if 'libedit' in readline.__doc__:

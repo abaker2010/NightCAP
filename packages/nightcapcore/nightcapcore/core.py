@@ -5,7 +5,7 @@
 # file that should have been included as part of this package.
 import argparse
 import json
-from .base import NightcapCLIConfiguration
+from .configuration import NightcapCLIConfiguration
 
 class NightcapCore(NightcapCLIConfiguration):
     def __init__(self):

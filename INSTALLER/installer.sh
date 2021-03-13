@@ -55,6 +55,10 @@ packages_re_installer="python3.8 -m pip install -r "$SCRIPTPATH$SEP".."$SEP"pack
 packages_installer="python3.8 -m pip install -e "$SCRIPTPATH$SEP".."$SEP"packages"$SEP"nightcapserver"$SEP
 packages_re_installer="python3.8 -m pip install -r "$SCRIPTPATH$SEP".."$SEP"packages"$SEP"nightcapserver"$SEP"requirements.txt"
 
+# Installing nightcapcli plugin/requirements
+packages_installer="python3.8 -m pip install -e "$SCRIPTPATH$SEP".."$SEP"packages"$SEP"nightcapcli"$SEP
+packages_re_installer="python3.8 -m pip install -r "$SCRIPTPATH$SEP".."$SEP"packages"$SEP"nightcapcli"$SEP"requirements.txt"
+
 # Installing main requirements
 main_re_installer="python3.8 -m pip install -r "$SCRIPTPATH$SEP".."$SEP"requirements.txt"
 

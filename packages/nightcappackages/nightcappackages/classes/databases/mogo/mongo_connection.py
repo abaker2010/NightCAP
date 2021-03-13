@@ -5,7 +5,7 @@
 # file that should have been included as part of this package.
 # region Import
 # from application.classes.base_cmd.base_cmd import NightcapBaseCMD
-from nightcapcore.base import NightcapCLIConfiguration
+from nightcapcore import NightcapCLIConfiguration
 from nightcapcore.decorators.singleton import Singleton
 from nightcappackages.classes.databases.mogo.interfaces.mongo_network import MongoDatabaseInterface
 from pymongo.errors import ServerSelectionTimeoutError
