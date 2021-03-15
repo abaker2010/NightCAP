@@ -20,7 +20,7 @@ class NightcapSettingsCMD(NightcapBaseCMD):
     
     #region 
     def do_devoptions(self, line):
-        NightcapDevOptions(self.selectedList).cmdloop()
+        NightcapDevOptions(self.selectedList, self.config).cmdloop()
     #endregion
 
     #region Install

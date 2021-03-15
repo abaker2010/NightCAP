@@ -3,7 +3,7 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-from nightcapcore.configuration import NighcapCoreCLIBaseConfiguration
+from nightcapcore import NighcapCoreCLIBaseConfiguration, Printer
 from nightcapcore.decorators.singleton import Singleton # Our http server handler for http requests
 from subprocess import Popen, PIPE, STDOUT
 import os
@@ -20,6 +20,7 @@ class NighcapCoreSimpleServer(object):
         self.proc = self.config["REPORTINGSERVER"]["proc"]
         self.status = self.config["REPORTINGSERVER"]["status"]
         self.pproc = None
+        self.printer = Printer()
 
     def get_url(self):
         return "http://%s:%s/" % (self.ip, self.port)
@@ -31,24 +32,23 @@ class NighcapCoreSimpleServer(object):
             return "UP"
 
     def start(self):
-        # call = "python3.8 %s --ip %s --port %s" % (os.path.join(os.path.dirname(__file__), "_server.py"), str(self.ip), str(self.port))
-        os.environ['DJANGO_SETTINGS_MODULE'] = 'bar.settings'
-        # call = "python3.8 %s runserver" % (os.path.join(os.path.dirname(__file__), "../nightcapsite/manage.py"))
-        # subprocess.call(['python3.8', os.path.join(os.path.dirname(__file__), "../nightcapsite/manage.py"), 'runserver'], shell=True)
-
-        # print(call)
-        # self.pproc = Popen(call, shell=True, stdin=PIPE, stdout=DEVNULL, stderr=STDOUT)
-        # print("Process ID Created", self.pproc.pid)
-        # print("Starting Up Django Server")
-        # self.status = "True"
+        try:
+            call = "python3.8 %s runserver" % (os.path.join(os.path.dirname(__file__), "../nightcapsite/manage.py"))
+            self.pproc = Popen(call, shell=True, stdin=PIPE, stdout=DEVNULL, stderr=STDOUT)
+            self.printer.print_formatted_additional(text="Starting Up Django Server", leadingBreaks=1, endingBreaks=1)
+            self.status = "True"
+        except Exception as e:
+            self.printer.print_error(exception=e)
 
 
     def shutdown(self):
         self.status = False
         try:
             if self.pproc.poll() is None:
-                print("Killing process with pid %s " % (self.pproc.pid))
-                self.pproc.kill()
+                self.printer.print_formatted_additional(text="Shutting Down Django Server", leadingBreaks=1, endingBreaks=1)
+                process = psutil.Process(self.pproc.pid)
+                for proc in process.children(recursive=True):
+                    proc.kill()
                 self.status = "False"
         except Exception as e:
             print(e)

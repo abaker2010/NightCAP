@@ -6,14 +6,16 @@
 import os
 import json
 import hashlib
+
+from nightcapcore.configuration.base import NightcapCLIConfiguration
 from ..base import NightcapBaseCMD
 from colorama import Fore, Style
 
 class NightcapDevOptions(NightcapBaseCMD):
-    def __init__(self,selectedList: list):
+    def __init__(self,selectedList: list, configuration: NightcapCLIConfiguration):
         self.selectedList = selectedList
         self.selectedList.append("dev")
-        NightcapBaseCMD.__init__(self,self.selectedList)
+        NightcapBaseCMD.__init__(self,self.selectedList, configuration)
 
     #region 
     def do_genPackageUID(self,package_path: str):
