@@ -6,7 +6,7 @@
 # region Import
 # from application.classes.base_cmd.base_cmd import NightcapBaseCMD
 from nightcapcore.decorators.singleton import Singleton
-from nightcappackages.classes.databases.mogo.mongo_connection import MongoDatabaseConnection
+from ..connections import MongoDatabaseConnection
 from pymongo.errors import ServerSelectionTimeoutError
 
 @Singleton

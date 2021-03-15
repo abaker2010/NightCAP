@@ -4,10 +4,11 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 
-from nightcappackages.classes.databases.interfaces.template_interface import Interface, abstractfunc
+from nightcappackages.classes.databases.base_interfaces.template_interface import abstractfunc
+from nightcappackages.classes.databases.mogo.interfaces.mongo_network import MongoDatabaseInterface
 
 
-class MongoDatabaseOperationsInterface(metaclass=Interface):
+class MongoDatabaseOperationsInterface(MongoDatabaseInterface):
     @abstractfunc
     def create(self):
         pass

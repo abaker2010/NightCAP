@@ -3,17 +3,14 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-# region Import
-from nightcappackages.classes.databases.mogo.interfaces.mogo_operations import MongoDatabaseOperationsInterface
-from nightcappackages.classes.databases.mogo.mongo_connection import MongoDatabaseConnection
 from nightcapcore.decorators.singleton import Singleton
 from nightcapcore.printers import Printer
+from nightcappackages.classes.databases.mogo.connections.mongo_operation_connector import MongoDatabaseOperationsConnection
 
 @Singleton
-class MongoProjectsDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInterface):
+class MongoProjectsDatabase(MongoDatabaseOperationsConnection):
     def __init__(self):
-        MongoDatabaseConnection.__init__(self)
-        MongoDatabaseOperationsInterface.__init__(self)
+        MongoDatabaseOperationsConnection.__init__(self)
         self._db = self.client[self.conf.currentConfig['MONGOSERVER']['db_name']]['projects']
         self.printer = Printer()
 

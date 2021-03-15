@@ -7,17 +7,15 @@
 # from application.classes.base_cmd.base_cmd import NightcapBaseCMD
 from bson.objectid import ObjectId
 from colorama.ansi import Fore, Style
-from nightcappackages.classes.databases.mogo.interfaces.mogo_operations import MongoDatabaseOperationsInterface
-from nightcappackages.classes.databases.mogo.mongo_connection import MongoDatabaseConnection
 from nightcapcore.decorators.singleton import Singleton
+from nightcappackages.classes.databases.mogo.connections.mongo_operation_connector import MongoDatabaseOperationsConnection
 from nightcappackages.classes.paths.pathsenum import NightcapPackagesPathsEnum
 from nightcappackages.classes.paths.paths import NightcapPackagesPaths
 
 @Singleton
-class MongoPackagesDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInterface):
+class MongoPackagesDatabase(MongoDatabaseOperationsConnection):
     def __init__(self):
-        MongoDatabaseConnection.__init__(self)
-        MongoDatabaseOperationsInterface.__init__(self)
+        MongoDatabaseOperationsConnection.__init__(self)
         self._db = self.client[self.conf.currentConfig['MONGOSERVER']['db_name']]['packages']
 
     def create(self, pkg: dict):

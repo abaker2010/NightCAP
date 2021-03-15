@@ -9,7 +9,7 @@ import sys
 import colorama 
 from colorama import Fore, Style
 from nightcapcore import ScreenHelper, Printer, NightcapCLIConfiguration, NightcapBanner
-from nightcappackages.classes.databases.mogo.mongo_database_checker import MongoDatabaseChecker
+from nightcappackages.classes.databases.mogo.checker import MongoDatabaseChecker
 from pymongo.errors import ServerSelectionTimeoutError
 from application.nightcap import Nightcap
 from application.legal.legal import Legal

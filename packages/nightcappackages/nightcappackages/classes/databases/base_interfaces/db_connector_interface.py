@@ -5,7 +5,7 @@
 # file that should have been included as part of this package.
 from abc import ABC, abstractmethod
 
-from nightcappackages.classes.databases.interfaces.template_interface import Interface, abstractfunc
+from nightcappackages.classes.databases.base_interfaces.template_interface import Interface, abstractfunc
 
 class DatabaseConnectorInterface(metaclass=Interface):
     @abstractfunc

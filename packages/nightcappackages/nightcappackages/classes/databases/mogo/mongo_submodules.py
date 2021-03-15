@@ -3,17 +3,13 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-# region Import
-# from application.classes.base_cmd.base_cmd import NightcapBaseCMD
-from nightcappackages.classes.databases.mogo.interfaces.mogo_operations import MongoDatabaseOperationsInterface
-from nightcappackages.classes.databases.mogo.mongo_connection import MongoDatabaseConnection
 from nightcapcore.decorators.singleton import Singleton
+from nightcappackages.classes.databases.mogo.connections.mongo_operation_connector import MongoDatabaseOperationsConnection
 
 @Singleton
-class MongoSubModuleDatabase(MongoDatabaseConnection, MongoDatabaseOperationsInterface):
+class MongoSubModuleDatabase(MongoDatabaseOperationsConnection):
     def __init__(self):
-        MongoDatabaseConnection.__init__(self)
-        MongoDatabaseOperationsInterface.__init__(self)
+        MongoDatabaseOperationsConnection.__init__(self)
         self._db = self.client[self.conf.currentConfig['MONGOSERVER']['db_name']]['submodules']
 
     def create(self, module: str = None, submodule: str = None):
