@@ -13,7 +13,7 @@ import shutil
 class NightcapProjectsCMD(NightcapBaseCMD):
     def __init__(self, conf: NightcapCLIConfiguration):
         NightcapBaseCMD.__init__(self,["projects"], conf)
-        self._db = MongoProjectsDatabase.instance()
+        self._db = MongoProjectsDatabase()
         self.config = conf
         self._count = 0
 

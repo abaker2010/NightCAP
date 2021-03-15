@@ -4,6 +4,7 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 
+from nightcapcli.cmds.projects_cmd import NightcapProjectsCMD
 from nightcapcore import NightcapCLIConfiguration
 from nightcapserver import NighcapCoreSimpleServer
 from colorama import Fore, Style
@@ -37,9 +38,9 @@ class NightcapMainCMD(NightcapBaseCMD):
             print(e)
     #endregion
 
-    # def do_projects(self, line):
-    #     '''\n\nChange current project'''
-    #     try:
-    #         NightcapProjectsCMD(self.config).cmdloop()
-    #     except Exception as e:
-    #         print(e)
+    def do_projects(self, line):
+        '''\n\nChange current project'''
+        try:
+            NightcapProjectsCMD(self.config).cmdloop()
+        except Exception as e:
+            print(e)

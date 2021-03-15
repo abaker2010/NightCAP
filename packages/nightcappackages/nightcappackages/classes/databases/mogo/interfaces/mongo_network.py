@@ -12,6 +12,8 @@ import time
 import threading
 
 class MongoDatabaseInterface(DatabaseConnectorInterface):
+    client = None
+
     def __init__(self, ip: str, port: str):
         self._connected = False
         self.printer = Printer()
@@ -34,4 +36,4 @@ class MongoDatabaseInterface(DatabaseConnectorInterface):
         pass
 
     def close(self):
-        pass
+        self.client.close()
