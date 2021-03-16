@@ -4,7 +4,7 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 from nightcapcore import ScreenHelper, Printer
-from nightcappackages.classes.databases.base_interfaces.template_interface import abstractfunc
+from nightcapcore.interface.template_interface import abstractfunc
 from nightcappackages.classes.databases.base_interfaces import DatabaseConnectorInterface
 from pymongo import MongoClient
 from pymongo.errors import ServerSelectionTimeoutError

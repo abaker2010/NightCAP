@@ -7,8 +7,8 @@
 # from application.classes.base_cmd.base_cmd import NightcapBaseCMD
 from nightcapcore import NightcapCLIConfiguration
 from nightcapcore.singleton.singleton import Singleton
-from nightcappackages.classes.databases.mogo.interfaces.mongo_network import MongoDatabaseInterface
-from nightcappackages.classes.databases.base_interfaces.template_interface import abstractfunc
+from nightcappackages.classes.databases.mogo.interfaces.mongo_db_interface import MongoDatabaseInterface
+from nightcapcore.interface.template_interface import abstractfunc
 from pymongo.errors import ServerSelectionTimeoutError
 
 class MongoDatabaseOperationsConnection(MongoDatabaseInterface):
