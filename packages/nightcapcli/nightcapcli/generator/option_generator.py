@@ -23,13 +23,13 @@ class NightcapOptionGenerator():
 
         if(len(self.selectedList) == 0):
             # print("finding options")
-            vals = list(map(lambda v: v['type'] + Fore.LIGHTMAGENTA_EX + " (" + str(NightcapInstalledPackageCounter().count_from_selected_module(v['type'])) + ")" + Style.RESET_ALL, MongoModuleDatabase.instance().get_all_modules()))
+            vals = list(map(lambda v: v['type'] + Fore.LIGHTMAGENTA_EX + " (" + str(NightcapInstalledPackageCounter().count_from_selected_module(v['type'])) + ")" + Style.RESET_ALL, MongoModuleDatabase().get_all_modules()))
         elif(len(self.selectedList) == 1):
             # print("finding with", self.selectedList)
-            vals = list(map(lambda v: v['type'] + Fore.LIGHTMAGENTA_EX + " (" + str(NightcapInstalledPackageCounter().count_from_selected_submodule(self.selectedList[0], v['type'])) + ")" + Style.RESET_ALL, MongoSubModuleDatabase.instance().find_submodules(self.selectedList[0])))
+            vals = list(map(lambda v: v['type'] + Fore.LIGHTMAGENTA_EX + " (" + str(NightcapInstalledPackageCounter().count_from_selected_submodule(self.selectedList[0], v['type'])) + ")" + Style.RESET_ALL, MongoSubModuleDatabase().find_submodules(self.selectedList[0])))
         elif(len(self.selectedList) == 2):
             # print("Trying to find submodule options")
-            vals = MongoPackagesDatabase.instance().packages(self.selectedList, isDetailed)
+            vals = MongoPackagesDatabase().packages(self.selectedList, isDetailed)
         else:
             print("should be for packages")
 

@@ -40,10 +40,10 @@ class NightcapBanner():
         print("\n\t", "=" * 100)
         print('\t=',rcolor3, "Aaron Baker".center(96, ' '), rcolor,'=')
         try:
-            report_server = rcolor + "Reports Server ~ " + rcolor2 + NighcapCoreSimpleServer.instance().get_status()
+            report_server = rcolor + "Reports Server ~ " + rcolor2 + NighcapCoreSimpleServer().get_status()
             print('\t=',report_server.center(107, ' '), rcolor,'=')
-            if(NighcapCoreSimpleServer.instance().get_status() == "UP"):
-                report_server_url = rcolor + "Reports URL ~ " + rcolor2 + NighcapCoreSimpleServer.instance().get_url()
+            if(NighcapCoreSimpleServer().get_status() == "UP"):
+                report_server_url = rcolor + "Reports URL ~ " + rcolor2 + NighcapCoreSimpleServer().get_url()
                 print('\t=', report_server_url.center(107, ' '), rcolor,'=')
             version_string = rcolor + "Version ~ " + rcolor2 + self.build_version
             build_number_string = rcolor + "Build ~ " + rcolor2 + self.build_number

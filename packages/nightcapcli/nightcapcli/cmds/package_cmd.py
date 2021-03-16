@@ -17,7 +17,7 @@ class NightcapCLIOptionsPackage(NightcapBaseCMD):
         NightcapBaseCMD.__init__(self, selectedList, configuration)
         self.config = configuration
         self.pkg_config = pkg_config
-        self.db = MongoPackagesDatabase.instance()
+        self.db = MongoPackagesDatabase()
         # print("Pkg config", pkg_config)
         # print("Pkg config", type(pkg_config))
         try:

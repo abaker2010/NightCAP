@@ -57,7 +57,7 @@ class Entry:
     def checkmongodb(self):
         try:
             self.printer.print_formatted_additional(text="Please wait while connecting to Mongo Server...")
-            self.mongo_server = MongoDatabaseChecker.instance()
+            self.mongo_server = MongoDatabaseChecker()
             return True
         except ServerSelectionTimeoutError as e:
             raise e

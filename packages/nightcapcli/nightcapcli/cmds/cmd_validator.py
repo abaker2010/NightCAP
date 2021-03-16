@@ -13,9 +13,9 @@ from nightcapcore import ScreenHelper
 
 class NightcapCLIOptionsValidator():
     def __init__(self, options, selectedList):
-        self.modules_db = MongoModuleDatabase.instance()
-        self.submodules_db = MongoSubModuleDatabase.instance()
-        self.packages_db = MongoPackagesDatabase.instance()
+        self.modules_db = MongoModuleDatabase()
+        self.submodules_db = MongoSubModuleDatabase()
+        self.packages_db = MongoPackagesDatabase()
         self.newSelectedList = []
         self.isvalid = self._validate(options, selectedList)
         self.pkg_conf = None

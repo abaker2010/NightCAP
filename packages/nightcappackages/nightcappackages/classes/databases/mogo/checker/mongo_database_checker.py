@@ -5,12 +5,11 @@
 # file that should have been included as part of this package.
 # region Import
 # from application.classes.base_cmd.base_cmd import NightcapBaseCMD
-from nightcapcore.decorators.singleton import Singleton
+from nightcapcore.singleton.singleton import Singleton
 from ..connections import MongoDatabaseConnection
 from pymongo.errors import ServerSelectionTimeoutError
 
-@Singleton
-class MongoDatabaseChecker(MongoDatabaseConnection):
+class MongoDatabaseChecker(MongoDatabaseConnection, metaclass=Singleton):
     def __init__(self):
         super().__init__()
         

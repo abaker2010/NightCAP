@@ -18,7 +18,7 @@ class NightcapPackageUninstallerCommand(Command):
         self.printer = Printer()
         self.__package_paths = NightcapPackagesPaths()
         self._package_path = package_path
-        self._db =  MongoPackagesDatabase.instance()
+        self._db =  MongoPackagesDatabase()
         self._ex = self._db.check_package_path(package_path.split("/"))
 
     
@@ -29,7 +29,7 @@ class NightcapPackageUninstallerCommand(Command):
                 ScreenHelper().clearScr()
                 self.printer.print_formatted_delete(text="Package does not exist")
             else:
-                _package = MongoPackagesDatabase.instance().get_package_config(self._package_path.split("/"))
+                _package = MongoPackagesDatabase().get_package_config(self._package_path.split("/"))
                 self.printer.print_formatted_other(text='Module', optionaltext=split_package_path[0])
                 self.printer.print_formatted_other(text='Submodule', optionaltext=split_package_path[1])
                 self.printer.print_formatted_other(text='Package', optionaltext=split_package_path[2])
@@ -43,10 +43,10 @@ class NightcapPackageUninstallerCommand(Command):
                         try:
                             try:
                                 self._db.delete(ObjectId(_package['_id']))
-                                MongoSubModuleDatabase.instance().submodule_try_uninstall(split_package_path[0], split_package_path[1])
+                                MongoSubModuleDatabase().submodule_try_uninstall(split_package_path[0], split_package_path[1])
                                 # If there are no submodules then remove the module
-                                if(MongoSubModuleDatabase.instance().find_submodules(split_package_path[0]).count() == 0):
-                                    MongoModuleDatabase.instance().module_try_unintall(split_package_path[0])
+                                if(MongoSubModuleDatabase().find_submodules(split_package_path[0]).count() == 0):
+                                    MongoModuleDatabase().module_try_unintall(split_package_path[0])
                                 self._delete(_package)
                                 self.printer.print_formatted_check(text="UNINSTALLED", vtabs=1, endingBreaks=1, leadingTab=1)
                             except Exception as e:

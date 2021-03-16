@@ -4,15 +4,14 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 from nightcapcore import NighcapCoreCLIBaseConfiguration, Printer
-from nightcapcore.decorators.singleton import Singleton # Our http server handler for http requests
+from nightcapcore.singleton.singleton import Singleton # Our http server handler for http requests
 from subprocess import Popen, PIPE, STDOUT
 import os
 import psutil
 import subprocess
 DEVNULL = open(os.devnull, 'wb')
  
-@Singleton
-class NighcapCoreSimpleServer(object):
+class NighcapCoreSimpleServer(object, metaclass=Singleton):
     def __init__(self):
         self.config = NighcapCoreCLIBaseConfiguration().currentConfig
         self.ip = self.config["REPORTINGSERVER"]["ip"]

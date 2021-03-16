@@ -25,7 +25,7 @@ class NightcapPackageInstallerCommand(Command):
 
     def __init__(self, package_path: str) -> None:
         self._package_paths = NightcapPackagesPaths()
-        self._db = MongoPackagesDatabase.instance()
+        self._db = MongoPackagesDatabase()
         self.printer = Printer()
         self._package = None
         self._package_path = package_path
@@ -48,11 +48,11 @@ class NightcapPackageInstallerCommand(Command):
             raise Exception("Package signature error")
 
         try:
-            MongoModuleDatabase.instance().module_install(self._package['package_for']['module'])
+            MongoModuleDatabase().module_install(self._package['package_for']['module'])
         except  Exception as e:
             self.printer.print_error(exception=e)
         try:
-            MongoSubModuleDatabase.instance().submodule_install(self._package['package_for']['module'], self._package['package_for']['submodule'])
+            MongoSubModuleDatabase().submodule_install(self._package['package_for']['module'], self._package['package_for']['submodule'])
         except  Exception as e:
             raise e
     

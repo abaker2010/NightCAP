@@ -4,14 +4,13 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 from nightcapcore import ScreenHelper, Printer
-from nightcapcore.interface.template_interface import abstractfunc
-from nightcappackages.classes.databases.base_interfaces import DatabaseConnectorInterface
+from nightcapcore.interface.template_interface import Interface, abstractfunc
 from pymongo import MongoClient
 from pymongo.errors import ServerSelectionTimeoutError
 import time
 import threading
 
-class MongoDatabaseInterface(DatabaseConnectorInterface):
+class MongoDatabaseInterface:
     client = None
 
     def __init__(self, ip: str, port: str):

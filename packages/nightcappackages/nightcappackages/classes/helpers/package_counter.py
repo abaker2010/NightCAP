@@ -12,11 +12,11 @@ class NightcapInstalledPackageCounter():
         pass
         
     def count_from_selected_module(self, module: str):
-        return MongoSubModuleDatabase.instance().find_submodules(module).count()
+        return MongoSubModuleDatabase().find_submodules(module).count()
 
     def count_from_selected_submodule(self, module: str, submodule: str):
         try:
-            return MongoPackagesDatabase.instance().find_packages(module, submodule).count()
+            return MongoPackagesDatabase().find_packages(module, submodule).count()
         except Exception as e:
             print(e)
             return []

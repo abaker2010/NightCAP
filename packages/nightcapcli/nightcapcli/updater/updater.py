@@ -20,7 +20,6 @@ import re
 import shutil
 from nightcappackages import *
 
-# @Singleton
 class NightcapUpdater:
     #region Init
     def __init__(self):
@@ -153,7 +152,7 @@ class NightcapUpdater:
                 #         print("*"*20,"\n")
                 elif(str(udb).endswith("packages.json")):
                     self.printer.print_formatted_check("Skipping: Mongo Updater Needed", leadingTab=3)
-                    # MogoPackagesDatabase.instance().update()
+                    # MogoPackagesDatabase().update()
                 #     if(self.verbose):
                 #         print("Skipping DB:", "Packages")
                 #         print("*"*20,"\n")

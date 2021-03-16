@@ -10,7 +10,7 @@ from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackages
 
 class NightcapListPackages():
     def __init__(self):
-        self.packages_db = MongoPackagesDatabase.instance()
+        self.packages_db = MongoPackagesDatabase()
         self.priner = Printer()
 
     def list_packages(self):
