@@ -4,10 +4,13 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 
+from random import randint
 from nightcapcore import NightcapCLIConfiguration, Printer, ScreenHelper, NightcapBanner
+from nightcapcore.colors.nightcap_colors import NightcapColors
 from nightcappackages import *
 import cmd
 from colorama import Fore, Style
+from nightcapserver.server.server import NighcapCoreSimpleServer
 try:
     from subprocess import DEVNULL # py3k
 except ImportError:
@@ -45,19 +48,31 @@ class NightcapBaseCMD(_NightcapBaseCMD_Config):
     #endregion
 
     def do_help(self, line):
-        try:
-            if(len(line) == 0):
-                if(self.config.project != None):
-                    self.printer.print_underlined_header_undecorated(text="System settings")
-                    self.printer.item_1(text="Current Project", optionalText=str(self.config.project['project_name']))
-                else:
-                    self.printer.print_underlined_header_undecorated(text="System settings")
-                    self.printer.item_1(text="Current Project", optionalText='None')
-        except Exception as e:
-            self.printer.print_error(exception=e)
-        
         super(NightcapBaseCMD, self).do_help(line)
 
+    def help_config(self):
+        self.printer.help(text="Get the current system configuration(s)")
+
+    def do_config(self, line):
+        ScreenHelper().clearScr()
+        self.printer.print_underlined_header_undecorated(text='Configuration')
+
+        self.printer.print_underlined_header(text='Projects', leadingTab=2)
+        if(len(line) == 0):
+            if(self.config.project != None):
+                self.printer.print_formatted_other(text="Current Project", optionaltext=str(self.config.project['project_name']),leadingTab=3, optionalTextColor=Fore.LIGHTMAGENTA_EX)
+            else:
+                self.printer.print_formatted_other(text="Current Project", optionaltext='None',leadingTab=3)
+                
+        self.printer.print_underlined_header(text='Web Server (Django)', leadingTab=2)
+        self.printer.print_formatted_other(text='IP', optionaltext=self.config.currentConfig["REPORTINGSERVER"]["ip"], leadingTab=3, optionalTextColor=Fore.YELLOW)
+        self.printer.print_formatted_other(text='Port', optionaltext=self.config.currentConfig["REPORTINGSERVER"]["port"], leadingTab=3, optionalTextColor=Fore.YELLOW)
+        self.printer.print_formatted_other(text='URL', optionaltext=NighcapCoreSimpleServer().get_url(), leadingTab=3, optionalTextColor=Fore.YELLOW)
+        # self.printer.print_formatted_other(text='Status', optionaltext= "UP" if NighcapCoreSimpleServer().status == True else "DOWN", leadingTab=3, optionalTextColor=Fore.YELLOW)
+
+        self.printer.print_underlined_header(text='Database (Mongo)', leadingTab=2)
+        self.printer.print_formatted_other(text='URL', optionaltext=self.config.currentConfig["MONGOSERVER"]["ip"], leadingTab=3, optionalTextColor=Fore.YELLOW)
+        self.printer.print_formatted_other(text='Status', optionaltext=self.config.currentConfig["MONGOSERVER"]["port"], leadingTab=3, optionalTextColor=Fore.YELLOW)
 
     def do_banner(self, line):
         ScreenHelper().clearScr()

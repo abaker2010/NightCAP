@@ -10,8 +10,10 @@ from .package_cmd import NightcapCLIOptionsPackage
 from .cmd_selector import NightcapCLIOptionsSelector
 from .cmd_validator import NightcapCLIOptionsValidator
 from .cmd_dev_options import NightcapDevOptions
+from .mongo_cmd import NightcapMongoSettingsCMD
+from .django_cmd import NightcapDjangoSettingsCMD
 
 __all__ = ["NightcapMainCMD", "NightcapProjectsCMD", 
             "NightcapSettingsCMD", "NightcapCLIOptionsPackage","NightcapCLIOptionsSelector",
-            "NightcapCLIOptionsValidator", "NightcapDevOptions"
+            "NightcapCLIOptionsValidator", "NightcapDevOptions", "NightcapMongoSettingsCMD", "NightcapDjangoSettingsCMD"
         ]

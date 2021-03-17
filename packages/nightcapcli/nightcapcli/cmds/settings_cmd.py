@@ -4,6 +4,9 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 from nightcapcli.cmds.cmd_dev_options import NightcapDevOptions
+from nightcapcli.cmds.django_cmd import NightcapDjangoSettingsCMD
+from nightcapcli.cmds.mongo_cmd import NightcapMongoSettingsCMD
+from nightcapcli.cmds.servers_cmd import NightcapMongoServerSettingsCMD
 from nightcapcli.generator.listpackages import NightcapListPackages
 from nightcapcli.updater.updater import NightcapUpdater
 # from nightcapcli.updater.updater import NightcapUpdater
@@ -17,7 +20,8 @@ class NightcapSettingsCMD(NightcapBaseCMD):
     def __init__(self, configuration: NightcapCLIConfiguration):
         NightcapBaseCMD.__init__(self,["settings"],configuration)
 
-    
+    def help_devoptions(self):
+        self.printer.help(text="Developer Options")
     #region 
     def do_devoptions(self, line):
         NightcapDevOptions(self.selectedList, self.config).cmdloop()
@@ -33,17 +37,14 @@ class NightcapSettingsCMD(NightcapBaseCMD):
             self.printer.print_error(exception=e)
 
     def help_install(self):
-        h1 = "Install a new module. Formatting for module creation can be found at:"
-        h2 = "https://some_url.com"
-        h = '''
-         %s %s
-        ''' % ((Fore.GREEN + h1),(Fore.YELLOW + h2 + Style.RESET_ALL))
-        print(h)
+        self.printer.help(text="Install a new module. Formatting for module creation can be found at", optionalText='https://some_url.com')
     #endregion
 
     #region List Packages
+    def help_list(self):
+        self.printer.help(text="List installed packages")
+
     def do_list(self, line):
-        '''\nList the packages that are installed\n'''
         ScreenHelper().clearScr()
         NightcapListPackages().list_packages()
 
@@ -59,17 +60,14 @@ class NightcapSettingsCMD(NightcapBaseCMD):
             self.printer.print_error(exception=e)
 
     def help_uninstall(self):
-        h1 = "Uninstall a module example:"
-        h2 = "uninstall [package_name]"
-        h = '''
-         %s %s
-        ''' % ((Fore.GREEN + h1),(Fore.YELLOW + h2 + Style.RESET_ALL))
-        print(h)
+        self.printer.help(text="Uninstall a module example", optionalText='uninstall [package_path]')
     #endregion
 
     #region Update
+    def help_update(self):
+        self.printer.help(text="Update the program, if there is no option specified the default will be used.", optionalText='update [main|dev] [-v]')
+
     def do_update(self, line):
-        '''\nUpdate the project. Usage: update [main|dev]. If no option is specified the default will be used.\n'''
         sline = str(line).lstrip().split(' ')
         print("Line: ", str(line).split(" "))
         try:
@@ -106,7 +104,11 @@ class NightcapSettingsCMD(NightcapBaseCMD):
     #endregion
         
     #region Server config section
+    def help_server(self):
+        self.printer.help(text='Configure a server')
+
     def do_server(self, line):
         print("Server config changes")
+        NightcapMongoServerSettingsCMD(self.config).cmdloop()
 
     #endregion

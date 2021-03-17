@@ -22,7 +22,7 @@ class NighcapCoreSimpleServer(object, metaclass=Singleton):
         self.printer = Printer()
 
     def get_url(self):
-        return "http://%s:%s/" % (self.ip, self.port)
+        return "https://%s:%s/" % (self.ip, self.port)
 
     def get_status(self):
         if(self.status == "False"):
@@ -32,7 +32,7 @@ class NighcapCoreSimpleServer(object, metaclass=Singleton):
 
     def start(self):
         try:
-            call = "python3.8 %s runserver" % (os.path.join(os.path.dirname(__file__), "../nightcapsite/manage.py"))
+            call = "python3.8 %s runserver %s" % (os.path.join(os.path.dirname(__file__), "../nightcapsite/manage.py"), self.config['REPORTINGSERVER']['port'])
             self.pproc = Popen(call, shell=True, stdin=PIPE, stdout=DEVNULL, stderr=STDOUT)
             self.printer.print_formatted_additional(text="Starting Up Django Server", leadingBreaks=1, endingBreaks=1)
             self.status = "True"

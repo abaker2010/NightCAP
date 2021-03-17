@@ -34,3 +34,12 @@ class ItemPrinter(PrinterBase):
             self.base_print(leadingText=leadingText, leadingTab=leadingTab, text=text, optionalText=optionalText, leadingBreaks=leadingBreaks,
             endingBreaks=endingBreaks, vtabs=vtabs,leadingColor=leadingColor, textColor=textColor, optionalTextColor=optionalTextColor,seperator=seperator,
             breakTextColor=breakTextColor, styleRest=styleRest)
+    
+    def help(self, leadingTab=1, leadingText="~", text="", optionalText="", leadingBreaks=0, endingBreaks=1, vtabs=1,seperator=' : ', 
+               leadingColor=Fore.LIGHTGREEN_EX, textColor=Fore.LIGHTGREEN_EX, optionalTextColor=Fore.LIGHTBLUE_EX,
+               breakTextColor=Fore.LIGHTMAGENTA_EX, styleRest=Style.RESET_ALL):
+
+            self.base_print(leadingText=leadingText, leadingTab=leadingTab, text=text, optionalText=optionalText, leadingBreaks=leadingBreaks,
+            endingBreaks=endingBreaks, vtabs=vtabs,leadingColor=leadingColor, textColor=textColor, optionalTextColor=optionalTextColor,seperator=seperator,
+            breakTextColor=breakTextColor, styleRest=styleRest)
+
