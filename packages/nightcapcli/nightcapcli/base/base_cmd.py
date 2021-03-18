@@ -67,8 +67,8 @@ class NightcapBaseCMD(_NightcapBaseCMD_Config):
         self.printer.print_underlined_header(text='Web Server (Django)', leadingTab=2)
         self.printer.print_formatted_other(text='IP', optionaltext=self.config.currentConfig["REPORTINGSERVER"]["ip"], leadingTab=3, optionalTextColor=Fore.YELLOW)
         self.printer.print_formatted_other(text='Port', optionaltext=self.config.currentConfig["REPORTINGSERVER"]["port"], leadingTab=3, optionalTextColor=Fore.YELLOW)
-        self.printer.print_formatted_other(text='URL', optionaltext=NighcapCoreSimpleServer().get_url(), leadingTab=3, optionalTextColor=Fore.YELLOW)
-        # self.printer.print_formatted_other(text='Status', optionaltext= "UP" if NighcapCoreSimpleServer().status == True else "DOWN", leadingTab=3, optionalTextColor=Fore.YELLOW)
+        self.printer.print_formatted_other(text='URL', optionaltext=NighcapCoreSimpleServer(self.config).get_url(), leadingTab=3, optionalTextColor=Fore.YELLOW)
+        self.printer.print_formatted_other(text='Status', optionaltext= NighcapCoreSimpleServer(self.config).get_status(), leadingTab=3, optionalTextColor=Fore.LIGHTGREEN_EX if NighcapCoreSimpleServer(self.config).get_status() == "UP" else Fore.MAGENTA)
 
         self.printer.print_underlined_header(text='Database (Mongo)', leadingTab=2)
         self.printer.print_formatted_other(text='URL', optionaltext=self.config.currentConfig["MONGOSERVER"]["ip"], leadingTab=3, optionalTextColor=Fore.YELLOW)

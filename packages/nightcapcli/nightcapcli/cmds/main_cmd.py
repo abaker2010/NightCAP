@@ -29,11 +29,11 @@ class NightcapMainCMD(NightcapBaseCMD):
         '''\n\tControll the update server\n\n\t\tOptions: status, start, stop'''
         try:
             if(line == "start"):
-                NighcapCoreSimpleServer().start()
+                NighcapCoreSimpleServer(self.config).start()
             elif(line == "stop"):
-                NighcapCoreSimpleServer().shutdown()
+                NighcapCoreSimpleServer(self.config).shutdown()
             elif (line == "status"):
-                print(NighcapCoreSimpleServer().get_status())
+                print(NighcapCoreSimpleServer(self.config).get_status())
         except Exception as e:
             print(e)
     #endregion

@@ -38,13 +38,9 @@ class NightcapBanner():
         for l in sart:
             print(l.center(125,' '))
         print("\n\t", "=" * 100)
-        print('\t=',rcolor3, "Aaron Baker".center(96, ' '), rcolor,'=')
+        print('\t=',rcolor3, "Created By: Aaron Baker".center(96, ' '), rcolor,'=')
+        print("\t=", " " * 98,"=")
         try:
-            report_server = rcolor + "Reports Server ~ " + rcolor2 + NighcapCoreSimpleServer().get_status()
-            print('\t=',report_server.center(107, ' '), rcolor,'=')
-            if(NighcapCoreSimpleServer().get_status() == "UP"):
-                report_server_url = rcolor + "Reports URL ~ " + rcolor2 + NighcapCoreSimpleServer().get_url()
-                print('\t=', report_server_url.center(107, ' '), rcolor,'=')
             version_string = rcolor + "Version ~ " + rcolor2 + self.build_version
             build_number_string = rcolor + "Build ~ " + rcolor2 + self.build_number
             print('\t=', rcolor2, ("%s\t%s" % (version_string, build_number_string)).center(109, ' '), rcolor, '=')

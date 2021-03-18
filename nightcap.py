@@ -10,6 +10,7 @@ import colorama
 from colorama import Fore, Style
 from nightcapcore import ScreenHelper, Printer, NightcapCLIConfiguration, NightcapBanner
 from nightcappackages.classes.databases.mogo.checker import MongoDatabaseChecker
+from nightcapserver.server.server import NighcapCoreSimpleServer
 from pymongo.errors import ServerSelectionTimeoutError
 from application.nightcap import Nightcap
 from application.legal.legal import Legal
@@ -134,7 +135,12 @@ def main():
             _printer.print_error(exception=e)
     except Exception as e:
         _printer.print_error(exception=e)
-    finally:  
+    finally:
+        _printer.print_underlined_header(text="Cleaning up...")
+        try:
+            NighcapCoreSimpleServer(_entry.conf).shutdown()
+        except Exception as e:
+            _printer.print_error(exception=e)
         exit()
 #region Main named if for keyboard interrupt
 if __name__ == '__main__':
