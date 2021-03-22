@@ -17,6 +17,7 @@ from .helpers import ScreenHelper
 from .banner import NightcapBanner
 from .colors import NightcapColors
 from .interface import Interface
+from .docker import NightcapCoreDockerChecker
 
 __all__ = [
     "NightcapCLIConfiguration", "NightcapCore",
@@ -24,7 +25,7 @@ __all__ = [
     "NightcapPathsEnum", "NightcapPathCleaner", "NightcapCoreUpdaterBase",
     "NightcapCoreUpaterRules", "NightcapCoreFiles", "Printer", 
     "NighcapCoreCLIBaseConfiguration", "Singleton", "Command",
-    "Invoker", "ScreenHelper", "NightcapBanner", "NightcapColors", "Interface"
+    "Invoker", "ScreenHelper", "NightcapBanner", "NightcapColors", "Interface", "NightcapCoreDockerChecker"
 ]
 
 __version__ = '0.0.1'

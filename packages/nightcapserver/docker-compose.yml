@@ -1,0 +1,29 @@
+version: "3.8"
+
+x-service-volumes: &service-volumes
+  - ./:/app/:rw,cached
+
+services: 
+  mongodb:
+    image: mongo:latest
+    container_name: nightcapmongodb
+    environment: 
+      MONGO_INITDB_ROOT_USERNAME: mongodbadmin
+      MONGO_INITDB_ROOT_PASSWORD: secret
+    ports:
+      - 28017:27017
+
+  website:
+    image: nightcapsite:latest
+    container_name: nightcapsite
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes: *service-volumes
+    ports:
+      - "8000:8000"
+    links: 
+        - "mongodb"
+    depends_on:
+      - mongodb
+
+
+      

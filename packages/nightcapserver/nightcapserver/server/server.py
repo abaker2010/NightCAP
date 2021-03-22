@@ -3,6 +3,7 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
+from pathlib import Path
 import sys
 import time
 from nightcapcore import NighcapCoreCLIBaseConfiguration, Printer
@@ -25,7 +26,7 @@ class NighcapCoreSimpleServer(object):
         self.printer = Printer()
 
     def get_url(self):
-        return "https://%s:%s/" % (self.config.currentConfig["REPORTINGSERVER"]["ip"], self.config.currentConfig["REPORTINGSERVER"]["port"])
+        return "http://%s:%s/" % (self.config.currentConfig["REPORTINGSERVER"]["ip"], self.config.currentConfig["REPORTINGSERVER"]["port"])
 
     def get_status(self):
         
@@ -36,7 +37,8 @@ class NighcapCoreSimpleServer(object):
 
     def start(self):
         try:
-            call = "python3.8 %s runserver %s" % (os.path.join(os.path.dirname(__file__), "../nightcapsite/manage.py"), self.config.currentConfig['REPORTINGSERVER']['port'])
+            call = "python3.8 %s runserver %s" % (os.path.join(os.path.dirname(__file__), '..', '..', "manage.py"), self.config.currentConfig['REPORTINGSERVER']['port'])
+            print(call)
             self.pproc = Popen(call, shell=True, stdin=PIPE, stdout=DEVNULL, stderr=STDOUT)
             self.printer.print_formatted_additional(text="Starting Up Django Server", leadingBreaks=1, endingBreaks=1)
             self.config.currentConfig.set("REPORTINGSERVER","status", 'True')

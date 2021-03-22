@@ -7,7 +7,6 @@
 # from application.classes.base_cmd.base_cmd import NightcapBaseCMD
 from nightcapcore.singleton.singleton import Singleton
 from ..connections import MongoDatabaseConnection
-from pymongo.errors import ServerSelectionTimeoutError
 
 class MongoDatabaseChecker(MongoDatabaseConnection, metaclass=Singleton):
     def __init__(self):

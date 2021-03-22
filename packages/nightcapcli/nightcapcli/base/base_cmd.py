@@ -5,6 +5,7 @@
 # file that should have been included as part of this package.
 
 from random import randint
+from mongo.mongo_helper import NightcapMongoHelper
 from nightcapcore import NightcapCLIConfiguration, Printer, ScreenHelper, NightcapBanner
 from nightcapcore.colors.nightcap_colors import NightcapColors
 from nightcappackages import *
@@ -35,6 +36,7 @@ class NightcapBaseCMD(_NightcapBaseCMD_Config):
         # region 
         self.config = configuration
         self.printer = Printer()
+        self.mongo_helper = NightcapMongoHelper(self.config)
         #endregion
 
     #region Exit

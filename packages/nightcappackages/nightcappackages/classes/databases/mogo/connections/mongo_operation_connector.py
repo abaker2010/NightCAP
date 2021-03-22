@@ -17,6 +17,9 @@ class MongoDatabaseOperationsConnection(MongoDatabaseInterface):
         ip = self.conf.currentConfig["MONGOSERVER"]["ip"]
         port = self.conf.currentConfig["MONGOSERVER"]["port"]
         _db_name = self.conf.currentConfig["MONGOSERVER"]["db_name"]
+        _uname = self.conf.currentConfig["MONGOSERVER"]["username"]
+        _pass = self.conf.currentConfig["MONGOSERVER"]["password"]
+        
         self.name = None
         if ip == None:
             raise Exception("Mongo Server IP not set")
@@ -27,7 +30,7 @@ class MongoDatabaseOperationsConnection(MongoDatabaseInterface):
         else:
             self.db_name = _db_name
         try:
-            super().__init__(ip, port)
+            super().__init__(ip, port, _uname, _pass)
         except ServerSelectionTimeoutError as e:
             raise e
 

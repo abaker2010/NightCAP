@@ -29,11 +29,12 @@ class NightcapMainCMD(NightcapBaseCMD):
         '''\n\tControll the update server\n\n\t\tOptions: status, start, stop'''
         try:
             if(line == "start"):
-                NighcapCoreSimpleServer(self.config).start()
+                self.mongo_helper.docker_helper.start_nighcap_site()
+                #NighcapCoreSimpleServer(self.config).start()
             elif(line == "stop"):
-                NighcapCoreSimpleServer(self.config).shutdown()
+                self.mongo_helper.docker_helper.stop_nightcapsite()
             elif (line == "status"):
-                print(NighcapCoreSimpleServer(self.config).get_status())
+                print(self.mongo_helper.docker_helper.get_site_container_status())
         except Exception as e:
             print(e)
     #endregion
