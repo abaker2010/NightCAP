@@ -4,6 +4,7 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 import os
+from pathlib import Path
 from colorama import Fore, Style
 from nightcapcore.printers import Printer
 
@@ -17,7 +18,7 @@ class NightcapDynamicParams(object):
             self.project = params_dict['project']
         else:
             self.isDir = False
-            self.dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_pcaps")
+            self.dir = os.path.join(Path(__file__).resolve().parent.parent, "test_pcaps")
             self.filename = "xmrig2.pcapng"
             self.project = None
         self.verboselevel = verboselevel

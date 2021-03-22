@@ -4,13 +4,14 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 # from nightcapcore import NightcapSimpleReport, NightcapCore
+from nightcapclient import NightcapClient
 from nightcapcore import *
 import os
 # from nightcapcore.report.widgets.header import NightcapSimpleReportHeader
 
-class SomePackageName(NightcapCore):
+class SomePackageName(NightcapClient):
     def __init__(self):
-        NightcapCore.__init__(self)
+        NightcapClient.__init__(self)
         # self.simple_report = NightcapSimpleReport(__file__, self.basedata['0'])
 
 def main():
