@@ -3,16 +3,13 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-from nightcapcli.cmds.cmd_dev_options import NightcapDevOptions
-from nightcapcli.cmds.django_cmd import NightcapDjangoSettingsCMD
-from nightcapcli.cmds.mongo_cmd import NightcapMongoSettingsCMD
-from nightcapcli.cmds.servers_cmd import NightcapMongoServerSettingsCMD
+from nightcapcli.cmds.cmd_shared.network_config_cmd import NightcapMongoNetworkSettingsCMD
+from nightcapcli.base.base_cmd import NightcapBaseCMD
+from nightcapcli.cmds.settings.cmd_dev_options import NightcapDevOptions
 from nightcapcli.generator.listpackages import NightcapListPackages
 from nightcapcli.updater.updater import NightcapUpdater
-# from nightcapcli.updater.updater import NightcapUpdater
 from nightcappackages.classes.helpers.package_installer import NightcapPackageInstallerCommand
 from nightcappackages.classes.helpers.package_uninstaller import NightcapPackageUninstallerCommand
-from ..base import NightcapBaseCMD
 from nightcapcore import *
 from colorama import Fore, Style
 
@@ -106,9 +103,12 @@ class NightcapSettingsCMD(NightcapBaseCMD):
     #region Server config section
     def help_server(self):
         self.printer.help(text='Configure a server')
+        self.printer.help(text='Usage: server <web|database>')
 
     def do_server(self, line):
-        print("Server config changes")
-        NightcapMongoServerSettingsCMD(self.config).cmdloop()
+        try:
+            NightcapMongoNetworkSettingsCMD(line, self.config).cmdloop()
+        except Exception as e:
+            self.printer.print_error(exception=e)
 
     #endregion

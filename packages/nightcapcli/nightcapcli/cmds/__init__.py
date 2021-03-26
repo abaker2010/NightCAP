@@ -4,16 +4,12 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 from .main_cmd import NightcapMainCMD
-from .projects_cmd import NightcapProjectsCMD
-from .settings_cmd import NightcapSettingsCMD
-from .package_cmd import NightcapCLIOptionsPackage
-from .cmd_selector import NightcapCLIOptionsSelector
-from .cmd_validator import NightcapCLIOptionsValidator
-from .cmd_dev_options import NightcapDevOptions
-from .mongo_cmd import NightcapMongoSettingsCMD
-from .django_cmd import NightcapDjangoSettingsCMD
+from .projects.projects_cmd import NightcapProjectsCMD
+from .settings import NightcapMongoSettingsCMD, NightcapDjangoSettingsCMD, NightcapDevOptions, NightcapSettingsCMD
+from .package.package_cmd import NightcapCLIOptionsPackage
 
-__all__ = ["NightcapMainCMD", "NightcapProjectsCMD", 
-            "NightcapSettingsCMD", "NightcapCLIOptionsPackage","NightcapCLIOptionsSelector",
-            "NightcapCLIOptionsValidator", "NightcapDevOptions", "NightcapMongoSettingsCMD", "NightcapDjangoSettingsCMD"
+
+__all__ = ["NightcapMainCMD", "NightcapProjectsCMD",
+            "NightcapSettingsCMD", "NightcapCLIOptionsPackage", 'NightcapDjangoSettingsCMD',
+            "NightcapDevOptions", "NightcapMongoSettingsCMD"
         ]

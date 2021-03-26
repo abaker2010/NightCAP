@@ -4,10 +4,9 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 from .cmds.main_cmd import NightcapMainCMD
-from .cmds.projects_cmd import NightcapProjectsCMD
-from .cmds.settings_cmd import NightcapSettingsCMD
-from .cmds.cmd_selector import NightcapCLIOptionsSelector
+from .cmds.projects import NightcapProjectsCMD
+from .cmds.settings import NightcapSettingsCMD
 
-__all__ = ["NightcapMainCMD", "NightcapProjectsCMD", "NightcapSettingsCMD", "NightcapCLIOptionsSelector"]
+__all__ = ["NightcapMainCMD", "NightcapProjectsCMD", "NightcapSettingsCMD"]
 
 __version__ = '0.0.1'

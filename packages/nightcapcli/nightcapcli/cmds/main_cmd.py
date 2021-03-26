@@ -4,7 +4,7 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 
-from nightcapcli.cmds.projects_cmd import NightcapProjectsCMD
+from nightcapcli.cmds.projects import NightcapProjectsCMD
 from nightcapcore import NightcapCLIConfiguration
 from nightcapserver import NighcapCoreSimpleServer
 from colorama import Fore, Style

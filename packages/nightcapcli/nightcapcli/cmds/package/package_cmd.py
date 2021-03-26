@@ -8,8 +8,8 @@ import copy
 import json
 from nightcapcore import NightcapCLIConfiguration
 from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
-# from application.classes.base_cmd.base_cmd import NightcapBaseCMD
-from ..base import NightcapBaseCMD
+from nightcapcli.base.base_cmd import NightcapBaseCMD
+
 from colorama import Fore, Style
 
 class NightcapCLIOptionsPackage(NightcapBaseCMD):

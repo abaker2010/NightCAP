@@ -6,7 +6,7 @@
 from nightcappackages.classes.databases.mogo.mongo_projects import MongoProjectsDatabase
 from tinydb.database import TinyDB
 from nightcapcore import NightcapCLIConfiguration, ScreenHelper
-from ..base import NightcapBaseCMD
+from nightcapcli.base.base_cmd import NightcapBaseCMD
 from colorama import Fore, Style
 import shutil
 

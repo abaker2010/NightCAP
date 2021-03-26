@@ -6,9 +6,8 @@
 import os
 import json
 import hashlib
-
+from nightcapcli.base.base_cmd import NightcapBaseCMD
 from nightcapcore.configuration.base import NightcapCLIConfiguration
-from ..base import NightcapBaseCMD
 from colorama import Fore, Style
 
 class NightcapDevOptions(NightcapBaseCMD):

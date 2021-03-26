@@ -18,8 +18,8 @@ except ImportError:
     import os
     DEVNULL = open(os.devnull, 'wb')
     
-class _NightcapBaseCMD_Config(cmd.Cmd):
-    def __init__(self, selectedList):
+class NightcapBaseCMD(cmd.Cmd):
+    def __init__(self, selectedList, configuration: NightcapCLIConfiguration):
         cmd.Cmd.__init__(self,completekey='tab', stdin=None, stdout=None)
         self.selectedList = [] if selectedList == None else selectedList
         itm = "" if selectedList == None else list(map(lambda v : "[" + Fore.LIGHTYELLOW_EX + v + Fore.LIGHTGREEN_EX + "]", selectedList))
@@ -28,17 +28,11 @@ class _NightcapBaseCMD_Config(cmd.Cmd):
         self.misc_header = Fore.GREEN + 'System' + Style.RESET_ALL
         self.undoc_header = Fore.GREEN + 'Other' + Style.RESET_ALL
         self.ruler = Fore.YELLOW + '-' + Style.RESET_ALL
-        
 
-class NightcapBaseCMD(_NightcapBaseCMD_Config):
-    def __init__(self, selectedList, configuration: NightcapCLIConfiguration):
-        super(NightcapBaseCMD, self).__init__(selectedList)
-        # region 
         self.config = configuration
         self.printer = Printer()
         self.mongo_helper = NightcapMongoHelper(self.config)
-        #endregion
-
+        
     #region Exit
     def do_exit(self,line):
         ScreenHelper().clearScr()

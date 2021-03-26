@@ -6,15 +6,11 @@
 # file that should have been included as part of this package.
 #region imports
 import os
-import subprocess
 import sys
 import colorama 
 from colorama import Fore, Style
-from nc_docker.docker_helper import NightcapDockerHelper
 from mongo.mongo_helper import NightcapMongoHelper
 from nightcapcore import ScreenHelper, Printer, NightcapCLIConfiguration, NightcapBanner
-from nightcapcore.docker.docker_checker import NightcapCoreDockerChecker
-from nightcappackages.classes.databases.mogo.checker import MongoDatabaseChecker
 from nightcapserver.server.server import NighcapCoreSimpleServer
 from pymongo.errors import ServerSelectionTimeoutError
 from application.nightcap import Nightcap
@@ -69,18 +65,13 @@ def main():
     _entry = Entry()
     try:
         colorama.init()
-        # _entry.banner()
         if(_entry.agreements()):
             try:
                 if(_entry.mongo_helper.check_mongo_container()):
                     _printer.print_formatted_check(text="Mongo Server", optionaltext="Connected")
                     ScreenHelper().clearScr()
                     _entry.banner()
-                    Nightcap(_entry.conf).cmdloop()
-                    # if(_entry.mongo_helper.check_mongo_dbs()):
-                        
-                    # else:
-                    #     raise Exception('Check Mongo DBS Failed')
+                    Nightcap([],_entry.conf).cmdloop()
                 else:
                     try:
                         ScreenHelper().clearScr()

@@ -4,9 +4,7 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 from nightcapcli.cmds.cmd_shared.network_config_cmd import NightcapMongoNetworkSettingsCMD
-from ..base import NightcapBaseCMD
 from nightcapcore import *
-from colorama import Fore, Style
 
 class NightcapDjangoSettingsCMD(NightcapMongoNetworkSettingsCMD):
     def __init__(self, configuration: NightcapCLIConfiguration):
