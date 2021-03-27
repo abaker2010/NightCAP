@@ -4,7 +4,6 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 # region Import
-# from application.classes.base_cmd.base_cmd import NightcapBaseCMD
 from bson.objectid import ObjectId
 from colorama.ansi import Fore, Style
 from nightcapcore.singleton.singleton import Singleton

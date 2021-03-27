@@ -19,7 +19,7 @@ except ImportError:
     DEVNULL = open(os.devnull, 'wb')
     
 class NightcapBaseCMD(cmd.Cmd):
-    def __init__(self, selectedList, configuration: NightcapCLIConfiguration):
+    def __init__(self, selectedList, configuration: NightcapCLIConfiguration, channelid=None):
         cmd.Cmd.__init__(self,completekey='tab', stdin=None, stdout=None)
         self.selectedList = [] if selectedList == None else selectedList
         itm = "" if selectedList == None else list(map(lambda v : "[" + Fore.LIGHTYELLOW_EX + v + Fore.LIGHTGREEN_EX + "]", selectedList))
@@ -32,11 +32,16 @@ class NightcapBaseCMD(cmd.Cmd):
         self.config = configuration
         self.printer = Printer()
         self.mongo_helper = NightcapMongoHelper(self.config)
+        self.channelID = channelid
         
     #region Exit
     def do_exit(self,line):
         ScreenHelper().clearScr()
         try:
+            if self.channelID == None:
+                print("No channel ID attached to unregister")
+            else:
+                print("Channel ID : ", self.channelID, ", needs unregistered")
             self.selectedList.remove(self.selectedList[-1])
         except Exception as e:
             pass

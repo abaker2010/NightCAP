@@ -6,6 +6,7 @@
 import os
 import copy
 import json
+from nightcapcli.observer.publisher import NightcapCLIPublisher
 from nightcapcore import NightcapCLIConfiguration
 from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
 from nightcapcli.base.base_cmd import NightcapBaseCMD
@@ -13,7 +14,7 @@ from nightcapcli.base.base_cmd import NightcapBaseCMD
 from colorama import Fore, Style
 
 class NightcapCLIOptionsPackage(NightcapBaseCMD):
-    def __init__(self,selectedList: list, configuration: NightcapCLIConfiguration, pkg_config: dict = None):
+    def __init__(self,selectedList: list, configuration: NightcapCLIConfiguration, pkg_config: dict = None, channelid: str = None):
         NightcapBaseCMD.__init__(self, selectedList, configuration)
         self.config = configuration
         self.pkg_config = pkg_config
@@ -101,3 +102,7 @@ class NightcapCLIOptionsPackage(NightcapBaseCMD):
                 print("Package not selected to be used")
         else:
             self.printer.print_error(exception=Exception("Scan canceled by user"))
+
+    def cli_update(self, message):
+        print("Trying to update from package cmd")
+        self.do_exit()

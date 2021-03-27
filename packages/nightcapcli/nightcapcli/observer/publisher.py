@@ -1,24 +1,32 @@
+#!/usr/bin/env python3.8
 # Copyright 2020 by Aaron Baker.
 # All rights reserved.
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-# region Import 
-from nightcappackages import *
+from os import sendfile
+from nightcapcli.observer.publisher_base import NightcapCLIPublisherBase
 from nightcappackages.classes.databases.mogo.mongo_modules import MongoModuleDatabase
 from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
 from nightcappackages.classes.databases.mogo.mongo_submodules import MongoSubModuleDatabase
-from nightcapcore import ScreenHelper
-# endregion
+from nightcapcore import Singleton
+from nightcapcore.printers.print import Printer
 
-class NightcapCLIOptionsValidator():
-    def __init__(self, options, selectedList):
+class NightcapCLIPublisher(NightcapCLIPublisherBase, metaclass=Singleton):
+    def __init__(self):
+        NightcapCLIPublisherBase.__init__(self,['basecli'])
+
         self.modules_db = MongoModuleDatabase()
         self.submodules_db = MongoSubModuleDatabase()
         self.packages_db = MongoPackagesDatabase()
-        self.newSelectedList = []
-        self.isvalid = self._validate(options, selectedList)
-        self.pkg_conf = None
+        self.printer = Printer()
+        self.selectedList = []
+
+    def set_list(self, list: list = []):
+        self.selectedList = list
+
+    def isValid(self, options, selectedList):
+        return self._validate(options, selectedList)
 
     def get_package_config(self, path: list):
         self.pkg_conf = self.packages_db.get_package_config(path)
@@ -45,8 +53,32 @@ class NightcapCLIOptionsValidator():
             return self._check_module_types(path) & self._check_sub_module(path) & self._check_packages(path)
         return False
 
-    def _validate(self, line: str, selected: list):
+    def compare(self):
+        if self.selectedList == []:
+            return {'add': len(self.newSelectedList)}
 
+        else:
+            _add = 0
+            print("Comparing New Selected List:", self.newSelectedList)
+            print("Comparing Selected List:", self.selectedList)
+            for i in range(len(self.newSelectedList)):
+                print("* Trying to compare items")
+                try:
+                    if self.selectedList[i] != self.newSelectedList[i]:
+                        print('Different:', self.selectedList[i],  self.newSelectedList[i])
+                        _add += 1
+                    else:
+                        print('Same:', self.selectedList[i],  self.newSelectedList[i])
+                except IndexError as e:
+                    _add += 1
+                except Exception as e:
+                    self.printer.print_error(exception=e)
+                i += 1
+            return {'add': _add}
+            
+
+
+    def _validate(self, line: str, selected: list):
         try:
             _options = []
             _splitCount = 0

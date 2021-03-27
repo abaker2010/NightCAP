@@ -10,6 +10,7 @@ import sys
 import colorama 
 from colorama import Fore, Style
 from mongo.mongo_helper import NightcapMongoHelper
+from nightcapcli.observer.publisher import NightcapCLIPublisher
 from nightcapcore import ScreenHelper, Printer, NightcapCLIConfiguration, NightcapBanner
 from nightcapserver.server.server import NighcapCoreSimpleServer
 from pymongo.errors import ServerSelectionTimeoutError
@@ -71,7 +72,12 @@ def main():
                     _printer.print_formatted_check(text="Mongo Server", optionaltext="Connected")
                     ScreenHelper().clearScr()
                     _entry.banner()
-                    Nightcap([],_entry.conf).cmdloop()
+                    # _channel = NightcapCLIPublisher().new_channel()
+                    _who = Nightcap([],_entry.conf, 'basecli')
+                    NightcapCLIPublisher().register('basecli', _who)
+                    print(NightcapCLIPublisher().channels)
+                    _who.cmdloop()
+                    
                 else:
                     try:
                         ScreenHelper().clearScr()

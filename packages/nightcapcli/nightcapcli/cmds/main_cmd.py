@@ -9,12 +9,11 @@ from nightcapcore import NightcapCLIConfiguration
 from nightcapserver import NighcapCoreSimpleServer
 from colorama import Fore, Style
 from ..base import NightcapBaseCMD
-# from .projects_cmd import NightcapProjectsCMD
 import os
 
 class NightcapMainCMD(NightcapBaseCMD):
-    def __init__(self, selectedList, configuration: NightcapCLIConfiguration):
-        super(NightcapMainCMD, self).__init__(selectedList, configuration)
+    def __init__(self, selectedList, configuration: NightcapCLIConfiguration, channelid: str = None):
+        NightcapBaseCMD.__init__(self, selectedList, configuration, channelid)
 
     #region Shell
     def do_shell(self, line):

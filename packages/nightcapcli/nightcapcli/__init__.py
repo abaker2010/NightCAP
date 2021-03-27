@@ -6,7 +6,8 @@
 from .cmds.main_cmd import NightcapMainCMD
 from .cmds.projects import NightcapProjectsCMD
 from .cmds.settings import NightcapSettingsCMD
+from .observer.publisher import NightcapCLIPublisherBase
 
-__all__ = ["NightcapMainCMD", "NightcapProjectsCMD", "NightcapSettingsCMD"]
+__all__ = ["NightcapMainCMD", "NightcapProjectsCMD", "NightcapSettingsCMD", 'NightcapCLIPublisherBase']
 
 __version__ = '0.0.1'
