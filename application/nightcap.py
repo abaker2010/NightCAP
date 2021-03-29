@@ -4,51 +4,63 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 #region Import
+import cmd
+from nightcapcli.cmds.main_cmd import NightcapMainCMD
 from nightcapcli.observer.publisher import NightcapCLIPublisher
 from nightcapcore import NightcapCLIConfiguration
 from nightcapcli.cmds.settings import NightcapSettingsCMD
 from nightcapcli.cmds import NightcapCLIOptionsPackage
-from nightcapcli.mixins.mixin_use import NightcapCLI_MixIn_Use
-from nightcapcli.mixins.mixin_usecmd import NightcapCLICMDMixIn
+from nightcapcli.mixins.mixin_maincmd import NightcapCLICMDMixIn
 from nightcapcore import ScreenHelper
 #endregion
 
 class Nightcap(NightcapCLICMDMixIn):
     def __init__(self, selected: list, configuration: NightcapCLIConfiguration, channelid: str = '', parentid: str = '', additionalchildren: list = []):
         NightcapCLICMDMixIn.__init__(self, selected, configuration, Nightcap, channelid)
-        self._conf = configuration
         self.channelid = channelid
         self.parentid = parentid
+
         if additionalchildren != []:
-            # for _ in additionalchildren:
-            #     print("additional child to create:", _)
-            print('Before calling additional children', '/'+ '/'.join(additionalchildren))
-            NightcapCLI_MixIn_Use.do_use(self, '/'+ '/'.join(additionalchildren), override=NightcapCLIOptionsPackage)
-            # self.do_use( '/'+ '/'.join(additionalchildren))
-
-
-    def do_settings(self, line):
-        print("Settings here")
-        ScreenHelper().clearScr()
-        NightcapSettingsCMD(self._conf).cmdloop()
-
-    def do_use(self, line):
-        NightcapCLI_MixIn_Use.do_use(self, line, override=NightcapCLIOptionsPackage)
+            _nns = self.selectedList.copy()
+            _nns.append(additionalchildren[0])
+            _nac = additionalchildren[1::]
+            _directions = { 
+                    'nextstep' : _nns,
+                    'additionalsteps' : _nac,
+                    'remove' : 0
+                }
+            self._push_object(_directions)
 
     def __del__(self):
-        print("Trying to close object")
-        print("Trying to notify parent ID:", self.parentid)
-        try:
-            NightcapCLIPublisher().dispatch(self.parentid, True)
-        except:
-            pass
+        # print("Trying to close object")
+        # print("Trying to notify parent ID:", self.parentid)
+        pass
+
+    def _push_object(self, directions: dict):
+        _channel = NightcapCLIPublisher().new_channel()
+        _who = None
+        if len(directions['nextstep']) == 3:
+            _who = NightcapCLIOptionsPackage(directions['nextstep'], self.config, NightcapCLIPublisher().get_package_config(directions['nextstep']), _channel)
+        else:
+            _who = self.pageobjct(directions['nextstep'], self.config, _channel, self.channelID, directions['additionalsteps'])
+
+        NightcapCLIPublisher().register(_channel, _who)
+
+        _who.cmdloop()
 
     def cli_update(self, message):
+        # print("Cli update called")
         if type(message) == bool:
-            print("Child object destroyed:", str(message))
-            print("Current list is:", NightcapCLIPublisher().selectedList)
+            # print("Child object destroyed:", str(message))
+            # print("Current list is:", NightcapCLIPublisher().selectedList)
+            pass
+
+        elif type(message) == dict:
+            # self.printer.print_formatted_additional("dict object")
+            # print(message)
+            self._push_object(message)
         else:
-            print("Message", message)
-        # self.do_exit()
+            pass
+            # print("Message", message)
         
 #endregion

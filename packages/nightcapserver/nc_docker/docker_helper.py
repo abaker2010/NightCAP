@@ -33,7 +33,6 @@ class NightcapDockerHelper(object):
             self.start_container_by_name('nightcapmongodb')
             time.sleep(3)
             MongoDatabaseChecker().initialize_database()
-            # _django_started = self.start_container_by_name('nightcapsite')
             return True
         except Exception as e:
             raise e
@@ -64,6 +63,7 @@ class NightcapDockerHelper(object):
         self.printer.print_underlined_header_undecorated(text="Stopping Docker Containers")
         self.stop_mongodb()
         self.stop_nightcapsite()
+        print("")
         return True
 
     def stop_nightcapsite(self):
@@ -79,9 +79,9 @@ class NightcapDockerHelper(object):
             self.printer.print_formatted_additional("Stopping...", name)
             # client = APIClient(base_url='unix://var/run/docker.sock')
             # client.stop(_container.name)
-            p = subprocess.Popen(['docker', 'stop', name])
+            p = subprocess.Popen(['docker', 'stop', name], stdout=DEVNULL)
             while p.poll() is None:
-                print('.', end='', flush=True)
+                print('', end='', flush=True)
                 time.sleep(1)
             self.printer.print_formatted_check(text="Stopped", leadingTab=3)
             # return True
@@ -112,9 +112,9 @@ class NightcapDockerHelper(object):
                     self.printer.print_formatted_additional("Starting...", _container.name)
                     # client = APIClient(base_url='unix://var/run/docker.sock')
                     # client.create_container(image='mongo:lastest',host_config=_container.attrs['Config'])
-                    p = subprocess.Popen(['docker', 'start', dict(_container.attrs['Config'])['Hostname']])
+                    p = subprocess.Popen(['docker', 'start', dict(_container.attrs['Config'])['Hostname']], stdout=DEVNULL)
                     while p.poll() is None:
-                        print('.', end='', flush=False)
+                        print('', end='', flush=False)
                         time.sleep(1)
                     self.printer.print_formatted_check(text="Created Containers")
                     return True

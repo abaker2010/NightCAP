@@ -21,6 +21,13 @@ class NightcapCLIPublisher(NightcapCLIPublisherBase, metaclass=Singleton):
         self.packages_db = MongoPackagesDatabase()
         self.printer = Printer()
         self.selectedList = []
+        # ----------------------
+
+        self.directions = { 
+            'nextstep' : [],
+            'additionalsteps' : [],
+            'remove' : 0
+        }
 
     def set_list(self, list: list = []):
         self.selectedList = list
@@ -53,34 +60,46 @@ class NightcapCLIPublisher(NightcapCLIPublisherBase, metaclass=Singleton):
             return self._check_module_types(path) & self._check_sub_module(path) & self._check_packages(path)
         return False
 
-    def compare(self):
+    # listA: selected list
+    # # listB: tmp list
+    # def _get_next_steps(self, listA: list, listB: list):
+    #     print("Comparing")
+    #     print(listA)
+    #     print(listB)
+    
+    def _get_pop(self, list: list):
+        _pop = 0 
+
         if self.selectedList == []:
-            return {'add': len(self.newSelectedList)}
-
+            # print("check remove: return 0")
+            return 0
         else:
-            _add = 0
-            print("Comparing New Selected List:", self.newSelectedList)
-            print("Comparing Selected List:", self.selectedList)
-            for i in range(len(self.newSelectedList)):
-                print("* Trying to compare items")
-                try:
-                    if self.selectedList[i] != self.newSelectedList[i]:
-                        print('Different:', self.selectedList[i],  self.newSelectedList[i])
-                        _add += 1
-                    else:
-                        print('Same:', self.selectedList[i],  self.newSelectedList[i])
-                except IndexError as e:
-                    _add += 1
-                except Exception as e:
-                    self.printer.print_error(exception=e)
-                i += 1
-            return {'add': _add}
-            
+            if len(self.selectedList) == 1:
+                # print("check remove: return 1")
+                return 1
+            elif len(self.selectedList) == 2:
+                if self.selectedList[0] != list[0]:
+                    # print("List[0] Dif")
+                    _pop = 2
+                elif self.selectedList[1] != list[1]:
+                    # print("List[1] Dif")
+                    _pop = 1
 
+                # print("check remove: return 2, pop", _pop)
+                return _pop
+            elif len(self.selectedList) == 3:
+                # print("check remove: return 3")
+                return 3
 
     def _validate(self, line: str, selected: list):
         try:
             _options = []
+            self.directions = { 
+                'nextstep' : [],
+                'additionalsteps' : [],
+                'remove' : 0
+            }
+
             _splitCount = 0
             if('/' in line):
                 _options = line.split('/')
@@ -96,8 +115,8 @@ class NightcapCLIPublisher(NightcapCLIPublisherBase, metaclass=Singleton):
             _emptyFront = '' == _orgItems[0]
             _emptyBack = '' == _orgItems[-1]
             # cleans list
-            _cleanedItems = list(filter(lambda item: item != '', _orgItems))
-            _combined = selected + _cleanedItems
+            _userWanting = list(filter(lambda item: item != '', _orgItems))
+            _combinedLists = selected + _userWanting
             ######
 
             _validCommand  = False
@@ -107,80 +126,116 @@ class NightcapCLIPublisher(NightcapCLIPublisherBase, metaclass=Singleton):
             ####
             # split = 2, items = 3
             # i/i/i
-            if len(_cleanedItems) == 3:
+            #region 3 Items
+            if len(_userWanting) == 3:
                 # print("3 sections")
                 if _splitCount == 2:
                     # print("Valid command")
-                    if(len(_cleanedItems) <= 3):
-                        _tmpNewList = _cleanedItems
+                    if(len(_userWanting) <= 3):
+                        _tmpNewList = _userWanting
                         _validCommand = True
+                        self.directions['nextstep'] = [_tmpNewList[0]]
+                        self.directions['additionalsteps'] = _tmpNewList[1::]
+            #endregion
             # Condition
             ####
             # split = 2, items = 2
             # /i/i  (combine)
+            # split = 1, items = 2
             # i/i   (replace)
-            elif len(_cleanedItems) == 2:
+            #region 2 Items
+            elif len(_userWanting) == 2:
                 # print("2 sections")
                 if _splitCount == 2:
                     # print("valid command")
                     # print("Split count 2")
                     if(_emptyFront):
-                        if(len(_combined) <=3):
-                            _tmpNewList =  _combined
+                        if(len(_combinedLists) <=3):
+                            _tmpNewList = _combinedLists
                             _validCommand = True
+                            self.directions['nextstep'] = [_tmpNewList[0]]
+                            self.directions['additionalsteps'] = _tmpNewList[1::]
                     else:
                         # print("Not empty front needs done")
-                        if(len(_cleanedItems) <= 3):
-                            _tmpNewList = _cleanedItems
+                        if(len(_userWanting) <= 3):
+                            _tmpNewList = _userWanting
                             _validCommand =  True
+                            self.directions['additionalsteps'] = _tmpNewList[1::]
+                            self.directions['nextstep'] = [_tmpNewList[0]]
+                            self.directions['remove'] = self._get_pop(_tmpNewList)
                 elif _splitCount == 1:
                     # print("valid command")
                     # print("Split count 1")
+                    # /i/i (combine)
                     if(_emptyFront):
-                        if(len(_combined) <=3):
-                            _tmpNewList =  _combined
+                        if(len(_combinedLists) <=3):
+                            _tmpNewList =  _combinedLists
                             _validCommand =  True
+                            self.directions['nextstep'] = [_tmpNewList[0]]
+                            self.directions['additionalsteps'] = _tmpNewList[1::]
                     else:
                         # print("Not empty front needs done")
-                        if(len(_cleanedItems) <= 3):
-                            _tmpNewList = _cleanedItems
+                        # i/i (replace)
+                        if(len(_userWanting) <= 3):
+                            _tmpNewList = _userWanting
                             _validCommand =  True
+                            self.directions['nextstep'] = [_tmpNewList[0]]
+                            self.directions['additionalsteps'] = _tmpNewList[1::]
+                            self.directions['remove'] = self._get_pop(_tmpNewList)
+            #endregion
             # Condition
             ####
             # split = 0|1, items = 1
             # /i  (combine)
             # i   (add)
-            elif len(_cleanedItems) == 1:
+            #region 1 Item
+            elif len(_userWanting) == 1:
                 # print("1 section")
+                # print("User passed 1 item to add")
                 if _splitCount == 1:
-                    # print("valid command")
+                    # print("Has split")
                     if(_hasEmpty):
                         if(_emptyBack):
-                            _tmpNewList = _cleanedItems
+                            _tmpNewList = _userWanting
                             _validCommand =  True
+                            self.directions['nextstep'] = _tmpNewList
+                            self.directions['remove'] = self._get_pop(_tmpNewList)
                         elif(_emptyFront):
-                            if(len(_combined) <= 3):
-                                _tmpNewList = _combined
+                            if(len(_combinedLists) <= 3):
+                                _tmpNewList = _combinedLists
                                 _validCommand =  True
+                                self.directions['nextstep'] = _tmpNewList
                 elif _splitCount == 0:
                     # print("valid command")
-                    if(len(_combined) <= 3):
-                        _tmpNewList = _combined
+                    # print("Has NO split")
+                    if(len(_combinedLists) <= 3):
+                        _tmpNewList = _combinedLists
                         _validCommand =  True
-            else:
-                return False
-
-            # print("Valid command 1", _validCommand)
-            # print("Tmp list to check", _tmpNewList)
-            if(_validCommand):
-                if(self._check_current_path(_tmpNewList)):
-                    self.newSelectedList = _tmpNewList
-                    return True
-                else:
-                    # print("Error with path")
-                    return False
+                        self.directions['nextstep'] = _tmpNewList
+            #endregion
             else:
                 return False
         except Exception as e:
-            print("Error with options validation", e)
+            # print(e)
+            raise e
+
+        # print("Valid command 1", _validCommand)
+        # print("Tmp list to check", _tmpNewList)
+        if(_validCommand):
+            if(self._check_current_path(_tmpNewList)):
+                # print("Current path of program:", selected)
+                # print("Path determined to be valid:", _tmpNewList)
+                # print("Directions:", self.directions)
+                # self._get_next_steps(self.selectedList, _tmpNewList)
+                # self.validatedList = _tmpNewList
+                # print('*'*10)
+                # print("Selected", '/'.join(selected))
+                # print("validated", '/'.join(self.validatedList))
+                if '/'.join(self.selectedList) == '/'.join(_tmpNewList):
+                    raise Exception("Already at the location")
+                else:   
+                    return True
+            else:
+                return False
+        else:
             return False

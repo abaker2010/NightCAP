@@ -5,5 +5,9 @@
 # file that should have been included as part of this package.
 from .network_config_cmd import NightcapMongoNetworkSettingsCMD
 from .cmd_validator import NightcapCLIOptionsValidator
+from .shell_cmd import ShellCMDMixin
 
-__all__ = ['NightcapMongoNetworkSettingsCMD', 'NightcapCLIOptionsValidator']
+__all__ = [
+    'NightcapMongoNetworkSettingsCMD', 'NightcapCLIOptionsValidator', 
+    'ShellCMDMixin'
+    ]

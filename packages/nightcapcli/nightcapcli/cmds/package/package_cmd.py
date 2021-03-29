@@ -6,6 +6,7 @@
 import os
 import copy
 import json
+from nightcapcli.cmds.projects.projects_cmd import NightcapProjectsCMD
 from nightcapcli.observer.publisher import NightcapCLIPublisher
 from nightcapcore import NightcapCLIConfiguration
 from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
@@ -67,6 +68,12 @@ class NightcapCLIOptionsPackage(NightcapBaseCMD):
 
         print()
 
+    def do_projects(self, line):
+        '''\n\nChange current project'''
+        try:
+            NightcapProjectsCMD(self.config).cmdloop()
+        except Exception as e:
+            print(e)
 
     def help_run(self):
         self.printer.item_2(text="Run package", leadingTab=1, vtabs=1, endingBreaks=1, leadingText='', textColor=Fore.LIGHTGREEN_EX)

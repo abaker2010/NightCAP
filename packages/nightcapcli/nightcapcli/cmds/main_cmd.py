@@ -4,26 +4,24 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 
+from nightcapcli.cmds.cmd_shared.shell_cmd import ShellCMDMixin
+from nightcapcli.cmds.package.package_cmd import NightcapCLIOptionsPackage
 from nightcapcli.cmds.projects import NightcapProjectsCMD
 from nightcapcore import NightcapCLIConfiguration
-from nightcapserver import NighcapCoreSimpleServer
 from colorama import Fore, Style
 from ..base import NightcapBaseCMD
-import os
+from nightcapcore import ScreenHelper
+from nightcapcli.cmds.settings import NightcapSettingsCMD
 
-class NightcapMainCMD(NightcapBaseCMD):
+class NightcapMainCMD(NightcapBaseCMD, ShellCMDMixin):
     def __init__(self, selectedList, configuration: NightcapCLIConfiguration, channelid: str = None):
-        NightcapBaseCMD.__init__(self, selectedList, configuration, channelid)
-
-    #region Shell
-    def do_shell(self, line):
-        "\n\tRun a shell command, becareful with this. This feature is still in beta\n"
-        output = os.popen(line).read()
-        print("\n{0}{1}{2}".format(Fore.LIGHTGREEN_EX,output, Style.RESET_ALL))
-        self.last_output = output
-    #endregion
+        NightcapBaseCMD.__init__(self,selectedList, configuration, channelid)
 
     #region Update Server
+
+    def complete_server(self, text, line, begidx, endidx):
+        return [i for i in ('start','stop','status') if i.startswith(text)]
+
     def do_server(self,line):
         '''\n\tControll the update server\n\n\t\tOptions: status, start, stop'''
         try:
@@ -34,8 +32,10 @@ class NightcapMainCMD(NightcapBaseCMD):
                 self.mongo_helper.docker_helper.stop_nightcapsite()
             elif (line == "status"):
                 print(self.mongo_helper.docker_helper.get_site_container_status())
+            else:
+                raise Exception("Error with server option. For more info use: help server")
         except Exception as e:
-            print(e)
+            self.printer.print_error(exception=e)
     #endregion
 
     def do_projects(self, line):
@@ -44,3 +44,9 @@ class NightcapMainCMD(NightcapBaseCMD):
             NightcapProjectsCMD(self.config).cmdloop()
         except Exception as e:
             print(e)
+
+    def do_settings(self, line):
+        print("Settings here")
+        ScreenHelper().clearScr()
+        NightcapSettingsCMD(self.config).cmdloop()
+        

@@ -28,7 +28,7 @@ class MongoDatabaseInterface:
             raise e
     
     def connect_authenticated(self, ip: str, port: str, username: str, password: str, authMechanism: str):
-        client = MongoClient(str(ip), int(port), username=username, password=password, authMechanism=authMechanism, serverSelectionTimeoutMS=500,)
+        client = MongoClient(str(ip), int(port), username=username, password=password, authMechanism=authMechanism, serverSelectionTimeoutMS=1000,)
         client.server_info() # force connection on a request as the
                             # connect=True parameter of MongoClient seems
                             # to be useless here 

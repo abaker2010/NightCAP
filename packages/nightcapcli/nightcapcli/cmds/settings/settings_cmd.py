@@ -105,6 +105,9 @@ class NightcapSettingsCMD(NightcapBaseCMD):
         self.printer.help(text='Configure a server')
         self.printer.help(text='Usage: server <web|database>')
 
+    def complete_server(self, text, line, begidx, endidx):
+        return [i for i in ('web','database') if i.startswith(text)]
+
     def do_server(self, line):
         try:
             NightcapMongoNetworkSettingsCMD(line, self.config).cmdloop()

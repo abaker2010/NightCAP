@@ -71,12 +71,16 @@ def main():
                 if(_entry.mongo_helper.check_mongo_container()):
                     _printer.print_formatted_check(text="Mongo Server", optionaltext="Connected")
                     ScreenHelper().clearScr()
-                    _entry.banner()
+                    # _entry.banner()
                     # _channel = NightcapCLIPublisher().new_channel()
                     _who = Nightcap([],_entry.conf, 'basecli')
                     NightcapCLIPublisher().register('basecli', _who)
-                    print(NightcapCLIPublisher().channels)
-                    _who.cmdloop()
+                    # print(NightcapCLIPublisher().channels)
+                    l = _who.precmd('banner')
+                    r = _who.onecmd(l)
+                    r = _who.postcmd(r, l)
+                    if not r:
+                        _who.cmdloop()
                     
                 else:
                     try:

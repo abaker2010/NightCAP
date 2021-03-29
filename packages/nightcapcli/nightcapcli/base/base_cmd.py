@@ -6,6 +6,8 @@
 
 from random import randint
 from mongo.mongo_helper import NightcapMongoHelper
+from nightcapcli.generator.option_generator import NightcapOptionGenerator
+from nightcapcli.observer.publisher import NightcapCLIPublisher
 from nightcapcore import NightcapCLIConfiguration, Printer, ScreenHelper, NightcapBanner
 from nightcapcore.colors.nightcap_colors import NightcapColors
 from nightcappackages import *
@@ -19,10 +21,13 @@ except ImportError:
     DEVNULL = open(os.devnull, 'wb')
     
 class NightcapBaseCMD(cmd.Cmd):
-    def __init__(self, selectedList, configuration: NightcapCLIConfiguration, channelid=None):
+    def __init__(self, selectedList: list, configuration: NightcapCLIConfiguration, channelid=None):
         cmd.Cmd.__init__(self,completekey='tab', stdin=None, stdout=None)
-        self.selectedList = [] if selectedList == None else selectedList
-        itm = "" if selectedList == None else list(map(lambda v : "[" + Fore.LIGHTYELLOW_EX + v + Fore.LIGHTGREEN_EX + "]", selectedList))
+        if selectedList != []:
+            self.selectedList = selectedList
+        else:
+            self.selectedList = [] if NightcapCLIPublisher().selectedList == [] else NightcapCLIPublisher().selectedList
+        itm = "" if self.selectedList == None else list(map(lambda v : "[" + Fore.LIGHTYELLOW_EX + v + Fore.LIGHTGREEN_EX + "]", self.selectedList))
         self.prompt = Fore.GREEN + 'nightcap' + "".join(itm) + ' > ' + Fore.CYAN
         self.doc_header = Fore.GREEN + 'Commands' + Style.RESET_ALL
         self.misc_header = Fore.GREEN + 'System' + Style.RESET_ALL
@@ -33,16 +38,28 @@ class NightcapBaseCMD(cmd.Cmd):
         self.printer = Printer()
         self.mongo_helper = NightcapMongoHelper(self.config)
         self.channelID = channelid
-        
-    #region Exit
+
+    def emptyline(self):pass
+
+    # putting into place to be used later
+    def preloop(self) -> None:
+        return super().preloop()
+
+    def postcmd(self, stop: bool, line: str) -> bool:
+        # print("Post cmd loop")
+        return super().postcmd(stop, line)
+
+    def postloop(self) -> None:
+        return super().postloop()
+    #####
+
     def do_exit(self,line):
         ScreenHelper().clearScr()
         try:
-            if self.channelID == None:
-                print("No channel ID attached to unregister")
-            else:
-                print("Channel ID : ", self.channelID, ", needs unregistered")
-            self.selectedList.remove(self.selectedList[-1])
+            if self.channelID != None:
+            #     self.printer.print_formatted_check(text="No channel ID attached to unregister")
+            # else:
+                NightcapCLIPublisher().del_channel(self.channelID)
         except Exception as e:
             pass
         return True
@@ -73,7 +90,7 @@ class NightcapBaseCMD(cmd.Cmd):
 
         self.printer.print_underlined_header(text='Database (Mongo)', leadingTab=2)
         self.printer.print_formatted_other(text='URL', optionaltext=self.config.currentConfig["MONGOSERVER"]["ip"], leadingTab=3, optionalTextColor=Fore.YELLOW)
-        self.printer.print_formatted_other(text='Status', optionaltext=self.config.currentConfig["MONGOSERVER"]["port"], leadingTab=3, optionalTextColor=Fore.YELLOW)
+        self.printer.print_formatted_other(text='Status', optionaltext=self.config.currentConfig["MONGOSERVER"]["port"], leadingTab=3, optionalTextColor=Fore.YELLOW, endingBreaks=1)
 
     def do_banner(self, line):
         ScreenHelper().clearScr()
