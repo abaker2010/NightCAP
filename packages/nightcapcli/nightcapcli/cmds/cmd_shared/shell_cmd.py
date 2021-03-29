@@ -8,8 +8,9 @@ import os
 import cmd
 from colorama.ansi import Fore, Style
 
+
 class ShellCMDMixin(cmd.Cmd, object):
-    def do_shell(self,s):
+    def do_shell(self, s):
         "\n\tRun a shell command, becareful with this. This feature is still in beta\n"
         print(Fore.LIGHTGREEN_EX)
         os.system(s)

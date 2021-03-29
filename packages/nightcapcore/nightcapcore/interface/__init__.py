@@ -5,4 +5,4 @@
 # file that should have been included as part of this package.
 from .template_interface import Interface
 
-__all__ = ['Interface']
+__all__ = ["Interface"]

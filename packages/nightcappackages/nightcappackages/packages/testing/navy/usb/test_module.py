@@ -7,12 +7,15 @@
 from nightcapclient import NightcapClient
 from nightcapcore import *
 import os
+
 # from nightcapcore.report.widgets.header import NightcapSimpleReportHeader
+
 
 class SomePackageName(NightcapClient):
     def __init__(self):
         NightcapClient.__init__(self)
         # self.simple_report = NightcapSimpleReport(__file__, self.basedata['0'])
+
 
 def main():
     print("\n", "\t[-] Able to run from module")
@@ -26,8 +29,8 @@ def main():
 
     # header_key = ncore.simple_report.add_header(NightcapSimpleReportHeader("IPs"))
     # header_key1 = ncore.simple_report.add_header(NightcapSimpleReportHeader("header two"))
-    
-    #region Analyzing PCAP
+
+    # region Analyzing PCAP
     # print("Looking into file")
     # total_counted = 0
     # for packet in ncore.pcapFiles:
@@ -46,19 +49,19 @@ def main():
     # print("\n\n")
     # print("processed pcap in developer package (line count)", total_counted)
 
-    #endregion
+    # endregion
 
     # ncore.simple_report.print_report()
 
     # ncore.simple_report.save()
 
-        
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
         exit()
     except Exception as e:
         print(e)
-    finally:        
+    finally:
         exit()

@@ -8,6 +8,7 @@ from .cmd_validator import NightcapCLIOptionsValidator
 from .shell_cmd import ShellCMDMixin
 
 __all__ = [
-    'NightcapMongoNetworkSettingsCMD', 'NightcapCLIOptionsValidator', 
-    'ShellCMDMixin'
-    ]
+    "NightcapMongoNetworkSettingsCMD",
+    "NightcapCLIOptionsValidator",
+    "ShellCMDMixin",
+]

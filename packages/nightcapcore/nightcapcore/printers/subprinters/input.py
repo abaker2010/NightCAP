@@ -6,13 +6,22 @@
 from nightcapcore.printers import PrinterBase
 from colorama import Fore, Back, Style
 
-class InputPrinter(PrinterBase):
 
+class InputPrinter(PrinterBase):
     def __init__(self):
         super().__init__()
 
-    def input(self, text: str, questionColor: Fore = Fore.LIGHTGREEN_EX,inputcolor: Fore = Fore.CYAN, width: int = 5,sep: str = ' ', vtab=1, etab=1):
-        print('\n'*vtab)
-        _input =  input(questionColor + str(text).center(width,sep) + inputcolor)
-        print('\n'*etab)
+    def input(
+        self,
+        text: str,
+        questionColor: Fore = Fore.LIGHTGREEN_EX,
+        inputcolor: Fore = Fore.CYAN,
+        width: int = 5,
+        sep: str = " ",
+        vtab=1,
+        etab=1,
+    ):
+        print("\n" * vtab)
+        _input = input(questionColor + str(text).center(width, sep) + inputcolor)
+        print("\n" * etab)
         return _input

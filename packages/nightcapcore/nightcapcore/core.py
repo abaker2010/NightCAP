@@ -7,10 +7,12 @@ import argparse
 import json
 from .configuration import NightcapCLIConfiguration
 
+
 class NightcapCore(NightcapCLIConfiguration):
     def __init__(self):
-        parser = argparse.ArgumentParser(description='Process some pcaps.')
-        parser.add_argument('--data', required=True,
-                            help='list of pcap filenames')
+        parser = argparse.ArgumentParser(description="Process some pcaps.")
+        parser.add_argument("--data", required=True, help="list of pcap filenames")
         args = parser.parse_args()
-        NightcapCLIConfiguration.__init__(self,generatePcaps=True,basedata=dict(json.loads(args.data)))
+        NightcapCLIConfiguration.__init__(
+            self, generatePcaps=True, basedata=dict(json.loads(args.data))
+        )

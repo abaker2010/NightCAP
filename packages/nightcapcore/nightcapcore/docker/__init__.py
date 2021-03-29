@@ -5,4 +5,4 @@
 # file that should have been included as part of this package.
 from .docker_checker import NightcapCoreDockerChecker
 
-__all__ = ['NightcapCoreDockerChecker']
+__all__ = ["NightcapCoreDockerChecker"]

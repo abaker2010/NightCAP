@@ -10,4 +10,11 @@ from .input import InputPrinter
 from .item import ItemPrinter
 from .waiting import WaitingPrinter
 
-__all__ = ["CheckMarkPrinter", "ErrorPrinter", "HeaderPrinter", "InputPrinter", "ItemPrinter", "WaitingPrinter"]
+__all__ = [
+    "CheckMarkPrinter",
+    "ErrorPrinter",
+    "HeaderPrinter",
+    "InputPrinter",
+    "ItemPrinter",
+    "WaitingPrinter",
+]

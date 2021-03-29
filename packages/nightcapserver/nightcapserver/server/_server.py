@@ -9,6 +9,7 @@ import socketserver
 from http.server import BaseHTTPRequestHandler
 from nightcapserver.server.reporting_server_base import NightcapCoreServerReportingBase
 
+
 class SimpleHttpRequestHandler(BaseHTTPRequestHandler):
     def do_HEAD(self):
         return
@@ -18,14 +19,14 @@ class SimpleHttpRequestHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         self.respond()
- 
+
     def respond(self):
-        if(".css" in self.path):
-            content = self.handle_http(200, 'text/css')
+        if ".css" in self.path:
+            content = self.handle_http(200, "text/css")
         else:
-            content = self.handle_http(200, 'text/html')
+            content = self.handle_http(200, "text/html")
         self.wfile.write(content)
- 
+
     def handle_http(self, status, content_type):
         print("requested: ", self.path)
         self.send_response(status)
@@ -33,19 +34,22 @@ class SimpleHttpRequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         print("Current Path:", os.path.dirname(__file__))
 
-        route_content = NightcapCoreServerReportingBase(os.path.join(os.path.dirname(__file__), "webbase")).get_route(self.path)
-        return bytes(route_content, 'UTF-8')
+        route_content = NightcapCoreServerReportingBase(
+            os.path.join(os.path.dirname(__file__), "webbase")
+        ).get_route(self.path)
+        return bytes(route_content, "UTF-8")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     try:
-        parser = argparse.ArgumentParser(description='Process some server inputs.')
-        parser.add_argument('--ip', required=True, dest="ip",
-                            help='lip')
-        parser.add_argument('--port', required=True, dest="port",
-                            help='port')
+        parser = argparse.ArgumentParser(description="Process some server inputs.")
+        parser.add_argument("--ip", required=True, dest="ip", help="lip")
+        parser.add_argument("--port", required=True, dest="port", help="port")
         args = parser.parse_args()
-        
-        httpd = socketserver.TCPServer((args.ip, int(args.port)), SimpleHttpRequestHandler)
+
+        httpd = socketserver.TCPServer(
+            (args.ip, int(args.port)), SimpleHttpRequestHandler
+        )
         httpd.serve_forever()
     except Exception as e:
         print(e)

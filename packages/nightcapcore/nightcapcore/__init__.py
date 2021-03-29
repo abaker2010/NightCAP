@@ -20,12 +20,25 @@ from .interface import Interface
 from .docker import NightcapCoreDockerChecker
 
 __all__ = [
-    "NightcapCLIConfiguration", "NightcapCore",
-    "NightcapDynamicParams", "NightcapPaths",
-    "NightcapPathsEnum", "NightcapPathCleaner", "NightcapCoreUpdaterBase",
-    "NightcapCoreUpaterRules", "NightcapCoreFiles", "Printer", 
-    "NighcapCoreCLIBaseConfiguration", "Singleton", "Command",
-    "Invoker", "ScreenHelper", "NightcapBanner", "NightcapColors", "Interface", "NightcapCoreDockerChecker"
+    "NightcapCLIConfiguration",
+    "NightcapCore",
+    "NightcapDynamicParams",
+    "NightcapPaths",
+    "NightcapPathsEnum",
+    "NightcapPathCleaner",
+    "NightcapCoreUpdaterBase",
+    "NightcapCoreUpaterRules",
+    "NightcapCoreFiles",
+    "Printer",
+    "NighcapCoreCLIBaseConfiguration",
+    "Singleton",
+    "Command",
+    "Invoker",
+    "ScreenHelper",
+    "NightcapBanner",
+    "NightcapColors",
+    "Interface",
+    "NightcapCoreDockerChecker",
 ]
 
-__version__ = '0.0.1'
+__version__ = "0.0.1"

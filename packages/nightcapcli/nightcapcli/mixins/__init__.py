@@ -5,6 +5,4 @@
 # file that should have been included as part of this package.
 from .mixin_maincmd import NightcapCLICMDMixIn
 
-__all__ = [
-            "NightcapCLICMDMixIn"
-        ]
+__all__ = ["NightcapCLICMDMixIn"]

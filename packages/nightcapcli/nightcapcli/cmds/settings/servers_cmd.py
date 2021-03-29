@@ -8,9 +8,10 @@ from nightcapcli.cmds.settings import NightcapMongoSettingsCMD
 from nightcapcli.cmds.settings.django_cmd import NightcapDjangoSettingsCMD
 from nightcapcore.configuration.base import NightcapCLIConfiguration
 
+
 class NightcapMongoServerSettingsCMD(NightcapBaseCMD):
     def __init__(self, configuration: NightcapCLIConfiguration):
-        NightcapBaseCMD.__init__(self,["settings","server"],configuration)
+        NightcapBaseCMD.__init__(self, ["settings", "server"], configuration)
 
     def help_database(self):
         self.printer.help(text="(Mongo) Database Configurations")

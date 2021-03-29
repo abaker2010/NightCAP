@@ -5,11 +5,21 @@
 # file that should have been included as part of this package.
 from .main_cmd import NightcapMainCMD
 from .projects.projects_cmd import NightcapProjectsCMD
-from .settings import NightcapMongoSettingsCMD, NightcapDjangoSettingsCMD, NightcapDevOptions, NightcapSettingsCMD
+from .settings import (
+    NightcapMongoSettingsCMD,
+    NightcapDjangoSettingsCMD,
+    NightcapDevOptions,
+    NightcapSettingsCMD,
+)
 from .package.package_cmd import NightcapCLIOptionsPackage
 
 
-__all__ = ["NightcapMainCMD", "NightcapProjectsCMD",
-            "NightcapSettingsCMD", "NightcapCLIOptionsPackage", 'NightcapDjangoSettingsCMD',
-            "NightcapDevOptions", "NightcapMongoSettingsCMD"
-        ]
+__all__ = [
+    "NightcapMainCMD",
+    "NightcapProjectsCMD",
+    "NightcapSettingsCMD",
+    "NightcapCLIOptionsPackage",
+    "NightcapDjangoSettingsCMD",
+    "NightcapDevOptions",
+    "NightcapMongoSettingsCMD",
+]

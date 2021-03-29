@@ -4,10 +4,10 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-#region imports
+# region imports
 import os
 import sys
-import colorama 
+import colorama
 from colorama import Fore, Style
 from mongo.mongo_helper import NightcapMongoHelper
 from nightcapcli.observer.publisher import NightcapCLIPublisher
@@ -17,11 +17,13 @@ from pymongo.errors import ServerSelectionTimeoutError
 from application.nightcap import Nightcap
 from application.legal.legal import Legal
 from subprocess import Popen, PIPE, STDOUT
-DEVNULL = open(os.devnull, 'wb')
+
+DEVNULL = open(os.devnull, "wb")
 
 try:
     import readline
-    if 'libedit' in readline.__doc__:
+
+    if "libedit" in readline.__doc__:
         readline.parse_and_bind("bind ^I rl_complete")
     else:
         readline.parse_and_bind("tab: complete")
@@ -29,28 +31,32 @@ except ImportError:
     sys.stdout.write("No readline module found, no tab completion available.\n")
 else:
     import rlcompleter
-#endregion
+# endregion
 
 
 class Entry:
     def __init__(self):
         self.conf = NightcapCLIConfiguration()
         self.printer = Printer()
-        self.yes = self.conf.currentConfig.get('NIGHTCAPCORE', 'yes').split()
+        self.yes = self.conf.currentConfig.get("NIGHTCAPCORE", "yes").split()
         self.mongo_server = None
         self.mongo_helper = NightcapMongoHelper(self.conf)
 
     def agreements(self):
         """Legal agreement the at the user must accept to use the program"""
-        
+
         while not self.conf.currentConfig.getboolean("NIGHTCAPCORE", "agreement"):
             ScreenHelper().clearScr()
             NightcapBanner(self.conf).Banner()
             Legal().termsAndConditions()
-            agree = input(Fore.LIGHTGREEN_EX + "\t\tYou must agree to our terms and conditions first (Y/n): " + Style.RESET_ALL).lower()
+            agree = input(
+                Fore.LIGHTGREEN_EX
+                + "\t\tYou must agree to our terms and conditions first (Y/n): "
+                + Style.RESET_ALL
+            ).lower()
 
             if agree in self.yes:
-                self.conf.currentConfig.set('NIGHTCAPCORE', 'agreement', 'true')
+                self.conf.currentConfig.set("NIGHTCAPCORE", "agreement", "true")
                 self.conf.Save()
                 ScreenHelper().clearScr()
                 self.banner()
@@ -66,34 +72,36 @@ def main():
     _entry = Entry()
     try:
         colorama.init()
-        if(_entry.agreements()):
+        if _entry.agreements():
             try:
-                if(_entry.mongo_helper.check_mongo_container()):
-                    _printer.print_formatted_check(text="Mongo Server", optionaltext="Connected")
+                if _entry.mongo_helper.check_mongo_container():
+                    _printer.print_formatted_check(
+                        text="Mongo Server", optionaltext="Connected"
+                    )
                     ScreenHelper().clearScr()
                     # _entry.banner()
                     # _channel = NightcapCLIPublisher().new_channel()
-                    _who = Nightcap([],_entry.conf, 'basecli')
-                    NightcapCLIPublisher().register('basecli', _who)
+                    _who = Nightcap([], _entry.conf, "basecli")
+                    NightcapCLIPublisher().register("basecli", _who)
                     # print(NightcapCLIPublisher().channels)
-                    l = _who.precmd('banner')
+                    l = _who.precmd("banner")
                     r = _who.onecmd(l)
                     r = _who.postcmd(r, l)
                     if not r:
                         _who.cmdloop()
-                    
+
                 else:
                     try:
                         ScreenHelper().clearScr()
                         _entry.banner()
-                        if(_entry.mongo_helper.change_mongo_server()):
+                        if _entry.mongo_helper.change_mongo_server():
                             ScreenHelper().clearScr()
                             main()
                     except Exception as e:
                         _printer.print_error(exception=e)
             except ServerSelectionTimeoutError as e:
                 raise e
-        
+
     except KeyboardInterrupt:
         ScreenHelper().clearScr()
         _entry.banner()
@@ -103,7 +111,7 @@ def main():
         try:
             ScreenHelper().clearScr()
             _entry.banner()
-            if(_entry.mongo_helper.change_mongo_server()):
+            if _entry.mongo_helper.change_mongo_server():
                 ScreenHelper().clearScr()
                 main()
         except Exception as e:
@@ -118,7 +126,9 @@ def main():
         except Exception as e:
             _printer.print_error(exception=e)
         exit()
-#region Main named if for keyboard interrupt
-if __name__ == '__main__':
+
+
+# region Main named if for keyboard interrupt
+if __name__ == "__main__":
     main()
-#endregion
+# endregion

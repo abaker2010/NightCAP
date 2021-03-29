@@ -5,20 +5,24 @@
 # file that should have been included as part of this package.
 from nightcapcore.singleton.singleton import Singleton
 from nightcapcore.printers import Printer
-from nightcappackages.classes.databases.mogo.connections.mongo_operation_connector import MongoDatabaseOperationsConnection
+from nightcappackages.classes.databases.mogo.connections.mongo_operation_connector import (
+    MongoDatabaseOperationsConnection,
+)
+
 
 class MongoProjectsDatabase(MongoDatabaseOperationsConnection, metaclass=Singleton):
     def __init__(self):
         MongoDatabaseOperationsConnection.__init__(self)
-        self._db = self.client[self.conf.currentConfig['MONGOSERVER']['db_name']]['projects']
+        self._db = self.client[self.conf.currentConfig["MONGOSERVER"]["db_name"]][
+            "projects"
+        ]
         self.printer = Printer()
 
     def create(self, prj: str):
-        if(self.find(prj).count() == 1):
+        if self.find(prj).count() == 1:
             self.printer.print_formatted_delete(text="Project Already Exists")
         else:
-            self._db.insert_one({"project_name" : prj})
-
+            self._db.insert_one({"project_name": prj})
 
     def read(self):
         return self._db.find()
@@ -30,15 +34,15 @@ class MongoProjectsDatabase(MongoDatabaseOperationsConnection, metaclass=Singlet
     def delete(self, puid: int):
         try:
             _prj = self.projects()
-         
-            if puid in _prj.keys():    
+
+            if puid in _prj.keys():
                 self._db.remove(_prj[puid])
-            
+
         except Exception as e:
-            self.printer.print_error(exception=e)        
+            self.printer.print_error(exception=e)
 
     def projects(self):
-        '''List all projects'''
+        """List all projects"""
         _ = self.read()
         if _.count() == 0:
             return None
@@ -55,14 +59,14 @@ class MongoProjectsDatabase(MongoDatabaseOperationsConnection, metaclass=Singlet
             if id in self.projects().keys():
                 return True
             return False
-        except: 
+        except:
             return False
 
     def find(self, prj_name: str):
-        return self._db.find({'project_name' : {"$eq" : prj_name}})
+        return self._db.find({"project_name": {"$eq": prj_name}})
 
     def select(self, id: int):
-        '''\n\tSelect a project\n\t\tUsage: select [project_number]\n'''
+        """\n\tSelect a project\n\t\tUsage: select [project_number]\n"""
         try:
             _ = self.projects()
             if id in _.keys():
@@ -72,7 +76,7 @@ class MongoProjectsDatabase(MongoDatabaseOperationsConnection, metaclass=Singlet
         except Exception as e:
             raise ValueError("")
 
-    #region Old Code needs updated
+    # region Old Code needs updated
     # def __has_project(self, project_name):
     #     found = self.projects_db.search(Query()["project_name"] == project_name)
     #     return found
@@ -88,4 +92,4 @@ class MongoProjectsDatabase(MongoDatabaseOperationsConnection, metaclass=Singlet
     #             self.create(_proj['project_name'])
     #         else:
     #             self.printer.print_formatted_check(text=_proj['project_name'], leadingTab=4)
-    #endregion
+    # endregion

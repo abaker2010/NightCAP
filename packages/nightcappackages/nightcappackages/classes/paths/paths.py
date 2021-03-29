@@ -7,10 +7,16 @@ import os
 from nightcapcore import NightcapPathCleaner
 from nightcappackages.classes.paths.pathsenum import NightcapPackagesPathsEnum
 
+
 class NightcapPackagesPaths(NightcapPathCleaner):
     def __init__(self):
-        '''Paths for the Nightcap project'''
-        NightcapPathCleaner.__init__(self, os.path.dirname(__file__).replace((os.sep + 'paths'), '').replace((os.sep + 'classes'), ''))
+        """Paths for the Nightcap project"""
+        NightcapPathCleaner.__init__(
+            self,
+            os.path.dirname(__file__)
+            .replace((os.sep + "paths"), "")
+            .replace((os.sep + "classes"), ""),
+        )
 
     def generate_path(self, path: NightcapPackagesPathsEnum, pathextra: list = []):
         try:

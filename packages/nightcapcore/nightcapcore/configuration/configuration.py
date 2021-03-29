@@ -7,23 +7,21 @@ import os
 import configparser
 from nightcapcore.singleton.singleton import Singleton
 
-class NighcapCoreCLIBaseConfiguration(metaclass=Singleton):
 
+class NighcapCoreCLIBaseConfiguration(metaclass=Singleton):
     def __init__(self):
-        self.installationDir = os.path.dirname(os.path.abspath(__file__)) + '/'
+        self.installationDir = os.path.dirname(os.path.abspath(__file__)) + "/"
         self.configFile = self.installationDir + "nightcapcore.cfg"
         self.configParser = configparser.RawConfigParser()
         self.currentConfig = None
         self._config()
-        
+
     def _config(self):
         conf = configparser.RawConfigParser()
         conf.read(self.configFile)
         self.currentConfig = conf
-        
 
     def Save(self):
         conf = configparser.RawConfigParser()
-        with open(self.configFile, 'w') as configfile:
+        with open(self.configFile, "w") as configfile:
             self.currentConfig.write(configfile)
-    

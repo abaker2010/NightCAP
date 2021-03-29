@@ -6,11 +6,11 @@
 # file that should have been included as part of this package.
 from uuid import uuid4
 
+
 class NightcapCLIPublisherBase:
     def __init__(self, channels):
-        self.channels = { channel : dict()
-                            for channel in channels }
-    
+        self.channels = {channel: dict() for channel in channels}
+
     def get_channel(self, channel):
         return self.channels[channel]
 
@@ -25,7 +25,7 @@ class NightcapCLIPublisherBase:
     def register(self, channel, who, callback=None, attr=None):
         if callback is None:
             if attr is None:
-                callback = getattr(who, 'cli_update')
+                callback = getattr(who, "cli_update")
             else:
                 callback = getattr(who, attr)
         self.get_channel(channel)[who] = callback

@@ -5,8 +5,11 @@
 # file that should have been included as part of this package.
 # region Import
 from nightcapcore import NightcapCLIConfiguration
-from nightcappackages.classes.databases.mogo.interfaces.mongo_db_interface import MongoDatabaseInterface
+from nightcappackages.classes.databases.mogo.interfaces.mongo_db_interface import (
+    MongoDatabaseInterface,
+)
 from pymongo.errors import ServerSelectionTimeoutError
+
 
 class MongoDatabaseConnection(MongoDatabaseInterface):
     def __init__(self):
@@ -16,7 +19,7 @@ class MongoDatabaseConnection(MongoDatabaseInterface):
         _db_name = self.conf.currentConfig["MONGOSERVER"]["db_name"]
         _uname = self.conf.currentConfig["MONGOSERVER"]["username"]
         _pass = self.conf.currentConfig["MONGOSERVER"]["password"]
-        
+
         self.name = None
         if ip == None:
             raise Exception("Mongo Server IP not set")

@@ -4,20 +4,24 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 from nightcapcore.singleton.singleton import Singleton
-from nightcappackages.classes.databases.mogo.connections.mongo_operation_connector import MongoDatabaseOperationsConnection
+from nightcappackages.classes.databases.mogo.connections.mongo_operation_connector import (
+    MongoDatabaseOperationsConnection,
+)
+
 
 class MongoSubModuleDatabase(MongoDatabaseOperationsConnection, metaclass=Singleton):
     def __init__(self):
         MongoDatabaseOperationsConnection.__init__(self)
-        self._db = self.client[self.conf.currentConfig['MONGOSERVER']['db_name']]['submodules']
+        self._db = self.client[self.conf.currentConfig["MONGOSERVER"]["db_name"]][
+            "submodules"
+        ]
 
     def create(self, module: str = None, submodule: str = None):
-        self._db.insert_one({'module' : module, 'type' : submodule})
+        self._db.insert_one({"module": module, "type": submodule})
         self.printer.print_formatted_check(text="Added to submodules db")
 
     def read(self):
         return self._db.find()
-        
 
     def update(self):
         # def update(self, updatedb: TinyDB):
@@ -28,39 +32,36 @@ class MongoSubModuleDatabase(MongoDatabaseOperationsConnection, metaclass=Single
         pass
 
     def find(self, module: str = None, submodule: str = None):
-        return self._db.find({
-        "$and" : [
-            {'module' : {"$eq": module}},
-            {'type' : {"$eq": submodule}}
-        ]})
+        return self._db.find(
+            {"$and": [{"module": {"$eq": module}}, {"type": {"$eq": submodule}}]}
+        )
 
     def find_one(self, module: str = None, submodule: str = None):
-        return self._db.find_one({'module' : module, 'submodule' : submodule})
+        return self._db.find_one({"module": module, "submodule": submodule})
 
     def find_submodules(self, module: str = None):
         # print("Trying to find submodules in db", module)
-        return self._db.find({"module" : module})
+        return self._db.find({"module": module})
 
     def check_submodule_path(self, path: list):
         # return self.find_one(path[0], path[1])
         # print("submodule path to find", path)
-        _subpath = self._db.find({
-            "$and" : [
-                {'module' : {"$eq" : path[0]}},
-                {'type' : {"$eq" : path[1]}}
-            ]
-        })
+        _subpath = self._db.find(
+            {"$and": [{"module": {"$eq": path[0]}}, {"type": {"$eq": path[1]}}]}
+        )
         # print("Submodules path", _subpath.count())
         return _subpath
 
     def submodule_install(self, module: str, submodule: str):
         _submoduleexists = self.find(module, submodule)
-        if(_submoduleexists.count() == 0):
+        if _submoduleexists.count() == 0:
             self.create(module, submodule)
         else:
             pass
-    
+
     def submodule_try_uninstall(self, module: str, submodule: str):
         _submoduleexists = self.find_one(module, submodule)
         self._db.remove(_submoduleexists)
-        self.printer.print_formatted_additional(text="Deleted submodule entry", leadingTab=3)
+        self.printer.print_formatted_additional(
+            text="Deleted submodule entry", leadingTab=3
+        )

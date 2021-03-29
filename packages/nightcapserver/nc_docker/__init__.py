@@ -5,4 +5,4 @@
 # file that should have been included as part of this package.
 from .docker_helper import NightcapDockerHelper
 
-__all__ = ['NightcapDockerHelper']
+__all__ = ["NightcapDockerHelper"]

@@ -5,12 +5,15 @@
 # file that should have been included as part of this package.
 # from nightcappackages.classes import NightcapPackages
 from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
-from nightcappackages.classes.databases.mogo.mongo_submodules import MongoSubModuleDatabase
+from nightcappackages.classes.databases.mogo.mongo_submodules import (
+    MongoSubModuleDatabase,
+)
 
-class NightcapInstalledPackageCounter():
+
+class NightcapInstalledPackageCounter:
     def __init__(self):
         pass
-        
+
     def count_from_selected_module(self, module: str):
         return MongoSubModuleDatabase().find_submodules(module).count()
 

@@ -6,6 +6,7 @@
 import enum
 import os
 
+
 class NightcapPackagesPathsEnum(enum.Enum):
     ProjectBase = "classes"
     PackagesBase = "packages"

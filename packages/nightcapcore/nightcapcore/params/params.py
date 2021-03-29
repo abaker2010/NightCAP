@@ -8,17 +8,20 @@ from pathlib import Path
 from colorama import Fore, Style
 from nightcapcore.printers import Printer
 
+
 class NightcapDynamicParams(object):
-    def __init__(self,params: dict = None,verboselevel: int = 0):
-        if(params != None):
-            params_dict = dict(params)['0']
-            self.isDir = params_dict['isDir']
-            self.dir = params_dict['dir']
-            self.filename = params_dict['filename']
-            self.project = params_dict['project']
+    def __init__(self, params: dict = None, verboselevel: int = 0):
+        if params != None:
+            params_dict = dict(params)["0"]
+            self.isDir = params_dict["isDir"]
+            self.dir = params_dict["dir"]
+            self.filename = params_dict["filename"]
+            self.project = params_dict["project"]
         else:
             self.isDir = False
-            self.dir = os.path.join(Path(__file__).resolve().parent.parent, "test_pcaps")
+            self.dir = os.path.join(
+                Path(__file__).resolve().parent.parent, "test_pcaps"
+            )
             self.filename = "xmrig2.pcapng"
             self.project = None
         self.verboselevel = verboselevel
@@ -26,21 +29,45 @@ class NightcapDynamicParams(object):
 
     def show_params(self):
 
-        if(self.project == None):
-            proj = ('None')
+        if self.project == None:
+            proj = "None"
         else:
-            proj = Fore.LIGHTYELLOW_EX+str(self.project['project_name'])
-        self.printer.item_2(text="~ PROJECT", optionalText=proj, leadingTab=1, leadingText='', textColor=Fore.LIGHTGREEN_EX)
-        self.printer.item_2(text="~ FILENAME", optionalText=str(self.filename), leadingTab=1, leadingText='', textColor=Fore.LIGHTGREEN_EX)
-        self.printer.item_2(text="~ ISDIR", optionalText=str(self.isDir), leadingTab=1, leadingText='', textColor=Fore.LIGHTGREEN_EX)
-        self.printer.item_2(text="~ PATH", optionalText=str(self.dir), leadingTab=1, leadingText='', textColor=Fore.LIGHTGREEN_EX, endingBreaks=1)   
+            proj = Fore.LIGHTYELLOW_EX + str(self.project["project_name"])
+        self.printer.item_2(
+            text="~ PROJECT",
+            optionalText=proj,
+            leadingTab=1,
+            leadingText="",
+            textColor=Fore.LIGHTGREEN_EX,
+        )
+        self.printer.item_2(
+            text="~ FILENAME",
+            optionalText=str(self.filename),
+            leadingTab=1,
+            leadingText="",
+            textColor=Fore.LIGHTGREEN_EX,
+        )
+        self.printer.item_2(
+            text="~ ISDIR",
+            optionalText=str(self.isDir),
+            leadingTab=1,
+            leadingText="",
+            textColor=Fore.LIGHTGREEN_EX,
+        )
+        self.printer.item_2(
+            text="~ PATH",
+            optionalText=str(self.dir),
+            leadingTab=1,
+            leadingText="",
+            textColor=Fore.LIGHTGREEN_EX,
+            endingBreaks=1,
+        )
 
     def toJson(self):
         js = {
-            'project' : self.project,
-            'isDir' : self.isDir,
-            'dir' : self.dir, 
-            'filename' : self.filename
-        } 
-        return js   
-    
+            "project": self.project,
+            "isDir": self.isDir,
+            "dir": self.dir,
+            "filename": self.filename,
+        }
+        return js

@@ -6,7 +6,8 @@
 import enum
 import os
 
+
 class NightcapPathsEnum(enum.Enum):
-    ProjectBase = os.sep.join(['nightcore', 'nightcore'])
-    Reporting = 'reporting'
-    ReportingTemplates = (os.sep.join(['server', 'webbase']))
+    ProjectBase = os.sep.join(["nightcore", "nightcore"])
+    Reporting = "reporting"
+    ReportingTemplates = os.sep.join(["server", "webbase"])

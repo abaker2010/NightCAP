@@ -13,33 +13,42 @@ from ..base import NightcapBaseCMD
 from nightcapcore import ScreenHelper
 from nightcapcli.cmds.settings import NightcapSettingsCMD
 
-class NightcapMainCMD(NightcapBaseCMD, ShellCMDMixin):
-    def __init__(self, selectedList, configuration: NightcapCLIConfiguration, channelid: str = None):
-        NightcapBaseCMD.__init__(self,selectedList, configuration, channelid)
 
-    #region Update Server
+class NightcapMainCMD(NightcapBaseCMD, ShellCMDMixin):
+    def __init__(
+        self,
+        selectedList,
+        configuration: NightcapCLIConfiguration,
+        channelid: str = None,
+    ):
+        NightcapBaseCMD.__init__(self, selectedList, configuration, channelid)
+
+    # region Update Server
 
     def complete_server(self, text, line, begidx, endidx):
-        return [i for i in ('start','stop','status') if i.startswith(text)]
+        return [i for i in ("start", "stop", "status") if i.startswith(text)]
 
-    def do_server(self,line):
-        '''\n\tControll the update server\n\n\t\tOptions: status, start, stop'''
+    def do_server(self, line):
+        """\n\tControll the update server\n\n\t\tOptions: status, start, stop"""
         try:
-            if(line == "start"):
+            if line == "start":
                 self.mongo_helper.docker_helper.start_nighcap_site()
-                #NighcapCoreSimpleServer(self.config).start()
-            elif(line == "stop"):
+                # NighcapCoreSimpleServer(self.config).start()
+            elif line == "stop":
                 self.mongo_helper.docker_helper.stop_nightcapsite()
-            elif (line == "status"):
+            elif line == "status":
                 print(self.mongo_helper.docker_helper.get_site_container_status())
             else:
-                raise Exception("Error with server option. For more info use: help server")
+                raise Exception(
+                    "Error with server option. For more info use: help server"
+                )
         except Exception as e:
             self.printer.print_error(exception=e)
-    #endregion
+
+    # endregion
 
     def do_projects(self, line):
-        '''\n\nChange current project'''
+        """\n\nChange current project"""
         try:
             NightcapProjectsCMD(self.config).cmdloop()
         except Exception as e:
@@ -49,4 +58,3 @@ class NightcapMainCMD(NightcapBaseCMD, ShellCMDMixin):
         print("Settings here")
         ScreenHelper().clearScr()
         NightcapSettingsCMD(self.config).cmdloop()
-        

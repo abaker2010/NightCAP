@@ -5,4 +5,5 @@
 # file that should have been included as part of this package.
 # from .interfaces.mongo_interface import MongoInterface
 from .mogo.interfaces.mongo_db_interface import MongoDatabaseInterface
-__all__ = [ "MongoDatabaseInterface"]
+
+__all__ = ["MongoDatabaseInterface"]

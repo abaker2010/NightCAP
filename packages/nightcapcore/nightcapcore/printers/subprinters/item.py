@@ -11,35 +11,134 @@ class ItemPrinter(PrinterBase):
     def __init__(self):
         super().__init__()
 
-    def item_1(self, leadingTab=2, leadingText="[-]", text="", optionalText="", leadingBreaks=0, endingBreaks=0, vtabs=0,seperator=' -> ', 
-               leadingColor=Fore.LIGHTGREEN_EX, textColor=Fore.LIGHTYELLOW_EX, optionalTextColor=Fore.LIGHTBLUE_EX,
-               breakTextColor=Fore.LIGHTMAGENTA_EX, styleRest=Style.RESET_ALL):
+    def item_1(
+        self,
+        leadingTab=2,
+        leadingText="[-]",
+        text="",
+        optionalText="",
+        leadingBreaks=0,
+        endingBreaks=0,
+        vtabs=0,
+        seperator=" -> ",
+        leadingColor=Fore.LIGHTGREEN_EX,
+        textColor=Fore.LIGHTYELLOW_EX,
+        optionalTextColor=Fore.LIGHTBLUE_EX,
+        breakTextColor=Fore.LIGHTMAGENTA_EX,
+        styleRest=Style.RESET_ALL,
+    ):
 
-            self.base_print(leadingText=leadingText, leadingTab=leadingTab, text=text, optionalText=optionalText, leadingBreaks=leadingBreaks,
-            endingBreaks=endingBreaks, vtabs=vtabs,leadingColor=leadingColor, textColor=textColor, optionalTextColor=optionalTextColor,seperator=seperator,
-            breakTextColor=breakTextColor, styleRest=styleRest)
+        self.base_print(
+            leadingText=leadingText,
+            leadingTab=leadingTab,
+            text=text,
+            optionalText=optionalText,
+            leadingBreaks=leadingBreaks,
+            endingBreaks=endingBreaks,
+            vtabs=vtabs,
+            leadingColor=leadingColor,
+            textColor=textColor,
+            optionalTextColor=optionalTextColor,
+            seperator=seperator,
+            breakTextColor=breakTextColor,
+            styleRest=styleRest,
+        )
 
-    def item_2(self, leadingTab=3, leadingText="-", text="", optionalText="", leadingBreaks=0, endingBreaks=0, vtabs=0,seperator=' : ', 
-               leadingColor=Fore.LIGHTGREEN_EX, textColor=Fore.LIGHTYELLOW_EX, optionalTextColor=Fore.LIGHTBLUE_EX,
-               breakTextColor=Fore.LIGHTMAGENTA_EX, styleRest=Style.RESET_ALL):
+    def item_2(
+        self,
+        leadingTab=3,
+        leadingText="-",
+        text="",
+        optionalText="",
+        leadingBreaks=0,
+        endingBreaks=0,
+        vtabs=0,
+        seperator=" : ",
+        leadingColor=Fore.LIGHTGREEN_EX,
+        textColor=Fore.LIGHTYELLOW_EX,
+        optionalTextColor=Fore.LIGHTBLUE_EX,
+        breakTextColor=Fore.LIGHTMAGENTA_EX,
+        styleRest=Style.RESET_ALL,
+    ):
 
-            self.base_print(leadingText=leadingText, leadingTab=leadingTab, text=text, optionalText=optionalText, leadingBreaks=leadingBreaks,
-            endingBreaks=endingBreaks, vtabs=vtabs,leadingColor=leadingColor, textColor=textColor, optionalTextColor=optionalTextColor,seperator=seperator,
-            breakTextColor=breakTextColor, styleRest=styleRest)
+        self.base_print(
+            leadingText=leadingText,
+            leadingTab=leadingTab,
+            text=text,
+            optionalText=optionalText,
+            leadingBreaks=leadingBreaks,
+            endingBreaks=endingBreaks,
+            vtabs=vtabs,
+            leadingColor=leadingColor,
+            textColor=textColor,
+            optionalTextColor=optionalTextColor,
+            seperator=seperator,
+            breakTextColor=breakTextColor,
+            styleRest=styleRest,
+        )
 
-    def item_3(self, leadingTab=4, leadingText="*", text="", optionalText="", leadingBreaks=0, endingBreaks=0, vtabs=0,seperator=' : ', 
-               leadingColor=Fore.LIGHTGREEN_EX, textColor=Fore.LIGHTYELLOW_EX, optionalTextColor=Fore.LIGHTBLUE_EX,
-               breakTextColor=Fore.LIGHTMAGENTA_EX, styleRest=Style.RESET_ALL):
+    def item_3(
+        self,
+        leadingTab=4,
+        leadingText="*",
+        text="",
+        optionalText="",
+        leadingBreaks=0,
+        endingBreaks=0,
+        vtabs=0,
+        seperator=" : ",
+        leadingColor=Fore.LIGHTGREEN_EX,
+        textColor=Fore.LIGHTYELLOW_EX,
+        optionalTextColor=Fore.LIGHTBLUE_EX,
+        breakTextColor=Fore.LIGHTMAGENTA_EX,
+        styleRest=Style.RESET_ALL,
+    ):
 
-            self.base_print(leadingText=leadingText, leadingTab=leadingTab, text=text, optionalText=optionalText, leadingBreaks=leadingBreaks,
-            endingBreaks=endingBreaks, vtabs=vtabs,leadingColor=leadingColor, textColor=textColor, optionalTextColor=optionalTextColor,seperator=seperator,
-            breakTextColor=breakTextColor, styleRest=styleRest)
-    
-    def help(self, leadingTab=1, leadingText="~", text="", optionalText="", leadingBreaks=0, endingBreaks=1, vtabs=1,seperator=' : ', 
-               leadingColor=Fore.LIGHTGREEN_EX, textColor=Fore.LIGHTGREEN_EX, optionalTextColor=Fore.LIGHTBLUE_EX,
-               breakTextColor=Fore.LIGHTMAGENTA_EX, styleRest=Style.RESET_ALL):
+        self.base_print(
+            leadingText=leadingText,
+            leadingTab=leadingTab,
+            text=text,
+            optionalText=optionalText,
+            leadingBreaks=leadingBreaks,
+            endingBreaks=endingBreaks,
+            vtabs=vtabs,
+            leadingColor=leadingColor,
+            textColor=textColor,
+            optionalTextColor=optionalTextColor,
+            seperator=seperator,
+            breakTextColor=breakTextColor,
+            styleRest=styleRest,
+        )
 
-            self.base_print(leadingText=leadingText, leadingTab=leadingTab, text=text, optionalText=optionalText, leadingBreaks=leadingBreaks,
-            endingBreaks=endingBreaks, vtabs=vtabs,leadingColor=leadingColor, textColor=textColor, optionalTextColor=optionalTextColor,seperator=seperator,
-            breakTextColor=breakTextColor, styleRest=styleRest)
+    def help(
+        self,
+        leadingTab=1,
+        leadingText="~",
+        text="",
+        optionalText="",
+        leadingBreaks=0,
+        endingBreaks=1,
+        vtabs=1,
+        seperator=" : ",
+        leadingColor=Fore.LIGHTGREEN_EX,
+        textColor=Fore.LIGHTGREEN_EX,
+        optionalTextColor=Fore.LIGHTBLUE_EX,
+        breakTextColor=Fore.LIGHTMAGENTA_EX,
+        styleRest=Style.RESET_ALL,
+    ):
 
+        self.base_print(
+            leadingText=leadingText,
+            leadingTab=leadingTab,
+            text=text,
+            optionalText=optionalText,
+            leadingBreaks=leadingBreaks,
+            endingBreaks=endingBreaks,
+            vtabs=vtabs,
+            leadingColor=leadingColor,
+            textColor=textColor,
+            optionalTextColor=optionalTextColor,
+            seperator=seperator,
+            breakTextColor=breakTextColor,
+            styleRest=styleRest,
+        )

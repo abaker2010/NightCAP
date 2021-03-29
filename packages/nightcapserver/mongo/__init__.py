@@ -5,4 +5,4 @@
 # file that should have been included as part of this package.
 from .mongo_helper import NightcapMongoHelper
 
-__all__ = ['NightcapMongoHelper']
+__all__ = ["NightcapMongoHelper"]

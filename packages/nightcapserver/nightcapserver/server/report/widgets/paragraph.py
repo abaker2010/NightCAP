@@ -8,4 +8,3 @@ class NightcapSimpleReportParagraph(dict):
         dict.__init__(self, text=text, format=format)
         self.text = text
         self.format = format
-        

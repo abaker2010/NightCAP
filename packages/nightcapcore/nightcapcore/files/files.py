@@ -6,6 +6,7 @@
 import os
 import errno
 
+
 class NightcapCoreFiles:
     def __init__(self, ppath: str):
         self.ppath = ppath
@@ -15,17 +16,19 @@ class NightcapCoreFiles:
         try:
             print("testing", _path)
             os.makedirs(_path)
-        except OSError as exc: # Python >2.5
+        except OSError as exc:  # Python >2.5
             if exc.errno == errno.EEXIST and os.path.isdir(_path):
                 pass
-            else: raise
+            else:
+                raise
+
     # def mkdir_p(self, path):
     #     try:
     #         os.makedirs(path)
     #     except OSError as exc: # Python >2.5
-            # if exc.errno == errno.EEXIST and os.path.isdir(path):
-            #     pass
-            # else: raise
+    # if exc.errno == errno.EEXIST and os.path.isdir(path):
+    #     pass
+    # else: raise
 
     # def safe_open_w(path):
     #     ''' Open "path" for writing, creating any parent directories as needed.

@@ -3,7 +3,7 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-#region Import
+# region Import
 import cmd
 from nightcapcli.cmds.main_cmd import NightcapMainCMD
 from nightcapcli.observer.publisher import NightcapCLIPublisher
@@ -12,10 +12,19 @@ from nightcapcli.cmds.settings import NightcapSettingsCMD
 from nightcapcli.cmds import NightcapCLIOptionsPackage
 from nightcapcli.mixins.mixin_maincmd import NightcapCLICMDMixIn
 from nightcapcore import ScreenHelper
-#endregion
+
+# endregion
+
 
 class Nightcap(NightcapCLICMDMixIn):
-    def __init__(self, selected: list, configuration: NightcapCLIConfiguration, channelid: str = '', parentid: str = '', additionalchildren: list = []):
+    def __init__(
+        self,
+        selected: list,
+        configuration: NightcapCLIConfiguration,
+        channelid: str = "",
+        parentid: str = "",
+        additionalchildren: list = [],
+    ):
         NightcapCLICMDMixIn.__init__(self, selected, configuration, Nightcap, channelid)
         self.channelid = channelid
         self.parentid = parentid
@@ -24,11 +33,7 @@ class Nightcap(NightcapCLICMDMixIn):
             _nns = self.selectedList.copy()
             _nns.append(additionalchildren[0])
             _nac = additionalchildren[1::]
-            _directions = { 
-                    'nextstep' : _nns,
-                    'additionalsteps' : _nac,
-                    'remove' : 0
-                }
+            _directions = {"nextstep": _nns, "additionalsteps": _nac, "remove": 0}
             self._push_object(_directions)
 
     def __del__(self):
@@ -39,10 +44,21 @@ class Nightcap(NightcapCLICMDMixIn):
     def _push_object(self, directions: dict):
         _channel = NightcapCLIPublisher().new_channel()
         _who = None
-        if len(directions['nextstep']) == 3:
-            _who = NightcapCLIOptionsPackage(directions['nextstep'], self.config, NightcapCLIPublisher().get_package_config(directions['nextstep']), _channel)
+        if len(directions["nextstep"]) == 3:
+            _who = NightcapCLIOptionsPackage(
+                directions["nextstep"],
+                self.config,
+                NightcapCLIPublisher().get_package_config(directions["nextstep"]),
+                _channel,
+            )
         else:
-            _who = self.pageobjct(directions['nextstep'], self.config, _channel, self.channelID, directions['additionalsteps'])
+            _who = self.pageobjct(
+                directions["nextstep"],
+                self.config,
+                _channel,
+                self.channelID,
+                directions["additionalsteps"],
+            )
 
         NightcapCLIPublisher().register(_channel, _who)
 
@@ -62,5 +78,6 @@ class Nightcap(NightcapCLICMDMixIn):
         else:
             pass
             # print("Message", message)
-        
-#endregion
+
+
+# endregion

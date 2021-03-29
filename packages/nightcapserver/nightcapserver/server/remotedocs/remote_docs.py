@@ -11,13 +11,20 @@ from nightcapcore.printers import Printer
 from tinydb import TinyDB
 from tinydb.queries import Query
 
+
 class NightcapCoreRemoteDocs(object):
     def __init__(self):
-        self.protocol_db = TinyDB(os.path.join(os.path.dirname(__file__), "..", "database", "protocol_links.json"))
+        self.protocol_db = TinyDB(
+            os.path.join(
+                os.path.dirname(__file__), "..", "database", "protocol_links.json"
+            )
+        )
         self.printer = Printer()
 
     def get_link(self, protocol):
-        found = self.protocol_db.table("protocol_links").search(Query()["name"] == protocol)
+        found = self.protocol_db.table("protocol_links").search(
+            Query()["name"] == protocol
+        )
         return found
 
     def __add_link(self, link: Mapping):
@@ -26,13 +33,15 @@ class NightcapCoreRemoteDocs(object):
         except Exception as e:
             print(e)
 
-    def update(self,updatedb: TinyDB):
+    def update(self, updatedb: TinyDB):
         try:
             _items_added = 0
             for protocol in updatedb.table("protocol_links").all():
-                if(self.get_link(protocol['name']) == []):
+                if self.get_link(protocol["name"]) == []:
                     self.__add_link(protocol)
                     _items_added += 1
-            self.printer.print_formatted_check("Successfully updated", optionaltext=str(_items_added), leadingTab=3)
+            self.printer.print_formatted_check(
+                "Successfully updated", optionaltext=str(_items_added), leadingTab=3
+            )
         except Exception as e:
-            self.printer.print_error("Error updating:",optionaltext=e.message)
+            self.printer.print_error("Error updating:", optionaltext=e.message)
