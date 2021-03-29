@@ -13,18 +13,20 @@ class HeaderPrinter(PrinterBase):
 
     def print_header(
         self,
+        text="",
+        *args,
         leadingTab=1,
         leadingText="",
-        text="",
         leadingBreaks=0,
         endingBreaks=0,
         vtabs=0,
         titleColor=Fore.LIGHTGREEN_EX,
         leadingColor=Fore.YELLOW,
         styleRest=Style.RESET_ALL,
+        **kwargs
     ):
         self.base_print(
-            text=str(text + styleRest),
+            str(text + styleRest),
             leadingText=leadingText,
             textColor=titleColor,
             leadingColor=leadingColor,
@@ -32,13 +34,15 @@ class HeaderPrinter(PrinterBase):
             leadingTab=leadingTab,
             endingBreaks=endingBreaks,
             vtabs=vtabs,
+            *args,**kwargs
         )
 
     def print_underlined_header(
         self,
+        text: str = "",
+        *args,
         leadingTab=1,
         leadingText="[-]",
-        text="",
         underline="-",
         leadingBreaks=1,
         endingBreaks=0,
@@ -47,6 +51,7 @@ class HeaderPrinter(PrinterBase):
         underlineColor=Fore.LIGHTMAGENTA_EX,
         leadingColor=Fore.YELLOW,
         styleRest=Style.RESET_ALL,
+        **kwargs
     ):
         self.base_print(
             text=text,
@@ -56,7 +61,8 @@ class HeaderPrinter(PrinterBase):
             leadingColor=leadingColor,
             leadingBreaks=leadingBreaks,
             leadingTab=leadingTab,
-        )  # , leadingBreaks=leadingBreaks, leadingTab=leadingTab, endingBreaks=endingBreaks,vtabs=vtabs,leadingColor=titleColor)
+            *args,**kwargs
+        )  
         self.base_print(
             text=str((underline * len(text)) + styleRest),
             endingBreaks=endingBreaks,
@@ -66,9 +72,10 @@ class HeaderPrinter(PrinterBase):
 
     def print_underlined_header_undecorated(
         self,
+        text="",
+        *args,
         leadingTab=1,
         leadingText="",
-        text="",
         underline="-",
         leadingBreaks=1,
         endingBreaks=0,
@@ -77,6 +84,7 @@ class HeaderPrinter(PrinterBase):
         underlineColor=Fore.LIGHTMAGENTA_EX,
         leadingColor=Fore.YELLOW,
         styleRest=Style.RESET_ALL,
+        **kwargs
     ):
         self.base_print(
             text=text,
@@ -86,6 +94,7 @@ class HeaderPrinter(PrinterBase):
             leadingColor=leadingColor,
             leadingBreaks=leadingBreaks,
             leadingTab=leadingTab,
+            *args,**kwargs
         )  # , leadingBreaks=leadingBreaks, leadingTab=leadingTab, endingBreaks=endingBreaks,vtabs=vtabs,leadingColor=titleColor)
         self.base_print(
             text=str((underline * len(text)) + styleRest),

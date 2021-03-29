@@ -98,7 +98,7 @@ def main():
                             ScreenHelper().clearScr()
                             main()
                     except Exception as e:
-                        _printer.print_error(exception=e)
+                        _printer.print_error(e)
             except ServerSelectionTimeoutError as e:
                 raise e
 
@@ -115,20 +115,22 @@ def main():
                 ScreenHelper().clearScr()
                 main()
         except Exception as e:
-            _printer.print_error(exception=e)
+            _printer.print_error(e)
     except Exception as e:
-        _printer.print_error(exception=e)
+        _printer.print_error(e)
     finally:
-        _printer.print_underlined_header(text="Cleaning up...")
+        _printer.print_underlined_header("Cleaning up...")
         try:
             NighcapCoreSimpleServer(_entry.conf).shutdown()
             _entry.mongo_helper.docker_helper.stop_all_containers()
         except Exception as e:
-            _printer.print_error(exception=e)
+            _printer.print_error(e)
         exit()
 
 
 # region Main named if for keyboard interrupt
 if __name__ == "__main__":
     main()
+    # _printer = Printer()
+    # _printer.print_underlined_header('testing')
 # endregion

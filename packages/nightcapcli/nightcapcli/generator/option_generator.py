@@ -123,7 +123,7 @@ class NightcapOptionGenerator:
                             _cvals.append(v)
 
         self.printer.item_1(
-            text="".join(_cvals), leadingText="", leadingTab=1, vtabs=1, endingBreaks=1
+            "".join(_cvals), "", leadingTab=1, leadingText='', vtabs=1, endingBreaks=1
         )
 
     def option_help(self):

@@ -25,7 +25,7 @@ class NightcapSettingsCMD(NightcapBaseCMD):
         NightcapBaseCMD.__init__(self, ["settings"], configuration)
 
     def help_devoptions(self):
-        self.printer.help(text="Developer Options")
+        self.printer.help("Developer Options")
 
     # region
     def do_devoptions(self, line):
@@ -44,15 +44,15 @@ class NightcapSettingsCMD(NightcapBaseCMD):
 
     def help_install(self):
         self.printer.help(
-            text="Install a new module. Formatting for module creation can be found at",
-            optionalText="https://some_url.com",
+            "Install a new module. Formatting for module creation can be found at",
+            "https://some_url.com",
         )
 
     # endregion
 
     # region List Packages
     def help_list(self):
-        self.printer.help(text="List installed packages")
+        self.printer.help("List installed packages")
 
     def do_list(self, line):
         ScreenHelper().clearScr()
@@ -71,7 +71,7 @@ class NightcapSettingsCMD(NightcapBaseCMD):
 
     def help_uninstall(self):
         self.printer.help(
-            text="Uninstall a module example", optionalText="uninstall [package_path]"
+            "Uninstall a module example", "uninstall [package_path]"
         )
 
     # endregion
@@ -79,8 +79,8 @@ class NightcapSettingsCMD(NightcapBaseCMD):
     # region Update
     def help_update(self):
         self.printer.help(
-            text="Update the program, if there is no option specified the default will be used.",
-            optionalText="update [main|dev] [-v]",
+            "Update the program, if there is no option specified the default will be used.",
+            "update [main|dev] [-v]",
         )
 
     def do_update(self, line):
@@ -125,8 +125,8 @@ class NightcapSettingsCMD(NightcapBaseCMD):
         return [i for i in ("normal", "debug") if i.startswith(text)]
 
     def help_verbosity(self):
-        self.printer.help(text="Configure verbosity level", endingBreaks=0)
-        self.printer.help(text="Usage: verbosity <normal|debug>",leadingBreaks=0)
+        self.printer.help("Configure verbosity level", endingBreaks=0)
+        self.printer.help("Usage: verbosity <normal|debug>",leadingBreaks=0)
 
     def do_verbosity(self, line):
         print("change the verbosity")
@@ -150,8 +150,8 @@ class NightcapSettingsCMD(NightcapBaseCMD):
 
     # region Server config section
     def help_server(self):
-        self.printer.help(text="Configure a server")
-        self.printer.help(text="Usage: server <web|database>")
+        self.printer.help("Configure a server")
+        self.printer.help("Usage: server <web|database>")
 
     def complete_server(self, text, line, begidx, endidx):
         return [i for i in ("web", "database") if i.startswith(text)]

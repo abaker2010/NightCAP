@@ -39,7 +39,7 @@ class MongoProjectsDatabase(MongoDatabaseOperationsConnection, metaclass=Singlet
                 self._db.remove(_prj[puid])
 
         except Exception as e:
-            self.printer.print_error(exception=e)
+            self.printer.print_error(e)
 
     def projects(self):
         """List all projects"""

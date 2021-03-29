@@ -38,24 +38,22 @@ class NightcapPackageUninstallerCommand(Command):
                     self._package_path.split("/")
                 )
                 self.printer.print_formatted_other(
-                    text="Module", optionaltext=split_package_path[0]
+                    "Module", split_package_path[0]
                 )
                 self.printer.print_formatted_other(
-                    text="Submodule", optionaltext=split_package_path[1]
+                    "Submodule", split_package_path[1]
                 )
                 self.printer.print_formatted_other(
-                    text="Package", optionaltext=split_package_path[2]
+                    "Package", split_package_path[2]
                 )
                 uconfirm = self._confim_delete(self._package_path)
                 ScreenHelper().clearScr()
                 if uconfirm.lower() == "y":
                     try:
-                        self.printer.print_underlined_header_undecorated(
-                            text="UNINSTALLED CONFIRMED"
-                        )
+                        self.printer.print_underlined_header_undecorated("UNINSTALLED CONFIRMED")
                         self.printer.print_formatted_other(
-                            text="Package",
-                            optionaltext=str(_package["_id"]),
+                            "Package",
+                            str(_package["_id"]),
                             leadingText="~",
                         )
 
@@ -83,12 +81,12 @@ class NightcapPackageUninstallerCommand(Command):
                                     leadingTab=1,
                                 )
                             except Exception as e:
-                                self.printer.print_error(exception=e)
+                                self.printer.print_error(e)
 
                         except Exception as e:
-                            self.printer.print_error(exception=e)
+                            self.printer.print_error(e)
                     except Exception as e:
-                        self.printer.print_error(exception=e)
+                        self.printer.print_error(e)
 
         except Exception as e:
             raise Exception("Package not found")
@@ -113,5 +111,5 @@ class NightcapPackageUninstallerCommand(Command):
             self.printer.print_formatted_check(text="Deleted Files")
         except OSError as e:
             self.printer.print_error(
-                exception=Exception("Error: %s - %s." % (e.filename, e.strerror))
+                Exception("Error: %s - %s." % (e.filename, e.strerror))
             )

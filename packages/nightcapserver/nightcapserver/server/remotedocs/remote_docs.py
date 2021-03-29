@@ -44,4 +44,4 @@ class NightcapCoreRemoteDocs(object):
                 "Successfully updated", optionaltext=str(_items_added), leadingTab=3
             )
         except Exception as e:
-            self.printer.print_error("Error updating:", optionaltext=e.message)
+            self.printer.print_error("Error updating:", e.message)

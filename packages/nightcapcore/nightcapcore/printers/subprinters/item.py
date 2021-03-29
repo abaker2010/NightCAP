@@ -13,10 +13,11 @@ class ItemPrinter(PrinterBase):
 
     def item_1(
         self,
-        leadingTab=2,
-        leadingText="[-]",
         text="",
         optionalText="",
+        *args,
+        leadingTab=2,
+        leadingText="[-]",
         leadingBreaks=0,
         endingBreaks=0,
         vtabs=0,
@@ -26,13 +27,14 @@ class ItemPrinter(PrinterBase):
         optionalTextColor=Fore.LIGHTBLUE_EX,
         breakTextColor=Fore.LIGHTMAGENTA_EX,
         styleRest=Style.RESET_ALL,
+        **kwargs
     ):
 
         self.base_print(
+            text,
+            optionalText,
             leadingText=leadingText,
             leadingTab=leadingTab,
-            text=text,
-            optionalText=optionalText,
             leadingBreaks=leadingBreaks,
             endingBreaks=endingBreaks,
             vtabs=vtabs,
@@ -42,14 +44,16 @@ class ItemPrinter(PrinterBase):
             seperator=seperator,
             breakTextColor=breakTextColor,
             styleRest=styleRest,
+            *args, **kwargs
         )
 
     def item_2(
         self,
-        leadingTab=3,
-        leadingText="-",
         text="",
         optionalText="",
+        *args,
+        leadingTab=3,
+        leadingText="-",
         leadingBreaks=0,
         endingBreaks=0,
         vtabs=0,
@@ -59,13 +63,13 @@ class ItemPrinter(PrinterBase):
         optionalTextColor=Fore.LIGHTBLUE_EX,
         breakTextColor=Fore.LIGHTMAGENTA_EX,
         styleRest=Style.RESET_ALL,
+        **kwargs
     ):
-
         self.base_print(
+            text,
+            optionalText,
             leadingText=leadingText,
             leadingTab=leadingTab,
-            text=text,
-            optionalText=optionalText,
             leadingBreaks=leadingBreaks,
             endingBreaks=endingBreaks,
             vtabs=vtabs,
@@ -75,14 +79,17 @@ class ItemPrinter(PrinterBase):
             seperator=seperator,
             breakTextColor=breakTextColor,
             styleRest=styleRest,
+            *args, **kwargs
         )
 
     def item_3(
         self,
-        leadingTab=4,
-        leadingText="*",
+
         text="",
         optionalText="",
+        *args,
+        leadingTab=4,
+        leadingText="*",
         leadingBreaks=0,
         endingBreaks=0,
         vtabs=0,
@@ -92,13 +99,14 @@ class ItemPrinter(PrinterBase):
         optionalTextColor=Fore.LIGHTBLUE_EX,
         breakTextColor=Fore.LIGHTMAGENTA_EX,
         styleRest=Style.RESET_ALL,
+        **kwargs
     ):
 
         self.base_print(
+            text,
+            optionalText,
             leadingText=leadingText,
             leadingTab=leadingTab,
-            text=text,
-            optionalText=optionalText,
             leadingBreaks=leadingBreaks,
             endingBreaks=endingBreaks,
             vtabs=vtabs,
@@ -108,14 +116,16 @@ class ItemPrinter(PrinterBase):
             seperator=seperator,
             breakTextColor=breakTextColor,
             styleRest=styleRest,
+            *args, **kwargs
         )
 
     def help(
         self,
-        leadingTab=1,
-        leadingText="~",
         text="",
         optionalText="",
+        *args,
+        leadingTab=1,
+        leadingText="~",
         leadingBreaks=0,
         endingBreaks=1,
         vtabs=1,
@@ -125,13 +135,14 @@ class ItemPrinter(PrinterBase):
         optionalTextColor=Fore.LIGHTBLUE_EX,
         breakTextColor=Fore.LIGHTMAGENTA_EX,
         styleRest=Style.RESET_ALL,
+        **kwargs
     ):
 
         self.base_print(
+            text,
+            optionalText,
             leadingText=leadingText,
             leadingTab=leadingTab,
-            text=text,
-            optionalText=optionalText,
             leadingBreaks=leadingBreaks,
             endingBreaks=endingBreaks,
             vtabs=vtabs,
@@ -141,4 +152,5 @@ class ItemPrinter(PrinterBase):
             seperator=seperator,
             breakTextColor=breakTextColor,
             styleRest=styleRest,
+            *args, **kwargs
         )

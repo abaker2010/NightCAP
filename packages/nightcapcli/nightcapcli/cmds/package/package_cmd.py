@@ -35,21 +35,21 @@ class NightcapCLIOptionsPackage(NightcapBaseCMD):
             )
             # print("Deep copied params", self.package_params)
         except Exception as e:
-            self.printer.print_error(exception=e)
+            self.printer.print_error(e)
             self.package_params = None
 
     def help_params(self):
         self.printer.item_2(
-            text="see parameters",
-            optionalText="params",
+            "see parameters",
+            "params",
             leadingTab=1,
             vtabs=1,
             leadingText="",
             textColor=Fore.LIGHTGREEN_EX,
         )
         self.printer.item_2(
-            text="set parameters",
-            optionalText="params [PARAM] [PARAMVALUE]",
+            "set parameters",
+            "params [PARAM] [PARAMVALUE]",
             leadingTab=1,
             endingBreaks=1,
             leadingText="",
@@ -66,21 +66,21 @@ class NightcapCLIOptionsPackage(NightcapBaseCMD):
 
         if len(line) == 0:
             self.printer.print_underlined_header(
-                text=title1, leadingText="", titleColor=Fore.LIGHTYELLOW_EX
+                title1, leadingText="", titleColor=Fore.LIGHTYELLOW_EX
             )
             self.config.show_params()
 
             if len(_params) != 0:
                 self.printer.print_underlined_header(
-                    text=title2, leadingText="", titleColor=Fore.LIGHTYELLOW_EX
+                    title2, leadingText="", titleColor=Fore.LIGHTYELLOW_EX
                 )
                 for k, v in self.pkg_config["package_information"][
                     "entry_file_optional_params"
                 ].items():
                     v = "None" if v == "" else v
                     self.printer.item_2(
-                        text="~ %s" % k,
-                        optionalText=v,
+                        "~ %s" % k,
+                        v,
                         leadingTab=1,
                         leadingText="",
                         textColor=Fore.LIGHTGREEN_EX,
@@ -97,9 +97,9 @@ class NightcapCLIOptionsPackage(NightcapBaseCMD):
                     print("dose not contain key")
 
             except Exception as e:
-                self.printer.print_error(exception=e)
+                self.printer.print_error(e)
                 self.printer.print_error(
-                    exception=Exception("Error with setting parameter")
+                    Exception("Error with setting parameter")
                 )
 
         print()
@@ -113,7 +113,7 @@ class NightcapCLIOptionsPackage(NightcapBaseCMD):
 
     def help_run(self):
         self.printer.item_2(
-            text="Run package",
+            "Run package",
             leadingTab=1,
             vtabs=1,
             endingBreaks=1,
@@ -157,7 +157,7 @@ class NightcapCLIOptionsPackage(NightcapBaseCMD):
             else:
                 print("Package not selected to be used")
         else:
-            self.printer.print_error(exception=Exception("Scan canceled by user"))
+            self.printer.print_error(Exception("Scan canceled by user"))
 
     def cli_update(self, message):
         print("Trying to update from package cmd")

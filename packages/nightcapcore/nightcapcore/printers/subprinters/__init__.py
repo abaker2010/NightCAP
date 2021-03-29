@@ -9,6 +9,7 @@ from .headerpy import HeaderPrinter
 from .input import InputPrinter
 from .item import ItemPrinter
 from .waiting import WaitingPrinter
+from .debug import DebugPrinter
 
 __all__ = [
     "CheckMarkPrinter",
@@ -17,4 +18,5 @@ __all__ = [
     "InputPrinter",
     "ItemPrinter",
     "WaitingPrinter",
+    "DebugPrinter"
 ]

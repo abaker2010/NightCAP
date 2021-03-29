@@ -13,20 +13,19 @@ class ErrorPrinter(PrinterBase):
 
     def print_error(
         self,
-        exception: Exception,
+        exception: Exception = None,
+        message: str = '',
+        *args,
+        leadingText="[!]",
         errColor=Fore.RED,
         msgColor=Fore.LIGHTYELLOW_EX,
+        optionalColor=Fore.YELLOW,
         leadingtab=1,
-        optionalText: str = "",
         vtab=1,
         endtab=1,
+        **kwargs
     ):
-        self.base_print(
-            leadingText="[!]",
-            text=optionalText + str(exception),
-            leadingColor=errColor,
-            textColor=msgColor,
-            leadingTab=leadingtab,
-            vtabs=vtab,
-            endingBreaks=endtab,
-        )
+        self.base_print(str(exception), message,
+        leadingColor=errColor,textColor=msgColor,optionalTextColor=optionalColor,leadingTab=leadingtab,vtabs=vtab,
+        endingBreaks=endtab,leadingText=leadingText,
+         *args, **kwargs)

@@ -60,7 +60,7 @@ class NighcapCoreSimpleServer(object):
             self.config.Save()
 
         except Exception as e:
-            self.printer.print_error(exception=e)
+            self.printer.print_error(e)
 
     def shutdown(self):
         self.status = False

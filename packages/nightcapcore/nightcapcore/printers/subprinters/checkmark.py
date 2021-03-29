@@ -16,6 +16,7 @@ class CheckMarkPrinter(PrinterBase):
         self,
         text,
         optionaltext="",
+        *args,
         leadingText="[*]",
         leadingBreaks=0,
         endingBreaks=0,
@@ -25,11 +26,12 @@ class CheckMarkPrinter(PrinterBase):
         textColor=Fore.LIGHTGREEN_EX,
         optionalTextColor=Fore.LIGHTBLACK_EX,
         breakTextColor=Fore.LIGHTBLACK_EX,
+        **kwargs
     ):
         self.base_print(
+            text,
+            optionaltext,
             leadingText=leadingText,
-            text=text,
-            optionalText=optionaltext,
             leadingTab=leadingTab,
             leadingBreaks=leadingBreaks,
             endingBreaks=endingBreaks,
@@ -38,12 +40,14 @@ class CheckMarkPrinter(PrinterBase):
             optionalTextColor=optionalTextColor,
             textColor=textColor,
             breakTextColor=breakTextColor,
+            *args,**kwargs
         )
 
     def print_formatted_check(
         self,
         text,
         optionaltext="",
+        *args,
         leadingBreaks=0,
         endingBreaks=0,
         vtabs=0,
@@ -52,11 +56,12 @@ class CheckMarkPrinter(PrinterBase):
         textColor=Fore.LIGHTGREEN_EX,
         optionalTextColor=Fore.LIGHTBLACK_EX,
         breakTextColor=Fore.LIGHTBLACK_EX,
+        **kwargs
     ):
         self.base_print(
+            text,
+            optionaltext,
             leadingText="[✓]",
-            text=text,
-            optionalText=optionaltext,
             leadingTab=leadingTab,
             leadingBreaks=leadingBreaks,
             endingBreaks=endingBreaks,
@@ -65,12 +70,14 @@ class CheckMarkPrinter(PrinterBase):
             optionalTextColor=optionalTextColor,
             textColor=textColor,
             breakTextColor=breakTextColor,
+            *args, **kwargs
         )
 
     def print_formatted_additional(
         self,
         text,
         optionaltext="",
+        *args,
         leadingBreaks=0,
         endingBreaks=0,
         vtabs=0,
@@ -79,11 +86,12 @@ class CheckMarkPrinter(PrinterBase):
         textColor=Fore.LIGHTGREEN_EX,
         optionalTextColor=Fore.LIGHTBLACK_EX,
         breakTextColor=Fore.LIGHTBLACK_EX,
+        **kwargs
     ):
         self.base_print(
-            leadingText="[>]",
             text=text,
             optionalText=optionaltext,
+            leadingText="[>]",
             leadingTab=leadingTab,
             leadingBreaks=leadingBreaks,
             endingBreaks=endingBreaks,
@@ -92,12 +100,14 @@ class CheckMarkPrinter(PrinterBase):
             optionalTextColor=optionalTextColor,
             textColor=textColor,
             breakTextColor=breakTextColor,
+            *args, **kwargs
         )
 
     def print_formatted_delete(
         self,
         text,
         optionaltext="",
+        *args,
         leadingBreaks=0,
         endingBreaks=0,
         vtabs=0,
@@ -106,11 +116,12 @@ class CheckMarkPrinter(PrinterBase):
         textColor=Fore.LIGHTYELLOW_EX,
         optionalTextColor=Fore.LIGHTBLACK_EX,
         breakTextColor=Fore.LIGHTBLACK_EX,
+        **kwargs
     ):
         self.base_print(
+            text,
+            optionaltext,
             leadingText="[x]",
-            text=text,
-            optionalText=optionaltext,
             leadingTab=leadingTab,
             leadingBreaks=leadingBreaks,
             endingBreaks=endingBreaks,
@@ -119,4 +130,5 @@ class CheckMarkPrinter(PrinterBase):
             optionalTextColor=optionalTextColor,
             textColor=textColor,
             breakTextColor=breakTextColor,
+            *args, **kwargs
         )

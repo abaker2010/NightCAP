@@ -23,19 +23,19 @@ class NightcapMongoNetworkSettingsCMD(NightcapBaseCMD):
             raise Exception("Invalid option: Please use web or database")
 
     def help_config(self):
-        self.printer.help(text="Shows current configuration")
+        self.printer.help("Shows current configuration")
 
     def do_config(self, line):
-        self.printer.print_underlined_header(text="CURRENT CONFIG")
+        self.printer.print_underlined_header("CURRENT CONFIG")
         self.printer.print_formatted_other(
-            text="IP",
-            optionaltext=self.config.currentConfig[self.network]["ip"],
+            "IP",
+            self.config.currentConfig[self.network]["ip"],
             leadingTab=2,
             optionalTextColor=Fore.MAGENTA,
         )
         self.printer.print_formatted_other(
-            text="Port",
-            optionaltext=self.config.currentConfig[self.network]["port"],
+            "Port",
+            self.config.currentConfig[self.network]["port"],
             endingBreaks=1,
             leadingTab=2,
             optionalTextColor=Fore.MAGENTA,
@@ -68,7 +68,7 @@ class NightcapMongoNetworkSettingsCMD(NightcapBaseCMD):
         return False
 
     def help_ip(self):
-        self.printer.help(text="Sets a new IP Address", optionalText="ip [IP Address]")
+        self.printer.help("Sets a new IP Address", "ip [IP Address]")
 
     def do_ip(self, line):
         print("Set IP")
@@ -82,15 +82,15 @@ class NightcapMongoNetworkSettingsCMD(NightcapBaseCMD):
                 self.config.Save()
             else:
                 self.printer.print_error(
-                    exception=Exception(
+                    Exception(
                         "Error with setting IP Address { %s }, please try again" % line
                     )
                 )
         except Exception as e:
-            self.printer.print_error(exception=e)
+            self.printer.print_error(e)
 
     def help_port(self):
-        self.printer.help(text="Sets a new Port Number", optionalText="port [1-65535]")
+        self.printer.help("Sets a new Port Number", "port [1-65535]")
 
     def do_port(self, line):
         print("Set port")
@@ -103,7 +103,7 @@ class NightcapMongoNetworkSettingsCMD(NightcapBaseCMD):
                 raise ValueError
         except ValueError:
             self.printer.print_error(
-                exception=Exception(
+                Exception(
                     "Error with setting Port { %s }. Expected range 1 - 65535, please try again"
                     % line
                 )

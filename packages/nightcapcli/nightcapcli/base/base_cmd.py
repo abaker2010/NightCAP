@@ -93,70 +93,70 @@ class NightcapBaseCMD(cmd.Cmd):
         super(NightcapBaseCMD, self).do_help(line)
 
     def help_config(self):
-        self.printer.help(text="Get the current system configuration(s)")
+        self.printer.help("Get the current system configuration(s)")
 
     def do_config(self, line):
         ScreenHelper().clearScr()
-        self.printer.print_underlined_header_undecorated(text="Configuration")
+        self.printer.print_underlined_header_undecorated("Configuration")
 
-        self.printer.print_underlined_header(text="Verbosity", leadingTab=2)
+        self.printer.print_underlined_header("Verbosity", leadingTab=2)
         self.printer.print_formatted_other(
-                    text="Verbosity", optionaltext="Normal" if self.config.currentConfig.getboolean('NIGHTCAPCORE','verbose') == False else "Debug", leadingTab=3,
+                    "Verbosity", "Normal" if self.config.currentConfig.getboolean('NIGHTCAPCORE','verbose') == False else "Debug", leadingTab=3,
                     optionalTextColor=Fore.LIGHTBLACK_EX if self.config.currentConfig.getboolean('NIGHTCAPCORE','verbose') == False else Fore.LIGHTYELLOW_EX
                 )
 
-        self.printer.print_underlined_header(text="Projects", leadingTab=2)
+        self.printer.print_underlined_header("Projects", leadingTab=2)
         if len(line) == 0:
             if self.config.project != None:
                 self.printer.print_formatted_other(
-                    text="Current Project",
-                    optionaltext=str(self.config.project["project_name"]),
+                    "Current Project",
+                    str(self.config.project["project_name"]),
                     leadingTab=3,
                     optionalTextColor=Fore.LIGHTMAGENTA_EX,
                 )
             else:
                 self.printer.print_formatted_other(
-                    text="Current Project", optionaltext="None", leadingTab=3
+                    "Current Project", "None", leadingTab=3
                 )
 
-        self.printer.print_underlined_header(text="Web Server (Django)", leadingTab=2)
+        self.printer.print_underlined_header("Web Server (Django)", leadingTab=2)
         self.printer.print_formatted_other(
-            text="IP",
-            optionaltext=self.config.currentConfig["REPORTINGSERVER"]["ip"],
+            "IP",
+            self.config.currentConfig["REPORTINGSERVER"]["ip"],
             leadingTab=3,
             optionalTextColor=Fore.YELLOW,
         )
         self.printer.print_formatted_other(
-            text="Port",
-            optionaltext=self.config.currentConfig["REPORTINGSERVER"]["port"],
+            "Port",
+            self.config.currentConfig["REPORTINGSERVER"]["port"],
             leadingTab=3,
             optionalTextColor=Fore.YELLOW,
         )
         self.printer.print_formatted_other(
-            text="URL",
-            optionaltext=NighcapCoreSimpleServer(self.config).get_url(),
+            "URL",
+            NighcapCoreSimpleServer(self.config).get_url(),
             leadingTab=3,
             optionalTextColor=Fore.YELLOW,
         )
         self.printer.print_formatted_other(
-            text="Status",
-            optionaltext=NighcapCoreSimpleServer(self.config).get_status(),
+            "Status",
+            NighcapCoreSimpleServer(self.config).get_status(),
             leadingTab=3,
             optionalTextColor=Fore.LIGHTGREEN_EX
             if NighcapCoreSimpleServer(self.config).get_status() == "UP"
             else Fore.MAGENTA,
         )
 
-        self.printer.print_underlined_header(text="Database (Mongo)", leadingTab=2)
+        self.printer.print_underlined_header("Database (Mongo)", leadingTab=2)
         self.printer.print_formatted_other(
-            text="URL",
-            optionaltext=self.config.currentConfig["MONGOSERVER"]["ip"],
+            "URL",
+            self.config.currentConfig["MONGOSERVER"]["ip"],
             leadingTab=3,
             optionalTextColor=Fore.YELLOW,
         )
         self.printer.print_formatted_other(
-            text="Status",
-            optionaltext=self.config.currentConfig["MONGOSERVER"]["port"],
+            "Status",
+            self.config.currentConfig["MONGOSERVER"]["port"],
             leadingTab=3,
             optionalTextColor=Fore.YELLOW,
             endingBreaks=1,

@@ -58,14 +58,12 @@ class NightcapDockerHelper(object):
     def init_nc_site(self, dc: NightcapCoreDockerChecker):
         if dc.ncs_exits == False:
             self.printer.print_underlined_header(
-                text="Initializing: (NC Site)", endingBreaks=1
+                "Initializing: (NC Site)", endingBreaks=1
             )
             self.make_docker()
 
     def stop_all_containers(self):
-        self.printer.print_underlined_header_undecorated(
-            text="Stopping Docker Containers"
-        )
+        self.printer.print_underlined_header_undecorated("Stopping Docker Containers")
         self.stop_mongodb()
         self.stop_nightcapsite()
         print("")
@@ -185,9 +183,7 @@ class NightcapDockerHelper(object):
 
     def make_docker(self):
         ScreenHelper().clearScr()
-        self.printer.print_underlined_header_undecorated(
-            text="Making docker image", endingBreaks=1
-        )
+        self.printer.print_underlined_header_undecorated("Making docker image", endingBreaks=1)
         p = subprocess.Popen(["make", "-C", Path(__file__).resolve().parent.parent])
 
         while p.poll() is None:
@@ -201,7 +197,7 @@ class NightcapDockerHelper(object):
             ScreenHelper().clearScr()
             try:
                 self.printer.print_underlined_header(
-                    text="Initializing: (Mongo)", endingBreaks=1
+                    "Initializing: (Mongo)", endingBreaks=1
                 )
                 print(Fore.LIGHTBLACK_EX)
                 dc.pull_image("mongo")

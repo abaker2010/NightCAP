@@ -70,10 +70,10 @@ class NightcapProjectsCMD(NightcapBaseCMD):
                 else:
                     raise Exception("Project does not exist")
             except Exception as e:
-                self.printer.print_error(exception=e)
+                self.printer.print_error(e)
         except ValueError as ar:
             self.printer.print_error(
-                exception=Exception("Please enter a project ID Numder")
+                Exception("Please enter a project ID Numder")
             )
 
     # endregion
@@ -130,11 +130,11 @@ class NightcapProjectsCMD(NightcapBaseCMD):
                     raise Exception()
             except ValueError as ar:
                 self.printer.print_error(
-                    exception=Exception("Please enter an existing project ID Numder")
+                    Exception("Please enter an existing project ID Numder")
                 )
         except Exception as e:
             self.printer.print_error(
-                exception=Exception(
+                Exception(
                     "Please check the param and try again. Note: Must use project number for selection"
                 )
             )
@@ -150,7 +150,7 @@ class NightcapProjectsCMD(NightcapBaseCMD):
             self.printer.print_formatted_check("Unselected project")
         except Exception as e:
             # self.output.output(str(e), level=6)
-            self.printer.print_error(exception=e)
+            self.printer.print_error(e)
 
     # endregion
 
@@ -160,7 +160,7 @@ class NightcapProjectsCMD(NightcapBaseCMD):
         try:
             self._db.create(line)
         except Exception as e:
-            self.printer.print_error(exception=e)
+            self.printer.print_error(e)
 
     # endregion
 

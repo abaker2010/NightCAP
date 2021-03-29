@@ -12,10 +12,11 @@ class PrinterBase:
 
     def base_print(
         self,
+        text: str = '',
+        optionaltext: str = '',
+        *args,
         leadingTab=1,
         leadingText="",
-        text="",
-        optionalText="",
         leadingBreaks=0,
         endingBreaks=0,
         vtabs=0,
@@ -25,17 +26,21 @@ class PrinterBase:
         optionalTextColor=Fore.LIGHTGREEN_EX,
         breakTextColor=Fore.LIGHTMAGENTA_EX,
         styleRest=Style.RESET_ALL,
+        **kwargs
     ):
+        # print("okay")
+        # print("Leading tab", str(leadingTab))
         _start = ("\v" * vtabs) + ("\n" * leadingBreaks)
         _leading = ("\t" * leadingTab) + " " + leadingColor + leadingText
         _text = textColor + str(text)
         _optional = (
-            (breakTextColor + seperator + optionalTextColor + optionalText)
-            if len(optionalText) != 0
+            (breakTextColor + seperator + optionalTextColor + optionaltext)
+            if len(optionaltext) != 0
             else ""
         )
         _end = styleRest + ("\n" * endingBreaks)
         print(_start + _leading + " " + _text + _optional + _end)
+
 
     def animated_base_print(
         self,

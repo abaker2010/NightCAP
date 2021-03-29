@@ -55,7 +55,7 @@ class NightcapUpdater:
         self.verbose = verbose
         try:
             self.printer.print_underlined_header(
-                text="Updating NightCAP", underline="*", endingBreaks=1, leadingText=""
+                "Updating NightCAP", underline="*", endingBreaks=1, leadingText=""
             )
             if self.verbose == False:
                 print(Fore.LIGHTGREEN_EX, "\t[-] Please wait...")
@@ -81,13 +81,13 @@ class NightcapUpdater:
     def __create_tmp(self):
         self.tmpdir = tempfile.mkdtemp()
         if self.verbose:
-            self.printer.print_underlined_header(text="Preparing")
-            self.printer.item_1(text="Creating tmp dir " + self.tmpdir)
+            self.printer.print_underlined_header("Preparing")
+            self.printer.item_1("Creating tmp dir " + self.tmpdir)
 
     def __remove_tmp(self):
-        self.printer.print_underlined_header(text="Clean Up")
+        self.printer.print_underlined_header("Clean Up")
         if self.verbose:
-            self.printer.print_header(text="Removing tmp dir")
+            self.printer.print_header("Removing tmp dir")
         shutil.rmtree(self.tmpdir)
         self.tmpUpdatePaths = []
         self.tmpUpdateLocation = None
@@ -97,9 +97,9 @@ class NightcapUpdater:
     # region Get update from Github
     def __get_update(self):
         if self.verbose:
-            self.printer.item_1(text="Downloading Update")
+            self.printer.item_1("Downloading Update")
             self.printer.print_header(
-                text="Progress", leadingText="[+]", endingBreaks=1
+                "Progress", leadingText="[+]", endingBreaks=1
             )
         if self.isMainBranch:
             resp = requests.get(
@@ -136,12 +136,12 @@ class NightcapUpdater:
         with ZipFile(os.path.join(self.tmpdir, self.updateFile), "r") as zip:
             if self.verbose:
                 self.printer.print_underlined_header(
-                    text="Extracting Files", leadingBreaks=2
+                    "Extracting Files", leadingBreaks=2
                 )
             zip.extractall(self.tmpdir)
-            self.printer.item_1(text="tmp -> " + self.tmpdir)
+            self.printer.item_1("tmp -> " + self.tmpdir)
         if self.verbose:
-            self.printer.item_1(text="Done extracting")
+            self.printer.item_1("Done extracting")
 
     # endregion
 
@@ -153,7 +153,7 @@ class NightcapUpdater:
 
     # region Combining Files
     def __combine_db_files(self):
-        self.printer.print_underlined_header(text="Trying to combine the db files")
+        self.printer.print_underlined_header("Trying to combine the db files")
 
         # the best way to do this would be to make the db's allow for a new file to be passed to it and
         # make it do the heavy lifting
@@ -163,8 +163,8 @@ class NightcapUpdater:
             try:
                 if self.verbose:
                     self.printer.item_1(
-                        text="Updater file",
-                        optionalText=str(udb).replace(self.tmpdir, "{tmp}"),
+                        "Updater file",
+                        str(udb).replace(self.tmpdir, "{tmp}"),
                         leadingBreaks=1,
                     )
                 if str(udb).endswith("projects_db.json"):
@@ -208,7 +208,7 @@ class NightcapUpdater:
                     # self.errorPrinter.print_error(exception=e)
                     # self.errorPrinter.print_error("Error with file:", optionaltext=str(udb).replace(self.tmpdir, "Tmp -> "))
             except Exception as e:
-                self.printer.print_error(exception=e, errColor=Fore.LIGHTRED_EX)
+                self.printer.print_error(e, errColor=Fore.LIGHTRED_EX)
 
     # endregion
 

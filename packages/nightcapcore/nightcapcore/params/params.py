@@ -34,29 +34,29 @@ class NightcapDynamicParams(object):
         else:
             proj = Fore.LIGHTYELLOW_EX + str(self.project["project_name"])
         self.printer.item_2(
-            text="~ PROJECT",
-            optionalText=proj,
+            "~ PROJECT",
+            proj,
             leadingTab=1,
             leadingText="",
             textColor=Fore.LIGHTGREEN_EX,
         )
         self.printer.item_2(
-            text="~ FILENAME",
-            optionalText=str(self.filename),
+            "~ FILENAME",
+            str(self.filename),
             leadingTab=1,
             leadingText="",
             textColor=Fore.LIGHTGREEN_EX,
         )
         self.printer.item_2(
-            text="~ ISDIR",
-            optionalText=str(self.isDir),
+            "~ ISDIR",
+            str(self.isDir),
             leadingTab=1,
             leadingText="",
             textColor=Fore.LIGHTGREEN_EX,
         )
         self.printer.item_2(
-            text="~ PATH",
-            optionalText=str(self.dir),
+            "~ PATH",
+            str(self.dir),
             leadingTab=1,
             leadingText="",
             textColor=Fore.LIGHTGREEN_EX,

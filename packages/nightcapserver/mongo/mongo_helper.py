@@ -67,7 +67,7 @@ class NightcapMongoHelper:
                 raise KeyboardInterrupt()
 
     def change_mongo_server(self, ip: str = None, port: str = None):
-        self.printer.print_underlined_header(text="Current Mongo Settings")
+        self.printer.print_underlined_header("Current Mongo Settings")
         self.printer.print_formatted_additional(
             text="IP", optionaltext=self.conf.currentConfig["MONGOSERVER"]["ip"]
         )
@@ -81,10 +81,8 @@ class NightcapMongoHelper:
             # print("Docker image (Mongo) exists:", _docker_checker.mongo_im_exists)
             # print("Docker image (Django) exists:", _docker_checker.ncs_exits)
             self.docker_helper.get_container_status_by_name("")
-            self.printer.print_underlined_header(text="Docker Images")
-            self.printer.print_underlined_header_undecorated(
-                text="MongoDB", leadingTab=2
-            )
+            self.printer.print_underlined_header("Docker Images")
+            self.printer.print_underlined_header_undecorated("MongoDB", leadingTab=2)
             if _docker_checker.mongo_im_exists == False:
                 self.printer.print_formatted_delete(
                     text="Container Status",
@@ -109,9 +107,7 @@ class NightcapMongoHelper:
                     endingBreaks=1,
                 )
 
-            self.printer.print_underlined_header_undecorated(
-                text="Nighcapsite", leadingTab=2
-            )
+            self.printer.print_underlined_header_undecorated("Nighcapsite", leadingTab=2)
             if _docker_checker.ncs_exits == False:
                 self.printer.print_formatted_delete(
                     text="Container Status",
@@ -140,7 +136,7 @@ class NightcapMongoHelper:
                 )
 
             self.printer.print_underlined_header(
-                text="Error connecting to mongo server"
+                "Error connecting to mongo server"
             )
             self.printer.print_formatted_additional(
                 text="Initialize",
@@ -214,7 +210,7 @@ class NightcapMongoHelper:
     def _change_mogo_settings(self, agree):
         if agree in self.yes:
             ScreenHelper().clearScr()
-            self.printer.print_underlined_header(text="Changing IP Address")
+            self.printer.print_underlined_header("Changing IP Address")
             _ip = input(
                 Fore.LIGHTGREEN_EX + "\t\tNew IP Address: " + Style.RESET_ALL
             ).lower()

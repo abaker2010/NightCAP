@@ -43,7 +43,7 @@ class NightcapMainCMD(NightcapBaseCMD, ShellCMDMixin):
                     "Error with server option. For more info use: help server"
                 )
         except Exception as e:
-            self.printer.print_error(exception=e)
+            self.printer.print_error(e)
 
     # endregion
 

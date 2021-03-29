@@ -42,7 +42,7 @@ class NightcapPackageInstallerCommand(Command):
             ) as json_file:
                 self._package = json.load(json_file)
             ScreenHelper().clearScr()
-            self.printer.print_underlined_header_undecorated(text="INSTALLING")
+            self.printer.print_underlined_header_undecorated("INSTALLING")
             self.printer.print_formatted_additional(
                 text="Package: "
                 + self._package["package_for"]["module"]
@@ -52,9 +52,9 @@ class NightcapPackageInstallerCommand(Command):
                 + self._package["package_information"]["package_name"]
             )
         except FileNotFoundError as nf:
-            self.printer.print_error(exception=nf)
+            self.printer.print_error(nf)
         except Exception as e:
-            self.printer.print_error(exception=e)
+            self.printer.print_error(e)
 
         try:
             npuid = self._package["package_information"]["uid"]
@@ -64,7 +64,7 @@ class NightcapPackageInstallerCommand(Command):
         try:
             MongoModuleDatabase().module_install(self._package["package_for"]["module"])
         except Exception as e:
-            self.printer.print_error(exception=e)
+            self.printer.print_error(e)
         try:
             MongoSubModuleDatabase().submodule_install(
                 self._package["package_for"]["module"],
@@ -110,9 +110,7 @@ class NightcapPackageInstallerCommand(Command):
             _imports = list(package["package_information"]["imports"])
 
             if _imports != []:
-                self.printer.print_underlined_header_undecorated(
-                    text="Installing Required Packages"
-                )
+                self.printer.print_underlined_header_undecorated("Installing Required Packages")
 
                 installed_packages_dict = {}
                 installed_packages = pkg_resources.working_set
@@ -221,7 +219,7 @@ class NightcapPackageInstallerCommand(Command):
 
             return True
         except Exception as e:
-            self.printer.print_error(exception=e)
+            self.printer.print_error(e)
             return False
 
     # endregion
@@ -255,7 +253,7 @@ class NightcapPackageInstallerCommand(Command):
 
             return True
         except Exception as e:
-            self.printer.print_error(exception=e)
+            self.printer.print_error(e)
             return False
 
     # endregion

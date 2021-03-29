@@ -64,9 +64,8 @@ class NightcapCLICMDMixIn(NightcapMainCMD):
                 )
             else:
                 # print("Invalid using line: ", line)
-                self.printer.print_error(
-                    exception=Exception("Not a valid option. Use [options] for help")
+                self.printer.print_error(Exception("Not a valid option. Use [options] for help")
                 )
 
         except Exception as e:
-            self.printer.print_error(exception=e)
+            self.printer.print_error(e)

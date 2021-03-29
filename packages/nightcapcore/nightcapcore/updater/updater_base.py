@@ -20,7 +20,7 @@ class NightcapCoreUpdaterBase:
             localtable.insert(item)
             self.printer.print_formatted_check(text="added", leadingTab=4)
         except Exception as e:
-            self.printer.print_error(e, optionalText="Error with inserting: ")
+            self.printer.print_error(e, "Error with inserting: ")
 
     def _find_module_item(self, localtable: Table, find: str, checkonrow: str):
         _v = localtable.search(Query()[checkonrow] == find)

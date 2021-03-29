@@ -14,13 +14,13 @@ class NightcapMongoServerSettingsCMD(NightcapBaseCMD):
         NightcapBaseCMD.__init__(self, ["settings", "server"], configuration)
 
     def help_database(self):
-        self.printer.help(text="(Mongo) Database Configurations")
+        self.printer.help("(Mongo) Database Configurations")
 
     def do_database(self, line):
         NightcapMongoSettingsCMD(self.config).cmdloop()
 
     def help_web(self):
-        self.printer.help(text="Web Server Configurations")
+        self.printer.help("Web Server Configurations")
 
     def do_web(self, line):
         NightcapDjangoSettingsCMD(self.config).cmdloop()
