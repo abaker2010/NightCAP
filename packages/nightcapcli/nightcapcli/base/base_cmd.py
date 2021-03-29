@@ -99,6 +99,12 @@ class NightcapBaseCMD(cmd.Cmd):
         ScreenHelper().clearScr()
         self.printer.print_underlined_header_undecorated(text="Configuration")
 
+        self.printer.print_underlined_header(text="Verbosity", leadingTab=2)
+        self.printer.print_formatted_other(
+                    text="Verbosity", optionaltext="Normal" if self.config.currentConfig.getboolean('NIGHTCAPCORE','verbose') == False else "Debug", leadingTab=3,
+                    optionalTextColor=Fore.LIGHTBLACK_EX if self.config.currentConfig.getboolean('NIGHTCAPCORE','verbose') == False else Fore.LIGHTYELLOW_EX
+                )
+
         self.printer.print_underlined_header(text="Projects", leadingTab=2)
         if len(line) == 0:
             if self.config.project != None:

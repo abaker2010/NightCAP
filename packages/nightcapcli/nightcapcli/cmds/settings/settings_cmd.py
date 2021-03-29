@@ -40,7 +40,7 @@ class NightcapSettingsCMD(NightcapBaseCMD):
             invoker.set_on_start(NightcapPackageInstallerCommand(line))
             invoker.do_something_important()
         except Exception as e:
-            self.printer.print_error(exception=e)
+            self.printer.print_error(e)
 
     def help_install(self):
         self.printer.help(
@@ -67,7 +67,7 @@ class NightcapSettingsCMD(NightcapBaseCMD):
             invoker.set_on_start(NightcapPackageUninstallerCommand(line))
             invoker.do_something_important()
         except Exception as e:
-            self.printer.print_error(exception=e)
+            self.printer.print_error(e)
 
     def help_uninstall(self):
         self.printer.help(
@@ -120,6 +120,34 @@ class NightcapSettingsCMD(NightcapBaseCMD):
 
     # endregion
 
+    
+    def complete_verbosity(self, text, line, begidx, endidx):
+        return [i for i in ("normal", "debug") if i.startswith(text)]
+
+    def help_verbosity(self):
+        self.printer.help(text="Configure verbosity level", endingBreaks=0)
+        self.printer.help(text="Usage: verbosity <normal|debug>",leadingBreaks=0)
+
+    def do_verbosity(self, line):
+        print("change the verbosity")
+        try:
+            if line != '':
+                if 'normal' == str(line).lower().strip():
+                    print("set to normal")
+                    self.config.currentConfig.set('NIGHTCAPCORE', "verbose", "false")
+                    self.config.Save()
+                elif 'debug' == str(line).lower().strip():
+                    print("set to debug")
+                    self.config.currentConfig.set('NIGHTCAPCORE', "verbose", "true")
+                    self.config.Save()
+
+            else:
+                raise Exception("Error with level, for more information use: help verbosity")
+        except Exception as e:
+            self.printer.print_error(e)
+            
+
+
     # region Server config section
     def help_server(self):
         self.printer.help(text="Configure a server")
@@ -132,6 +160,6 @@ class NightcapSettingsCMD(NightcapBaseCMD):
         try:
             NightcapMongoNetworkSettingsCMD(line, self.config).cmdloop()
         except Exception as e:
-            self.printer.print_error(exception=e)
+            self.printer.print_error(e)
 
     # endregion
