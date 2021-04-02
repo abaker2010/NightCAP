@@ -13,7 +13,7 @@ from nightcappackages.classes.databases.mogo.connections.mongo_operation_connect
 class MongoProjectsDatabase(MongoDatabaseOperationsConnection, metaclass=Singleton):
     def __init__(self):
         MongoDatabaseOperationsConnection.__init__(self)
-        self._db = self.client[self.conf.currentConfig["MONGOSERVER"]["db_name"]][
+        self._db = self.client[self.conf.config["MONGOSERVER"]["db_name"]][
             "projects"
         ]
         self.printer = Printer()

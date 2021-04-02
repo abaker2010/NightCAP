@@ -3,6 +3,8 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
+import os
+import sys
 from nightcapcli.cmds.cmd_shared.network_config_cmd import (
     NightcapMongoNetworkSettingsCMD,
 )
@@ -134,13 +136,15 @@ class NightcapSettingsCMD(NightcapBaseCMD):
             if line != '':
                 if 'normal' == str(line).lower().strip():
                     print("set to normal")
-                    self.config.currentConfig.set('NIGHTCAPCORE', "verbose", "false")
+                    self.config.config.set('NIGHTCAPCORE', "verbose", "false")
                     self.config.Save()
                 elif 'debug' == str(line).lower().strip():
                     print("set to debug")
-                    self.config.currentConfig.set('NIGHTCAPCORE', "verbose", "true")
+                    self.config.config.set('NIGHTCAPCORE', "verbose", "true")
                     self.config.Save()
 
+                self.printer.print_formatted_additional(text="Rebooting...")
+                os.execv(sys.argv[0], sys.argv)
             else:
                 raise Exception("Error with level, for more information use: help verbosity")
         except Exception as e:

@@ -9,7 +9,7 @@ from nightcapcli.cmds.main_cmd import NightcapMainCMD
 from nightcapcli.observer.publisher import NightcapCLIPublisher
 from nightcapcore import NightcapCLIConfiguration
 from nightcapcli.cmds.settings import NightcapSettingsCMD
-from nightcapcli.cmds import NightcapCLIOptionsPackage
+from nightcapcli.cmds import NightcapCLIPackage
 from nightcapcli.mixins.mixin_maincmd import NightcapCLICMDMixIn
 from nightcapcore import ScreenHelper
 
@@ -45,7 +45,7 @@ class Nightcap(NightcapCLICMDMixIn):
         _channel = NightcapCLIPublisher().new_channel()
         _who = None
         if len(directions["nextstep"]) == 3:
-            _who = NightcapCLIOptionsPackage(
+            _who = NightcapCLIPackage(
                 directions["nextstep"],
                 self.config,
                 NightcapCLIPublisher().get_package_config(directions["nextstep"]),

@@ -11,14 +11,14 @@ from .settings import (
     NightcapDevOptions,
     NightcapSettingsCMD,
 )
-from .package.package_cmd import NightcapCLIOptionsPackage
+from .package.package_cmd import NightcapCLIPackage
 
 
 __all__ = [
     "NightcapMainCMD",
     "NightcapProjectsCMD",
     "NightcapSettingsCMD",
-    "NightcapCLIOptionsPackage",
+    "NightcapCLIPackage",
     "NightcapDjangoSettingsCMD",
     "NightcapDevOptions",
     "NightcapMongoSettingsCMD",

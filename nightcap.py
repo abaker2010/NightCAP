@@ -38,14 +38,14 @@ class Entry:
     def __init__(self):
         self.conf = NightcapCLIConfiguration()
         self.printer = Printer()
-        self.yes = self.conf.currentConfig.get("NIGHTCAPCORE", "yes").split()
+        self.yes = self.conf.config.get("NIGHTCAPCORE", "yes").split()
         self.mongo_server = None
         self.mongo_helper = NightcapMongoHelper(self.conf)
 
     def agreements(self):
         """Legal agreement the at the user must accept to use the program"""
 
-        while not self.conf.currentConfig.getboolean("NIGHTCAPCORE", "agreement"):
+        while not self.conf.config.getboolean("NIGHTCAPCORE", "agreement"):
             ScreenHelper().clearScr()
             NightcapBanner(self.conf).Banner()
             Legal().termsAndConditions()
@@ -56,7 +56,7 @@ class Entry:
             ).lower()
 
             if agree in self.yes:
-                self.conf.currentConfig.set("NIGHTCAPCORE", "agreement", "true")
+                self.conf.config.set("NIGHTCAPCORE", "agreement", "true")
                 self.conf.Save()
                 ScreenHelper().clearScr()
                 self.banner()
@@ -83,6 +83,7 @@ def main():
                     # _channel = NightcapCLIPublisher().new_channel()
                     _who = Nightcap([], _entry.conf, "basecli")
                     NightcapCLIPublisher().register("basecli", _who)
+
                     # print(NightcapCLIPublisher().channels)
                     l = _who.precmd("banner")
                     r = _who.onecmd(l)
@@ -132,5 +133,5 @@ def main():
 if __name__ == "__main__":
     main()
     # _printer = Printer()
-    # _printer.print_underlined_header('testing')
-# endregion
+    # _printer.debug('testing', 'opt')
+    # endregion

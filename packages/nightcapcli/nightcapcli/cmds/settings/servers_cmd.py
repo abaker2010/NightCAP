@@ -6,7 +6,7 @@
 from nightcapcli.base.base_cmd import NightcapBaseCMD
 from nightcapcli.cmds.settings import NightcapMongoSettingsCMD
 from nightcapcli.cmds.settings.django_cmd import NightcapDjangoSettingsCMD
-from nightcapcore.configuration.base import NightcapCLIConfiguration
+from nightcapcore.configuration import NightcapCLIConfiguration
 
 
 class NightcapMongoServerSettingsCMD(NightcapBaseCMD):

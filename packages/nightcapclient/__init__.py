@@ -1,3 +1,3 @@
-from .nightcapclient import NightcapClient
+from .nightcapclient import NightcapScanner
 
-__all__ = ["NightcapClient"]
+__all__ = ["NightcapScanner"]

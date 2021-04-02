@@ -4,12 +4,11 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 from .core import NightcapCore
-from .params import NightcapDynamicParams
 from .paths import NightcapPaths, NightcapPathsEnum, NightcapPathCleaner
 from .updater import NightcapCoreUpaterRules, NightcapCoreUpdaterBase
 from .files import NightcapCoreFiles
 from .printers import Printer
-from .configuration import NighcapCoreCLIBaseConfiguration, NightcapCLIConfiguration
+from .configuration import NightcapCLIConfiguration
 from .singleton import Singleton
 from .command import Command
 from .invoker import Invoker
@@ -22,7 +21,6 @@ from .docker import NightcapCoreDockerChecker
 __all__ = [
     "NightcapCLIConfiguration",
     "NightcapCore",
-    "NightcapDynamicParams",
     "NightcapPaths",
     "NightcapPathsEnum",
     "NightcapPathCleaner",
@@ -30,7 +28,6 @@ __all__ = [
     "NightcapCoreUpaterRules",
     "NightcapCoreFiles",
     "Printer",
-    "NighcapCoreCLIBaseConfiguration",
     "Singleton",
     "Command",
     "Invoker",

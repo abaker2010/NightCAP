@@ -36,7 +36,7 @@ class NightcapProjectsCMD(NightcapBaseCMD):
                             + Fore.GREEN
                         )
                     )
-                    yes_options = self.config.currentConfig["NIGHTCAPCORE"][
+                    yes_options = self.config.config["NIGHTCAPCORE"][
                         "yes"
                     ].split(" ")
                     if _confirm in yes_options:

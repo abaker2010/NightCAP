@@ -6,8 +6,7 @@
 from pathlib import Path
 import sys
 import time
-from nightcapcore import NighcapCoreCLIBaseConfiguration, Printer
-from nightcapcore.configuration.base import NightcapCLIConfiguration
+from nightcapcore import NightcapCLIConfiguration, Printer
 from nightcapcore.singleton.singleton import (
     Singleton,
 )  # Our http server handler for http requests
@@ -24,29 +23,29 @@ class NighcapCoreSimpleServer(object):
         self.config = config
         # self.ip = self.config["REPORTINGSERVER"]["ip"]
         # self.port = int(self.config["REPORTINGSERVER"]["port"])
-        self.proc = self.config.currentConfig["REPORTINGSERVER"]["proc"]
+        self.proc = self.config.config["REPORTINGSERVER"]["proc"]
         # self.status = self.config["REPORTINGSERVER"]["status"]
         self.pproc = None
         self.printer = Printer()
 
     def get_url(self):
         return "http://%s:%s/" % (
-            self.config.currentConfig["REPORTINGSERVER"]["ip"],
-            self.config.currentConfig["REPORTINGSERVER"]["port"],
+            self.config.config["REPORTINGSERVER"]["ip"],
+            self.config.config["REPORTINGSERVER"]["port"],
         )
 
     def get_status(self):
 
-        if self.config.currentConfig["REPORTINGSERVER"]["status"] == "False":
+        if self.config.config["REPORTINGSERVER"]["status"] == "False":
             return "DOWN"
-        if self.config.currentConfig["REPORTINGSERVER"]["status"] == "True":
+        if self.config.config["REPORTINGSERVER"]["status"] == "True":
             return "UP"
 
     def start(self):
         try:
             call = "python3.8 %s runserver %s" % (
                 os.path.join(os.path.dirname(__file__), "..", "..", "manage.py"),
-                self.config.currentConfig["REPORTINGSERVER"]["port"],
+                self.config.config["REPORTINGSERVER"]["port"],
             )
             print(call)
             self.pproc = Popen(
@@ -55,8 +54,8 @@ class NighcapCoreSimpleServer(object):
             self.printer.print_formatted_additional(
                 text="Starting Up Django Server", leadingBreaks=1, endingBreaks=1
             )
-            self.config.currentConfig.set("REPORTINGSERVER", "status", "True")
-            self.config.currentConfig.set("REPORTINGSERVER", "proc", self.pproc.pid)
+            self.config.config.set("REPORTINGSERVER", "status", "True")
+            self.config.config.set("REPORTINGSERVER", "proc", self.pproc.pid)
             self.config.Save()
 
         except Exception as e:
@@ -74,8 +73,8 @@ class NighcapCoreSimpleServer(object):
                     proc.kill()
                     while proc.is_running() == True:
                         time.sleep(0.5)
-                self.config.currentConfig.set("REPORTINGSERVER", "status", "False")
-                self.config.currentConfig.set("REPORTINGSERVER", "proc", "None")
+                self.config.config.set("REPORTINGSERVER", "status", "False")
+                self.config.config.set("REPORTINGSERVER", "proc", "None")
                 self.config.Save()
                 self.printer.print_formatted_check(
                     text="Shutdown complete", endingBreaks=1

@@ -12,7 +12,7 @@ import os
 import docker as dDocker
 from docker import APIClient
 from colorama.ansi import Fore, Style
-from nightcapcore.configuration.base import NightcapCLIConfiguration
+from nightcapcore.configuration import NightcapCLIConfiguration
 from nightcapcore.docker.docker_checker import NightcapCoreDockerChecker
 from nightcapcore.helpers.screen.screen_helper import ScreenHelper
 from nightcapcore.printers.print import Printer
@@ -27,7 +27,7 @@ class NightcapDockerHelper(object):
     def __init__(self, config: NightcapCLIConfiguration) -> None:
         super().__init__()
         self.conf = config
-        self.yes = self.conf.currentConfig.get("NIGHTCAPCORE", "yes").split()
+        self.yes = self.conf.config.get("NIGHTCAPCORE", "yes").split()
         self.printer = Printer()
         self.docker = dDocker.from_env()
 

@@ -56,6 +56,7 @@ class NightcapBaseCMD(cmd.Cmd):
         self.ruler = Fore.YELLOW + "-" + Style.RESET_ALL
 
         self.config = configuration
+        self.verbosity = self.config.config.getboolean('NIGHTCAPCORE','verbose')
         self.printer = Printer()
         self.mongo_helper = NightcapMongoHelper(self.config)
         self.channelID = channelid
@@ -101,8 +102,8 @@ class NightcapBaseCMD(cmd.Cmd):
 
         self.printer.print_underlined_header("Verbosity", leadingTab=2)
         self.printer.print_formatted_other(
-                    "Verbosity", "Normal" if self.config.currentConfig.getboolean('NIGHTCAPCORE','verbose') == False else "Debug", leadingTab=3,
-                    optionalTextColor=Fore.LIGHTBLACK_EX if self.config.currentConfig.getboolean('NIGHTCAPCORE','verbose') == False else Fore.LIGHTYELLOW_EX
+                    "Verbosity", "Normal" if self.verbosity == False else "Debug", leadingTab=3,
+                    optionalTextColor=Fore.LIGHTBLACK_EX if self.verbosity == False else Fore.LIGHTYELLOW_EX
                 )
 
         self.printer.print_underlined_header("Projects", leadingTab=2)
@@ -122,13 +123,13 @@ class NightcapBaseCMD(cmd.Cmd):
         self.printer.print_underlined_header("Web Server (Django)", leadingTab=2)
         self.printer.print_formatted_other(
             "IP",
-            self.config.currentConfig["REPORTINGSERVER"]["ip"],
+            self.config.config["REPORTINGSERVER"]["ip"],
             leadingTab=3,
             optionalTextColor=Fore.YELLOW,
         )
         self.printer.print_formatted_other(
             "Port",
-            self.config.currentConfig["REPORTINGSERVER"]["port"],
+            self.config.config["REPORTINGSERVER"]["port"],
             leadingTab=3,
             optionalTextColor=Fore.YELLOW,
         )
@@ -150,13 +151,13 @@ class NightcapBaseCMD(cmd.Cmd):
         self.printer.print_underlined_header("Database (Mongo)", leadingTab=2)
         self.printer.print_formatted_other(
             "URL",
-            self.config.currentConfig["MONGOSERVER"]["ip"],
+            self.config.config["MONGOSERVER"]["ip"],
             leadingTab=3,
             optionalTextColor=Fore.YELLOW,
         )
         self.printer.print_formatted_other(
             "Status",
-            self.config.currentConfig["MONGOSERVER"]["port"],
+            self.config.config["MONGOSERVER"]["port"],
             leadingTab=3,
             optionalTextColor=Fore.YELLOW,
             endingBreaks=1,

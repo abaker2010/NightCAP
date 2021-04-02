@@ -16,11 +16,11 @@ from pymongo.errors import ServerSelectionTimeoutError
 class MongoDatabaseOperationsConnection(MongoDatabaseInterface):
     def __init__(self):
         self.conf = NightcapCLIConfiguration()
-        ip = self.conf.currentConfig["MONGOSERVER"]["ip"]
-        port = self.conf.currentConfig["MONGOSERVER"]["port"]
-        _db_name = self.conf.currentConfig["MONGOSERVER"]["db_name"]
-        _uname = self.conf.currentConfig["MONGOSERVER"]["username"]
-        _pass = self.conf.currentConfig["MONGOSERVER"]["password"]
+        ip = self.conf.config["MONGOSERVER"]["ip"]
+        port = self.conf.config["MONGOSERVER"]["port"]
+        _db_name = self.conf.config["MONGOSERVER"]["db_name"]
+        _uname = self.conf.config["MONGOSERVER"]["username"]
+        _pass = self.conf.config["MONGOSERVER"]["password"]
 
         self.name = None
         if ip == None:

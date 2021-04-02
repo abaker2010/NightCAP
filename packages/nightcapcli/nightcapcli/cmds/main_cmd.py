@@ -5,7 +5,6 @@
 # file that should have been included as part of this package.
 
 from nightcapcli.cmds.cmd_shared.shell_cmd import ShellCMDMixin
-from nightcapcli.cmds.package.package_cmd import NightcapCLIOptionsPackage
 from nightcapcli.cmds.projects import NightcapProjectsCMD
 from nightcapcore import NightcapCLIConfiguration
 from colorama import Fore, Style

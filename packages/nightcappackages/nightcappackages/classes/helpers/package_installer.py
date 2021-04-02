@@ -170,7 +170,7 @@ class NightcapPackageInstallerCommand(Command):
                                     + "\n\t\tOverride package? (Y/n): "
                                     + Style.RESET_ALL
                                 ).lower()
-                                yes = self._db.conf.currentConfig.get(
+                                yes = self._db.conf.config.get(
                                     "NIGHTCAPCORE", "yes"
                                 ).split()
                                 if agree in yes:

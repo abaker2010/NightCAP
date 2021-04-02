@@ -29,13 +29,13 @@ class NightcapMongoNetworkSettingsCMD(NightcapBaseCMD):
         self.printer.print_underlined_header("CURRENT CONFIG")
         self.printer.print_formatted_other(
             "IP",
-            self.config.currentConfig[self.network]["ip"],
+            self.config.config[self.network]["ip"],
             leadingTab=2,
             optionalTextColor=Fore.MAGENTA,
         )
         self.printer.print_formatted_other(
             "Port",
-            self.config.currentConfig[self.network]["port"],
+            self.config.config[self.network]["port"],
             endingBreaks=1,
             leadingTab=2,
             optionalTextColor=Fore.MAGENTA,
@@ -75,10 +75,10 @@ class NightcapMongoNetworkSettingsCMD(NightcapBaseCMD):
         try:
             print("Change IP address for django server")
             if str(line).lower() == "localhost":
-                self.config.currentConfig.set(self.network, "ip", "127.0.0.1")
+                self.config.config.set(self.network, "ip", "127.0.0.1")
                 self.config.Save()
             elif self._isvalidIPAddress(line):
-                self.config.currentConfig.set(self.network, "ip", line)
+                self.config.config.set(self.network, "ip", line)
                 self.config.Save()
             else:
                 self.printer.print_error(
@@ -97,7 +97,7 @@ class NightcapMongoNetworkSettingsCMD(NightcapBaseCMD):
         try:
             port = int(line)
             if 1 <= port <= 65535:
-                self.config.currentConfig.set(self.network, "port", line)
+                self.config.config.set(self.network, "port", line)
                 self.config.Save()
             else:
                 raise ValueError

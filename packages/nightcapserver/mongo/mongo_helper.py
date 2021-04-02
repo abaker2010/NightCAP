@@ -7,7 +7,7 @@ import os
 import sys
 from colorama.ansi import Fore, Style
 from nc_docker.docker_helper import NightcapDockerHelper
-from nightcapcore.configuration.base import NightcapCLIConfiguration
+from nightcapcore.configuration import NightcapCLIConfiguration
 from nightcapcore.docker.docker_checker import NightcapCoreDockerChecker
 from nightcapcore.helpers.screen.screen_helper import ScreenHelper
 from nightcapcore.printers.print import Printer
@@ -22,7 +22,7 @@ class NightcapMongoHelper:
         super().__init__()
         self.printer = Printer()
         self.conf = conf
-        self.yes = self.conf.currentConfig.get("NIGHTCAPCORE", "yes").split()
+        self.yes = self.conf.config.get("NIGHTCAPCORE", "yes").split()
         self.docker_helper = NightcapDockerHelper(self.conf)
         try:
             self.mongo_server = MongoDatabaseChecker()
@@ -69,14 +69,14 @@ class NightcapMongoHelper:
     def change_mongo_server(self, ip: str = None, port: str = None):
         self.printer.print_underlined_header("Current Mongo Settings")
         self.printer.print_formatted_additional(
-            text="IP", optionaltext=self.conf.currentConfig["MONGOSERVER"]["ip"]
+            text="IP", optionaltext=self.conf.config["MONGOSERVER"]["ip"]
         )
         self.printer.print_formatted_additional(
             text="Port",
-            optionaltext=self.conf.currentConfig["MONGOSERVER"]["port"],
+            optionaltext=self.conf.config["MONGOSERVER"]["port"],
             endingBreaks=1,
         )
-        if "127.0.0.1" or "localhost" in self.conf.currentConfig["MONGOSERVER"]["ip"]:
+        if "127.0.0.1" or "localhost" in self.conf.config["MONGOSERVER"]["ip"]:
             _docker_checker = NightcapCoreDockerChecker()
             # print("Docker image (Mongo) exists:", _docker_checker.mongo_im_exists)
             # print("Docker image (Django) exists:", _docker_checker.ncs_exits)
@@ -218,8 +218,8 @@ class NightcapMongoHelper:
                 Fore.LIGHTGREEN_EX + "\t\tNew Port: " + Style.RESET_ALL
             ).lower()
             try:
-                self.conf.currentConfig.set("MONGOSERVER", "ip", str(_ip))
-                self.conf.currentConfig.set("MONGOSERVER", "port", str(_port))
+                self.conf.config.set("MONGOSERVER", "ip", str(_ip))
+                self.conf.config.set("MONGOSERVER", "port", str(_port))
                 self.conf.Save()
             except Exception as e:
                 raise e

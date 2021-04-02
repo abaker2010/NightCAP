@@ -14,5 +14,5 @@ class NightcapCore(NightcapCLIConfiguration):
         parser.add_argument("--data", required=True, help="list of pcap filenames")
         args = parser.parse_args()
         NightcapCLIConfiguration.__init__(
-            self, generatePcaps=True, basedata=dict(json.loads(args.data))
+            self
         )

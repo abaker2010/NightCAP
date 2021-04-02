@@ -17,7 +17,7 @@ from nightcappackages.classes.paths.paths import NightcapPackagesPaths
 class MongoPackagesDatabase(MongoDatabaseOperationsConnection, metaclass=Singleton):
     def __init__(self):
         MongoDatabaseOperationsConnection.__init__(self)
-        self._db = self.client[self.conf.currentConfig["MONGOSERVER"]["db_name"]][
+        self._db = self.client[self.conf.config["MONGOSERVER"]["db_name"]][
             "packages"
         ]
 

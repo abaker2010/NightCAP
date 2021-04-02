@@ -68,7 +68,7 @@ class NightcapCoreServerReportingBase(NighcapCoreCLIBaseConfiguration):
 
     def _generate_report_template_page(self, basepath: str, data: str):
         base_page = open(os.path.join(basepath, "simple_report.html")).readlines()
-        replacement = NighcapCoreCLIBaseConfiguration().currentConfig.get(
+        replacement = NighcapCoreCLIBaseConfiguration().config.get(
             "REPORTINGREPLACEMENTS", "report_data_replacement"
         )
 
@@ -96,7 +96,7 @@ class NightcapCoreServerReportingBase(NighcapCoreCLIBaseConfiguration):
     # region Standard Tempplate
     def _generate_standard_template_page(self, basepath: str, data: str):
         base_page = open(os.path.join(basepath, "base.html")).readlines()
-        replacement = NighcapCoreCLIBaseConfiguration().currentConfig.get(
+        replacement = NighcapCoreCLIBaseConfiguration().config.get(
             "REPORTINGREPLACEMENTS", "base_data_replacement"
         )
         n_lines = []
@@ -116,7 +116,7 @@ class NightcapCoreServerReportingBase(NighcapCoreCLIBaseConfiguration):
     def _generate_home_page(self, path):
         data = open(path).readlines()
         print("Data for home page: ", data)
-        proj_replace = NighcapCoreCLIBaseConfiguration().currentConfig.get(
+        proj_replace = NighcapCoreCLIBaseConfiguration().config.get(
             "REPORTINGREPLACEMENTS", "project_list_replacement"
         )
         ndata = []
@@ -187,12 +187,12 @@ class NightcapCoreServerReportingBase(NighcapCoreCLIBaseConfiguration):
 
         list_replacement = (
             "["
-            + self.currentConfig.get("REPORTINGREPLACEMENTS", "list_item_replacement")
+            + self.config.get("REPORTINGREPLACEMENTS", "list_item_replacement")
             + "]"
         )
         header_replacement = (
             "["
-            + self.currentConfig.get("REPORTINGREPLACEMENTS", "header_replacement")
+            + self.config.get("REPORTINGREPLACEMENTS", "header_replacement")
             + "]"
         )
 

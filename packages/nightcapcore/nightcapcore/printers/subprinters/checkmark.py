@@ -89,8 +89,8 @@ class CheckMarkPrinter(PrinterBase):
         **kwargs
     ):
         self.base_print(
-            text=text,
-            optionalText=optionaltext,
+            text,
+            optionaltext,
             leadingText="[>]",
             leadingTab=leadingTab,
             leadingBreaks=leadingBreaks,

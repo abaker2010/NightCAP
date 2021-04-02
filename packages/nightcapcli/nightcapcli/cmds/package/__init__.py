@@ -1,3 +1,3 @@
-from .package_cmd import NightcapCLIOptionsPackage
+from .package_cmd import NightcapCLIPackage
 
-__all__ = ["NightcapCLIOptionsPackage"]
+__all__ = ["NightcapCLIPackage"]
