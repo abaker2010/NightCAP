@@ -10,5 +10,5 @@ from nightcapcore import *
 
 
 class NightcapMongoSettingsCMD(NightcapMongoNetworkSettingsCMD):
-    def __init__(self, configuration: NightcapCLIConfiguration):
-        NightcapMongoNetworkSettingsCMD.__init__(self, "database", configuration)
+    def __init__(self):
+        NightcapMongoNetworkSettingsCMD.__init__(self, "database")

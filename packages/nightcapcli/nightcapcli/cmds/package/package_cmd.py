@@ -20,14 +20,14 @@ class NightcapCLIPackage(NightcapCLIPackageConfiguration, NightcapBaseCMD):
     def __init__(
         self,
         selectedList: list,
-        configuration: NightcapCLIConfiguration,
         pkg_config: dict = None,
         channelid: str = None,
     ):
-        NightcapBaseCMD.__init__(self, selectedList, configuration)
-        # self.config.generatePcaps = True
         NightcapCLIPackageConfiguration.__init__(self, pkg_config)
+        NightcapBaseCMD.__init__(self, selectedList)
+        # self.config.generatePcaps = True
         
+        # self._pconfig = configuration
         self.db = MongoPackagesDatabase()
 
         try:
@@ -43,7 +43,7 @@ class NightcapCLIPackage(NightcapCLIPackageConfiguration, NightcapBaseCMD):
     def do_projects(self, line):
         """\n\nChange current project"""
         try:
-            NightcapProjectsCMD(self.config).cmdloop()
+            NightcapProjectsCMD().cmdloop()
         except Exception as e:
             print(e)
 
@@ -58,11 +58,11 @@ class NightcapCLIPackage(NightcapCLIPackageConfiguration, NightcapBaseCMD):
         )
 
     def do_run(self, line):
-
-        print("package information:", self.pkg_information,"\n\n\n\n\n")
+        print("project information:", self.config.project)
+        print("package information:", self.pkg_information,"\n")
         try:
             force = False
-            if self.project == None:
+            if self.config.project == None:
                 force = input(
                     (
                         Fore.YELLOW
@@ -71,7 +71,8 @@ class NightcapCLIPackage(NightcapCLIPackageConfiguration, NightcapBaseCMD):
                     )
                 )
                 print(Style.RESET_ALL, Fore.LIGHTCYAN_EX)
-                yes_options = self.config["NIGHTCAPCORE"]["yes"].split(" ")
+                print("config", type(self.config))
+                yes_options = self.config.config["NIGHTCAPCORE"]["yes"].split(" ")
                 if force == None:
                     force = False
                 else:

@@ -16,11 +16,10 @@ class NightcapCLICMDMixIn(NightcapMainCMD):
     def __init__(
         self,
         selectedList: list,
-        configuration: NightcapCLIConfiguration,
         nextobj: type = object,
         channelid: str = None,
     ):
-        NightcapMainCMD.__init__(self, selectedList, configuration, channelid)
+        NightcapMainCMD.__init__(self, selectedList,channelid)
         self.pageobjct = nextobj
 
     def do_options(self, line):

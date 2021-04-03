@@ -47,7 +47,7 @@ class Entry:
 
         while not self.conf.config.getboolean("NIGHTCAPCORE", "agreement"):
             ScreenHelper().clearScr()
-            NightcapBanner(self.conf).Banner()
+            NightcapBanner().Banner()
             Legal().termsAndConditions()
             agree = input(
                 Fore.LIGHTGREEN_EX
@@ -64,7 +64,7 @@ class Entry:
         return True
 
     def banner(self):
-        NightcapBanner(self.conf).Banner()
+        NightcapBanner().Banner()
 
 
 def main():
@@ -81,7 +81,7 @@ def main():
                     ScreenHelper().clearScr()
                     # _entry.banner()
                     # _channel = NightcapCLIPublisher().new_channel()
-                    _who = Nightcap([], _entry.conf, "basecli")
+                    _who = Nightcap([], "basecli")
                     NightcapCLIPublisher().register("basecli", _who)
 
                     # print(NightcapCLIPublisher().channels)

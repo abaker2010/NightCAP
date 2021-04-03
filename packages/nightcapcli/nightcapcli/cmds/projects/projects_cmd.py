@@ -12,10 +12,10 @@ import shutil
 
 
 class NightcapProjectsCMD(NightcapBaseCMD):
-    def __init__(self, conf: NightcapCLIConfiguration):
-        NightcapBaseCMD.__init__(self, ["projects"], conf)
+    def __init__(self):
+        NightcapBaseCMD.__init__(self, ["projects"])
         self._db = MongoProjectsDatabase()
-        self.config = conf
+        # self.config = conf
         self._count = 0
 
     # region Delete Project
@@ -124,7 +124,9 @@ class NightcapProjectsCMD(NightcapBaseCMD):
                 if _selected != None:
                     self.config.project = _selected
                     self.printer.print_formatted_check(
-                        text="Selected", optionaltext=_selected["project_name"]
+                        text="Selected", optionaltext=_selected["project_name"],
+                        leadingBreaks=1,
+                        endingBreaks=1
                     )
                 else:
                     raise Exception()

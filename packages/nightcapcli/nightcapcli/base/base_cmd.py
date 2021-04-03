@@ -27,7 +27,6 @@ class NightcapBaseCMD(cmd.Cmd):
     def __init__(
         self,
         selectedList: list,
-        configuration: NightcapCLIConfiguration,
         channelid=None,
     ):
         cmd.Cmd.__init__(self, completekey="tab", stdin=None, stdout=None)
@@ -55,7 +54,7 @@ class NightcapBaseCMD(cmd.Cmd):
         self.undoc_header = Fore.GREEN + "Other" + Style.RESET_ALL
         self.ruler = Fore.YELLOW + "-" + Style.RESET_ALL
 
-        self.config = configuration
+        self.config = NightcapCLIConfiguration()
         self.verbosity = self.config.config.getboolean('NIGHTCAPCORE','verbose')
         self.printer = Printer()
         self.mongo_helper = NightcapMongoHelper(self.config)
@@ -165,4 +164,4 @@ class NightcapBaseCMD(cmd.Cmd):
 
     def do_banner(self, line):
         ScreenHelper().clearScr()
-        NightcapBanner(self.config).Banner()
+        NightcapBanner().Banner()

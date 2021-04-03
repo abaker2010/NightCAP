@@ -9,15 +9,15 @@ from colorama import Fore
 
 
 class NightcapMongoNetworkSettingsCMD(NightcapBaseCMD):
-    def __init__(self, networkopt: str, configuration: NightcapCLIConfiguration):
+    def __init__(self, networkopt: str):
         self.network = ""
         if networkopt.lower() == "database":
             NightcapBaseCMD.__init__(
-                self, ["settings", "server", "database"], configuration
+                self, ["settings", "server", "database"]
             )
             self.network = "MONGOSERVER"
         elif networkopt.lower() == "web":
-            NightcapBaseCMD.__init__(self, ["settings", "server", "web"], configuration)
+            NightcapBaseCMD.__init__(self, ["settings", "server", "web"])
             self.network = "REPORTINGSERVER"
         else:
             raise Exception("Invalid option: Please use web or database")

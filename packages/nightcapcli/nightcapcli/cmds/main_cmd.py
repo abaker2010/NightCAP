@@ -17,10 +17,9 @@ class NightcapMainCMD(NightcapBaseCMD, ShellCMDMixin):
     def __init__(
         self,
         selectedList,
-        configuration: NightcapCLIConfiguration,
         channelid: str = None,
     ):
-        NightcapBaseCMD.__init__(self, selectedList, configuration, channelid)
+        NightcapBaseCMD.__init__(self, selectedList, channelid)
 
     # region Update Server
 
@@ -49,11 +48,11 @@ class NightcapMainCMD(NightcapBaseCMD, ShellCMDMixin):
     def do_projects(self, line):
         """\n\nChange current project"""
         try:
-            NightcapProjectsCMD(self.config).cmdloop()
+            NightcapProjectsCMD().cmdloop()
         except Exception as e:
             print(e)
 
     def do_settings(self, line):
         print("Settings here")
         ScreenHelper().clearScr()
-        NightcapSettingsCMD(self.config).cmdloop()
+        NightcapSettingsCMD().cmdloop()

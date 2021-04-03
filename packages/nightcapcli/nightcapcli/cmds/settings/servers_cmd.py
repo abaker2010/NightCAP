@@ -11,16 +11,16 @@ from nightcapcore.configuration import NightcapCLIConfiguration
 
 class NightcapMongoServerSettingsCMD(NightcapBaseCMD):
     def __init__(self, configuration: NightcapCLIConfiguration):
-        NightcapBaseCMD.__init__(self, ["settings", "server"], configuration)
+        NightcapBaseCMD.__init__(self, ["settings", "server"])
 
     def help_database(self):
         self.printer.help("(Mongo) Database Configurations")
 
     def do_database(self, line):
-        NightcapMongoSettingsCMD(self.config).cmdloop()
+        NightcapMongoSettingsCMD().cmdloop()
 
     def help_web(self):
         self.printer.help("Web Server Configurations")
 
     def do_web(self, line):
-        NightcapDjangoSettingsCMD(self.config).cmdloop()
+        NightcapDjangoSettingsCMD().cmdloop()

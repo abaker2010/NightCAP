@@ -12,10 +12,10 @@ from colorama import Fore, Style
 
 
 class NightcapDevOptions(NightcapBaseCMD):
-    def __init__(self, selectedList: list, configuration: NightcapCLIConfiguration):
+    def __init__(self, selectedList: list):
         self.selectedList = selectedList
         self.selectedList.append("dev")
-        NightcapBaseCMD.__init__(self, self.selectedList, configuration)
+        NightcapBaseCMD.__init__(self, self.selectedList)
 
     # region
     def do_genPackageUID(self, package_path: str):

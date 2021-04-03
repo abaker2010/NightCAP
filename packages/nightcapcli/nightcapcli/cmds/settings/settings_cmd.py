@@ -23,15 +23,15 @@ from colorama import Fore, Style
 
 
 class NightcapSettingsCMD(NightcapBaseCMD):
-    def __init__(self, configuration: NightcapCLIConfiguration):
-        NightcapBaseCMD.__init__(self, ["settings"], configuration)
+    def __init__(self):
+        NightcapBaseCMD.__init__(self, ["settings"])
 
     def help_devoptions(self):
         self.printer.help("Developer Options")
 
     # region
     def do_devoptions(self, line):
-        NightcapDevOptions(self.selectedList, self.config).cmdloop()
+        NightcapDevOptions(self.selectedList).cmdloop()
 
     # endregion
 
@@ -136,17 +136,19 @@ class NightcapSettingsCMD(NightcapBaseCMD):
             if line != '':
                 if 'normal' == str(line).lower().strip():
                     print("set to normal")
+                    self.verbosity = False
                     self.config.config.set('NIGHTCAPCORE', "verbose", "false")
                     self.config.Save()
                 elif 'debug' == str(line).lower().strip():
                     print("set to debug")
+                    self.verbosity = True
                     self.config.config.set('NIGHTCAPCORE', "verbose", "true")
                     self.config.Save()
-
-                self.printer.print_formatted_additional(text="Rebooting...")
-                os.execv(sys.argv[0], sys.argv)
             else:
                 raise Exception("Error with level, for more information use: help verbosity")
+            
+            self.printer.print_formatted_additional(text="Rebooting...")
+            os.execv(sys.argv[0], sys.argv)
         except Exception as e:
             self.printer.print_error(e)
             
@@ -162,7 +164,7 @@ class NightcapSettingsCMD(NightcapBaseCMD):
 
     def do_server(self, line):
         try:
-            NightcapMongoNetworkSettingsCMD(line, self.config).cmdloop()
+            NightcapMongoNetworkSettingsCMD(line).cmdloop()
         except Exception as e:
             self.printer.print_error(e)
 

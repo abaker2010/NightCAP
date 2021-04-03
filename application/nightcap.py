@@ -20,12 +20,11 @@ class Nightcap(NightcapCLICMDMixIn):
     def __init__(
         self,
         selected: list,
-        configuration: NightcapCLIConfiguration,
         channelid: str = "",
         parentid: str = "",
         additionalchildren: list = [],
     ):
-        NightcapCLICMDMixIn.__init__(self, selected, configuration, Nightcap, channelid)
+        NightcapCLICMDMixIn.__init__(self, selected, Nightcap, channelid)
         self.channelid = channelid
         self.parentid = parentid
 
@@ -47,14 +46,12 @@ class Nightcap(NightcapCLICMDMixIn):
         if len(directions["nextstep"]) == 3:
             _who = NightcapCLIPackage(
                 directions["nextstep"],
-                self.config,
                 NightcapCLIPublisher().get_package_config(directions["nextstep"]),
                 _channel,
             )
         else:
             _who = self.pageobjct(
                 directions["nextstep"],
-                self.config,
                 _channel,
                 self.channelID,
                 directions["additionalsteps"],

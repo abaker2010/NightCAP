@@ -16,11 +16,11 @@ from nightcapcore.colors import NightcapColors
 # endregion
 
 
-class NightcapBanner:
-    def __init__(self, configuration: NightcapCLIConfiguration):
-        self.config = configuration
-        self.build_version = self.config.config["BUILD_DATA"]["version"]
-        self.build_number = self.config.config["BUILD_DATA"]["build"]
+class NightcapBanner(NightcapCLIConfiguration):
+    def __init__(self):
+        NightcapCLIConfiguration.__init__(self)
+        self.build_version = self.config["BUILD_DATA"]["version"]
+        self.build_number = self.config["BUILD_DATA"]["build"]
 
     def _randomColor(self):
         random = randint(0, 11)
