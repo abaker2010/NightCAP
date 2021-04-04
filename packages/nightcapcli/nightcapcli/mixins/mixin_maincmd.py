@@ -13,45 +13,47 @@ from ..cmds import NightcapMainCMD
 
 class NightcapCLICMDMixIn(NightcapMainCMD):
     """
-        (MixIn, User CLI Object)
-        
-        This class is used for the options, use commands for the application/nightcap.py
+    (MixIn, User CLI Object)
 
-        ...
+    This class is used for the options, use commands for the application/nightcap.py
 
-        Attributes
-        ----------
-            pageobjct: -> Object
-                Used for casting when dynamically creating the next page
+    ...
 
-        Methods 
+    Attributes
+    ----------
+        pageobjct: -> Object
+            Used for casting when dynamically creating the next page
+
+    Methods
+    -------
+        Accessible
         -------
-            Accessible 
-            -------
-                do_options(self, line): -> None
-                    Allows the user to see what options are available to be used
+            do_options(self, line): -> None
+                Allows the user to see what options are available to be used
 
-                help_use(self): -> None
-                    Overrides the use help command
+            help_use(self): -> None
+                Overrides the use help command
 
-                complete_use(self, text, line, begidx, endidx): -> list
-                    Tab auto complete for the use command
+            complete_use(self, text, line, begidx, endidx): -> list
+                Tab auto complete for the use command
 
-                do_use(self, line: str, override: object = None): -> None
-                    Allows the user to select an option to use and enter a new cmd
+            do_use(self, line: str, override: object = None): -> None
+                Allows the user to select an option to use and enter a new cmd
     """
-    #region Init
+
+    # region Init
     def __init__(
         self,
         selectedList: list,
         nextobj: type = object,
         channelid: str = None,
     ):
-        NightcapMainCMD.__init__(self, selectedList,channelid)
+        NightcapMainCMD.__init__(self, selectedList, channelid)
         self.pageobjct = nextobj
-    #endregion
 
-    #region Do Options
+    # endregion
+
+    # region Do Options
     def do_options(self, line):
         """\nSee what options are available to use. Use -d on packages to see detailed information\n"""
         if len(line) == 0:
@@ -67,26 +69,27 @@ class NightcapCLICMDMixIn(NightcapMainCMD):
         else:
             print("Error with command")
 
-    #endregion
+    # endregion
 
-    #region Help Use
+    # region Help Use
     def help_use(self):
         print(
             "\nSelect/Use a module/submobule/package: use [module/submobule/package name]\n"
         )
 
-    #endregion
+    # endregion
 
-    #region Complete Use
+    # region Complete Use
     def complete_use(self, text, line, begidx, endidx):
         return [
             i
             for i in NightcapOptionGenerator(self.selectedList).completed_options()
             if i.startswith(text)
         ]
-    #endregion
 
-    #region Do Use
+    # endregion
+
+    # region Do Use
     def do_use(self, line: str, override: object = None):
         # print("Using ", line)
         try:
@@ -101,9 +104,11 @@ class NightcapCLICMDMixIn(NightcapMainCMD):
                 )
             else:
                 # print("Invalid using line: ", line)
-                self.printer.print_error(Exception("Not a valid option. Use [options] for help")
+                self.printer.print_error(
+                    Exception("Not a valid option. Use [options] for help")
                 )
 
         except Exception as e:
             self.printer.print_error(e)
-    #endregion
+
+    # endregion

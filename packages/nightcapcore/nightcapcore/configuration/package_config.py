@@ -8,7 +8,7 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-#region Imports
+# region Imports
 import copy
 import os
 from nightcapcore.printers.print import Printer
@@ -17,59 +17,60 @@ from abc import ABC
 from pathlib import Path
 from colorama import Fore, Style
 from nightcapcore.configuration.configuration import NightcapCLIConfiguration
-#endregion
+
+# endregion
+
 
 class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
     """
-        
-        This class is used for the package configuration
 
-        ...
+    This class is used for the package configuration
 
-        Attributes
-        ----------
-            pkg_information: -> dict
-                This is the package information for the selected package
+    ...
 
-            pkg_params: -> dict
-                Required parameters for the package
+    Attributes
+    ----------
+        pkg_information: -> dict
+            This is the package information for the selected package
 
-            printer: -> Printer
-                Console printer
+        pkg_params: -> dict
+            Required parameters for the package
 
-            generatePcaps: -> bool
-                If the object should generate the FileCaputre list
+        printer: -> Printer
+            Console printer
 
-        Methods 
+        generatePcaps: -> bool
+            If the object should generate the FileCaputre list
+
+    Methods
+    -------
+        Accessible
         -------
-            Accessible 
-            -------
-                show_params(self): -> None
-                    Print a list of the parameters
+            show_params(self): -> None
+                Print a list of the parameters
 
-                complete_params(self, text, line, begidx, endidx): -> list
-                    Tab auto complete for the package params
+            complete_params(self, text, line, begidx, endidx): -> list
+                Tab auto complete for the package params
 
-                help_params(self): -> None
-                    Override for the params help options
+            help_params(self): -> None
+                Override for the params help options
 
-                do_params(self,line): -> None
-                    Allows the users to set/view the params
+            do_params(self,line): -> None
+                Allows the users to set/view the params
 
-                toJson(self): -> dict
-                    Returns a json object of the object
-                
+            toJson(self): -> dict
+                Returns a json object of the object
 
-            None Accessible
-            -------
-                _get_pcaps(self): -> list
-                    Returns an empty list or a list of FileCaptures that were specified in the params
+
+        None Accessible
+        -------
+            _get_pcaps(self): -> list
+                Returns an empty list or a list of FileCaptures that were specified in the params
 
     """
-    #region Init
-    def __init__(
-        self, pkg_information: dict
-    ):
+
+    # region Init
+    def __init__(self, pkg_information: dict):
         NightcapCLIConfiguration.__init__(self)
         # NightcapCLIConfiguration.__init__(self)
         # self.config = config
@@ -77,7 +78,7 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
         self.pkg_params = []
         self.printer = Printer()
         self.generatePcaps = True
-        
+
         try:
             self.pkg_params = copy.deepcopy(
                 pkg_information["package_information"]["entry_file_optional_params"]
@@ -88,9 +89,10 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
             self.package_params = None
         # print("Generate pcap files package_conf", self.config.generatePcaps)
         # self.pcaps = self._get_pcaps() if self.config.generatePcaps == True else []
-    #endregion
 
-    #region Show Params
+    # endregion
+
+    # region Show Params
     def show_params(self):
 
         if self.project == None:
@@ -98,7 +100,6 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
         else:
             proj = Fore.LIGHTYELLOW_EX + str(self.project["project_name"])
 
-            
         self.printer.print_underlined_header("Base Parameters", leadingTab=2)
         self.printer.print_formatted_other(
             "PROJECT",
@@ -137,16 +138,17 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
                 )
         print()
 
-    #endregion
+    # endregion
 
-    #region Complete params
+    # region Complete params
     def complete_params(self, text, line, begidx, endidx):
         _ = ["isdir", "filename", "path"]
         _.extend(list(dict(self.pkg_params).keys()))
         return [i for i in _ if i.startswith(text)]
-    #endregion
 
-    #region Help params
+    # endregion
+
+    # region Help params
     def help_params(self):
         self.printer.item_2(
             "see parameters",
@@ -164,10 +166,11 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
             leadingText="",
             textColor=Fore.LIGHTGREEN_EX,
         )
-    #endregion
 
-    #region Do params
-    def do_params(self,line):
+    # endregion
+
+    # region Do params
+    def do_params(self, line):
         if len(line) == 0:
             self.show_params()
         else:
@@ -178,14 +181,18 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
                     raise Exception("Paramater Error.")
                 else:
                     if _s[0].lower() == "project":
-                        self.printer.print_error(Exception("Projects not allowed to be set this way. Please use the projects command."))
+                        self.printer.print_error(
+                            Exception(
+                                "Projects not allowed to be set this way. Please use the projects command."
+                            )
+                        )
                     else:
                         if _s[0].lower() == "isdir":
                             try:
                                 _ = None
-                                if str(_s[1]).lower() == 'true':
+                                if str(_s[1]).lower() == "true":
                                     _ = True
-                                elif str(_s[1]).lower() == 'false':
+                                elif str(_s[1]).lower() == "false":
                                     _ = False
                                 else:
                                     raise Exception("Please use either True or False")
@@ -207,9 +214,9 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
                                 self.pkg_params[_s[0]] = str(_s[1])
             except Exception as e:
                 raise e
-        #endregion
-        
-    #region Get pcaps
+        # endregion
+
+    # region Get pcaps
     def _get_pcaps(self):
         try:
             _pcapFiles = []
@@ -224,20 +231,24 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
                                 pyshark.FileCapture(os.path.join(root, name))
                             )
             else:
-                _pcapFiles.append(pyshark.FileCapture(os.path.join(self.dir, self.filename)))
+                _pcapFiles.append(
+                    pyshark.FileCapture(os.path.join(self.dir, self.filename))
+                )
             return _pcapFiles
         except Exception as e:
             self.printer.print_error(e)
             return []
-    #endregion
 
-    #region To JSON
+    # endregion
+
+    # region To JSON
     def toJson(self):
         js = {
             "project": self.project,
             "isDir": self.isDir,
             "dir": self.dir,
-            "filename": self.filename
+            "filename": self.filename,
         }
         return js
-    #endregion
+
+    # endregion

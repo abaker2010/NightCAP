@@ -34,7 +34,8 @@ class HeaderPrinter(PrinterBase):
             leadingTab=leadingTab,
             endingBreaks=endingBreaks,
             vtabs=vtabs,
-            *args,**kwargs
+            *args,
+            **kwargs
         )
 
     def print_underlined_header(
@@ -61,8 +62,9 @@ class HeaderPrinter(PrinterBase):
             leadingColor=leadingColor,
             leadingBreaks=leadingBreaks,
             leadingTab=leadingTab,
-            *args,**kwargs
-        )  
+            *args,
+            **kwargs
+        )
         self.base_print(
             text=str((underline * len(text)) + styleRest),
             endingBreaks=endingBreaks,
@@ -94,7 +96,8 @@ class HeaderPrinter(PrinterBase):
             leadingColor=leadingColor,
             leadingBreaks=leadingBreaks,
             leadingTab=leadingTab,
-            *args,**kwargs
+            *args,
+            **kwargs
         )  # , leadingBreaks=leadingBreaks, leadingTab=leadingTab, endingBreaks=endingBreaks,vtabs=vtabs,leadingColor=titleColor)
         self.base_print(
             text=str((underline * len(text)) + styleRest),

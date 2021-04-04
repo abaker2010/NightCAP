@@ -10,62 +10,65 @@ from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackages
 from nightcappackages.classes.databases.mogo.mongo_submodules import (
     MongoSubModuleDatabase,
 )
+
 # endregion
+
 
 class NightcapCLIOptionsValidator:
     """
-        This class is used to help validate user input to the console
+    This class is used to help validate user input to the console
 
-        ...
+    ...
 
-        Attributes
-        ----------
+    Attributes
+    ----------
 
-            modules_db: -> MongoModuleDatabase
-                Instance of the MongoModuleDatabase
+        modules_db: -> MongoModuleDatabase
+            Instance of the MongoModuleDatabase
 
-            submodules_db: -> MongoSubModuleDatabase
-                Instance of the MongoSubModuleDatabase
-            
-            packages_db: -> MongoPackagesDatabase
-                Instance of the MongoPackagesDatabase
+        submodules_db: -> MongoSubModuleDatabase
+            Instance of the MongoSubModuleDatabase
 
-            newSelectedList: -> list
-                New selected list that was generated based on the users input that will be used for the [<T>][<T>] in the console
+        packages_db: -> MongoPackagesDatabase
+            Instance of the MongoPackagesDatabase
 
-            isvalid: -> bool
-                Is used to help validate the users input 
+        newSelectedList: -> list
+            New selected list that was generated based on the users input that will be used for the [<T>][<T>] in the console
 
-            pkg_conf: -> dict
-                This is the selected package configuration if any
+        isvalid: -> bool
+            Is used to help validate the users input
 
-        Methods 
+        pkg_conf: -> dict
+            This is the selected package configuration if any
+
+    Methods
+    -------
+        Accessible
         -------
-            Accessible 
-            -------
-                get_package_config(self, path: list): -> dict
-                    Returns a packages configuration information
+            get_package_config(self, path: list): -> dict
+                Returns a packages configuration information
 
-            None Accessible
-            -------
-                _check_module_types(self, path: list): -> bool
-                    Returns a bool based on if the module exists or not
+        None Accessible
+        -------
+            _check_module_types(self, path: list): -> bool
+                Returns a bool based on if the module exists or not
 
-                _check_sub_module(self, path: list): -> bool
-                    Returns a bool based on if the submodule exists or not
+            _check_sub_module(self, path: list): -> bool
+                Returns a bool based on if the submodule exists or not
 
-                _check_packages(self, selected): -> bool
-                    Returns a bool based on if the package exists or not
+            _check_packages(self, selected): -> bool
+                Returns a bool based on if the package exists or not
 
-                _check_current_path(self, path: list): -> bool
-                    Returns a bool based on the current path
+            _check_current_path(self, path: list): -> bool
+                Returns a bool based on the current path
 
-                _validate(self, line: str, selected: list): -> bool
-                    Reutns a bool based on if the users input is vaild or not
-                
-            
+            _validate(self, line: str, selected: list): -> bool
+                Reutns a bool based on if the users input is vaild or not
+
+
     """
-    #region Init
+
+    # region Init
     def __init__(self, options, selectedList):
         self.modules_db = MongoModuleDatabase()
         self.submodules_db = MongoSubModuleDatabase()
@@ -73,16 +76,18 @@ class NightcapCLIOptionsValidator:
         self.newSelectedList = []
         self.isvalid = self._validate(options, selectedList)
         self.pkg_conf = None
-    #endregion
 
-    #region Package Configuration
+    # endregion
+
+    # region Package Configuration
     def get_package_config(self, path: list):
         self.pkg_conf = self.packages_db.get_package_config(path)
         # print("Found pkg config", self.pkg_conf)
         return self.pkg_conf
-    #endregion
 
-    #region Check Sub/Module/Packages Types
+    # endregion
+
+    # region Check Sub/Module/Packages Types
     def _check_module_types(self, path: list):
         return False if self.modules_db.check_module_path(path).count() == 0 else True
 
@@ -97,9 +102,10 @@ class NightcapCLIOptionsValidator:
     def _check_packages(self, selected):
         # print("Checking package")
         return self.packages_db.check_package_path(selected)
-    #endregion
 
-    #region Check Current Path
+    # endregion
+
+    # region Check Current Path
     def _check_current_path(self, path: list):
         if len(path) == 1:
             return self._check_module_types(path)
@@ -112,9 +118,10 @@ class NightcapCLIOptionsValidator:
                 & self._check_packages(path)
             )
         return False
-    #endregion
 
-    #region Validate Input
+    # endregion
+
+    # region Validate Input
     def _validate(self, line: str, selected: list):
 
         try:
@@ -222,4 +229,5 @@ class NightcapCLIOptionsValidator:
         except Exception as e:
             print("Error with options validation", e)
             return False
-    #endregion
+
+    # endregion

@@ -3,7 +3,7 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-#region Imports
+# region Imports
 from nightcappackages import *
 from nightcapcore import Printer
 from colorama import Fore, Style
@@ -12,50 +12,54 @@ from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackages
 from nightcappackages.classes.databases.mogo.mongo_submodules import (
     MongoSubModuleDatabase,
 )
-#endregion
+
+# endregion
+
 
 class NightcapOptionGenerator:
     """
-        
-        This class is used to help validate user input to the console
 
-        ...
+    This class is used to help validate user input to the console
 
-        Attributes
-        ----------
-            selectedList: -> list:
-                Used for the current path of the program
+    ...
 
-            printer: -> Printer
-                Allows access to the console printer
+    Attributes
+    ----------
+        selectedList: -> list:
+            Used for the current path of the program
+
+        printer: -> Printer
+            Allows access to the console printer
 
 
-        Methods 
+    Methods
+    -------
+        Accessible
         -------
-            Accessible 
-            -------
-                completed_options(self): -> list
-                    Tab auto complete for the options at the current path 
+            completed_options(self): -> list
+                Tab auto complete for the options at the current path
 
-                options(self, isDetailed=False): -> None
-                    This is used to select an option or to get the list of options that are available to be used
+            options(self, isDetailed=False): -> None
+                This is used to select an option or to get the list of options that are available to be used
 
-                option_help(self): -> None
-                    Override for the options help
+            option_help(self): -> None
+                Override for the options help
 
 
-            None Accessible
-            -------
+        None Accessible
+        -------
 
 
     """
-    #region Init
+
+    # region Init
     def __init__(self, selectedList):
         self.selectedList = selectedList
         self.printer = Printer()
-    #endregion
 
-    #region Tab options complete
+    # endregion
+
+    # region Tab options complete
     def completed_options(self):
         vals = []
         # print("List to use to find m/sm/p:", self.selectedList)
@@ -93,9 +97,10 @@ class NightcapOptionGenerator:
                 for v in vals:
                     _cvals.append(v)
         return _cvals
-    #endregion
 
-    #region Options
+    # endregion
+
+    # region Options
     def options(self, isDetailed=False):
 
         vals = []
@@ -163,11 +168,12 @@ class NightcapOptionGenerator:
                             _cvals.append(v)
 
         self.printer.item_1(
-            "".join(_cvals), "", leadingTab=1, leadingText='', vtabs=1, endingBreaks=1
+            "".join(_cvals), "", leadingTab=1, leadingText="", vtabs=1, endingBreaks=1
         )
-    #endregion
 
-    #region Options Help
+    # endregion
+
+    # region Options Help
     def option_help(self):
         print(
             """
@@ -179,4 +185,4 @@ class NightcapOptionGenerator:
         """
         )
 
-    #endregion
+    # endregion

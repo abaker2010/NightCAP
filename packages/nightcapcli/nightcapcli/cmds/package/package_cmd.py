@@ -3,7 +3,7 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-#region Imports
+# region Imports
 import os
 import copy
 import json
@@ -12,45 +12,48 @@ from nightcapcore.configuration.package_config import NightcapCLIPackageConfigur
 from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
 from nightcapcli.base.base_cmd import NightcapBaseCMD
 from colorama import Fore, Style
-#endregion
+
+# endregion
+
 
 class NightcapCLIPackage(NightcapCLIPackageConfiguration, NightcapBaseCMD):
     """
-        (User CLI Object)
-        
-        This class is used for the packages cli. IE: [<T>][<T>][<T>]
+    (User CLI Object)
 
-        ...
+    This class is used for the packages cli. IE: [<T>][<T>][<T>]
 
-        Attributes
-        ----------
-            ** Not including inherited attrs from NightcapCLIPackageConfiguration, NightcapBaseCMD
-            
-            db: -> MongoPackagesDatabase
-                Returns an instance of the MongoPackagesDatabase
+    ...
 
-            package_params: -> dict
-                The package parameters for the currently selected package
+    Attributes
+    ----------
+        ** Not including inherited attrs from NightcapCLIPackageConfiguration, NightcapBaseCMD
 
-        Methods 
+        db: -> MongoPackagesDatabase
+            Returns an instance of the MongoPackagesDatabase
+
+        package_params: -> dict
+            The package parameters for the currently selected package
+
+    Methods
+    -------
+        Accessible
         -------
-            Accessible 
-            -------
-                do_projects(self, line): -> None:
-                    Enters into the projects cmd
+            do_projects(self, line): -> None:
+                Enters into the projects cmd
 
-                help_run(self, line): -> None
-                    Override for the runs help command
+            help_run(self, line): -> None
+                Override for the runs help command
 
-                do_run(self, line): -> None
-                    Allows the user to run the selected package
+            do_run(self, line): -> None
+                Allows the user to run the selected package
 
-                do_update(self, line): -> None
-                    Trys to update, currently not working and looks like wrong place for the code
-            
+            do_update(self, line): -> None
+                Trys to update, currently not working and looks like wrong place for the code
+
 
     """
-    #region Init
+
+    # region Init
     def __init__(
         self,
         selectedList: list,
@@ -60,7 +63,7 @@ class NightcapCLIPackage(NightcapCLIPackageConfiguration, NightcapBaseCMD):
         NightcapCLIPackageConfiguration.__init__(self, pkg_config)
         NightcapBaseCMD.__init__(self, selectedList)
         # self.config.generatePcaps = True
-        
+
         # self._pconfig = configuration
         self.db = MongoPackagesDatabase()
 
@@ -72,9 +75,8 @@ class NightcapCLIPackage(NightcapCLIPackageConfiguration, NightcapBaseCMD):
             self.printer.print_error(e)
             self.package_params = None
 
-    #endregion
+    # endregion
 
-    
     def do_projects(self, line):
         """\n\nChange current project"""
         try:
@@ -94,7 +96,7 @@ class NightcapCLIPackage(NightcapCLIPackageConfiguration, NightcapBaseCMD):
 
     def do_run(self, line):
         print("project information:", self.config.project)
-        print("package information:", self.pkg_information,"\n")
+        print("package information:", self.pkg_information, "\n")
         try:
             force = False
             if self.config.project == None:
@@ -126,7 +128,10 @@ class NightcapCLIPackage(NightcapCLIPackageConfiguration, NightcapBaseCMD):
                     dat[1] = self.package_params
                     dat[2] = self.pkg_information
                     print("data before passing: ", dat)
-                    call = "python3.8 %s --data '%s'" % (exe_path, json.dumps(dat, default=str))
+                    call = "python3.8 %s --data '%s'" % (
+                        exe_path,
+                        json.dumps(dat, default=str),
+                    )
                     os.system(call)
                 else:
                     print("Package not selected to be used")

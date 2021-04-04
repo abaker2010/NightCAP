@@ -191,9 +191,7 @@ class NightcapCoreServerReportingBase(NighcapCoreCLIBaseConfiguration):
             + "]"
         )
         header_replacement = (
-            "["
-            + self.config.get("REPORTINGREPLACEMENTS", "header_replacement")
-            + "]"
+            "[" + self.config.get("REPORTINGREPLACEMENTS", "header_replacement") + "]"
         )
 
         template_file = NightcapPaths().generate_path(

@@ -11,10 +11,16 @@ class DebugPrinter(PrinterBase):
     def __init__(self):
         super(PrinterBase, self).__init__()
 
-
-    def debug(self, text: str = '', optionaltext: str = '', currentMode: bool = False, *args, **kwargs):
+    def debug(
+        self,
+        text: str = "",
+        optionaltext: str = "",
+        currentMode: bool = False,
+        *args,
+        **kwargs
+    ):
         # print("Text", text)
         # print("Optional",optionaltext)
         if currentMode == True:
-            self.base_print(text, optionaltext,*args, **kwargs)
+            self.base_print(text, optionaltext, *args, **kwargs)
         # self.base_print(self,text, optionaltext)

@@ -3,7 +3,7 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-#region Import
+# region Import
 import cmd
 from nightcapcli.cmds.main_cmd import NightcapMainCMD
 from nightcapcli.observer.publisher import NightcapCLIPublisher
@@ -12,21 +12,24 @@ from nightcapcli.cmds.settings import NightcapSettingsCMD
 from nightcapcli.cmds import NightcapCLIPackage
 from nightcapcli.mixins.mixin_maincmd import NightcapCLICMDMixIn
 from nightcapcore import ScreenHelper
-#endregion
+
+# endregion
+
 
 class Nightcap(NightcapCLICMDMixIn):
-    """ 
-        This object is used to create the CLI's for the users:
-            - Base
-            - Module
-            - Submodule
-
-        Init: 
-            - selected list         :  used for [<T>][<T>] options for console
-            - channelid             :  used for the (self) notifications from the observer
-            - parentid              :  used for the parent interactive notifications from the observer
-            - additionalchildren    :  used for additional page creation when a deep path is specified
     """
+    This object is used to create the CLI's for the users:
+        - Base
+        - Module
+        - Submodule
+
+    Init:
+        - selected list         :  used for [<T>][<T>] options for console
+        - channelid             :  used for the (self) notifications from the observer
+        - parentid              :  used for the parent interactive notifications from the observer
+        - additionalchildren    :  used for additional page creation when a deep path is specified
+    """
+
     def __init__(
         self,
         selected: list,
@@ -85,4 +88,6 @@ class Nightcap(NightcapCLICMDMixIn):
         else:
             pass
             # print("Message", message)
+
+
 # endregion

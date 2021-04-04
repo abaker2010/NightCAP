@@ -6,45 +6,50 @@
 # region Import
 from nightcapcore.singleton.singleton import Singleton
 from ..connections import MongoDatabaseConnection
-#endregion
+
+# endregion
+
 
 class MongoDatabaseChecker(MongoDatabaseConnection, metaclass=Singleton):
     """
-        
-        This class is used to check the Docker Continers
 
-        ...
+    This class is used to check the Docker Continers
 
-        Methods 
+    ...
+
+    Methods
+    -------
+        Accessible
         -------
-            Accessible 
-            -------
-                check_database(self): -> bool
-                    returns a boolean depending on if the docker container is running
+            check_database(self): -> bool
+                returns a boolean depending on if the docker container is running
 
-                initialize_database(self): -> None
-                    initializes the databases
+            initialize_database(self): -> None
+                initializes the databases
 
     """
-    #region Init
+
+    # region Init
     def __init__(self):
         super().__init__()
-    #endregion
 
-    #region Check Database
+    # endregion
+
+    # region Check Database
     def check_database(self):
         if self.db_name in self.client.list_database_names():
             return True
         else:
             return False
-    #endregion
 
-    #region Init Database
+    # endregion
+
+    # region Init Database
     def initialize_database(self):
         mydict = {"name": "John", "address": "Highway 37"}
         self.client[self.db_name]["holder"].insert_one(mydict)
-    #endregion
 
+    # endregion
 
     def test(self):
         print("Called testing")

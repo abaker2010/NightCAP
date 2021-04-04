@@ -3,46 +3,50 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-#region Imports
+# region Imports
 import os
 import json
 import hashlib
 from nightcapcli.base.base_cmd import NightcapBaseCMD
 from nightcapcore.configuration import NightcapCLIConfiguration
 from colorama import Fore, Style
-#endregion
+
+# endregion
+
 
 class NightcapDevOptions(NightcapBaseCMD):
     """
-        (User CLI Object)
-        
-        This class is used as a child class in the settings for developer options
+    (User CLI Object)
 
-        ...
+    This class is used as a child class in the settings for developer options
 
-        Attributes
-        ----------
-            ** Not including the ones from NightcapBaseCMD
-                selectedList: -> list
-                    The current selected console path
+    ...
 
-        Methods 
+    Attributes
+    ----------
+        ** Not including the ones from NightcapBaseCMD
+            selectedList: -> list
+                The current selected console path
+
+    Methods
+    -------
+        Accessible
         -------
-            Accessible 
-            -------
-                help_genPackageUID(self): -> None
-                    Override for the genPackageUID commands help
-            
-                do_genPackageUID(self, package_path: str): -> None
-                    this will sign the package that the user passes into the program to be used later for installation
+            help_genPackageUID(self): -> None
+                Override for the genPackageUID commands help
+
+            do_genPackageUID(self, package_path: str): -> None
+                this will sign the package that the user passes into the program to be used later for installation
 
     """
-    #region Init
+
+    # region Init
     def __init__(self, selectedList: list):
         self.selectedList = selectedList
         self.selectedList.append("dev")
         NightcapBaseCMD.__init__(self, self.selectedList)
-    #endregion
+
+    # endregion
 
     # region Do genPackageUID
     def do_genPackageUID(self, package_path: str):
@@ -71,9 +75,10 @@ class NightcapDevOptions(NightcapBaseCMD):
             print("\n\n")
         except Exception as e:
             print(e)
-    #endregion
 
-    #region Help genPackageUID
+    # endregion
+
+    # region Help genPackageUID
     def help_genPackageUID(self):
         h1 = "Generate UID for custom package:"
         h2 = "\tUsage ~ genPackageUID /path/to/package_info.json"

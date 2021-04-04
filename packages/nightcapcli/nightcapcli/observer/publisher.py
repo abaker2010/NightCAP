@@ -4,7 +4,7 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-#region Imports
+# region Imports
 from nightcapcli.observer.publisher_base import NightcapCLIPublisherBase
 from nightcappackages.classes.databases.mogo.mongo_modules import MongoModuleDatabase
 from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
@@ -13,75 +13,78 @@ from nightcappackages.classes.databases.mogo.mongo_submodules import (
 )
 from nightcapcore import Singleton
 from nightcapcore.printers.print import Printer
-#endregion
+
+# endregion
+
 
 class NightcapCLIPublisher(NightcapCLIPublisherBase, metaclass=Singleton):
     """
-        
-        This class is used as the main publisher for the program
 
-        ...
+    This class is used as the main publisher for the program
 
-        Attributes
-        ----------
-            ** Not including NightcapCLIPublisherBase
+    ...
 
-            modules_db: -> MongoModuleDatabase
-                Allows access to the MongoModuleDatabase
-                
-            submodules_db: -> MongoSubModuleDatabase
-                Allows access to the MongoSubModuleDatabase
+    Attributes
+    ----------
+        ** Not including NightcapCLIPublisherBase
 
-            packages_db: ->MongoPackagesDatabase
-                Allows access to the MongoPackagesDatabase
+        modules_db: -> MongoModuleDatabase
+            Allows access to the MongoModuleDatabase
 
-            printer: -> Printer()
-                Allows access to the Printer
+        submodules_db: -> MongoSubModuleDatabase
+            Allows access to the MongoSubModuleDatabase
 
-            selectedList: -> list
-                The current path of the program
+        packages_db: ->MongoPackagesDatabase
+            Allows access to the MongoPackagesDatabase
 
-            directions: -> dict
-                The directions that are suppose to be passed on with the message
+        printer: -> Printer()
+            Allows access to the Printer
+
+        selectedList: -> list
+            The current path of the program
+
+        directions: -> dict
+            The directions that are suppose to be passed on with the message
 
 
-        Methods 
+    Methods
+    -------
+        Accessible
         -------
-            Accessible 
-            -------
-                set_list(self, list: list = []): -> None
-                    Set a new selected list
+            set_list(self, list: list = []): -> None
+                Set a new selected list
 
-                isValid(self, options, selectedList): -> bool
-                    returns a bool based of if the selected list and option is valid
+            isValid(self, options, selectedList): -> bool
+                returns a bool based of if the selected list and option is valid
 
-                get_package_config(self, path: list): -> dict
-                    returns the package configuration
+            get_package_config(self, path: list): -> dict
+                returns the package configuration
 
-                
 
-            None Accessible
-            -------
-                _check_module_types(self, path: list): -> bool
-                    checks the module in the list to see if it exists
 
-                _check_sub_module(self, path: list): -> bool
-                    checks the submodule in the list to see if it exists
+        None Accessible
+        -------
+            _check_module_types(self, path: list): -> bool
+                checks the module in the list to see if it exists
 
-                _check_packages(self, selected): -> dict
-                    checks the package to see if it exists and if it does it returns the coniguration
+            _check_sub_module(self, path: list): -> bool
+                checks the submodule in the list to see if it exists
 
-                _check_current_path(self, path: list): -> bool
-                    checks the current path in the list to see if it exists
+            _check_packages(self, selected): -> dict
+                checks the package to see if it exists and if it does it returns the coniguration
 
-                _get_pop(self, list: list): -> int
-                    returns the pop count needed
+            _check_current_path(self, path: list): -> bool
+                checks the current path in the list to see if it exists
 
-                _validate(self, line: str, selected: list): -> bool
-                    checks to see if the users input is valid
+            _get_pop(self, list: list): -> int
+                returns the pop count needed
+
+            _validate(self, line: str, selected: list): -> bool
+                checks to see if the users input is valid
 
     """
-    #region Init
+
+    # region Init
     def __init__(self):
         NightcapCLIPublisherBase.__init__(self, ["basecli"])
 
@@ -92,31 +95,36 @@ class NightcapCLIPublisher(NightcapCLIPublisherBase, metaclass=Singleton):
         self.selectedList = []
         # ----------------------
         self.directions = {"nextstep": [], "additionalsteps": [], "remove": 0}
-    #endregion
 
-    #region Set List
+    # endregion
+
+    # region Set List
     def set_list(self, list: list = []):
         self.selectedList = list
-    #endregion
 
-    #region isValid
+    # endregion
+
+    # region isValid
     def isValid(self, options, selectedList):
         return self._validate(options, selectedList)
-    #endregion
 
-    #region Get package config
+    # endregion
+
+    # region Get package config
     def get_package_config(self, path: list):
         self.pkg_conf = self.packages_db.get_package_config(path)
         # print("Found pkg config", self.pkg_conf)
         return self.pkg_conf
-    #endregion
 
-    #region Check module tpye
+    # endregion
+
+    # region Check module tpye
     def _check_module_types(self, path: list):
         return False if self.modules_db.check_module_path(path).count() == 0 else True
-    #endregion
 
-    #region Check submodule
+    # endregion
+
+    # region Check submodule
     def _check_sub_module(self, path: list):
         # print("Checking submodule", path)
         return (
@@ -124,15 +132,17 @@ class NightcapCLIPublisher(NightcapCLIPublisherBase, metaclass=Singleton):
             if self.submodules_db.check_submodule_path(path).count() == 0
             else True
         )
-    #endregion
 
-    #region Check package
+    # endregion
+
+    # region Check package
     def _check_packages(self, selected):
         # print("Checking package")
         return self.packages_db.check_package_path(selected)
-    #endregion
 
-    #region Check current path
+    # endregion
+
+    # region Check current path
     def _check_current_path(self, path: list):
         if len(path) == 1:
             return self._check_module_types(path)
@@ -145,9 +155,10 @@ class NightcapCLIPublisher(NightcapCLIPublisherBase, metaclass=Singleton):
                 & self._check_packages(path)
             )
         return False
-    #endregion
 
-    #region Get popped object
+    # endregion
+
+    # region Get popped object
     def _get_pop(self, list: list):
         _pop = 0
 
@@ -171,9 +182,10 @@ class NightcapCLIPublisher(NightcapCLIPublisherBase, metaclass=Singleton):
             elif len(self.selectedList) == 3:
                 # print("check remove: return 3")
                 return 3
-    #endregion
 
-    #region Validate
+    # endregion
+
+    # region Validate
     def _validate(self, line: str, selected: list):
         try:
             _options = []
@@ -318,4 +330,5 @@ class NightcapCLIPublisher(NightcapCLIPublisherBase, metaclass=Singleton):
                 return False
         else:
             return False
-    #endregion
+
+    # endregion

@@ -3,7 +3,7 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-#region Imports
+# region Imports
 import os
 import sys
 from colorama.ansi import Fore, Style
@@ -16,51 +16,54 @@ from nightcappackages.classes.databases.mogo.checker.mongo_database_checker impo
     MongoDatabaseChecker,
 )
 from pymongo.errors import ServerSelectionTimeoutError
-#endregion
+
+# endregion
+
 
 class NightcapMongoHelper:
     """
-        
-        This class is used to as a helper for MongoDB
 
-        ...
+    This class is used to as a helper for MongoDB
 
-        Attributes
-        ----------
-            printer: -> Printer
-                allows us to print from the command line
+    ...
 
-            conf: -> NightcapCLIConfiguration
-                allows us to have access to the main configuration
+    Attributes
+    ----------
+        printer: -> Printer
+            allows us to print from the command line
 
-            yes: -> list
-                list of yes 'words'
+        conf: -> NightcapCLIConfiguration
+            allows us to have access to the main configuration
 
-            docker_helper: -> NightcapDockerHelper
-                allows us to talk to the MongoDB Docker Container
+        yes: -> list
+            list of yes 'words'
 
-            mongo_server: -> MongoDatabaseChecker
-                allows us to check the status of the Docker Container
+        docker_helper: -> NightcapDockerHelper
+            allows us to talk to the MongoDB Docker Container
 
-        Methods 
+        mongo_server: -> MongoDatabaseChecker
+            allows us to check the status of the Docker Container
+
+    Methods
+    -------
+        Accessible
         -------
-            Accessible 
-            -------
-                check_mongo_container(self): -> bool
-                    checks to see if the Mongo container is running
+            check_mongo_container(self): -> bool
+                checks to see if the Mongo container is running
 
-                check_mongo_dbs(self): -> None
-                    prints the status
-                
-                change_mongo_server(self, ip: str = None, port: str = None): -> None
-                    Allows us to change the mongo server configurations
+            check_mongo_dbs(self): -> None
+                prints the status
 
-            None Accessible
-            -------
-                _change_mogo_settings(self, agree): -> bool
-                    changes the mongo settings
+            change_mongo_server(self, ip: str = None, port: str = None): -> None
+                Allows us to change the mongo server configurations
+
+        None Accessible
+        -------
+            _change_mogo_settings(self, agree): -> bool
+                changes the mongo settings
     """
-    #region Init
+
+    # region Init
     def __init__(self, conf: NightcapCLIConfiguration) -> None:
         super().__init__()
         self.printer = Printer()
@@ -71,9 +74,10 @@ class NightcapMongoHelper:
             self.mongo_server = MongoDatabaseChecker()
         except:
             self.mongo_server = None
-    #endregion
 
-    #region Check Mongo Container
+    # endregion
+
+    # region Check Mongo Container
     def check_mongo_container(self):
         try:
             self.printer.print_formatted_additional(
@@ -87,9 +91,10 @@ class NightcapMongoHelper:
             # return True if self.docker_helper.get_mongo_container_status() == "running" else False
         except ServerSelectionTimeoutError as e:
             raise e
-    #endregion
 
-    #region Check Mongo DB Status
+    # endregion
+
+    # region Check Mongo DB Status
     def check_mongo_dbs(self):
         _db_exits = MongoDatabaseChecker().check_database()
         if _db_exits:
@@ -112,9 +117,10 @@ class NightcapMongoHelper:
                 os.execv(sys.argv[0], sys.argv)
             else:
                 raise KeyboardInterrupt()
-    #endregion
 
-    #region Change Mongo Server
+    # endregion
+
+    # region Change Mongo Server
     def change_mongo_server(self, ip: str = None, port: str = None):
         self.printer.print_underlined_header("Current Mongo Settings")
         self.printer.print_formatted_additional(
@@ -156,7 +162,9 @@ class NightcapMongoHelper:
                     endingBreaks=1,
                 )
 
-            self.printer.print_underlined_header_undecorated("Nighcapsite", leadingTab=2)
+            self.printer.print_underlined_header_undecorated(
+                "Nighcapsite", leadingTab=2
+            )
             if _docker_checker.ncs_exits == False:
                 self.printer.print_formatted_delete(
                     text="Container Status",
@@ -184,9 +192,7 @@ class NightcapMongoHelper:
                     endingBreaks=1,
                 )
 
-            self.printer.print_underlined_header(
-                "Error connecting to mongo server"
-            )
+            self.printer.print_underlined_header("Error connecting to mongo server")
             self.printer.print_formatted_additional(
                 text="Initialize",
                 optionaltext="I",
@@ -255,9 +261,10 @@ class NightcapMongoHelper:
                 + Style.RESET_ALL
             ).lower()
             self._change_mogo_settings(agree)
-    #endregion
 
-    #region Change Mongo Settings
+    # endregion
+
+    # region Change Mongo Settings
     def _change_mogo_settings(self, agree):
         if agree in self.yes:
             ScreenHelper().clearScr()
@@ -277,4 +284,5 @@ class NightcapMongoHelper:
             return True
 
         return False
-    #endregion
+
+    # endregion

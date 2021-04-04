@@ -3,63 +3,67 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-#region Imports
+# region Imports
 from nightcappackages.classes.databases.mogo.mongo_projects import MongoProjectsDatabase
 from nightcapcli.base.base_cmd import NightcapBaseCMD
 from colorama import Fore, Style
-#endregion
+
+# endregion
+
 
 class NightcapProjectsCMD(NightcapBaseCMD):
     """
-        (User CLI Object)
-        
-        This class is used for the projects cli. IE: [projects]
+    (User CLI Object)
 
-        ...
+    This class is used for the projects cli. IE: [projects]
 
-        Attributes
-        ----------
-            ** Not including the ones from NightcapBaseCMD
+    ...
 
-            _db: -> MongoProjectsDatabase
-                Allows the console to interacte with an instance of the MongoProjectsDatabase
-            
-            _count: -> int
-                Current count of projects
-            
+    Attributes
+    ----------
+        ** Not including the ones from NightcapBaseCMD
 
-        Methods 
+        _db: -> MongoProjectsDatabase
+            Allows the console to interacte with an instance of the MongoProjectsDatabase
+
+        _count: -> int
+            Current count of projects
+
+
+    Methods
+    -------
+        Accessible
         -------
-            Accessible 
-            -------
-                do_delete(self, line): -> None
-                    Deletes a project
+            do_delete(self, line): -> None
+                Deletes a project
 
-                do_list(self, line): -> None
-                    Prints out the current list of projects
+            do_list(self, line): -> None
+                Prints out the current list of projects
 
-                do_select(self, line): -> None
-                    Allows the user to select a project to use
+            do_select(self, line): -> None
+                Allows the user to select a project to use
 
-                do_unselect(self, line): -> None
-                    Allows the user to unselect a project
+            do_unselect(self, line): -> None
+                Allows the user to unselect a project
 
-                do_create(self, line): -> None
-                    Allows the user to create a new project
+            do_create(self, line): -> None
+                Allows the user to create a new project
 
-            None Accessible
-            -------
-                _prepare_list(self, item): -> None
-                    Creates a list of the users projects
+        None Accessible
+        -------
+            _prepare_list(self, item): -> None
+                Creates a list of the users projects
 
     """
-    #region Init
+
+    # region Init
     def __init__(self):
         NightcapBaseCMD.__init__(self, ["projects"])
         self._db = MongoProjectsDatabase()
         # self.config = conf
         self._count = 0
-    #endregion
+
+    # endregion
 
     # region Delete Project
     def do_delete(self, line):
@@ -79,9 +83,7 @@ class NightcapProjectsCMD(NightcapBaseCMD):
                             + Fore.GREEN
                         )
                     )
-                    yes_options = self.config.config["NIGHTCAPCORE"][
-                        "yes"
-                    ].split(" ")
+                    yes_options = self.config.config["NIGHTCAPCORE"]["yes"].split(" ")
                     if _confirm in yes_options:
                         self._db.delete(_puid)
 
@@ -115,9 +117,7 @@ class NightcapProjectsCMD(NightcapBaseCMD):
             except Exception as e:
                 self.printer.print_error(e)
         except ValueError as ar:
-            self.printer.print_error(
-                Exception("Please enter a project ID Numder")
-            )
+            self.printer.print_error(Exception("Please enter a project ID Numder"))
 
     # endregion
 
@@ -167,9 +167,10 @@ class NightcapProjectsCMD(NightcapBaseCMD):
                 if _selected != None:
                     self.config.project = _selected
                     self.printer.print_formatted_check(
-                        text="Selected", optionaltext=_selected["project_name"],
+                        text="Selected",
+                        optionaltext=_selected["project_name"],
                         leadingBreaks=1,
-                        endingBreaks=1
+                        endingBreaks=1,
                     )
                 else:
                     raise Exception()

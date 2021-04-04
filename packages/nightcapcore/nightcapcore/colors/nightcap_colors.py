@@ -3,25 +3,28 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-#region Imports
+# region Imports
 from colorama import Fore, Back, Style
-#endregion
+
+# endregion
+
 
 class NightcapColors:
     """
-        
-        This class is used to allow for random color selection
 
-        ...
+    This class is used to allow for random color selection
 
-        Methods 
+    ...
+
+    Methods
+    -------
+        Accessible
         -------
-            Accessible 
-            ------- 
-                randomColor(self, number: int): -> colorama color
-                    returns a random color
+            randomColor(self, number: int): -> colorama color
+                returns a random color
 
     """
+
     def __init__(self):
         return
 

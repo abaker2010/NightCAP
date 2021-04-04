@@ -9,28 +9,31 @@ from nightcappackages.classes.databases.mogo.interfaces.mongo_db_interface impor
     MongoDatabaseInterface,
 )
 from pymongo.errors import ServerSelectionTimeoutError
-#endregion
+
+# endregion
+
 
 class MongoDatabaseConnection(MongoDatabaseInterface):
     """
-        
-        This class is used as an interface to connect to the Mongo Docker Container
 
-        ...
+    This class is used as an interface to connect to the Mongo Docker Container
 
-        Attributes
-        ----------
-            ** Not including the MongoDatabaseInterface options
-            
-            conf: -> NightcapCLIConfiguration
-            ip: -> str
-            port: -> str
-            name: -> str
+    ...
 
-            _db_name: -> str
-            _uname: -> str
-            _pass: -> str
+    Attributes
+    ----------
+        ** Not including the MongoDatabaseInterface options
+
+        conf: -> NightcapCLIConfiguration
+        ip: -> str
+        port: -> str
+        name: -> str
+
+        _db_name: -> str
+        _uname: -> str
+        _pass: -> str
     """
+
     def __init__(self):
         self.conf = NightcapCLIConfiguration()
         ip = self.conf.config["MONGOSERVER"]["ip"]

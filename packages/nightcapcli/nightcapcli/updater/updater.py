@@ -3,7 +3,7 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-#region Imports
+# region Imports
 from colorama import Fore, Style
 from nightcapcore import Printer
 import requests
@@ -15,17 +15,20 @@ import tempfile
 import re
 import shutil
 from nightcappackages import *
-#endregion
+
+# endregion
+
 
 class NightcapUpdater:
     """
-        
-        This class is used update the program, allows for Dev/Main options
-        
-        Currently not going to be documenting much about this class. This is not working correctly right now
-        ...
+
+    This class is used update the program, allows for Dev/Main options
+
+    Currently not going to be documenting much about this class. This is not working correctly right now
+    ...
 
     """
+
     # region Init
     def __init__(self):
         print("Calling update for system")
@@ -101,9 +104,7 @@ class NightcapUpdater:
     def __get_update(self):
         if self.verbose:
             self.printer.item_1("Downloading Update")
-            self.printer.print_header(
-                "Progress", leadingText="[+]", endingBreaks=1
-            )
+            self.printer.print_header("Progress", leadingText="[+]", endingBreaks=1)
         if self.isMainBranch:
             resp = requests.get(
                 "https://github.com/abaker2010/NightCAP/archive/main.zip", stream=True

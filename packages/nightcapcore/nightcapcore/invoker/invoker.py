@@ -3,23 +3,23 @@ from nightcapcore.command.command import Command
 
 class Invoker:
     """
-        
-        The Invoker is associated with one or several commands. It sends a request
-            to the command
 
-        ...
+    The Invoker is associated with one or several commands. It sends a request
+        to the command
 
-        Attributes
-        ----------
+    ...
+
+    Attributes
+    ----------
 
 
-        Methods 
+    Methods
+    -------
+        Accessible
         -------
-            Accessible 
-            -------
 
-            None Accessible
-            -------
+        None Accessible
+        -------
 
     """
 
@@ -41,7 +41,6 @@ class Invoker:
 
         if isinstance(self._on_start, Command):
             self._on_start.execute()
-
 
         if isinstance(self._on_finish, Command):
             self._on_finish.execute()

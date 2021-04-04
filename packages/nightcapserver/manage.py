@@ -1,13 +1,15 @@
 #!/usr/bin/env python
-#region Imports
+# region Imports
 import os
 import sys
-#endregion
+
+# endregion
+
 
 def main():
     """
-        
-        This class is used to interact with the Django Docker container
+
+    This class is used to interact with the Django Docker container
 
     """
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "nightcapsite.settings")

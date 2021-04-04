@@ -4,7 +4,7 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-#region Imports
+# region Imports
 import os
 import sys
 import colorama
@@ -21,6 +21,7 @@ from subprocess import Popen, PIPE, STDOUT
 DEVNULL = open(os.devnull, "wb")
 try:
     import readline
+
     if "libedit" in readline.__doc__:
         readline.parse_and_bind("bind ^I rl_complete")
     else:
@@ -29,54 +30,56 @@ except ImportError:
     sys.stdout.write("No readline module found, no tab completion available.\n")
 else:
     import rlcompleter
-#endregion
+# endregion
 
-#region Entry
+# region Entry
 class Entry:
     """
-        
-        This class is used to as a wrapper for the entry process to the program
 
-        ...
+    This class is used to as a wrapper for the entry process to the program
 
-        Attributes
-        ----------
+    ...
 
-            conf: -> NightcapCLIConfiguration
-                this allows us to use the main configuration of the program
+    Attributes
+    ----------
 
-            printer: -> Printer
-                allows us to print to the command line
+        conf: -> NightcapCLIConfiguration
+            this allows us to use the main configuration of the program
 
-            yes: -> list
-                used to check against for the user agreements
+        printer: -> Printer
+            allows us to print to the command line
 
-            mongo_server = None
+        yes: -> list
+            used to check against for the user agreements
 
-            mongo_helper: -> NightcapMongoHelper
-                helps us to interact witht the MongoDB Container
+        mongo_server = None
 
-        Methods 
+        mongo_helper: -> NightcapMongoHelper
+            helps us to interact witht the MongoDB Container
+
+    Methods
+    -------
+        Accessible
         -------
-            Accessible 
-            -------
-                agreements(self): -> bool
-                    asks the user to agree to the terms of usage and conduct
+            agreements(self): -> bool
+                asks the user to agree to the terms of usage and conduct
 
-                banner(self): -> None
-                    easier to access banner
+            banner(self): -> None
+                easier to access banner
 
     """
-    #region Init
+
+    # region Init
     def __init__(self):
         self.conf = NightcapCLIConfiguration()
         self.printer = Printer()
         self.yes = self.conf.config.get("NIGHTCAPCORE", "yes").split()
         # self.mongo_server = None
         self.mongo_helper = NightcapMongoHelper(self.conf)
-    #endregion
 
-    #region Agreements
+    # endregion
+
+    # region Agreements
     def agreements(self):
         """Legal agreement the at the user must accept to use the program"""
         while not self.conf.config.getboolean("NIGHTCAPCORE", "agreement"):
@@ -96,19 +99,23 @@ class Entry:
                 self.banner()
 
         return True
-    #endregion
 
-    #region Banner
+    # endregion
+
+    # region Banner
     def banner(self):
         NightcapBanner().Banner()
-    #endregion
-#endregion
 
-#region Main
+    # endregion
+
+
+# endregion
+
+# region Main
 def main():
     """
-        
-        This class is used as the main entry to the program
+
+    This class is used as the main entry to the program
 
     """
     _printer = Printer()
@@ -170,9 +177,11 @@ def main():
         except Exception as e:
             _printer.print_error(e)
         exit()
-#endregion
 
-# region __NAME__ 
+
+# endregion
+
+# region __NAME__
 if __name__ == "__main__":
     main()
-#endregion
+# endregion

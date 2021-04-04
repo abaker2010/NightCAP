@@ -40,7 +40,8 @@ class CheckMarkPrinter(PrinterBase):
             optionalTextColor=optionalTextColor,
             textColor=textColor,
             breakTextColor=breakTextColor,
-            *args,**kwargs
+            *args,
+            **kwargs
         )
 
     def print_formatted_check(
@@ -70,7 +71,8 @@ class CheckMarkPrinter(PrinterBase):
             optionalTextColor=optionalTextColor,
             textColor=textColor,
             breakTextColor=breakTextColor,
-            *args, **kwargs
+            *args,
+            **kwargs
         )
 
     def print_formatted_additional(
@@ -100,7 +102,8 @@ class CheckMarkPrinter(PrinterBase):
             optionalTextColor=optionalTextColor,
             textColor=textColor,
             breakTextColor=breakTextColor,
-            *args, **kwargs
+            *args,
+            **kwargs
         )
 
     def print_formatted_delete(
@@ -130,5 +133,6 @@ class CheckMarkPrinter(PrinterBase):
             optionalTextColor=optionalTextColor,
             textColor=textColor,
             breakTextColor=breakTextColor,
-            *args, **kwargs
+            *args,
+            **kwargs
         )

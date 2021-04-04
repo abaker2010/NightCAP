@@ -6,32 +6,37 @@
 # region Imports
 import os
 import platform
+
 # endregion
+
 
 class ScreenHelper:
     """
-        
-        This class is used to help with screen actions
 
-        ...
+    This class is used to help with screen actions
 
-        Methods 
+    ...
+
+    Methods
+    -------
+        Accessible
         -------
-            Accessible 
-            -------
-                clearScr(self): -> None
-                    Will clear the screen visible to the user
+            clearScr(self): -> None
+                Will clear the screen visible to the user
 
     """
-    #region Init
+
+    # region Init
     def __init__(self):
         return
-    #endregion
 
-    #region Clear Screen
+    # endregion
+
+    # region Clear Screen
     def clearScr(self):
         if platform.system() == "windows":
             os.system("cls")
         else:
             os.system("clear")
-    #endregion
+
+    # endregion

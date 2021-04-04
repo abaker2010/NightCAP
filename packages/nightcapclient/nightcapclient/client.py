@@ -3,54 +3,57 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-#region Imports
+# region Imports
 import argparse
 import json
 import abc
 from abc import abstractmethod
 from nightcapcore.configuration.package_config import NightcapCLIPackageConfiguration
-#endregion
+
+# endregion
+
 
 class NightcapScanner(NightcapCLIPackageConfiguration):
     """
-        
-        This class is used to allows the Nightcap program to interact with the installed scanners
 
-        ...
+    This class is used to allows the Nightcap program to interact with the installed scanners
 
-        Attributes
-        ----------
-            ** Not including those inherited from NightcapCLIPackageConfiguration for now
+    ...
 
-            captures: -> List<FileCapture>
-                returns a list of FileCaptures for the scanner to work with
+    Attributes
+    ----------
+        ** Not including those inherited from NightcapCLIPackageConfiguration for now
 
-        Methods 
+        captures: -> List<FileCapture>
+            returns a list of FileCaptures for the scanner to work with
+
+    Methods
+    -------
+        Accessible
         -------
-            Accessible 
-            -------
-                onClose(self): -> NotImplementedError
-                    After the package is ran
+            onClose(self): -> NotImplementedError
+                After the package is ran
 
-                onIntro(self): -> NotImplementedError
-                    Intro before the client package is executed
+            onIntro(self): -> NotImplementedError
+                Intro before the client package is executed
 
-                onProcess(self): -> NotImplementedError
-                    - User Must Implement
-                    This is the code that the user is running in the package
+            onProcess(self): -> NotImplementedError
+                - User Must Implement
+                This is the code that the user is running in the package
 
-                onReport(self): -> NotImplementedError
-                    - User Must Implement
-                    This will be the way that the user generates reports
+            onReport(self): -> NotImplementedError
+                - User Must Implement
+                This will be the way that the user generates reports
 
-                onRun(self): -> None
-                    This will try and run the package 
+            onRun(self): -> None
+                This will try and run the package
 
-                run(self): -> None
-                    Allows the user to have the clean Object.run() syntax
+            run(self): -> None
+                Allows the user to have the clean Object.run() syntax
 
     """
-    #region Init
+
+    # region Init
     def __init__(self, intro: str = None):
         parser = argparse.ArgumentParser(description="Process some pcaps.")
         parser.add_argument("--data", required=True, help="list of pcap filenames")
@@ -60,7 +63,9 @@ class NightcapScanner(NightcapCLIPackageConfiguration):
         # print("Args after passing", dict(json.loads(args.data)))
 
         try:
-            NightcapCLIPackageConfiguration.__init__(self, dict(json.loads(args.data))['2'])
+            NightcapCLIPackageConfiguration.__init__(
+                self, dict(json.loads(args.data))["2"]
+            )
         except Exception as e:
             print("Error 1", e)
         print("Client generate PCAPS:", self.generatePcaps)
@@ -78,35 +83,42 @@ class NightcapScanner(NightcapCLIPackageConfiguration):
         #     print("Error 2", e)
         # print(self.pkg_config.pcaps)
         return []
-    #endregion
 
-    #region onClose
+    # endregion
+
+    # region onClose
     def onClose(self):
         """Todo when the process is done"""
         raise NotImplementedError
-    #endregion
 
-    #region onIntro
+    # endregion
+
+    # region onIntro
     def onIntro(self):
         """Intro to the program"""
-        self.printer.print_formatted_additional("Please wait while processing PCAP files...", endingBreaks=1)
-    #endregion
+        self.printer.print_formatted_additional(
+            "Please wait while processing PCAP files...", endingBreaks=1
+        )
 
-    #region onProcess
+    # endregion
+
+    # region onProcess
     @abc.abstractmethod
     def onProcess(self):
         """Process to do"""
         raise NotImplementedError
-    #endregion
 
-    #region onReport
+    # endregion
+
+    # region onReport
     @abc.abstractmethod
     def onReport(self):
         """Generate Reports"""
         raise NotImplementedError
-    #endregion
 
-    #region onRun
+    # endregion
+
+    # region onRun
     def onRun(self):
         """Run the program"""
         try:
@@ -126,9 +138,11 @@ class NightcapScanner(NightcapCLIPackageConfiguration):
         except Exception as e:
             self.printer.print_error(Exception("Error with Reporting"))
             raise e
-    #endregion
 
-    #region run
+    # endregion
+
+    # region run
     def run(self):
         self.onRun()
-    #endregion
+
+    # endregion

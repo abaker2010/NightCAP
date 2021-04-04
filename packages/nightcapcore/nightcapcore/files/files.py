@@ -3,42 +3,46 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-#region Imports
+# region Imports
 import os
 import errno
-#endregion
+
+# endregion
+
 
 class NightcapCoreFiles:
     """
-        
-        This class is used to help validate user input to the console
 
-        ...
+    This class is used to help validate user input to the console
 
-        Attributes
-        ----------
-            ppath: -> str
-                the package path
+    ...
 
-        Methods 
+    Attributes
+    ----------
+        ppath: -> str
+            the package path
+
+    Methods
+    -------
+        Accessible
         -------
-            Accessible 
-            -------
-                create_html_report(self, data): -> None
-                    Create Html reports
+            create_html_report(self, data): -> None
+                Create Html reports
 
-            None Accessible
-            -------
-                _make_dirs(self): -> None
-                    Makes the needed directories passed
+        None Accessible
+        -------
+            _make_dirs(self): -> None
+                Makes the needed directories passed
 
     """
-    #region Init
+
+    # region Init
     def __init__(self, ppath: str):
         self.ppath = ppath
-    #endregion
 
-    #region Make Dirs
+    # endregion
+
+    # region Make Dirs
     def _make_dirs(self):
         _path = os.path.dirname(self.ppath)
         try:
@@ -49,9 +53,10 @@ class NightcapCoreFiles:
                 pass
             else:
                 raise
-    #endregion
 
-    #region Generate reports
+    # endregion
+
+    # region Generate reports
     def create_html_report(self, data):
         print("Creating HTML Report at:", self.ppath)
         print("Data to be wrote", len(data))
@@ -62,7 +67,8 @@ class NightcapCoreFiles:
         with open(self.ppath, "w+") as file:
             file.write(data)
         print("File Wrote")
-    #endregion
+
+    # endregion
 
     # def mkdir_p(self, path):
     #     try:

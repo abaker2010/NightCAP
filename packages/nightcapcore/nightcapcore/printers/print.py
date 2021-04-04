@@ -13,7 +13,7 @@ from nightcapcore.printers import (
     HeaderPrinter,
     ErrorPrinter,
     CheckMarkPrinter,
-    DebugPrinter
+    DebugPrinter,
 )
 from colorama import Fore, Back, Style
 from nightcapcore.printers.subprinters.waiting import WaitingPrinter
@@ -26,7 +26,7 @@ class Printer(
     ItemPrinter,
     InputPrinter,
     WaitingPrinter,
-    DebugPrinter
+    DebugPrinter,
 ):
     def __init__(self):
         super(Printer, self).__init__()

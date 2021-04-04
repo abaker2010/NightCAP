@@ -4,20 +4,21 @@ from abc import ABC, abstractmethod
 
 class Command(ABC):
     """
-        
-        The Command interface declares a method for executing a command.
 
-        ...
+    The Command interface declares a method for executing a command.
 
-        Methods 
+    ...
+
+    Methods
+    -------
+        Accessible
         -------
-            Accessible 
-            -------
-                @abstractmethod
-                execute(self) -> None:
-                    Execute command
+            @abstractmethod
+            execute(self) -> None:
+                Execute command
 
     """
+
     @abstractmethod
     def execute(self) -> None:
         pass

@@ -12,8 +12,8 @@ class PrinterBase:
 
     def base_print(
         self,
-        text: str = '',
-        optionaltext: str = '',
+        text: str = "",
+        optionaltext: str = "",
         *args,
         leadingTab=1,
         leadingText="",
@@ -40,7 +40,6 @@ class PrinterBase:
         )
         _end = styleRest + ("\n" * endingBreaks)
         print(_start + _leading + " " + _text + _optional + _end)
-
 
     def animated_base_print(
         self,

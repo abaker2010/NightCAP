@@ -12,90 +12,96 @@ from nightcappackages.classes.databases.mogo.connections.mongo_operation_connect
 )
 from nightcappackages.classes.paths.pathsenum import NightcapPackagesPathsEnum
 from nightcappackages.classes.paths.paths import NightcapPackagesPaths
-#endregion
+
+# endregion
+
 
 class MongoPackagesDatabase(MongoDatabaseOperationsConnection, metaclass=Singleton):
     """
-        
-        This class is used to interact with the packages database
 
-        ...
+    This class is used to interact with the packages database
 
-        Attributes
-        ----------
-            _db: -> MongoClient
-                MongoClient
+    ...
 
-        Methods 
+    Attributes
+    ----------
+        _db: -> MongoClient
+            MongoClient
+
+    Methods
+    -------
+        Accessible
         -------
-            Accessible 
-            -------
-                create(self, pkg: dict): -> None
-                    Allows the users to insert an entry
+            create(self, pkg: dict): -> None
+                Allows the users to insert an entry
 
-                read(self): -> Any
-                    reads the db
+            read(self): -> Any
+                reads the db
 
-                delete(self, puid: ObjectId): -> None
-                    delete an entry
+            delete(self, puid: ObjectId): -> None
+                delete an entry
 
-                get_package_run_path(self, pkg_config: dict = None): -> str
-                    get the package run path for the system
+            get_package_run_path(self, pkg_config: dict = None): -> str
+                get the package run path for the system
 
-                check_package_path(self, path: list): -> bool
-                    check if the package exists
+            check_package_path(self, path: list): -> bool
+                check if the package exists
 
-                package_params(self, selected: list): -> None
-                    prints out the package params
+            package_params(self, selected: list): -> None
+                prints out the package params
 
-                get_package_config(self, parentmodules: list): -> dict
-                    gets the package configuration
+            get_package_config(self, parentmodules: list): -> dict
+                gets the package configuration
 
-                packages(self, parentmodules: list, isDetailed: bool = False): -> Any
-                    returns a list of packages if any
+            packages(self, parentmodules: list, isDetailed: bool = False): -> Any
+                returns a list of packages if any
 
-                find_package(self, package: dict = None): -> dict
-                    trys to find a package
+            find_package(self, package: dict = None): -> dict
+                trys to find a package
 
-                find_packages(self, module: str = None, submodule: str = None): -> dict
-                    tries to find many packages
+            find_packages(self, module: str = None, submodule: str = None): -> dict
+                tries to find many packages
 
-                install(self, package: dict = None): -> bool
-                    will try to install a new package
+            install(self, package: dict = None): -> bool
+                will try to install a new package
 
-                get_all_packages(self): -> dict
-                    returns all of the packages installed
+            get_all_packages(self): -> dict
+                returns all of the packages installed
     """
-    #region Init
+
+    # region Init
     def __init__(self):
         MongoDatabaseOperationsConnection.__init__(self)
-        self._db = self.client[self.conf.config["MONGOSERVER"]["db_name"]][
-            "packages"
-        ]
-    #endregion
+        self._db = self.client[self.conf.config["MONGOSERVER"]["db_name"]]["packages"]
 
-    #region Create
+    # endregion
+
+    # region Create
     def create(self, pkg: dict):
         self._db.insert_one(pkg)
-    #endregion
 
-    #region Read
+    # endregion
+
+    # region Read
     def read(self):
         return self._db.find()
-    #endregion
 
-    #region Update
+    # endregion
+
+    # region Update
     def update(self):
         # super().update(updatetable=updatedb.table('packages'),localtable=self.db_packages.table('packages'),checkonrow='package_information',checkonrowtwo='uid', updaterrule=NightcapCoreUpaterRules.Package)
         pass
-    #endregion
 
-    #region Delete
+    # endregion
+
+    # region Delete
     def delete(self, puid: ObjectId):
         self._db.delete_one({"_id": puid})
-    #endregion
 
-    #region Get package run path
+    # endregion
+
+    # region Get package run path
     def get_package_run_path(self, pkg_config: dict = None):
         _path = NightcapPackagesPaths().generate_path(
             NightcapPackagesPathsEnum.PackagesBase,
@@ -107,9 +113,10 @@ class MongoPackagesDatabase(MongoDatabaseOperationsConnection, metaclass=Singlet
             ],
         )
         return _path
-    #endregion
 
-    #region Check package path
+    # endregion
+
+    # region Check package path
     def check_package_path(self, path: list):
         _module = path[0]
         _submodule = path[1]
@@ -126,9 +133,10 @@ class MongoPackagesDatabase(MongoDatabaseOperationsConnection, metaclass=Singlet
             }
         )
         return False if _ == None else True
-    #endregion
 
-    #region Package params
+    # endregion
+
+    # region Package params
     def package_params(self, selected: list):
         _module = selected[0]
         _submodule = selected[1]
@@ -148,9 +156,10 @@ class MongoPackagesDatabase(MongoDatabaseOperationsConnection, metaclass=Singlet
                 ]
             }
         )
-    #endregion
 
-    #region Get package config
+    # endregion
+
+    # region Get package config
     def get_package_config(self, parentmodules: list):
         _module = parentmodules[0]
         _submodule = parentmodules[1]
@@ -166,7 +175,8 @@ class MongoPackagesDatabase(MongoDatabaseOperationsConnection, metaclass=Singlet
                 ]
             }
         )
-    #endregion
+
+    # endregion
 
     # region Get Options Packages
     def packages(self, parentmodules: list, isDetailed: bool = False):

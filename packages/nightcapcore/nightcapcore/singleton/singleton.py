@@ -5,6 +5,7 @@
 # file that should have been included as part of this package.
 from abc import ABCMeta
 
+
 class Singleton(ABCMeta):
     _instances = {}
 

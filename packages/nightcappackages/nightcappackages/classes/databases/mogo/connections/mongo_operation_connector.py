@@ -11,42 +11,45 @@ from nightcappackages.classes.databases.mogo.interfaces.mongo_db_interface impor
 )
 from nightcapcore.interface.template_interface import abstractfunc
 from pymongo.errors import ServerSelectionTimeoutError
-#endregion
+
+# endregion
+
 
 class MongoDatabaseOperationsConnection(MongoDatabaseInterface):
     """
-        
-        This class is used to define some of the MongoDatabseInterface
 
-        ...
+    This class is used to define some of the MongoDatabseInterface
 
-        Attributes
-        ----------
-            conf: -> NightcapCLIConfiguration
-            ip: -> str
-            port: -> str
-            _db_name: -> str
-            _uname: -> str
-            _pass: -> str   
+    ...
 
-         Methods 
+    Attributes
+    ----------
+        conf: -> NightcapCLIConfiguration
+        ip: -> str
+        port: -> str
+        _db_name: -> str
+        _uname: -> str
+        _pass: -> str
+
+     Methods
+    -------
+        Accessible
         -------
-            Accessible 
-            -------
 
-                create(self): -> pass
-                    Must be implemented when inherited
+            create(self): -> pass
+                Must be implemented when inherited
 
-                read(self) -> pass
-                    Must be implemented when inherited
+            read(self) -> pass
+                Must be implemented when inherited
 
-                update(self) -> pass
-                    Must be implemented when inherited
-                
-                delete(self) -> pass
-                    Must be implemented when inherited
+            update(self) -> pass
+                Must be implemented when inherited
+
+            delete(self) -> pass
+                Must be implemented when inherited
     """
-    #region Init
+
+    # region Init
     def __init__(self):
         self.conf = NightcapCLIConfiguration()
         ip = self.conf.config["MONGOSERVER"]["ip"]
@@ -68,7 +71,8 @@ class MongoDatabaseOperationsConnection(MongoDatabaseInterface):
             super().__init__(ip, port, _uname, _pass)
         except ServerSelectionTimeoutError as e:
             raise e
-    #endregion
+
+    # endregion
 
     @abstractfunc
     def create(self):

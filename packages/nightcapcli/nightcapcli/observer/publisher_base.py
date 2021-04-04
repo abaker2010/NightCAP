@@ -4,45 +4,47 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-#region Imports
+# region Imports
 from uuid import uuid4
-#endregion
+
+# endregion
 
 
 class NightcapCLIPublisherBase:
     """
-        
-        This class is used as the base publisher
 
-        ...
+    This class is used as the base publisher
 
-        Attributes
-        ----------
-            channles: -> list
-                A list of all the current channels attached to the observer
+    ...
 
-        Methods 
+    Attributes
+    ----------
+        channles: -> list
+            A list of all the current channels attached to the observer
+
+    Methods
+    -------
+        Accessible
         -------
-            Accessible 
-            -------
-                get_channel(self, channel): -> dict
-                    returns the channel information
-                
-                new_channel(self): -> uid
-                    creates a new channel
+            get_channel(self, channel): -> dict
+                returns the channel information
 
-                register(self, channel, who, callback=None, attr=None):
-                    register an object to the observer
+            new_channel(self): -> uid
+                creates a new channel
 
-                unregister(self, channel, who):
-                    unregister from the observer
+            register(self, channel, who, callback=None, attr=None):
+                register an object to the observer
 
-                del_channel(self, channel):
-                    delete a channel
+            unregister(self, channel, who):
+                unregister from the observer
 
-                dispatch(self, channel, message):
-                    send message to channel
+            del_channel(self, channel):
+                delete a channel
+
+            dispatch(self, channel, message):
+                send message to channel
     """
+
     def __init__(self, channels):
         self.channels = {channel: dict() for channel in channels}
 

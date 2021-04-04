@@ -3,44 +3,48 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-#region Imports
+# region Imports
 from nightcappackages import *
 from colorama import Fore, Style
 from nightcapcore import *
 from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
-#endregion
+
+# endregion
+
 
 class NightcapListPackages:
     """
-        
-        This class is used to print the installed packages
 
-        ...
+    This class is used to print the installed packages
 
-        Attributes
-        ----------
-            packages_db: -> MongoPackagesDatabase
-                Allows access to the MongoPackagesDatabase
+    ...
 
-            priner: -> Printer
-                Allows access to the console printer
+    Attributes
+    ----------
+        packages_db: -> MongoPackagesDatabase
+            Allows access to the MongoPackagesDatabase
+
+        priner: -> Printer
+            Allows access to the console printer
 
 
-        Methods 
+    Methods
+    -------
+        Accessible
         -------
-            Accessible 
-            -------
-                list_packages(self): -> None
-                    Prints the installed packages to the user
+            list_packages(self): -> None
+                Prints the installed packages to the user
 
     """
-    #region Init
+
+    # region Init
     def __init__(self):
         self.packages_db = MongoPackagesDatabase()
         self.priner = Printer()
-    #endregion
 
-    #region List Packages
+    # endregion
+
+    # region List Packages
     def list_packages(self):
         print("\n\t\tInstalled packages")
         print("\t\t", "-" * 20, "\n", sep="")
@@ -66,4 +70,5 @@ class NightcapListPackages:
                     sep="",
                 )
                 print(Fore.GREEN, "\t\t", p["package_information"]["details"], "\n")
-    #endregion
+
+    # endregion

@@ -44,7 +44,8 @@ class ItemPrinter(PrinterBase):
             seperator=seperator,
             breakTextColor=breakTextColor,
             styleRest=styleRest,
-            *args, **kwargs
+            *args,
+            **kwargs
         )
 
     def item_2(
@@ -79,12 +80,12 @@ class ItemPrinter(PrinterBase):
             seperator=seperator,
             breakTextColor=breakTextColor,
             styleRest=styleRest,
-            *args, **kwargs
+            *args,
+            **kwargs
         )
 
     def item_3(
         self,
-
         text="",
         optionalText="",
         *args,
@@ -116,7 +117,8 @@ class ItemPrinter(PrinterBase):
             seperator=seperator,
             breakTextColor=breakTextColor,
             styleRest=styleRest,
-            *args, **kwargs
+            *args,
+            **kwargs
         )
 
     def help(
@@ -152,5 +154,6 @@ class ItemPrinter(PrinterBase):
             seperator=seperator,
             breakTextColor=breakTextColor,
             styleRest=styleRest,
-            *args, **kwargs
+            *args,
+            **kwargs
         )

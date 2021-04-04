@@ -18,5 +18,5 @@ __all__ = [
     "InputPrinter",
     "ItemPrinter",
     "WaitingPrinter",
-    "DebugPrinter"
+    "DebugPrinter",
 ]

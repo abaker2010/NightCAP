@@ -14,7 +14,7 @@ import os
 class SomePackageName(NightcapScanner):
     def __init__(self):
         NightcapScanner.__init__(self)
-        print("Basedata", self.basedata['0'])
+        print("Basedata", self.basedata["0"])
         # self.simple_report = NightcapSimpleReport(__file__, self.basedata['0'])
 
 
