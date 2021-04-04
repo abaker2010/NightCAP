@@ -22,8 +22,63 @@ except ImportError:
 
     DEVNULL = open(os.devnull, "wb")
 
-
 class NightcapBaseCMD(cmd.Cmd):
+    """
+        This class is used as the base cmd for the program
+
+        ...
+
+        Attributes
+        ----------
+            selectedList:
+                List for the consolses [<T>][<T>]
+
+            channleID:
+                The channel for the object
+
+            config:
+                NightcapCLIConfiguration, this is the main one for the program
+
+            verbosity:
+                Verbosity for the console printing
+
+            printer:
+                Printer object for the program
+
+            mongo_helper:
+                MongoDB Helper Object
+
+        Methods
+        -------
+            emptyline(self):
+                Override to keep the enter key cleaned up
+
+            preloop(self):
+                Override for the preloop before entering into the cmd
+
+            postcmd(self, stop: bool, line: str) -> bool: 
+                Override for after the command is done but the user does not have control yet
+
+            postloop(self) -> None:
+                Override for after the cmd loop is exiting
+
+            do_exit(self, line):
+                Allows the user to exit the cmd loop
+
+            do_help(self, line):
+                Allows the user to call help
+
+            help_config(self, line):
+                Overrides configurations help command
+
+            do_config(self, line):
+                Allows the user to call the config command
+
+            do_banner(self, line):
+                Allows the user to clear the screen and recreate the banner
+    """
+
+    #region Init
     def __init__(
         self,
         selectedList: list,
@@ -59,7 +114,9 @@ class NightcapBaseCMD(cmd.Cmd):
         self.printer = Printer()
         self.mongo_helper = NightcapMongoHelper(self.config)
         self.channelID = channelid
+    #endregion 
 
+    #region CMD Overrides
     def emptyline(self):
         pass
 
@@ -73,9 +130,10 @@ class NightcapBaseCMD(cmd.Cmd):
 
     def postloop(self) -> None:
         return super().postloop()
-
+    #endregion
     #####
 
+    #region Exit
     def do_exit(self, line):
         ScreenHelper().clearScr()
         try:
@@ -89,9 +147,12 @@ class NightcapBaseCMD(cmd.Cmd):
 
     # endregion
 
+    #region Help
     def do_help(self, line):
         super(NightcapBaseCMD, self).do_help(line)
+    #endregion
 
+    #region Config
     def help_config(self):
         self.printer.help("Get the current system configuration(s)")
 
@@ -161,7 +222,10 @@ class NightcapBaseCMD(cmd.Cmd):
             optionalTextColor=Fore.YELLOW,
             endingBreaks=1,
         )
+    #endregion
 
+    #region Banner
     def do_banner(self, line):
         ScreenHelper().clearScr()
         NightcapBanner().Banner()
+    #endregion

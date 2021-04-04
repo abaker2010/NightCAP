@@ -3,20 +3,54 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
+#region Imports
 import os
 import copy
 import json
 from nightcapcli.cmds.projects.projects_cmd import NightcapProjectsCMD
-from nightcapcli.observer.publisher import NightcapCLIPublisher
-from nightcapcore.configuration.configuration import NightcapCLIConfiguration
 from nightcapcore.configuration.package_config import NightcapCLIPackageConfiguration
 from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
 from nightcapcli.base.base_cmd import NightcapBaseCMD
-
 from colorama import Fore, Style
-
+#endregion
 
 class NightcapCLIPackage(NightcapCLIPackageConfiguration, NightcapBaseCMD):
+    """
+        (User CLI Object)
+        
+        This class is used for the packages cli. IE: [<T>][<T>][<T>]
+
+        ...
+
+        Attributes
+        ----------
+            ** Not including inherited attrs from NightcapCLIPackageConfiguration, NightcapBaseCMD
+            
+            db: -> MongoPackagesDatabase
+                Returns an instance of the MongoPackagesDatabase
+
+            package_params: -> dict
+                The package parameters for the currently selected package
+
+        Methods 
+        -------
+            Accessible 
+            -------
+                do_projects(self, line): -> None:
+                    Enters into the projects cmd
+
+                help_run(self, line): -> None
+                    Override for the runs help command
+
+                do_run(self, line): -> None
+                    Allows the user to run the selected package
+
+                do_update(self, line): -> None
+                    Trys to update, currently not working and looks like wrong place for the code
+            
+
+    """
+    #region Init
     def __init__(
         self,
         selectedList: list,
@@ -38,8 +72,9 @@ class NightcapCLIPackage(NightcapCLIPackageConfiguration, NightcapBaseCMD):
             self.printer.print_error(e)
             self.package_params = None
 
-    # def __del__(self):
+    #endregion
 
+    
     def do_projects(self, line):
         """\n\nChange current project"""
         try:

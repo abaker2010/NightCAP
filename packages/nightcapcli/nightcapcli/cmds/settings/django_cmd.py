@@ -3,12 +3,19 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
+#region Imports
 from nightcapcli.cmds.cmd_shared.network_config_cmd import (
     NightcapMongoNetworkSettingsCMD,
 )
 from nightcapcore import *
-
+#endregion
 
 class NightcapDjangoSettingsCMD(NightcapMongoNetworkSettingsCMD):
+    """
+        (User CLI Object)
+        
+        This class is used as a wrapper for the network settings object but to be specified for the Django Settings 
+
+    """
     def __init__(self):
         NightcapMongoNetworkSettingsCMD.__init__(self, "web")

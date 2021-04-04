@@ -1,11 +1,15 @@
 #!/usr/bin/env python
-"""Django's command-line utility for administrative tasks."""
+#region Imports
 import os
 import sys
-
+#endregion
 
 def main():
-    """Run administrative tasks."""
+    """
+        
+        This class is used to interact with the Django Docker container
+
+    """
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "nightcapsite.settings")
     try:
         from django.core.management import execute_from_command_line

@@ -3,29 +3,57 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-# region imports
+#region Imports
 from random import randint
 from art import *
-from colorama import Style, Fore
+from colorama import Style
 from nightcapcore import NightcapCLIConfiguration
-
-# from application.classes.colors.nightcap_colors import NightcapColors
-from nightcapserver import NighcapCoreSimpleServer
 from nightcapcore.colors import NightcapColors
 
-# endregion
-
+#endregion
 
 class NightcapBanner(NightcapCLIConfiguration):
+    """
+        
+        This class is used create the banner for the cli
+
+        ...
+
+        Attributes
+        ----------
+            build_version: -> str
+                build version of the program
+
+            build_number: -> str
+                build number of the program
+            
+        Methods 
+        -------
+            Accessible 
+            -------
+                Banner(self, rand: bool = True): -> None
+                    Prints the banner to the console
+
+            None Accessible
+            -------
+                _randomColor(self): -> const
+                    returns a colorama color
+
+    """
+    #region Init
     def __init__(self):
         NightcapCLIConfiguration.__init__(self)
         self.build_version = self.config["BUILD_DATA"]["version"]
         self.build_number = self.config["BUILD_DATA"]["build"]
+    #endregion
 
+    #region Random Color
     def _randomColor(self):
         random = randint(0, 11)
         return NightcapColors().randomColor(random)
+    #endregion
 
+    #region Banner
     def Banner(self, rand: bool = True):
         rcolor = None
         rcolor2 = self._randomColor()
@@ -57,3 +85,4 @@ class NightcapBanner(NightcapCLIConfiguration):
             pass
         print("\t", "=" * 100, Style.RESET_ALL)
         return
+    #endregion

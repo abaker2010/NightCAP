@@ -3,7 +3,7 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-
+#region Imports
 from pathlib import Path
 import subprocess
 from subprocess import Popen, PIPE, STDOUT
@@ -19,18 +19,110 @@ from nightcapcore.printers.print import Printer
 from nightcappackages.classes.databases.mogo.checker.mongo_database_checker import (
     MongoDatabaseChecker,
 )
-
 DEVNULL = open(os.devnull, "wb")
-
+#endregion
 
 class NightcapDockerHelper(object):
+    """
+        
+        This class is used as the main Docker helper
+
+        ...
+
+        Attributes
+        ----------
+            printer: -> Printer
+                allows us to print from the command line
+
+            conf: -> NightcapCLIConfiguration
+                allows us to have access to the main configuration
+
+            yes: -> list
+                list of yes 'words'
+
+            docker_helper: -> NightcapDockerHelper
+                allows us to talk to the Docker containers
+
+            mongo_server: -> MongoDatabaseChecker
+                allows us to check the status of the Docker Container
+
+        Methods 
+        -------
+            Accessible 
+            -------
+                prepare_containers(self): -> bool
+                    prepares the Docker containers
+
+                restart_containers(self): -> None
+                    restart the containers
+
+                init_containers(self, agreement: str, dc: NightcapCoreDockerChecker): -> bool
+                    initilize the containers
+
+                init_nc_site(self, dc: NightcapCoreDockerChecker): -> None
+                    init for Nightcap Site
+
+                stop_all_containers(self): -> bool
+                    stops all containers
+
+                stop_nightcapsite(self): -> None
+                    stop the nc site container
+
+                stop_mongodb(self): -> None
+                    stop the mongodb container
+
+                stop_container_by_name(self, name: str): -> None
+                    stops a container by its name
+
+                start_all_containers(self): -> None
+                    start all containers
+
+                start_mongodb(self): -> None
+                    start monogdb container
+
+                start_nighcap_site(self): -> None 
+                    start nightcap site conatiner
+
+                start_container_by_name(self, name: str): -> bool
+                    start container by name
+
+                get_mongo_container_status(self): -> str
+                    gets status of mongodb container
+
+                get_site_container_status(self): -> str
+                    gets the status of the nightcap site conatiner
+
+                mongo_continer_exists(self): -> bool
+                    checks to see if the mongo container exists
+
+                site_container_exists(self): -> bool
+                    checks to see if the nightcap site container exists
+                
+                container_exists(self, name: str): -> bool
+                    checks to see if any container exists
+
+                get_container_status_by_name(self, name: str): -> str
+                    gets the container status by the name of the container
+
+                build_containers(self): -> None
+                    builds the needed containers
+
+                make_docker(self): -> None
+                    makes the nightcap site docker
+
+                init_mongo(self, dc: NightcapCoreDockerChecker): -> bool 
+                    init for the mongo database
+    """
+    #region Init
     def __init__(self, config: NightcapCLIConfiguration) -> None:
         super().__init__()
         self.conf = config
         self.yes = self.conf.config.get("NIGHTCAPCORE", "yes").split()
         self.printer = Printer()
         self.docker = dDocker.from_env()
+    #endregion
 
+    #region Prepare Containers
     def prepare_containers(self):
         try:
             self.start_container_by_name("nightcapmongodb")
@@ -39,11 +131,15 @@ class NightcapDockerHelper(object):
             return True
         except Exception as e:
             raise e
+    #endregion
 
+    #region Restart Containers
     def restart_containers(self):
         self.stop_all_containers()
         self.start_all_containers()
+    #endregion
 
+    #region Init Containers
     def init_containers(self, agreement: str, dc: NightcapCoreDockerChecker):
         try:
             if agreement in self.yes:
@@ -54,27 +150,37 @@ class NightcapDockerHelper(object):
             return True
         except Exception as e:
             raise e
+    #endregion
 
+    #region NC Site Init
     def init_nc_site(self, dc: NightcapCoreDockerChecker):
         if dc.ncs_exits == False:
             self.printer.print_underlined_header(
                 "Initializing: (NC Site)", endingBreaks=1
             )
             self.make_docker()
+    #endregion
 
+    #region Stop all containers
     def stop_all_containers(self):
         self.printer.print_underlined_header_undecorated("Stopping Docker Containers")
         self.stop_mongodb()
         self.stop_nightcapsite()
         print("")
         return True
+    #endregion
 
+    #region Stop Nightcap Site
     def stop_nightcapsite(self):
         self.stop_container_by_name("nightcapsite")
+    #endregion
 
+    #region Stop MongoDB Container
     def stop_mongodb(self):
         self.stop_container_by_name("nightcapmongodb")
+    #endregion
 
+    #region Stop Container By Name
     def stop_container_by_name(self, name: str):
         try:
             # for _container in self.docker.containers.list(all=True):
@@ -94,17 +200,25 @@ class NightcapDockerHelper(object):
             #     time.sleep(1)
         except Exception as e:
             raise e
+    #endregion
 
+    #region start All Containers
     def start_all_containers(self):
         self.start_mongodb()
         self.start_nighcap_site()
+    #endregion
 
+    #region Start MongoDB
     def start_mongodb(self):
         self.start_container_by_name("nightcapmongodb")
+    #endregion
 
+    #region Start NC Container
     def start_nighcap_site(self):
         self.start_container_by_name("nightcapsite")
+    #endregion
 
+    #region Start Container By Name
     def start_container_by_name(self, name: str):
         # print("Containers")
         # print(self.docker.containers.list(all=True))
@@ -136,19 +250,29 @@ class NightcapDockerHelper(object):
             #     time.sleep(1)
         except Exception as e:
             raise e
+    #endregion
 
+    #region Get Mongo Container Status
     def get_mongo_container_status(self):
         return self.get_container_status_by_name("nightcapmongodb")
+    #endregion
 
+    #region Get Nightcap Site Container Status
     def get_site_container_status(self):
         return self.get_container_status_by_name("nightcapsite")
+    #endregion
 
+    #region Mongo Container Exists
     def mongo_continer_exists(self):
         return self.container_exists("nightcapmongodb")
+    #endregion
 
+    #region Nightcap Site Contatiner Exists
     def site_container_exists(self):
         return self.container_exists("nightcapsite")
+    #endregion
 
+    #region Container Exists
     def container_exists(self, name: str):
         try:
             for _container in self.docker.containers.list(all=True):
@@ -157,7 +281,9 @@ class NightcapDockerHelper(object):
             return False
         except Exception as e:
             raise e
+    #endregion
 
+    #region Get Container Status By Name
     def get_container_status_by_name(self, name: str):
         try:
             for _container in self.docker.containers.list(all=True):
@@ -166,7 +292,9 @@ class NightcapDockerHelper(object):
             return _container.attrs["State"]["Status"]
         except Exception as e:
             return "Missing"
+    #endregion
 
+    #region Build Containers
     def build_containers(self):
         try:
             self.printer.print_formatted_additional(text="Creating Docker Containers")
@@ -180,7 +308,9 @@ class NightcapDockerHelper(object):
             self.printer.print_formatted_check(text="Created Containers")
         except Exception as e:
             raise e
+    #endregion
 
+    #region Make Docker
     def make_docker(self):
         ScreenHelper().clearScr()
         self.printer.print_underlined_header_undecorated("Making docker image", endingBreaks=1)
@@ -191,7 +321,9 @@ class NightcapDockerHelper(object):
             time.sleep(1)
 
         print("returncode", p.returncode)
+    #endregion
 
+    #region Init Mongo
     def init_mongo(self, dc: NightcapCoreDockerChecker):
         if dc.mongo_im_exists == False:
             ScreenHelper().clearScr()
@@ -212,3 +344,4 @@ class NightcapDockerHelper(object):
                     text="Error with installing docker mongo image"
                 )
                 raise e
+    #endregion

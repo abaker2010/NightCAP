@@ -3,6 +3,7 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
+#region Imports
 import os
 import sys
 from nightcapcli.cmds.cmd_shared.network_config_cmd import (
@@ -19,17 +20,83 @@ from nightcappackages.classes.helpers.package_uninstaller import (
     NightcapPackageUninstallerCommand,
 )
 from nightcapcore import *
-from colorama import Fore, Style
-
+#endregion
 
 class NightcapSettingsCMD(NightcapBaseCMD):
+    """
+        (User CLI Object)
+        
+        This class is used as the cli for the user settings
+
+        ...
+
+        Attributes
+        ----------
+
+
+        Methods 
+        -------
+            Accessible 
+            -------
+
+                help_devoptions(self): -> None
+                    Override for the devoptions help command
+
+                do_devoptions(self, line): -> None
+                    Allows the user to enter into the devoptions cmd
+
+                help_install(self): -> None  
+                    Override for the install help command
+
+                do_install(self, line): -> None         
+                    Allows the user to install new packages
+
+                help_list(self): -> None
+                    Override for the list help command
+
+                do_list(self, line): -> None
+                    Lists all of the packages installed 
+
+                help_uninstall(self): -> None
+                    Override for the uninstall help command
+
+                do_uninstall(self, line): -> None
+                    Uninstall a package based on the path passed in
+
+                help_update(self): -> None
+                    Override for the update help command
+
+                do_update(self, line): -> None
+                    Allows the user to update the program Dev/Main
+
+                complete_server(self, text, line, begidx, endidx): -> None
+                    Tab auto compelete options for the server command
+
+                help_server(self): -> None
+                    Override for the server help command
+
+                do_server(self, line): -> None
+                    Allows the user to enter into the server cmd 
+
+                complete_verbosity(self, text, line, begidx, endidx): -> None
+                    Tab auto complete options for the verbosity command
+
+                help_verbosity(self): -> None
+                    Override for the verbose help command
+
+                do_verbosity(self, line): -> None
+                    Allows the user to change the verbostiy of the output shown in the console
+
+    """
+    #region Init
     def __init__(self):
         NightcapBaseCMD.__init__(self, ["settings"])
+    #endregion
 
+    #region Dev Options
     def help_devoptions(self):
         self.printer.help("Developer Options")
 
-    # region
     def do_devoptions(self, line):
         NightcapDevOptions(self.selectedList).cmdloop()
 
@@ -121,8 +188,8 @@ class NightcapSettingsCMD(NightcapBaseCMD):
             print("Exception:", e)
 
     # endregion
-
-    
+  
+    #region Verbosity
     def complete_verbosity(self, text, line, begidx, endidx):
         return [i for i in ("normal", "debug") if i.startswith(text)]
 
@@ -152,15 +219,15 @@ class NightcapSettingsCMD(NightcapBaseCMD):
         except Exception as e:
             self.printer.print_error(e)
             
-
+    #endregion
 
     # region Server config section
+    def complete_server(self, text, line, begidx, endidx):
+        return [i for i in ("web", "database") if i.startswith(text)]
+
     def help_server(self):
         self.printer.help("Configure a server")
         self.printer.help("Usage: server <web|database>")
-
-    def complete_server(self, text, line, begidx, endidx):
-        return [i for i in ("web", "database") if i.startswith(text)]
 
     def do_server(self, line):
         try:

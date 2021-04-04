@@ -4,10 +4,45 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
+#region Imports
 from uuid import uuid4
+#endregion
 
 
 class NightcapCLIPublisherBase:
+    """
+        
+        This class is used as the base publisher
+
+        ...
+
+        Attributes
+        ----------
+            channles: -> list
+                A list of all the current channels attached to the observer
+
+        Methods 
+        -------
+            Accessible 
+            -------
+                get_channel(self, channel): -> dict
+                    returns the channel information
+                
+                new_channel(self): -> uid
+                    creates a new channel
+
+                register(self, channel, who, callback=None, attr=None):
+                    register an object to the observer
+
+                unregister(self, channel, who):
+                    unregister from the observer
+
+                del_channel(self, channel):
+                    delete a channel
+
+                dispatch(self, channel, message):
+                    send message to channel
+    """
     def __init__(self, channels):
         self.channels = {channel: dict() for channel in channels}
 

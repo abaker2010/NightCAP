@@ -3,20 +3,63 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
+#region Imports
 from nightcappackages.classes.databases.mogo.mongo_projects import MongoProjectsDatabase
-from tinydb.database import TinyDB
-from nightcapcore import NightcapCLIConfiguration, ScreenHelper
 from nightcapcli.base.base_cmd import NightcapBaseCMD
 from colorama import Fore, Style
-import shutil
-
+#endregion
 
 class NightcapProjectsCMD(NightcapBaseCMD):
+    """
+        (User CLI Object)
+        
+        This class is used for the projects cli. IE: [projects]
+
+        ...
+
+        Attributes
+        ----------
+            ** Not including the ones from NightcapBaseCMD
+
+            _db: -> MongoProjectsDatabase
+                Allows the console to interacte with an instance of the MongoProjectsDatabase
+            
+            _count: -> int
+                Current count of projects
+            
+
+        Methods 
+        -------
+            Accessible 
+            -------
+                do_delete(self, line): -> None
+                    Deletes a project
+
+                do_list(self, line): -> None
+                    Prints out the current list of projects
+
+                do_select(self, line): -> None
+                    Allows the user to select a project to use
+
+                do_unselect(self, line): -> None
+                    Allows the user to unselect a project
+
+                do_create(self, line): -> None
+                    Allows the user to create a new project
+
+            None Accessible
+            -------
+                _prepare_list(self, item): -> None
+                    Creates a list of the users projects
+
+    """
+    #region Init
     def __init__(self):
         NightcapBaseCMD.__init__(self, ["projects"])
         self._db = MongoProjectsDatabase()
         # self.config = conf
         self._count = 0
+    #endregion
 
     # region Delete Project
     def do_delete(self, line):
@@ -166,8 +209,8 @@ class NightcapProjectsCMD(NightcapBaseCMD):
 
     # endregion
 
-    def update(self, updatedb: TinyDB):
-        print("\t", "updating db: projects_db.json")
-        print("\t", "updater tables:", updatedb.tables())
-        # print("\t","user tables:", self.projects_db.table())
-        # self.projects_db.update(updatedb)
+    # def update(self, updatedb: TinyDB):
+    #     print("\t", "updating db: projects_db.json")
+    #     print("\t", "updater tables:", updatedb.tables())
+    #     # print("\t","user tables:", self.projects_db.table())
+    #     # self.projects_db.update(updatedb)

@@ -7,6 +7,7 @@ from colorama import Fore, Style
 
 
 class Legal:
+    """ Handles the legal header """
     def termsAndConditions(self):
         print(Fore.LIGHTYELLOW_EX + "\n\tI shall not use nightcap to:")
         print("\t-----------------------------\n")

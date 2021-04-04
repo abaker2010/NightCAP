@@ -3,15 +3,10 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-# from application.classes.helpers.printers.subprinters.errors import ErrorPrinter
-# from application.classes.helpers.printers.print import Printer
+#region Imports
 from colorama import Fore, Style
 from nightcapcore import Printer
-
-# from nightcappackages import NightcapPackages
-from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
 import requests
-from tinydb.database import TinyDB
 from tqdm.auto import tqdm
 from zipfile import ZipFile
 import os
@@ -20,9 +15,17 @@ import tempfile
 import re
 import shutil
 from nightcappackages import *
-
+#endregion
 
 class NightcapUpdater:
+    """
+        
+        This class is used update the program, allows for Dev/Main options
+        
+        Currently not going to be documenting much about this class. This is not working correctly right now
+        ...
+
+    """
     # region Init
     def __init__(self):
         print("Calling update for system")

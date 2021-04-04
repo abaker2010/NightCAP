@@ -3,6 +3,7 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
+#region Imports
 import json
 import os
 from nightcappackages.classes.databases.mogo.mongo_modules import MongoModuleDatabase
@@ -21,20 +22,61 @@ import subprocess
 import pkg_resources
 import shutil
 import errno
+#endregion
 
 
 class NightcapPackageInstallerCommand(Command):
     """
-    Some commands can implement simple operations on their own.
-    """
+        
+        This class is used to install packages
 
+        ...
+
+        Attributes
+        ----------
+            _package_paths: -> NightcapPackagesPaths
+                used for package installation path
+
+            _db: -> MongoPackagesDatabase
+                for an instance to the MongoDB database
+
+            _printer: -> Printer
+                allows us to print to the console
+
+            _package: -> dict
+                the package information that will be used to be installed
+            
+
+        Methods 
+        -------
+            Accessible 
+            -------
+                execute(self) -> None:
+                    executes the installer
+
+                
+
+            None Accessible
+            -------
+                _copy(self, pkt: dict, src: str): -> None
+                    copies data to the the needed locations
+
+                _imports(self, package: dict = None): -> bool
+                    gets needed imports for the programs
+
+                _install_import(self, imprt: dict = None, reinstall: bool = False): -> bool
+                    installs the collected imports
+    """
+    #region Init
     def __init__(self, package_path: str) -> None:
         self._package_paths = NightcapPackagesPaths()
         self._db = MongoPackagesDatabase()
         self.printer = Printer()
         self._package = None
         self._package_path = package_path
+    #endregion
 
+    #region Execute
     def execute(self) -> None:
         try:
             with open(
@@ -73,7 +115,7 @@ class NightcapPackageInstallerCommand(Command):
         except Exception as e:
             raise e
 
-        # region Checking for package in db
+        
         _imports = self._imports(self._package)
         if _imports:
             if self._db.install(self._package):
@@ -83,7 +125,9 @@ class NightcapPackageInstallerCommand(Command):
                 )
             else:
                 self.printer.print_formatted_delete(text="Could not copy files")
+    #endregion
 
+    #region Copy
     def _copy(self, pkt: dict, src: str):
         _path = self._package_paths.generate_path(
             NightcapPackagesPathsEnum.PackagesBase,
@@ -103,6 +147,7 @@ class NightcapPackageInstallerCommand(Command):
                 self.printer.print_formatted_delete(
                     text="Package not copied. Error: %s" % str(e)
                 )
+    #endregion
 
     # region Collect Imports
     def _imports(self, package: dict = None):

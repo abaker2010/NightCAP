@@ -3,6 +3,7 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
+#region Imports
 from colorama import Fore
 from nightcapcore import Printer
 from nightcappackages.classes.databases.mogo.mongo_modules import MongoModuleDatabase
@@ -17,16 +18,54 @@ from nightcappackages.classes.paths import (
 from bson.objectid import ObjectId
 from nightcapcore import *
 import shutil
-
+#endregion
 
 class NightcapPackageUninstallerCommand(Command):
+    """
+        
+        This class is used to uninstall packages
+
+        ...
+
+        Attributes
+        ----------
+            printer: -> Printer
+                allows us to print to the console
+
+            __package_paths: -> NightcapPackagesPaths
+                the package installation path
+
+            _db: -> MongoPackagesDatabase
+                allows us to remove the entry for the package from the database
+
+        Methods 
+        -------
+            Accessible 
+            -------
+                execute(self): -> None
+                    run uninstall commands
+
+
+
+            None Accessible
+            -------
+                _confim_delete(self, package_path: str): -> None
+                    Confirms deletion
+
+                _delete(self, pkt: dict): -> None
+                    tries to uninstalls the package
+
+    """
+    #region Init
     def __init__(self, package_path: str) -> None:
         self.printer = Printer()
         self.__package_paths = NightcapPackagesPaths()
         self._package_path = package_path
         self._db = MongoPackagesDatabase()
         self._ex = self._db.check_package_path(package_path.split("/"))
+    #endregion
 
+    #region Execute
     def execute(self) -> None:
         try:
             split_package_path = self._package_path.split("/")
@@ -90,12 +129,16 @@ class NightcapPackageUninstallerCommand(Command):
 
         except Exception as e:
             raise Exception("Package not found")
+    #endregion
 
+    #region Confirm Delete
     def _confim_delete(self, package_path: str):
         return self.printer.input(
             "Are you sure you want to uninstall? [y/n]: ", questionColor=Fore.RED
         )
+    #endregion
 
+    #region Delete
     def _delete(self, pkt: dict):
         _path = self.__package_paths.generate_path(
             NightcapPackagesPathsEnum.PackagesBase,
@@ -113,3 +156,4 @@ class NightcapPackageUninstallerCommand(Command):
             self.printer.print_error(
                 Exception("Error: %s - %s." % (e.filename, e.strerror))
             )
+    #endregion

@@ -3,16 +3,28 @@ from nightcapcore.command.command import Command
 
 class Invoker:
     """
-    The Invoker is associated with one or several commands. It sends a request
-    to the command.
+        
+        The Invoker is associated with one or several commands. It sends a request
+            to the command
+
+        ...
+
+        Attributes
+        ----------
+
+
+        Methods 
+        -------
+            Accessible 
+            -------
+
+            None Accessible
+            -------
+
     """
 
     _on_start = None
     _on_finish = None
-
-    """
-    Initialize commands.
-    """
 
     def set_on_start(self, command: Command):
         self._on_start = command
@@ -27,12 +39,9 @@ class Invoker:
         command.
         """
 
-        # print("Invoker: Does anybody want something done before I begin?")
         if isinstance(self._on_start, Command):
             self._on_start.execute()
 
-        # print("Invoker: ...doing something really important...")
 
-        # print("Invoker: Does anybody want something done after I finish?")
         if isinstance(self._on_finish, Command):
             self._on_finish.execute()

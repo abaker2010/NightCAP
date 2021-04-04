@@ -3,15 +3,23 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
+#region Imports
 from abc import ABC
+#endregion
 
-
+#regin Abstract Function Definition
 def abstractfunc(func):
     func.__isabstract__ = True
     return func
+#endregion
 
 
 class Interface(type):
+    """
+        
+        This class is used as a template interface using ABC
+
+    """
     def __init__(self, name, bases, namespace):
         for base in bases:
             must_implement = getattr(base, "abstract_methods", [])

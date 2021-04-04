@@ -3,12 +3,56 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
+#region Imports
 from nightcapcli.base.base_cmd import NightcapBaseCMD
 from nightcapcore import *
 from colorama import Fore
-
+#endregion
 
 class NightcapMongoNetworkSettingsCMD(NightcapBaseCMD):
+    """
+        (User CLI Object)
+        
+        This class is used to control the Mongo Network Settings (This is a child cmd)
+
+        ...
+
+        Attributes
+        ----------
+            network: -> str
+                Mainly used for the init of the NightcapBaseCMD which creates the needed view for the users display
+
+            Other attrs that are inherited from the NightcapBaseCMD class
+
+        Methods 
+        -------
+            Accessible 
+            ------- 
+                help_config(self): -> None
+                    Override for the configurations help option
+
+                do_config(self, line): -> None
+                    Allows the user to set configurations for the Mongo Network Configurations
+
+                help_ip(self):
+                    Override for the ips help command
+
+                do_ip(self, line):
+                    Allows the user to set a new IP addres. ip <addr>
+
+                help_port(self):
+                    Override for the ports help command
+
+                do_port(self, line):
+                    Allows the user to set a new Port. port <port>
+
+            None Accessible
+            -------
+                _isvalidIPAddress(self, IP): -> bool
+                    Returns a bool based on if the input was an IP address or not   
+
+    """
+    #region Init
     def __init__(self, networkopt: str):
         self.network = ""
         if networkopt.lower() == "database":
@@ -21,7 +65,9 @@ class NightcapMongoNetworkSettingsCMD(NightcapBaseCMD):
             self.network = "REPORTINGSERVER"
         else:
             raise Exception("Invalid option: Please use web or database")
+    #endregion
 
+    #region Config
     def help_config(self):
         self.printer.help("Shows current configuration")
 
@@ -40,7 +86,9 @@ class NightcapMongoNetworkSettingsCMD(NightcapBaseCMD):
             leadingTab=2,
             optionalTextColor=Fore.MAGENTA,
         )
+    #endregion
 
+    #region Is IP Valid
     def _isvalidIPAddress(self, IP):
         """
         :type IP: str
@@ -66,7 +114,9 @@ class NightcapMongoNetworkSettingsCMD(NightcapBaseCMD):
         if IP.count(":") == 7 and all(isIPv6(i) for i in IP.split(":")):
             return True
         return False
+    #endregion
 
+    #region IP
     def help_ip(self):
         self.printer.help("Sets a new IP Address", "ip [IP Address]")
 
@@ -89,6 +139,9 @@ class NightcapMongoNetworkSettingsCMD(NightcapBaseCMD):
         except Exception as e:
             self.printer.print_error(e)
 
+    #endregion
+
+    #region Port
     def help_port(self):
         self.printer.help("Sets a new Port Number", "port [1-65535]")
 
@@ -108,3 +161,4 @@ class NightcapMongoNetworkSettingsCMD(NightcapBaseCMD):
                     % line
                 )
             )
+    #endregion
