@@ -3,24 +3,37 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-# from nightcapcore import NightcapSimpleReport, NightcapCore
 from nightcapclient import NightcapScanner
 from nightcapcore import *
 import os
-
-# from nightcapcore.report.widgets.header import NightcapSimpleReportHeader
-
+#endregion
 
 class SomePackageName(NightcapScanner):
     def __init__(self):
+        # super(NightcapScanner, self).__init__()
         NightcapScanner.__init__(self)
-        print("Basedata", self.basedata["0"])
         # self.simple_report = NightcapSimpleReport(__file__, self.basedata['0'])
 
 
+    def onProcess(self):
+        print("Processing Pcap files from abstract method")
+        # print("Count of files passed:", len(self.p))
+        for cpt in self.get_pcaps(display_filter='udp'):
+            _ = 0
+            for pkg in cpt:
+                _ += 1
+            print("Capture length: ", str(_))
+
+    def onReport(self):
+        print("Generating Reports")
+
+
 def main():
-    print("\n", "\t[-] Able to run from module")
     ncore = SomePackageName()
+    try:
+        
+        ncore.printer.print_underlined_header("Protocol Overview")
+        ncore.run()
 
     # ncore.simple_report.name = "Test Report"
     # custom_style = str(os.path.dirname(__file__)) + '/src/style.css'
@@ -55,7 +68,9 @@ def main():
     # ncore.simple_report.print_report()
 
     # ncore.simple_report.save()
-
+    except Exception as e:
+        ncore.printer.print_error(e)
+        print(e)
 
 if __name__ == "__main__":
     try:

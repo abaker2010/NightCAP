@@ -9,7 +9,6 @@ import json
 import abc
 from abc import abstractmethod
 from nightcapcore.configuration.package_config import NightcapCLIPackageConfiguration
-
 # endregion
 
 
@@ -70,7 +69,7 @@ class NightcapScanner(NightcapCLIPackageConfiguration):
             print("Error 1", e)
         print("Client generate PCAPS:", self.generatePcaps)
 
-        self.captures = self._get_pcaps()
+        # self.captures = self.get_pcaps(display_filter='dhcp')
         # NightcapCLIConfiguration.__init__(
         #     self, generatePcaps=True, basedata=dict(json.loads(args.data))
         # )

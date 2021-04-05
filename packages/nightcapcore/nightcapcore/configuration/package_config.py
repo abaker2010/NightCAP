@@ -56,7 +56,7 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
                 Override for the params help options
 
             do_params(self,line): -> None
-                Allows the users to set/view the params
+                Allows the users to set/view the params. (-d for detailed view)
 
             toJson(self): -> dict
                 Returns a json object of the object
@@ -80,9 +80,13 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
         self.generatePcaps = True
 
         try:
-            self.pkg_params = copy.deepcopy(
-                pkg_information["package_information"]["entry_file_optional_params"]
-            )
+            self.pkg_params = {}
+            self.pkg_descripts = {}
+            if pkg_information["package_information"]["entry_file_optional_params"] != {}:
+                for k, v in pkg_information["package_information"]["entry_file_optional_params"].items():
+                    self.pkg_params[v["name"]] = v["value"]
+                    self.pkg_descripts[v["name"]] = v["description"]
+
             # print("Deep copied params", self.package_params)
         except Exception as e:
             self.printer.print_error(e)
@@ -93,49 +97,115 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
     # endregion
 
     # region Show Params
-    def show_params(self):
+    def show_params(self, detailed: bool = False):
 
-        if self.project == None:
-            proj = "None"
-        else:
-            proj = Fore.LIGHTYELLOW_EX + str(self.project["project_name"])
+        # if self.project == None:
+        #     proj = "None"
+        # else:
+        #     proj = Fore.LIGHTYELLOW_EX + str(self.project["project_name"])
 
         self.printer.print_underlined_header("Base Parameters", leadingTab=2)
-        self.printer.print_formatted_other(
-            "PROJECT",
-            proj,
-            leadingTab=3,
-            optionalTextColor=Fore.YELLOW,
-        )
-        self.printer.print_formatted_other(
-            "FILENAME",
-            str(self.filename),
-            leadingTab=3,
-            optionalTextColor=Fore.YELLOW,
-        )
-        self.printer.print_formatted_other(
-            "ISDIR",
-            str(self.isDir),
-            leadingTab=3,
-            optionalTextColor=Fore.YELLOW,
-        )
-        self.printer.print_formatted_other(
-            "PATH",
-            str(self.dir),
-            leadingTab=3,
-            optionalTextColor=Fore.YELLOW,
-        )
+        # self.printer.print_formatted_other(
+        #     "PROJECT",
+        #     proj,
+        #     leadingTab=3,
+        #     optionalTextColor=Fore.YELLOW,
+        # )
+
+        if detailed == False:
+            self.printer.print_formatted_other(
+                "FILENAME",
+                str(self.filename),
+                leadingTab=3,
+                optionalTextColor=Fore.YELLOW,
+            )
+        else:
+            self.printer.print_formatted_other(
+                "FILENAME",
+                "Pcap file name to be used for the scan",
+                leadingTab=3,
+                optionalTextColor=Fore.MAGENTA,
+            )
+            self.printer.print_formatted_additional(
+                "Current Value",
+                str(self.filename),
+                leadingTab=4,
+                optionalTextColor=Fore.YELLOW,
+                endingBreaks=1
+            )
+
+        if detailed == False:
+            self.printer.print_formatted_other(
+                "ISDIR",
+                str(self.isDir),
+                leadingTab=3,
+                optionalTextColor=Fore.YELLOW,
+            )
+        else:
+            self.printer.print_formatted_other(
+                "ISDIR",
+                "To either try and scan the pcap file or a directory of pcap files",
+                leadingTab=3,
+                optionalTextColor=Fore.MAGENTA,
+            )
+            self.printer.print_formatted_additional(
+                "Current Value",
+                str(self.isDir),
+                leadingTab=4,
+                optionalTextColor=Fore.YELLOW,
+                endingBreaks=1
+            )
+
+
+        if detailed == False:
+            self.printer.print_formatted_other(
+                "PATH",
+                str(self.dir),
+                leadingTab=3,
+                optionalTextColor=Fore.YELLOW,
+            )
+        else:
+            self.printer.print_formatted_other(
+                "PATH",
+                "The directory of the pcap file(s)",
+                leadingTab=3,
+                optionalTextColor=Fore.MAGENTA,
+            )
+            self.printer.print_formatted_additional(
+                "Current Value",
+                str(self.dir),
+                leadingTab=4,
+                optionalTextColor=Fore.YELLOW,
+                endingBreaks=1
+            )
 
         if self.package_params != {}:
+
             self.printer.print_underlined_header("Package Parameters", leadingTab=2)
-            for k, v in self.pkg_params.items():
-                _ = "None" if v == "" else v
-                self.printer.print_formatted_other(
-                    str(k).upper(),
-                    str(_),
-                    leadingTab=3,
-                    optionalTextColor=Fore.YELLOW,
-                )
+            if detailed == False:
+                for k, v in self.pkg_params.items():
+                    _ = "None" if v == "" else v
+                    self.printer.print_formatted_other(
+                        str(k).upper(),
+                        str(_),
+                        leadingTab=3,
+                        optionalTextColor=Fore.YELLOW,
+                    )
+            else:
+                for k, v in self.pkg_params.items():
+                    _ = "None" if v == "" else v
+                    self.printer.print_formatted_other(
+                        str(k).upper(),
+                        str(self.pkg_descripts[k]),
+                        leadingTab=3,
+                        optionalTextColor=Fore.MAGENTA,
+                    )
+                    self.printer.print_formatted_other(
+                        "Current Value",
+                        str(_),
+                        leadingTab=4,
+                        optionalTextColor=Fore.YELLOW,
+                    )
         print()
 
     # endregion
@@ -171,53 +241,63 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
 
     # region Do params
     def do_params(self, line):
-        if len(line) == 0:
-            self.show_params()
-        else:
-            try:
-                _s = str(line).split(" ")
+        try:
+            if len(line) == 0:
+                self.show_params()
+            else:
+                try:
+                    _s = str(line).split(" ")
 
-                if len(_s) != 2:
-                    raise Exception("Paramater Error.")
-                else:
-                    if _s[0].lower() == "project":
-                        self.printer.print_error(
-                            Exception(
-                                "Projects not allowed to be set this way. Please use the projects command."
-                            )
-                        )
-                    else:
-                        if _s[0].lower() == "isdir":
-                            try:
-                                _ = None
-                                if str(_s[1]).lower() == "true":
-                                    _ = True
-                                elif str(_s[1]).lower() == "false":
-                                    _ = False
-                                else:
-                                    raise Exception("Please use either True or False")
-                                self.isDir = _
-                            except Exception as e:
-                                raise e
-                        elif _s[0].lower() == "path":
-                            try:
-                                self.dir = str(_s[1])
-                            except Exception as e:
-                                raise e
-                        elif _s[0].lower() == "filename":
-                            try:
-                                self.filename = str(_s[1])
-                            except Exception as e:
-                                raise e
+                    if len(_s) != 2:
+                        if _s[0] == '-d':
+                            self.show_params(detailed=True)
                         else:
-                            if _s[0] in dict(self.pkg_params).keys():
-                                self.pkg_params[_s[0]] = str(_s[1])
-            except Exception as e:
-                raise e
+                            raise Exception("Paramater Error.")
+                    else:
+                        if _s[0].lower() == "project":
+                            self.printer.print_error(
+                                Exception(
+                                    "Projects not allowed to be set this way. Please use the projects command."
+                                )
+                            )
+                        else:
+                            if _s[0].lower() == "isdir":
+                                try:
+                                    _ = None
+                                    if str(_s[1]).lower() == "true":
+                                        _ = True
+                                    elif str(_s[1]).lower() == "false":
+                                        _ = False
+                                    else:
+                                        raise Exception("Please use either True or False")
+                                    self.isDir = _
+                                except Exception as e:
+                                    raise e
+                            elif _s[0].lower() == "path":
+                                try:
+                                    self.dir = str(_s[1])
+                                except Exception as e:
+                                    raise e
+                            elif _s[0].lower() == "filename":
+                                try:
+                                    self.filename = str(_s[1])
+                                except Exception as e:
+                                    raise e
+                            else:
+                                if _s[0] in dict(self.pkg_params).keys():
+                                    self.pkg_params[_s[0]] = str(_s[1])
+                except Exception as e:
+                    raise e
+        except Exception as e:
+            self.printer.print_error(e)
         # endregion
 
     # region Get pcaps
-    def _get_pcaps(self):
+    def get_pcaps(self, *args, keep_packets=True, display_filter=None, only_summaries=False,
+                 decryption_key=None, encryption_type="wpa-pwk", decode_as=None,
+                 disable_protocol=None, tshark_path=None, override_prefs=None,
+                 use_json=False, output_file=None, include_raw=False, eventloop=None, custom_parameters=None,
+                 debug=False, **kwargs):
         try:
             _pcapFiles = []
             print("Trying to generate pcaps")
@@ -228,11 +308,45 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
                     for name in files:
                         if str(name).split(".")[1] in exts:
                             _pcapFiles.append(
-                                pyshark.FileCapture(os.path.join(root, name))
+                                pyshark.FileCapture(
+                                    os.path.join(root, name),
+                                    display_filter=display_filter,
+                                    keep_packets=keep_packets,
+                                    only_summaries=only_summaries,
+                                    decryption_key=decryption_key,
+                                    encryption_type=encryption_type,
+                                    decode_as=decode_as,
+                                    disable_protocol=disable_protocol,
+                                    tshark_path=tshark_path,
+                                    override_prefs=override_prefs,
+                                    use_json=use_json,
+                                    output_file=output_file,
+                                    include_raw=include_raw,
+                                    eventloop=eventloop,
+                                    custom_parameters=custom_parameters,
+                                    debug=debug
+                                )
                             )
             else:
                 _pcapFiles.append(
-                    pyshark.FileCapture(os.path.join(self.dir, self.filename))
+                    pyshark.FileCapture(
+                        os.path.join(self.dir, self.filename), 
+                        display_filter=display_filter,
+                        keep_packets=keep_packets,
+                        only_summaries=only_summaries,
+                        decryption_key=decryption_key,
+                        encryption_type=encryption_type,
+                        decode_as=decode_as,
+                        disable_protocol=disable_protocol,
+                        tshark_path=tshark_path,
+                        override_prefs=override_prefs,
+                        use_json=use_json,
+                        output_file=output_file,
+                        include_raw=include_raw,
+                        eventloop=eventloop,
+                        custom_parameters=custom_parameters,
+                        debug=debug
+                    )
                 )
             return _pcapFiles
         except Exception as e:
