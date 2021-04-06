@@ -6,7 +6,7 @@
     {% url 'public:contact' as contact_url %}
     <span>{% if request.path == contact_url %}Contact{% else %}<a href="{{ contact_url }}">Contact</a>{% endif %}</span>
 
-    <span style='float:right'>
+    <!-- <span style='float:right'>
         {% if user.is_authenticated %}
         {% url 'accounts:profile' as profile_url %}
             <span>{% if request.path == profile_url %}{{ user.username }}{% else %}<a href="{{ profile_url }}">Profile | </a>{% endif %}</span>
@@ -14,6 +14,6 @@
         {% else %}
             <span><a href="{% url 'accounts:login' %}">Login</a></span>
         {% endif %}
-    </span>
+    </span> -->
 
 </div>

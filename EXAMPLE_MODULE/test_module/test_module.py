@@ -13,19 +13,21 @@ class SomePackageName(NightcapScanner):
         # super(NightcapScanner, self).__init__()
         NightcapScanner.__init__(self)
         # self.simple_report = NightcapSimpleReport(__file__, self.basedata['0'])
+        self.found_count = 0
 
 
-    def onProcess(self):
-        print("Processing Pcap files from abstract method")
-        # print("Count of files passed:", len(self.p))
-        for cpt in self.get_pcaps(display_filter='udp'):
-            _ = 0
-            for pkg in cpt:
-                _ += 1
-            print("Capture length: ", str(_))
+    def onProcess(self, pkt):
+        self.found_count += 1
+
+    def onClose(self):
+        self.printer.print_formatted_check("Total packets")
+        self.printer.print_formatted_additional("Count", str(self.found_count), leadingTab=3)
 
     def onReport(self):
         print("Generating Reports")
+
+    def onConsolePrint(self):
+        pass
 
 
 def main():

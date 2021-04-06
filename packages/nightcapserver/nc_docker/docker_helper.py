@@ -167,6 +167,7 @@ class NightcapDockerHelper(object):
             )
             self.make_docker()
 
+        self.set_account()
     # endregion
 
     # region Stop all containers
@@ -333,6 +334,22 @@ class NightcapDockerHelper(object):
 
     # endregion
 
+    #region set admin
+    def set_account(self):
+        try:
+            self.printer.print_formatted_additional(text="Creating Docker Containers")
+            _ = os.path.join(
+                Path(__file__).resolve().parent.parent, "manage.py"
+            )
+            p = subprocess.Popen(["python3", _, "createsuperuser"], stdout=PIPE, stdin=PIPE)
+            while p.poll() is None:
+                print(".", end="", flush=True)
+                time.sleep(1)
+            self.printer.print_formatted_check(text="Created Containers")
+        except Exception as e:
+            raise e
+    #endregion
+
     # region Make Docker
     def make_docker(self):
         ScreenHelper().clearScr()
@@ -370,5 +387,4 @@ class NightcapDockerHelper(object):
                     text="Error with installing docker mongo image"
                 )
                 raise e
-
     # endregion

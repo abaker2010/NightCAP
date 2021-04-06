@@ -39,7 +39,7 @@ class PrinterBase:
             else ""
         )
         _end = styleRest + ("\n" * endingBreaks)
-        print(_start + _leading + " " + _text + _optional + _end)
+        print(_start + _leading + Style.RESET_ALL + " " + _text + _optional + _end)
 
     def animated_base_print(
         self,
