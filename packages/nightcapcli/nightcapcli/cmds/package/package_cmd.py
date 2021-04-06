@@ -95,8 +95,8 @@ class NightcapCLIPackage(NightcapCLIPackageConfiguration, NightcapBaseCMD):
         )
 
     def do_run(self, line):
-        print("project information:", self.config.project)
-        print("package information:", self.pkg_information, "\n")
+        # print("project information:", self.config.project)
+        # print("package information:", self.pkg_information, "\n")
         try:
             force = False
             if self.config.project == None:
@@ -108,7 +108,7 @@ class NightcapCLIPackage(NightcapCLIPackageConfiguration, NightcapBaseCMD):
                     )
                 )
                 print(Style.RESET_ALL, Fore.LIGHTCYAN_EX)
-                print("config", type(self.config))
+                # print("config", type(self.config))
                 yes_options = self.config.config["NIGHTCAPCORE"]["yes"].split(" ")
                 if force == None:
                     force = False
@@ -120,14 +120,14 @@ class NightcapCLIPackage(NightcapCLIPackageConfiguration, NightcapBaseCMD):
 
             if force == True:
                 if len(self.selectedList) == 3:
-                    print("List to be used to find run path", self.selectedList)
+                    # print("List to be used to find run path", self.selectedList)
                     exe_path = self.db.get_package_run_path(self.pkg_information)
-                    print(exe_path)
+                    # print(exe_path)
                     dat = {}
                     dat[0] = self.toJson()
                     dat[1] = self.package_params
                     dat[2] = self.pkg_information
-                    print("data before passing: ", dat)
+                    # print("data before passing: ", dat)
                     call = "python3.8 %s --data '%s'" % (
                         exe_path,
                         json.dumps(dat, default=str),

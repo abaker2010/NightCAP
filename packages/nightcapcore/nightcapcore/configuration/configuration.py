@@ -11,7 +11,7 @@ from nightcapcore.singleton.singleton import Singleton
 
 
 class NightcapCLIConfiguration(metaclass=Singleton):
-    def __init__(self):
+    def __init__(self, data: dict = None):
         self._config()
         self.printer = Printer()
 
@@ -35,6 +35,13 @@ class NightcapCLIConfiguration(metaclass=Singleton):
             if self.config.get("NIGHTCAPSCAN", "filename") == "None"
             else self.config.get("NIGHTCAPSCAN", "filename")
         )
+
+        if data != None:
+            # print("Trying to set config data")
+            self.project = data['project']
+            self.isDir = data['isDir']
+            self.dir = data['dir']
+            self.filename = data['filename']
 
     def _config(self):
         conf = configparser.RawConfigParser()

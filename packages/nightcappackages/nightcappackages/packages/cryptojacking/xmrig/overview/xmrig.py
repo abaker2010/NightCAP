@@ -157,7 +157,8 @@ class XMRigScanner(NightcapScanner):
 
     #region Report
     def onReport(self):
-        print("Generating Reports")
+        # print("Generating Reports")
+        pass
     #endregion
 
 def main():

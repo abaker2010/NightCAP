@@ -64,13 +64,13 @@ class NightcapScanner(NightcapCLIPackageConfiguration):
         parser.add_argument("--data", required=True, help="list of pcap filenames")
         args = parser.parse_args()
         # print("Args after passing", args)
-        print("\n\nArgs after passing", args.data, "\n\n")
+        # print("\n\nArgs after passing", args.data, "\n\n")
         # print("Args after passing", dict(json.loads(args.data)))
 
         try:
-            print("Tring to pass json on to client", dict(json.loads(args.data)))
+            # print("Tring to pass json on to client", dict(json.loads(args.data)))
             NightcapCLIPackageConfiguration.__init__(
-                self, dict(json.loads(args.data))["2"]
+                self, dict(json.loads(args.data))["2"], dict(json.loads(args.data))["0"]
             )
 
             self._keep_packets = keep_packets
@@ -91,7 +91,7 @@ class NightcapScanner(NightcapCLIPackageConfiguration):
 
         except Exception as e:
             print("Error 1", e)
-        print("Client generate PCAPS:", self.generatePcaps)
+        # print("Client generate PCAPS:", self.generatePcaps)
 
         # self.captures = self.get_pcaps(display_filter='dhcp')
         # NightcapCLIConfiguration.__init__(
@@ -126,6 +126,7 @@ class NightcapScanner(NightcapCLIPackageConfiguration):
     # region onIntro
     def onIntro(self):
         """Intro to the program"""
+        self.show_params()
         self.printer.print_formatted_additional(
             "Please wait while processing PCAP files...", endingBreaks=1
         )

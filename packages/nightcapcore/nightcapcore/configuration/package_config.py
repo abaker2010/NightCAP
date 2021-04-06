@@ -70,8 +70,8 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
     """
 
     # region Init
-    def __init__(self, pkg_information: dict):
-        NightcapCLIConfiguration.__init__(self)
+    def __init__(self, pkg_information: dict, data: dict = None):
+        NightcapCLIConfiguration.__init__(self, data=data)
         # NightcapCLIConfiguration.__init__(self)
         # self.config = config
         self.pkg_information = pkg_information
@@ -93,7 +93,6 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
             self.package_params = None
         # print("Generate pcap files package_conf", self.config.generatePcaps)
         # self.pcaps = self._get_pcaps() if self.config.generatePcaps == True else []
-
     # endregion
 
     # region Show Params
@@ -179,33 +178,36 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
                 endingBreaks=1
             )
 
-        if self.package_params != {}:
+        try:
+            if self.package_params != {}:
 
-            self.printer.print_underlined_header("Package Parameters", leadingTab=2)
-            if detailed == False:
-                for k, v in self.pkg_params.items():
-                    _ = "None" if v == "" else v
-                    self.printer.print_formatted_other(
-                        str(k).upper(),
-                        str(_),
-                        leadingTab=3,
-                        optionalTextColor=Fore.YELLOW,
-                    )
-            else:
-                for k, v in self.pkg_params.items():
-                    _ = "None" if v == "" else v
-                    self.printer.print_formatted_other(
-                        str(k).upper(),
-                        str(self.pkg_descripts[k]),
-                        leadingTab=3,
-                        optionalTextColor=Fore.MAGENTA,
-                    )
-                    self.printer.print_formatted_other(
-                        "Current Value",
-                        str(_),
-                        leadingTab=4,
-                        optionalTextColor=Fore.YELLOW,
-                    )
+                self.printer.print_underlined_header("Package Parameters", leadingTab=2)
+                if detailed == False:
+                    for k, v in self.pkg_params.items():
+                        _ = "None" if v == "" else v
+                        self.printer.print_formatted_other(
+                            str(k).upper(),
+                            str(_),
+                            leadingTab=3,
+                            optionalTextColor=Fore.YELLOW,
+                        )
+                else:
+                    for k, v in self.pkg_params.items():
+                        _ = "None" if v == "" else v
+                        self.printer.print_formatted_other(
+                            str(k).upper(),
+                            str(self.pkg_descripts[k]),
+                            leadingTab=3,
+                            optionalTextColor=Fore.MAGENTA,
+                        )
+                        self.printer.print_formatted_other(
+                            "Current Value",
+                            str(_),
+                            leadingTab=4,
+                            optionalTextColor=Fore.YELLOW,
+                        )
+        except Exception as e:
+            pass
         print()
 
     # endregion
@@ -300,7 +302,7 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
                  debug=False, **kwargs):
         try:
             _pcapFiles = []
-            print("Trying to generate pcaps")
+            # print("Trying to generate pcaps")Generating Reports
             if self.isDir:
                 exts = self["NIGHTCAPCORE"]["extentions"].split(" ")
 

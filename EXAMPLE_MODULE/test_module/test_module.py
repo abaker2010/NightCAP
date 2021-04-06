@@ -24,7 +24,8 @@ class SomePackageName(NightcapScanner):
         self.printer.print_formatted_additional("Count", str(self.found_count), leadingTab=3)
 
     def onReport(self):
-        print("Generating Reports")
+        # print("Generating Reports")
+        pass
 
     def onConsolePrint(self):
         pass
