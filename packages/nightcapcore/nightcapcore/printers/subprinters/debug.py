@@ -13,14 +13,19 @@ class DebugPrinter(PrinterBase):
 
     def debug(
         self,
-        text: str = "",
-        optionaltext: str = "",
+        text: object = None,
+        optionaltext: object = None,
         currentMode: bool = False,
         *args,
+        leadingText='[DEBUG]',
+        leadingTab=0,
+        optionalTextColor=Fore.LIGHTBLACK_EX,
+        textColor=Fore.LIGHTCYAN_EX,
+        leadingColor=Fore.MAGENTA,
         **kwargs
     ):
         # print("Text", text)
         # print("Optional",optionaltext)
         if currentMode == True:
-            self.base_print(text, optionaltext, *args, **kwargs)
+            self.base_print(text, optionaltext, *args, leadingText=leadingText,leadingTab=leadingTab, leadingColor=leadingColor, textColor=textColor, optionalTextColor=optionalTextColor, **kwargs)
         # self.base_print(self,text, optionaltext)

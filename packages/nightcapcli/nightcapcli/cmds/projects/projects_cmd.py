@@ -193,7 +193,7 @@ class NightcapProjectsCMD(NightcapBaseCMD):
         try:
             self.config.project = None
             # self.output.output("[+] Unselected project")
-            self.printer.print_formatted_check("Unselected project")
+            self.printer.print_formatted_check("Unselected project", leadingBreaks=1,endingBreaks=1)
         except Exception as e:
             # self.output.output(str(e), level=6)
             self.printer.print_error(e)
@@ -209,6 +209,9 @@ class NightcapProjectsCMD(NightcapBaseCMD):
             self.printer.print_error(e)
 
     # endregion
+
+    def do_exit(self, line):
+        return True
 
     # def update(self, updatedb: TinyDB):
     #     print("\t", "updating db: projects_db.json")

@@ -14,7 +14,7 @@ class ErrorPrinter(PrinterBase):
     def print_error(
         self,
         exception: Exception = None,
-        message: str = "",
+        message: object = None,
         *args,
         leadingText="[!]",
         errColor=Fore.RED,

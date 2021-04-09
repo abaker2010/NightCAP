@@ -204,7 +204,7 @@ class NightcapDockerHelper(object):
             while p.poll() is None:
                 print("", end="", flush=True)
                 time.sleep(1)
-            self.printer.print_formatted_check(text="Stopped", leadingTab=3)
+            self.printer.print_formatted_check("Stopped", leadingTab=3)
             # return True
 
             # return False

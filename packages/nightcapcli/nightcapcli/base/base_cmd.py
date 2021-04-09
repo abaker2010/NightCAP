@@ -4,13 +4,9 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 import os
-from pathlib import Path
-from random import randint
 from mongo.mongo_helper import NightcapMongoHelper
-from nightcapcli.generator.option_generator import NightcapOptionGenerator
 from nightcapcli.observer.publisher import NightcapCLIPublisher
 from nightcapcore import NightcapCLIConfiguration, Printer, ScreenHelper, NightcapBanner
-from nightcapcore.colors.nightcap_colors import NightcapColors
 from nightcapcore.test_pcaps.test_pcaps import TestPcaps
 from nightcappackages import *
 import cmd
@@ -92,75 +88,33 @@ class NightcapBaseCMD(cmd.Cmd):
             self.selectedList = selectedList
         else:
             self.selectedList = NightcapCLIPublisher().selectedList
-            # (
-            #     []
-            #     if NightcapCLIPublisher().selectedList == []
-            #     else NightcapCLIPublisher().selectedList
-            # )
-        # itm = (
-        #     ""
-        #     if self.selectedList == None
-        #     else list(
-        #         map(
-        #             lambda v: "[" + Fore.LIGHTYELLOW_EX + v + Fore.LIGHTGREEN_EX + "]",
-        #             self.selectedList,
-        #         )
-        #     )
-        # )
-        
-        # self.prompt = Fore.GREEN + "nightcap" + "".join(itm) + " > " + Fore.CYAN
+
         self.doc_header = Fore.GREEN + "Commands" + Style.RESET_ALL
         self.misc_header = Fore.GREEN + "System" + Style.RESET_ALL
         self.undoc_header = Fore.GREEN + "Other" + Style.RESET_ALL
         self.ruler = Fore.YELLOW + "-" + Style.RESET_ALL
 
         self.config = NightcapCLIConfiguration()
-        self.verbosity = self.config.config.getboolean("NIGHTCAPCORE", "verbose")
+        
         self.printer = Printer()
         self.mongo_helper = NightcapMongoHelper(self.config)
         self.channelID = channelid
         self.prompt = self._prompt()
-        print("Publisher List", NightcapCLIPublisher().selectedList)
-        self.project = (
-            None
-            if self.config.config.get("NIGHTCAPSCAN", "project") == "None"
-            else self.config.config.get("NIGHTCAPSCAN", "project")
-        )
-        self.isDir = (
-            False
-            if self.config.config.getboolean("NIGHTCAPSCAN", "isdir") == "None"
-            else self.config.config.getboolean("NIGHTCAPSCAN", "isdir")
-        )
-        self.dir = (
-            # os.path.join(Path(__file__).resolve().parent.parent, "test_pcaps")
-            TestPcaps().path
-            if self.config.config.get("NIGHTCAPSCAN", "dir") == "None"
-            else self.config.config.get("NIGHTCAPSCAN", "dir")
-        )
-        self.filename = (
-            "xmrig.pcapng"
-            if self.config.config.get("NIGHTCAPSCAN", "filename") == "None"
-            else self.config.config.get("NIGHTCAPSCAN", "filename")
-        )
-
         
     # endregion
 
     def addselected(self, item):
         NightcapCLIPublisher().selectedList.append(item)
         self.selectedList = NightcapCLIPublisher().selectedList
-        # self.prompt = self._prompt()
 
     def popselected(self):
         NightcapCLIPublisher().selectedList.pop(-1)
         self.selectedList = NightcapCLIPublisher().selectedList
-        # self.prompt = self._prompt()
 
     #region 
     def _prompt(self):
         _p = []
         for _ in self.selectedList:
-            print("[" + Fore.LIGHTYELLOW_EX + _ + Fore.LIGHTGREEN_EX + "]")
             _p.append("[" + Fore.LIGHTYELLOW_EX + _ + Fore.LIGHTGREEN_EX + "]")
         _p = "".join(_p)
         return Fore.GREEN + "nightcap" + _p + " > " + Fore.CYAN
@@ -175,7 +129,6 @@ class NightcapBaseCMD(cmd.Cmd):
         return super().preloop()
 
     def postcmd(self, stop: bool, line: str) -> bool:
-        # print("Post cmd loop")
         return super().postcmd(stop, line)
 
     def postloop(self) -> None:
@@ -186,34 +139,22 @@ class NightcapBaseCMD(cmd.Cmd):
 
     # region Exit
     def do_exit(self, line):
-        # ScreenHelper().clearScr()
         try:
             if self.channelID != None:
-                #     self.printer.print_formatted_check(text="No channel ID attached to unregister")
-                # else:
-                print("Pop Before/After", self.channelID)
-                print(NightcapCLIPublisher().channels)
-                print("*"*10)
-                # NightcapCLIPublisher().unregister(self.channelID)
+                self.printer.debug("Pop Before/After", self.channelID, currentMode=self.config.verbosity)
+                self.printer.debug(NightcapCLIPublisher().channels, currentMode=self.config.verbosity)
                 NightcapCLIPublisher().del_channel(self.channelID)
                 self.popselected()
-                print(NightcapCLIPublisher().channels)
-                # print(NightcapCLIPublisher().selectedList)
-                
-                # NightcapCLIPublisher().selectedList.pop(-1)
-                # print(NightcapCLIPublisher().selectedList)
+                self.printer.debug(NightcapCLIPublisher().channels, currentMode=self.config.verbosity)
             else:
-                print("Pop Before/After (NO CHANNLE ID)")
-                print(NightcapCLIPublisher().channels)
-                print("*"*10)
+                self.printer.debug("Pop Before/After (NO CHANNLE ID)", currentMode=self.config.verbosity)
+                self.printer.debug(NightcapCLIPublisher().channels, currentMode=self.config.verbosity)
                 self.popselected()
-                print(NightcapCLIPublisher().channels)
+                self.printer.debug(NightcapCLIPublisher().channels, currentMode=self.config.verbosity)
                 
         except Exception as e:
             pass
         return True
-        
-
     # endregion
 
     # region Help
@@ -233,10 +174,10 @@ class NightcapBaseCMD(cmd.Cmd):
         self.printer.print_underlined_header("Verbosity", leadingTab=2)
         self.printer.print_formatted_other(
             "Verbosity",
-            "Normal" if self.verbosity == False else "Debug",
+            "Normal" if self.config.verbosity == False else "Debug",
             leadingTab=3,
             optionalTextColor=Fore.LIGHTBLACK_EX
-            if self.verbosity == False
+            if self.config.verbosity == False
             else Fore.LIGHTYELLOW_EX,
         )
 

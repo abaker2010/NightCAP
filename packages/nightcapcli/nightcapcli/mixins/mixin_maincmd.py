@@ -103,7 +103,7 @@ class NightcapCLICMDMixIn(NightcapMainCMD):
                 # print(NightcapCLIPublisher().channels)
 
                 NightcapCLIPublisher().directions["override"] = override
-                print("directions", NightcapCLIPublisher().directions)
+                # print("directions", NightcapCLIPublisher().directions)
                 NightcapCLIPublisher().dispatch(
                     self.channelID, NightcapCLIPublisher().directions
                 )

@@ -14,7 +14,7 @@ class ItemPrinter(PrinterBase):
     def item_1(
         self,
         text="",
-        optionalText="",
+        optionalText=None,
         *args,
         leadingTab=2,
         leadingText="[-]",
@@ -51,7 +51,7 @@ class ItemPrinter(PrinterBase):
     def item_2(
         self,
         text="",
-        optionalText="",
+        optionalText=None,
         *args,
         leadingTab=3,
         leadingText="-",
@@ -87,7 +87,7 @@ class ItemPrinter(PrinterBase):
     def item_3(
         self,
         text="",
-        optionalText="",
+        optionalText=None,
         *args,
         leadingTab=4,
         leadingText="*",
@@ -124,7 +124,7 @@ class ItemPrinter(PrinterBase):
     def help(
         self,
         text="",
-        optionalText="",
+        optionalText=None,
         *args,
         leadingTab=1,
         leadingText="~",

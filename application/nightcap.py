@@ -49,28 +49,25 @@ class Nightcap(NightcapCLICMDMixIn):
             self._push_object(_directions)
 
     def __del__(self):
-        # print("Trying to close object")
-        # print("Trying to notify parent ID:", self.parentid)
         pass
 
     def _push_object(self, directions: dict):
-        print("Trying to push new object")
-        print("Current path:", NightcapCLIPublisher().selectedList)
-        print("Directions: ", directions["nextstep"][-1])
+        self.printer.debug("Trying to push new object", currentMode=self.config.verbosity)
+        self.printer.debug("Current path:", NightcapCLIPublisher().selectedList, currentMode=self.config.verbosity)
 
         try:
-            print("Making new channel")
+            self.printer.debug("Making new channel", currentMode=self.config.verbosity)
             _channel = NightcapCLIPublisher().new_channel()
-            print(NightcapCLIPublisher().channels)
-            print("Channels: ", _channel)
-            # raise Exception("Test Error")
+
+            self.printer.debug("Channels",NightcapCLIPublisher().channels, currentMode=self.config.verbosity)
+            self.printer.debug("Channel", _channel, currentMode=self.config.verbosity)
 
             if len(directions["nextstep"]) != 3:
-                print("trying to add:", directions["nextstep"][-1])
+                self.printer.debug("Trying to add", directions["nextstep"][-1], currentMode=self.config.verbosity)
                 self.addselected(directions["nextstep"][-1])
-                print("Testing after")
-                print(NightcapCLIPublisher().selectedList)
-                # NightcapCLIPublisher().selectedList.append(directions["nextstep"][-1])
+
+                self.printer.debug("After adding", NightcapCLIPublisher().selectedList, currentMode=self.config.verbosity)
+
                 _who = self.pageobjct(
                     NightcapCLIPublisher().selectedList,
                     _channel,
@@ -81,15 +78,12 @@ class Nightcap(NightcapCLICMDMixIn):
                 NightcapCLIPublisher().register(_channel, _who)
                 _who.cmdloop()
             else:
-                print("trying to add:", directions["nextstep"][-1])
+                self.printer.debug("Trying to add", directions["nextstep"][-1], currentMode=self.config.verbosity)
                 self.addselected(directions["nextstep"][-1])
-
-                print("Testing after")
-                print(NightcapCLIPublisher().selectedList)
-
-                print("Package Config")
-                print(NightcapCLIPublisher().get_package_config(NightcapCLIPublisher().selectedList))
-                # NightcapCLIPublisher().selectedList.append(directions["nextstep"][-1])
+                
+                self.printer.debug("New Path", NightcapCLIPublisher().selectedList, currentMode=self.config.verbosity)
+                self.printer.debug("Package Config", NightcapCLIPublisher().get_package_config(NightcapCLIPublisher().selectedList), currentMode=self.config.verbosity)
+                
                 _who = NightcapCLIPackage(
                     NightcapCLIPublisher().selectedList,
                     NightcapCLIPublisher().get_package_config(NightcapCLIPublisher().selectedList),

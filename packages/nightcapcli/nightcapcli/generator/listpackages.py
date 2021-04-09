@@ -46,11 +46,13 @@ class NightcapListPackages:
 
     # region List Packages
     def list_packages(self):
-        print("\n\t\tInstalled packages")
-        print("\t\t", "-" * 20, "\n", sep="")
+        # print("\n\t\tInstalled packages")
+        # print("\t\t", "-" * 20, "\n", sep="")
+        self.priner.print_underlined_header_undecorated("Installed Packages", endingBreaks=1)
         _packages = list(map(lambda v: v, self.packages_db.get_all_packages()))
         if _packages == []:
-            print(Fore.YELLOW + "\t\tNo Packages Installed\n", Style.RESET_ALL)
+            # print(Fore.YELLOW + "\t\tNo Packages Installed\n", Style.RESET_ALL)
+            self.priner.print_error(Exception("No Packages Installed"))
         else:
             for p in _packages:
                 print(
@@ -69,6 +71,6 @@ class NightcapListPackages:
                     p["author_info"]["creator"],
                     sep="",
                 )
-                print(Fore.GREEN, "\t\t", p["package_information"]["details"], "\n")
-
+                self.priner.item_3(p["package_information"]["details"], endingBreaks=1, leadingTab=2, leadingText="[?] - ")
+                # print(Fore.GREEN, "\t\t", p["package_information"]["details"], "\n")
     # endregion

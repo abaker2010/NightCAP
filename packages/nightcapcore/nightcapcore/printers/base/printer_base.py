@@ -12,8 +12,8 @@ class PrinterBase:
 
     def base_print(
         self,
-        text: str = "",
-        optionaltext: str = "",
+        text: object = None,
+        optionaltext: object = None,
         *args,
         leadingTab=1,
         leadingText="",
@@ -34,8 +34,8 @@ class PrinterBase:
         _leading = ("\t" * leadingTab) + " " + leadingColor + leadingText
         _text = textColor + str(text)
         _optional = (
-            (breakTextColor + seperator + optionalTextColor + optionaltext)
-            if len(optionaltext) != 0
+            (breakTextColor + seperator + optionalTextColor + str(optionaltext))
+            if optionaltext != None
             else ""
         )
         _end = styleRest + ("\n" * endingBreaks)

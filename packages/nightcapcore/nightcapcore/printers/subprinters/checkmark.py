@@ -15,7 +15,7 @@ class CheckMarkPrinter(PrinterBase):
     def print_formatted_other(
         self,
         text,
-        optionaltext="",
+        optionaltext=None,
         *args,
         leadingText="[*]",
         leadingBreaks=0,
@@ -47,7 +47,7 @@ class CheckMarkPrinter(PrinterBase):
     def print_formatted_check(
         self,
         text,
-        optionaltext="",
+        optionaltext=None,
         *args,
         leadingBreaks=0,
         endingBreaks=0,
@@ -78,7 +78,7 @@ class CheckMarkPrinter(PrinterBase):
     def print_formatted_additional(
         self,
         text,
-        optionaltext="",
+        optionaltext=None,
         *args,
         leadingBreaks=0,
         endingBreaks=0,
@@ -109,7 +109,7 @@ class CheckMarkPrinter(PrinterBase):
     def print_formatted_delete(
         self,
         text,
-        optionaltext="",
+        optionaltext=None,
         *args,
         leadingBreaks=0,
         endingBreaks=0,

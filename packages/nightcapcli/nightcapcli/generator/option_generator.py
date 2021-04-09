@@ -168,7 +168,7 @@ class NightcapOptionGenerator:
                             _cvals.append(v)
 
         self.printer.item_1(
-            "".join(_cvals), "", leadingTab=1, leadingText="", vtabs=1, endingBreaks=1
+            "".join(_cvals), "", leadingTab=1, leadingText="", vtabs=1, endingBreaks=1, seperator=''
         )
 
     # endregion

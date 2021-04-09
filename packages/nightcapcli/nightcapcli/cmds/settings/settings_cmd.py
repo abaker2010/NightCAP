@@ -200,26 +200,16 @@ class NightcapSettingsCMD(NightcapBaseCMD):
         self.printer.help("Usage: verbosity <normal|debug>", leadingBreaks=0)
 
     def do_verbosity(self, line):
-        print("change the verbosity")
         try:
             if line != "":
                 if "normal" == str(line).lower().strip():
-                    print("set to normal")
-                    self.verbosity = False
-                    self.config.config.set("NIGHTCAPCORE", "verbose", "false")
-                    self.config.Save()
+                    self.config.verbosity = False
                 elif "debug" == str(line).lower().strip():
-                    print("set to debug")
-                    self.verbosity = True
-                    self.config.config.set("NIGHTCAPCORE", "verbose", "true")
-                    self.config.Save()
+                    self.config.verbosity = True
             else:
                 raise Exception(
                     "Error with level, for more information use: help verbosity"
                 )
-
-            self.printer.print_formatted_additional(text="Rebooting...")
-            os.execv(sys.argv[0], sys.argv)
         except Exception as e:
             self.printer.print_error(e)
 
@@ -240,3 +230,6 @@ class NightcapSettingsCMD(NightcapBaseCMD):
             self.printer.print_error(e)
 
     # endregion
+
+    def do_exit(self, line):
+        return True

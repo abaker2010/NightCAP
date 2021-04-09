@@ -81,7 +81,7 @@ class NighcapCoreSimpleServer(object):
                 )
             else:
                 self.printer.print_formatted_check(
-                    text="Server was not running", endingBreaks=1
+                    "Server was not running", endingBreaks=1
                 )
         except Exception as e:
             print(e)

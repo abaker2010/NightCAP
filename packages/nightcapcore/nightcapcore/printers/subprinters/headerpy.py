@@ -41,7 +41,7 @@ class HeaderPrinter(PrinterBase):
     def print_header_w_option(
         self,
         text="",
-        optionaltext="",
+        optionaltext=None,
         *args,
         leadingTab=1,
         leadingText="[-]",

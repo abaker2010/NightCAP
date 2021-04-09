@@ -221,7 +221,7 @@ class NightcapScanner(NightcapBaseCMD):
         try:
             _pcapFiles = []
             # print("Trying to generate pcaps")Generating Reports
-            if self.isDir:
+            if self.config.isDir:
                 exts = self.config.config["NIGHTCAPCORE"]["extentions"].split(" ")
 
                 for root, dirs, files in os.walk(self.dir, topdown=False):
@@ -250,7 +250,7 @@ class NightcapScanner(NightcapBaseCMD):
             else:
                 _pcapFiles.append(
                     pyshark.FileCapture(
-                        os.path.join(self.dir, self.filename), 
+                        os.path.join(self.config.dir, self.config.filename), 
                         display_filter=display_filter,
                         keep_packets=keep_packets,
                         only_summaries=only_summaries,
@@ -301,7 +301,7 @@ class NightcapScanner(NightcapBaseCMD):
         if detailed == False:
             self.printer.print_formatted_other(
                 "FILENAME",
-                str(self.filename),
+                str(self.config.filename),
                 leadingTab=3,
                 optionalTextColor=Fore.YELLOW,
             )
@@ -314,7 +314,7 @@ class NightcapScanner(NightcapBaseCMD):
             )
             self.printer.print_formatted_additional(
                 "Current Value",
-                str(self.filename),
+                str(self.config.filename),
                 leadingTab=4,
                 optionalTextColor=Fore.YELLOW,
                 endingBreaks=1
@@ -323,7 +323,7 @@ class NightcapScanner(NightcapBaseCMD):
         if detailed == False:
             self.printer.print_formatted_other(
                 "ISDIR",
-                str(self.isDir),
+                str(self.config.isDir),
                 leadingTab=3,
                 optionalTextColor=Fore.YELLOW,
             )
@@ -336,7 +336,7 @@ class NightcapScanner(NightcapBaseCMD):
             )
             self.printer.print_formatted_additional(
                 "Current Value",
-                str(self.isDir),
+                str(self.config.isDir),
                 leadingTab=4,
                 optionalTextColor=Fore.YELLOW,
                 endingBreaks=1
@@ -346,7 +346,7 @@ class NightcapScanner(NightcapBaseCMD):
         if detailed == False:
             self.printer.print_formatted_other(
                 "PATH",
-                str(self.dir),
+                str(self.config.dir),
                 leadingTab=3,
                 optionalTextColor=Fore.YELLOW,
             )
@@ -359,7 +359,7 @@ class NightcapScanner(NightcapBaseCMD):
             )
             self.printer.print_formatted_additional(
                 "Current Value",
-                str(self.dir),
+                str(self.config.dir),
                 leadingTab=4,
                 optionalTextColor=Fore.YELLOW,
                 endingBreaks=1

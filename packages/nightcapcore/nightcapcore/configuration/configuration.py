@@ -15,6 +15,8 @@ class NightcapCLIConfiguration(metaclass=Singleton):
         self._config()
         self.printer = Printer()
 
+        self.verbosity = self.config.getboolean("NIGHTCAPCORE", "verbose")
+
         self.project = (
             None
             if self.config.get("NIGHTCAPSCAN", "project") == "None"
