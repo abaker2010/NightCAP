@@ -60,9 +60,13 @@ class NightcapCLICMDMixIn(NightcapMainCMD):
             NightcapOptionGenerator(self.selectedList).options()
         elif line == "-d":
             if len(self.selectedList) != 2:
-                self.printer.print_formatted_additional(
-                    text="Detailed information can not be provided at this level"
-                )
+                # self.printer.print_formatted_additional(
+                #     text="Detailed information can not be provided at this level"
+                # )
+                if len(self.selectedList) == 0:
+                    self.printer.print_header_w_option("Module Name", "(Submodule Count)")
+                elif len(self.selectedList) == 1:    
+                    self.printer.print_header_w_option("Submodule Name", "(Submodule Count)")
                 NightcapOptionGenerator(self.selectedList).options(isDetailed=False)
             else:
                 NightcapOptionGenerator(self.selectedList).options(isDetailed=True)
@@ -99,6 +103,7 @@ class NightcapCLICMDMixIn(NightcapMainCMD):
                 # print(NightcapCLIPublisher().channels)
 
                 NightcapCLIPublisher().directions["override"] = override
+                print("directions", NightcapCLIPublisher().directions)
                 NightcapCLIPublisher().dispatch(
                     self.channelID, NightcapCLIPublisher().directions
                 )

@@ -54,25 +54,78 @@ class Nightcap(NightcapCLICMDMixIn):
         pass
 
     def _push_object(self, directions: dict):
-        _channel = NightcapCLIPublisher().new_channel()
-        _who = None
-        if len(directions["nextstep"]) == 3:
-            _who = NightcapCLIPackage(
-                directions["nextstep"],
-                NightcapCLIPublisher().get_package_config(directions["nextstep"]),
-                _channel,
-            )
-        else:
-            _who = self.pageobjct(
-                directions["nextstep"],
-                _channel,
-                self.channelID,
-                directions["additionalsteps"],
-            )
+        print("Trying to push new object")
+        print("Current path:", NightcapCLIPublisher().selectedList)
+        print("Directions: ", directions["nextstep"][-1])
 
-        NightcapCLIPublisher().register(_channel, _who)
+        try:
+            print("Making new channel")
+            _channel = NightcapCLIPublisher().new_channel()
+            print(NightcapCLIPublisher().channels)
+            print("Channels: ", _channel)
+            # raise Exception("Test Error")
 
-        _who.cmdloop()
+            if len(directions["nextstep"]) != 3:
+                print("trying to add:", directions["nextstep"][-1])
+                self.addselected(directions["nextstep"][-1])
+                print("Testing after")
+                print(NightcapCLIPublisher().selectedList)
+                # NightcapCLIPublisher().selectedList.append(directions["nextstep"][-1])
+                _who = self.pageobjct(
+                    NightcapCLIPublisher().selectedList,
+                    _channel,
+                    self.channelID,
+                    directions["additionalsteps"],
+                )
+
+                NightcapCLIPublisher().register(_channel, _who)
+                _who.cmdloop()
+            else:
+                print("trying to add:", directions["nextstep"][-1])
+                self.addselected(directions["nextstep"][-1])
+
+                print("Testing after")
+                print(NightcapCLIPublisher().selectedList)
+
+                print("Package Config")
+                print(NightcapCLIPublisher().get_package_config(NightcapCLIPublisher().selectedList))
+                # NightcapCLIPublisher().selectedList.append(directions["nextstep"][-1])
+                _who = NightcapCLIPackage(
+                    NightcapCLIPublisher().selectedList,
+                    NightcapCLIPublisher().get_package_config(NightcapCLIPublisher().selectedList),
+                    _channel,
+                )
+
+                NightcapCLIPublisher().register(_channel, _who)
+                _who.cmdloop()
+                # raise Exception("Not Implemented")
+        except Exception as e:
+            self.printer.print_error(e)
+            NightcapCLIPublisher().del_channel(_channel)
+            print(NightcapCLIPublisher().channels)
+        # NightcapCLIPublisher().selectedList.append(directions["nextstep"][-1])
+        # print(NightcapCLIPublisher().selectedList)
+        # _channel = NightcapCLIPublisher().new_channel()
+        # _who = None
+        
+        # if len(directions["nextstep"]) == 3:
+        #     print("pushing object with", NightcapCLIPublisher().selectedList)
+        #     # _who = NightcapCLIPackage(
+        #     #     NightcapCLIPublisher().selectedList,
+        #     #     NightcapCLIPublisher().get_package_config(NightcapCLIPublisher().selectedList),
+        #     #     _channel,
+        #     # )
+        #     print("PKG Data:", NightcapCLIPublisher().get_package_config(NightcapCLIPublisher().selectedList))
+        # else:
+        #     _who = self.pageobjct(
+        #         NightcapCLIPublisher().selectedList,
+        #         _channel,
+        #         self.channelID,
+        #         directions["additionalsteps"],
+        #     )
+
+        #     NightcapCLIPublisher().register(_channel, _who)
+        #     _who.cmdloop()
 
     def cli_update(self, message):
         # print("Cli update called")

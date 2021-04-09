@@ -38,6 +38,45 @@ class HeaderPrinter(PrinterBase):
             **kwargs
         )
 
+    def print_header_w_option(
+        self,
+        text="",
+        optionaltext="",
+        *args,
+        leadingTab=1,
+        leadingText="[-]",
+        underline="-",
+        leadingBreaks=1,
+        endingBreaks=0,
+        vtabs=0,
+        titleColor=Fore.LIGHTGREEN_EX,
+        underlineColor=Fore.LIGHTMAGENTA_EX,
+        leadingColor=Fore.YELLOW,
+        optionaltextColor=Fore.MAGENTA,
+        styleRest=Style.RESET_ALL,
+        **kwargs
+    ):
+        self.base_print(
+            str(text + styleRest),
+            optionaltext=optionaltext,
+            optionalTextColor=optionaltextColor,
+            leadingText=leadingText,
+            textColor=titleColor,
+            leadingColor=leadingColor,
+            leadingBreaks=leadingBreaks,
+            leadingTab=leadingTab,
+            endingBreaks=endingBreaks,
+            vtabs=vtabs,
+            *args,
+            **kwargs
+        )
+        self.base_print(
+            text=str((underline * (len(text) + len(optionaltext))) + styleRest),
+            endingBreaks=endingBreaks,
+            leadingTab=leadingTab,
+            leadingColor=underlineColor,
+        )
+
     def print_underlined_header(
         self,
         text: str = "",

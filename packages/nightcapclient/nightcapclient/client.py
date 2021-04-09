@@ -7,14 +7,19 @@
 import argparse
 import json
 import abc
+import os
 import time
 from abc import abstractmethod
+from colorama import Fore
+from nightcapcli.base.base_cmd import NightcapBaseCMD
 from nightcapcore.configuration.package_config import NightcapCLIPackageConfiguration
+from nightcapcore.printers.print import Printer
+import pyshark
 from pyshark.packet.packet import Packet
 # endregion
 
 
-class NightcapScanner(NightcapCLIPackageConfiguration):
+class NightcapScanner(NightcapBaseCMD):
     """
 
     This class is used to allows the Nightcap program to interact with the installed scanners
@@ -65,14 +70,21 @@ class NightcapScanner(NightcapCLIPackageConfiguration):
         args = parser.parse_args()
         # print("Args after passing", args)
         # print("\n\nArgs after passing", args.data, "\n\n")
-        # print("Args after passing", dict(json.loads(args.data)))
+        print("Args after passing", dict(json.loads(args.data)))
+        self.printer = Printer()
+
+        # dat = {}
+        # dat[0] = self.toJson()
+        # dat[1] = self.package_params
+        # dat[2] = self.pkg_information
 
         try:
-            # print("Tring to pass json on to client", dict(json.loads(args.data)))
-            NightcapCLIPackageConfiguration.__init__(
+            print("Tring to pass json on to client", dict(json.loads(args.data)))
+            NightcapBaseCMD.__init__(
                 self, dict(json.loads(args.data))["2"], dict(json.loads(args.data))["0"]
             )
-
+            _data = dict(json.loads(args.data))
+            print("Data needs fixed in the client", _data)
             self._keep_packets = keep_packets
             self._display_filter = display_filter
             self._only_summaries = only_summaries
@@ -88,6 +100,12 @@ class NightcapScanner(NightcapCLIPackageConfiguration):
             self._eventloop = eventloop
             self._custom_parameters = custom_parameters
             self._debug = debug
+
+            # self.filename = _data[0]['filename']
+            # self.isDir = _data[0]['isDir']
+            # self.dir = _data[0]['dir']
+            # self.project = _data[0]['project']
+            
 
         except Exception as e:
             print("Error 1", e)
@@ -126,7 +144,8 @@ class NightcapScanner(NightcapCLIPackageConfiguration):
     # region onIntro
     def onIntro(self):
         """Intro to the program"""
-        self.show_params()
+        # self.show_params()
+        
         self.printer.print_formatted_additional(
             "Please wait while processing PCAP files...", endingBreaks=1
         )
@@ -193,8 +212,189 @@ class NightcapScanner(NightcapCLIPackageConfiguration):
 
     # endregion
 
+    # region Get pcaps
+    def get_pcaps(self, *args, keep_packets=True, display_filter=None, only_summaries=False,
+                 decryption_key=None, encryption_type="wpa-pwk", decode_as=None,
+                 disable_protocol=None, tshark_path=None, override_prefs=None,
+                 use_json=False, output_file=None, include_raw=False, eventloop=None, custom_parameters=None,
+                 debug=False, **kwargs):
+        try:
+            _pcapFiles = []
+            # print("Trying to generate pcaps")Generating Reports
+            if self.isDir:
+                exts = self.config.config["NIGHTCAPCORE"]["extentions"].split(" ")
+
+                for root, dirs, files in os.walk(self.dir, topdown=False):
+                    for name in files:
+                        if str(name).split(".")[1] in exts:
+                            _pcapFiles.append(
+                                pyshark.FileCapture(
+                                    os.path.join(root, name),
+                                    display_filter=display_filter,
+                                    keep_packets=keep_packets,
+                                    only_summaries=only_summaries,
+                                    decryption_key=decryption_key,
+                                    encryption_type=encryption_type,
+                                    decode_as=decode_as,
+                                    disable_protocol=disable_protocol,
+                                    tshark_path=tshark_path,
+                                    override_prefs=override_prefs,
+                                    use_json=use_json,
+                                    output_file=output_file,
+                                    include_raw=include_raw,
+                                    eventloop=eventloop,
+                                    custom_parameters=custom_parameters,
+                                    debug=debug
+                                )
+                            )
+            else:
+                _pcapFiles.append(
+                    pyshark.FileCapture(
+                        os.path.join(self.dir, self.filename), 
+                        display_filter=display_filter,
+                        keep_packets=keep_packets,
+                        only_summaries=only_summaries,
+                        decryption_key=decryption_key,
+                        encryption_type=encryption_type,
+                        decode_as=decode_as,
+                        disable_protocol=disable_protocol,
+                        tshark_path=tshark_path,
+                        override_prefs=override_prefs,
+                        use_json=use_json,
+                        output_file=output_file,
+                        include_raw=include_raw,
+                        eventloop=eventloop,
+                        custom_parameters=custom_parameters,
+                        debug=debug
+                    )
+                )
+            return _pcapFiles
+        except Exception as e:
+            self.printer.print_error(e)
+            return []
+    # endregion
+
     # region run
     def run(self):
         self.onRun()
+
+    # endregion
+
+
+
+# region Show Params
+    def show_params(self, detailed: bool = False):
+
+        # if self.project == None:
+        #     proj = "None"
+        # else:
+        #     proj = Fore.LIGHTYELLOW_EX + str(self.project["project_name"])
+
+        self.printer.print_underlined_header("Base Parameters", leadingTab=2)
+        # self.printer.print_formatted_other(
+        #     "PROJECT",
+        #     proj,
+        #     leadingTab=3,
+        #     optionalTextColor=Fore.YELLOW,
+        # )
+
+        if detailed == False:
+            self.printer.print_formatted_other(
+                "FILENAME",
+                str(self.filename),
+                leadingTab=3,
+                optionalTextColor=Fore.YELLOW,
+            )
+        else:
+            self.printer.print_formatted_other(
+                "FILENAME",
+                "Pcap file name to be used for the scan",
+                leadingTab=3,
+                optionalTextColor=Fore.MAGENTA,
+            )
+            self.printer.print_formatted_additional(
+                "Current Value",
+                str(self.filename),
+                leadingTab=4,
+                optionalTextColor=Fore.YELLOW,
+                endingBreaks=1
+            )
+
+        if detailed == False:
+            self.printer.print_formatted_other(
+                "ISDIR",
+                str(self.isDir),
+                leadingTab=3,
+                optionalTextColor=Fore.YELLOW,
+            )
+        else:
+            self.printer.print_formatted_other(
+                "ISDIR",
+                "To either try and scan the pcap file or a directory of pcap files",
+                leadingTab=3,
+                optionalTextColor=Fore.MAGENTA,
+            )
+            self.printer.print_formatted_additional(
+                "Current Value",
+                str(self.isDir),
+                leadingTab=4,
+                optionalTextColor=Fore.YELLOW,
+                endingBreaks=1
+            )
+
+
+        if detailed == False:
+            self.printer.print_formatted_other(
+                "PATH",
+                str(self.dir),
+                leadingTab=3,
+                optionalTextColor=Fore.YELLOW,
+            )
+        else:
+            self.printer.print_formatted_other(
+                "PATH",
+                "The directory of the pcap file(s)",
+                leadingTab=3,
+                optionalTextColor=Fore.MAGENTA,
+            )
+            self.printer.print_formatted_additional(
+                "Current Value",
+                str(self.dir),
+                leadingTab=4,
+                optionalTextColor=Fore.YELLOW,
+                endingBreaks=1
+            )
+
+        try:
+            if self.pkg_params != {}:
+
+                self.printer.print_underlined_header("Package Parameters", leadingTab=2)
+                if detailed == False:
+                    for k, v in self.pk.items():
+                        _ = "None" if v == "" else v
+                        self.printer.print_formatted_other(
+                            str(k).upper(),
+                            str(_),
+                            leadingTab=3,
+                            optionalTextColor=Fore.YELLOW,
+                        )
+                else:
+                    for k, v in self.pkg_params.items():
+                        _ = "None" if v == "" else v
+                        self.printer.print_formatted_other(
+                            str(k).upper(),
+                            str(self.pkg_descripts[k]),
+                            leadingTab=3,
+                            optionalTextColor=Fore.MAGENTA,
+                        )
+                        self.printer.print_formatted_other(
+                            "Current Value",
+                            str(_),
+                            leadingTab=4,
+                            optionalTextColor=Fore.YELLOW,
+                        )
+        except Exception as e:
+            pass
+        print()
 
     # endregion
