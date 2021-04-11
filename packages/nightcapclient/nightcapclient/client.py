@@ -8,9 +8,11 @@ import argparse
 import json
 import abc
 import os
+import sys
 import time
 from abc import abstractmethod
 from colorama import Fore
+from colorama.ansi import Style
 from nightcapcli.base.base_cmd import NightcapBaseCMD
 from nightcapcore.configuration.package_config import NightcapCLIPackageConfiguration
 from nightcapcore.printers.print import Printer
@@ -68,9 +70,9 @@ class NightcapScanner(NightcapBaseCMD):
         parser = argparse.ArgumentParser(description="Process some pcaps.")
         parser.add_argument("--data", required=True, help="list of pcap filenames")
         args = parser.parse_args()
-        # print("Args after passing", args)
+        print("Args after passing", args)
         # print("\n\nArgs after passing", args.data, "\n\n")
-        print("Args after passing", dict(json.loads(args.data)))
+        # print("Args after passing", dict(json.loads(args.data)))
         self.printer = Printer()
 
         # dat = {}
@@ -79,12 +81,14 @@ class NightcapScanner(NightcapBaseCMD):
         # dat[2] = self.pkg_information
 
         try:
-            print("Tring to pass json on to client", dict(json.loads(args.data)))
+            # print("Tring to pass json on to client", dict(json.loads(args.data)))
             NightcapBaseCMD.__init__(
-                self, dict(json.loads(args.data))["2"], dict(json.loads(args.data))["0"]
+                self, dict(json.loads(args.data))["2"], passedJson=dict(json.loads(args.data))["0"]
             )
             _data = dict(json.loads(args.data))
-            print("Data needs fixed in the client", _data)
+            # print("Data needs fixed in the client", _data)
+            self.base_params = _data["0"]
+            self.package_params = _data["1"]
             self._keep_packets = keep_packets
             self._display_filter = display_filter
             self._only_summaries = only_summaries
@@ -100,6 +104,7 @@ class NightcapScanner(NightcapBaseCMD):
             self._eventloop = eventloop
             self._custom_parameters = custom_parameters
             self._debug = debug
+            self._elapseTime = 0
 
             # self.filename = _data[0]['filename']
             # self.isDir = _data[0]['isDir']
@@ -130,7 +135,10 @@ class NightcapScanner(NightcapBaseCMD):
     # region onClose
     def onClose(self):
         """Todo when the process is done"""
-        self.printer.print_formatted_check('Elapse time (seconds)', str(round(self._elapseTime, 3)), endingBreaks=1)
+        try:
+            self.printer.print_formatted_check('Elapse time (seconds)', str(round(self._elapseTime, 3)), endingBreaks=1)
+        except Exception as e:
+            print(e)
     # endregion
 
     # region onConsolePrint
@@ -146,9 +154,9 @@ class NightcapScanner(NightcapBaseCMD):
         """Intro to the program"""
         # self.show_params()
         
-        self.printer.print_formatted_additional(
-            "Please wait while processing PCAP files...", endingBreaks=1
-        )
+        # self.printer.print_formatted_additional(
+        #     "Please wait while processing PCAP files...", endingBreaks=1
+        # )
 
     # endregion
 
@@ -183,14 +191,19 @@ class NightcapScanner(NightcapBaseCMD):
                 _count = 1
                 for pkt in cpt:
                     # print(type(pkt))
-                    self.onProcess(pkt, _count)
+                    sys.stdout.write(Fore.LIGHTCYAN_EX + "\r\t\t[?] " + Fore.LIGHTGREEN_EX + "Scanning Packet # : " + Fore.LIGHTYELLOW_EX + str(_count) + Style.RESET_ALL)
+                    try:
+                        self.onProcess(pkt, _count)
+                    except Exception as e:
+                        print("There has been an error")
+                        pass
                     _count += 1
             self._elapseTime = time.time() - start
             print("")
         except Exception as e:
             self.printer.print_error(Exception("Error with Processing"))
             print(e)
-            raise e
+            # raise e
 
         try:
             self.onReport()
@@ -226,6 +239,7 @@ class NightcapScanner(NightcapBaseCMD):
 
                 for root, dirs, files in os.walk(self.dir, topdown=False):
                     for name in files:
+                        print("Parsing filename", name)
                         if str(name).split(".")[1] in exts:
                             _pcapFiles.append(
                                 pyshark.FileCapture(
@@ -248,9 +262,10 @@ class NightcapScanner(NightcapBaseCMD):
                                 )
                             )
             else:
+                print("Parsing filename", os.path.join(self.base_params['dir'], self.base_params['filename']))
                 _pcapFiles.append(
                     pyshark.FileCapture(
-                        os.path.join(self.config.dir, self.config.filename), 
+                        os.path.join(self.base_params['dir'], self.base_params['filename']), 
                         display_filter=display_filter,
                         keep_packets=keep_packets,
                         only_summaries=only_summaries,

@@ -131,7 +131,7 @@ class NightcapDockerHelper(object):
         try:
             self.start_container_by_name("nightcapmongodb")
             time.sleep(3)
-            MongoDatabaseChecker().initialize_database()
+            # MongoDatabaseChecker().initialize_database()
             return True
         except Exception as e:
             raise e
@@ -146,13 +146,13 @@ class NightcapDockerHelper(object):
     # endregion
 
     # region Init Containers
-    def init_containers(self, agreement: str, dc: NightcapCoreDockerChecker):
+    def init_containers(self, dc: NightcapCoreDockerChecker):
         try:
-            if agreement in self.yes:
-                self.init_mongo(dc)
-                self.init_nc_site(dc)
-                self.build_containers()
-            print(Style.RESET_ALL)
+            self.init_mongo(dc)
+            self.init_nc_site(dc)
+            self.build_containers()
+            self.prepare_containers()
+            # self.set_account()
             return True
         except Exception as e:
             raise e
@@ -166,8 +166,6 @@ class NightcapDockerHelper(object):
                 "Initializing: (NC Site)", endingBreaks=1
             )
             self.make_docker()
-
-        self.set_account()
     # endregion
 
     # region Stop all containers
@@ -258,7 +256,7 @@ class NightcapDockerHelper(object):
                     while p.poll() is None:
                         print("", end="", flush=False)
                         time.sleep(1)
-                    self.printer.print_formatted_check(text="Created Containers")
+                    self.printer.print_formatted_check(text="Container Started")
                     return True
 
             return False
@@ -320,13 +318,13 @@ class NightcapDockerHelper(object):
     # region Build Containers
     def build_containers(self):
         try:
-            self.printer.print_formatted_additional(text="Creating Docker Containers")
+            self.printer.print_underlined_header(text="Creating Docker Containers")
             _ = os.path.join(
                 Path(__file__).resolve().parent.parent, "docker-compose.yml"
             )
-            p = subprocess.Popen(["docker-compose", "-f", _, "up", "--no-start"])
+            p = subprocess.Popen(["docker-compose", "-f", _, "up", "--no-start"], stdout=DEVNULL, stderr=DEVNULL)
             while p.poll() is None:
-                print(".", end="", flush=True)
+                print("", end="", flush=True)
                 time.sleep(1)
             self.printer.print_formatted_check(text="Created Containers")
         except Exception as e:
@@ -337,46 +335,49 @@ class NightcapDockerHelper(object):
     #region set admin
     def set_account(self):
         try:
-            self.printer.print_formatted_additional(text="Creating Docker Containers")
+            self.printer.print_formatted_additional(text="Creating account")
             _ = os.path.join(
                 Path(__file__).resolve().parent.parent, "manage.py"
             )
             p = subprocess.Popen(["python3", _, "createsuperuser"], stdout=PIPE, stdin=PIPE)
             while p.poll() is None:
-                print(".", end="", flush=True)
+                print("", end="", flush=True)
                 time.sleep(1)
-            self.printer.print_formatted_check(text="Created Containers")
+            self.printer.print_formatted_check(text="Account Created")
         except Exception as e:
             raise e
     #endregion
 
     # region Make Docker
     def make_docker(self):
-        ScreenHelper().clearScr()
-        self.printer.print_underlined_header_undecorated(
-            "Making docker image", endingBreaks=1
+        # ScreenHelper().clearScr()
+        self.printer.item_1(
+            "Please wait while making NC Docker Image"
         )
-        p = subprocess.Popen(["make", "-C", Path(__file__).resolve().parent.parent])
+        p = subprocess.Popen(["make", "-C", Path(__file__).resolve().parent.parent], stdout=DEVNULL, stderr=DEVNULL)
 
         while p.poll() is None:
-            print(".", end="", flush=True)
+            print("", end="", flush=True)
             time.sleep(1)
 
-        print("returncode", p.returncode)
+        # print("returncode", p.returncode)
+        if p.returncode == 0:
+            self.printer.print_formatted_check("Done", leadingTab=3)
+        else:
+            self.printer.print_error(Exception("Error pulling docker image: %s" % (p.returncode)))
 
     # endregion
 
     # region Init Mongo
     def init_mongo(self, dc: NightcapCoreDockerChecker):
         if dc.mongo_im_exists == False:
-            ScreenHelper().clearScr()
+            # ScreenHelper().clearScr()
             try:
                 self.printer.print_underlined_header(
                     "Initializing: (Mongo)", endingBreaks=1
                 )
                 print(Fore.LIGHTBLACK_EX)
                 dc.pull_image("mongo")
-                ScreenHelper().clearScr()
                 self.printer.print_formatted_check(
                     text="Initialized", optionaltext="Mongo"
                 )

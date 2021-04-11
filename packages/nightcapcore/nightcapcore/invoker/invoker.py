@@ -32,7 +32,7 @@ class Invoker:
     def set_on_finish(self, command: Command):
         self._on_finish = command
 
-    def do_something_important(self) -> None:
+    def execute(self) -> None:
         """
         The Invoker does not depend on concrete command or receiver classes. The
         Invoker passes a request to a receiver indirectly, by executing a

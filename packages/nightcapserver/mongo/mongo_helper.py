@@ -233,11 +233,17 @@ class NightcapMongoHelper:
                     + "\t\tAre you sure you want to initialize containers (Y/N): "
                     + Style.RESET_ALL
                 ).lower()
-                _init = self.docker_helper.init_containers(yes, _docker_checker)
-                if _init == True:
-                    self.docker_helper.prepare_containers()
-                    self.printer.print_formatted_additional(text="Rebooting...")
-                    os.execv(sys.argv[0], sys.argv)
+                ScreenHelper().clearScr()
+                if yes in self.yes:
+                    self.printer.print_underlined_header_undecorated("Setting Up Environment", leadingTab=0)
+                    _init = self.docker_helper.init_containers(_docker_checker)
+                    if _init == True:
+                    #     self.printer.print_underlined_header("Preparing Docker Images")
+                    #     self.docker_helper.prepare_containers()
+                        print()
+                        self.printer.print_formatted_check("Set Up Done", leadingTab=1, endingBreaks=1)
+                        self.printer.print_formatted_additional(text="Rebooting...")
+                        os.execv(sys.argv[0], sys.argv)
             elif _selection.strip().lower() == "s":
                 yes = input(
                     Fore.YELLOW

@@ -170,6 +170,7 @@ def main():
     except Exception as e:
         _printer.print_error(e)
     finally:
+    
         _printer.print_underlined_header("Cleaning up...")
         try:
             NighcapCoreSimpleServer(_entry.conf).shutdown()

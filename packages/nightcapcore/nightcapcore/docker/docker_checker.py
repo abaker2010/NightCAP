@@ -8,6 +8,8 @@ import time
 from subprocess import Popen, PIPE, STDOUT
 import os
 
+from nightcapcore.printers.print import Printer
+
 DEVNULL = open(os.devnull, "wb")
 # endregion
 
@@ -48,7 +50,7 @@ class NightcapCoreDockerChecker(object):
         super().__init__()
         self.mongo_im_exists = self.__check_image("mongo", "latest", "mongo")
         self.ncs_exits = self.__check_image("nightcapsite", "latest", "nightcapsite")
-
+        self.printer = Printer()
     # endregion
 
     # region Check Image
@@ -71,14 +73,17 @@ class NightcapCoreDockerChecker(object):
 
     # region Pull Image
     def pull_image(self, image: str):
-        print("Tring to pull", image)
-        p = Popen(["docker", "pull", image])
-
+        self.printer.item_1("Please wait while pulling Image", image)
+        self.printer.print_formatted_additional("Note: This could take some time", leadingTab=3)
+        p = Popen(["docker", "pull", image], stdout=DEVNULL)
         while p.poll() is None:
-            print(".", end="", flush=True)
+            print("", end="", flush=True)
             time.sleep(1)
 
-        print("returncode", p.returncode)
+        if p.returncode == 0:
+            self.printer.print_formatted_check("Done", leadingTab=3)
+        else:
+            self.printer.print_error(Exception("Error pulling docker image: %s" % (p.returncode)))
         # _p1 = subprocess.Popen(['docker', 'pull', image], stdout=subprocess.PIPE)
         # _p1.wait()
         # return

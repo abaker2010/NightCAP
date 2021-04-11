@@ -111,7 +111,7 @@ class NightcapSettingsCMD(NightcapBaseCMD):
         try:
             invoker = Invoker()
             invoker.set_on_start(NightcapPackageInstallerCommand(line))
-            invoker.do_something_important()
+            invoker.execute()
         except Exception as e:
             self.printer.print_error(e)
 
@@ -138,7 +138,7 @@ class NightcapSettingsCMD(NightcapBaseCMD):
         try:
             invoker = Invoker()
             invoker.set_on_start(NightcapPackageUninstallerCommand(line))
-            invoker.do_something_important()
+            invoker.execute()
         except Exception as e:
             self.printer.print_error(e)
 
@@ -204,8 +204,11 @@ class NightcapSettingsCMD(NightcapBaseCMD):
             if line != "":
                 if "normal" == str(line).lower().strip():
                     self.config.verbosity = False
+                    self.config.config.set('NIGHTCAPCORE', 'verbose', 'False')
                 elif "debug" == str(line).lower().strip():
                     self.config.verbosity = True
+                    self.config.config.set('NIGHTCAPCORE', 'verbose', 'True')
+                self.config.Save()
             else:
                 raise Exception(
                     "Error with level, for more information use: help verbosity"

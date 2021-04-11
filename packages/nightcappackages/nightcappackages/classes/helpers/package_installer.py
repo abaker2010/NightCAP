@@ -123,7 +123,7 @@ class NightcapPackageInstallerCommand(Command):
             if self._db.install(self._package):
                 self._copy(self._package, self._package_path)
                 self.printer.print_formatted_check(
-                    text="INSTALLED", leadingTab=1, endingBreaks=1
+                    text="INSTALLED", leadingTab=1, endingBreaks=1, leadingBreaks=1
                 )
             else:
                 self.printer.print_formatted_delete(text="Could not copy files")

@@ -76,7 +76,7 @@ class NightcapCLIPackage(NightcapBaseCMD):
         except Exception as e:
             self.printer.print_error(e)
             self.pkg_params = {}
-        print("Project", NightcapCLIConfiguration().project)
+        # print("Project", NightcapCLIConfiguration().project)
 
 
     def do_exit(self, line):
@@ -289,50 +289,52 @@ class NightcapCLIPackage(NightcapBaseCMD):
 
     #region Do Run
     def do_run(self, line):
-        try:
-            force = False
-            print(NightcapCLIConfiguration().project)
-            if NightcapCLIConfiguration().project == None:
-                force = input(
-                    (
-                        Fore.YELLOW
-                        + "Project not selected to be used would you like to continue? [Y/n]: "
-                        + Fore.GREEN
-                    )
-                )
-                print(Style.RESET_ALL, Fore.LIGHTCYAN_EX)
-                yes_options = self.config.config.get("NIGHTCAPCORE","yes").split(" ")
-                if force == None:
-                    force = False
-                else:
-                    if force in yes_options:
-                        force = True
-            else:
-                print("project being used")
-                force = True
-
-            if force == True:
-                if len(self.selectedList) == 3:
-                    try:
-                        exe_path = self.db.get_package_run_path(self.pkg_information)
-                        dat = {}
-                        dat[0] = self.toJson()
-                        dat[1] = self.pkg_params
-                        dat[2] = self.pkg_information
-                        call = "python3.8 %s --data '%s'" % (
-                            exe_path,
-                            json.dumps(dat, default=str),
+        if self.config.filename != None:
+            try:
+                force = False
+                if NightcapCLIConfiguration().project == None:
+                    force = input(
+                        (
+                            Fore.YELLOW
+                            + "Project not selected to be used would you like to continue? [Y/n]: "
+                            + Fore.GREEN
                         )
-                        os.system(call)
-                    except Exception as e:
-                        self.printer.print_error(e)
+                    )
+                    print(Style.RESET_ALL, Fore.LIGHTCYAN_EX)
+                    yes_options = self.config.config.get("NIGHTCAPCORE","yes").split(" ")
+                    if force == None:
+                        force = False
+                    else:
+                        if force in yes_options:
+                            force = True
                 else:
-                    self.printer.print_error(Exception("Package not selected to be used"))
-                    print(self.selectedList)
-            else:
-                self.printer.print_error(Exception("Scan canceled by user"))
-        except Exception as e:
-            self.printer.print_error(e)
+                    print("project being used")
+                    force = True
+
+                if force == True:
+                    if len(self.selectedList) == 3:
+                        try:
+                            exe_path = self.db.get_package_run_path(self.pkg_information)
+                            dat = {}
+                            dat[0] = self.toJson()
+                            dat[1] = self.pkg_params
+                            dat[2] = self.pkg_information
+                            call = "python3.8 %s --data '%s'" % (
+                                exe_path,
+                                json.dumps(dat, default=str),
+                            )
+                            os.system(call)
+                        except Exception as e:
+                            self.printer.print_error(e)
+                    else:
+                        self.printer.print_error(Exception("Package not selected to be used"))
+                        print(self.selectedList)
+                else:
+                    self.printer.print_error(Exception("Scan canceled by user"))
+            except Exception as e:
+                self.printer.print_error(e)
+        else:
+            self.printer.print_error(Exception("Please Specify A File"))
     #endregion 
 
     #region Update

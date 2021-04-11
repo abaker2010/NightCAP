@@ -4,7 +4,10 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 # region Imports
+from re import sub
+from nightcapcore.printers.print import Printer
 from nightcapcore.singleton.singleton import Singleton
+from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
 from nightcappackages.classes.databases.mogo.connections.mongo_operation_connector import (
     MongoDatabaseOperationsConnection,
 )
@@ -62,7 +65,7 @@ class MongoSubModuleDatabase(MongoDatabaseOperationsConnection, metaclass=Single
     def __init__(self):
         MongoDatabaseOperationsConnection.__init__(self)
         self._db = self.client[self.conf.config["MONGOSERVER"]["db_name"]]["submodules"]
-
+        self.printer = Printer()
     # endregion
 
     # region Create
@@ -102,7 +105,7 @@ class MongoSubModuleDatabase(MongoDatabaseOperationsConnection, metaclass=Single
 
     # region Find One
     def find_one(self, module: str = None, submodule: str = None):
-        return self._db.find_one({"module": module, "submodule": submodule})
+        return self._db.find_one({"module": module, "type": submodule})
 
     # endregion
 
@@ -137,10 +140,11 @@ class MongoSubModuleDatabase(MongoDatabaseOperationsConnection, metaclass=Single
 
     # region Uninstall Submodule
     def submodule_try_uninstall(self, module: str, submodule: str):
-        _submoduleexists = self.find_one(module, submodule)
-        self._db.remove(_submoduleexists)
-        self.printer.print_formatted_additional(
-            text="Deleted submodule entry", leadingTab=3
-        )
+        _count = MongoPackagesDatabase().find_packages(module, submodule).count()
+        if _count == 0:
+            self.printer.debug("Trying remove submodule:", self.find_one(module, submodule), currentMode=self.conf.verbosity)
+            self._db.remove(self.find_one(module, submodule))
+            self.printer.debug("Deleted submodule entry", currentMode=self.conf.verbosity)
 
     # endregion
+

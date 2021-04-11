@@ -33,7 +33,7 @@ class NightcapCLIConfiguration(metaclass=Singleton):
             else self.config.get("NIGHTCAPSCAN", "dir")
         )
         self.filename = (
-            "xmrig.pcapng"
+            None
             if self.config.get("NIGHTCAPSCAN", "filename") == "None"
             else self.config.get("NIGHTCAPSCAN", "filename")
         )

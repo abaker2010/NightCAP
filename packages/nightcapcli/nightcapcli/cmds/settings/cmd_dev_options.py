@@ -51,28 +51,36 @@ class NightcapDevOptions(NightcapBaseCMD):
     # region Do genPackageUID
     def do_genPackageUID(self, package_path: str):
         try:
+            self.printer.print_underlined_header("Trying to sign package")
+            self.printer.print_formatted_additional("Please wait...")
+            print(os.path.join(package_path, "package_info.json"))
             data = None
+            self.printer.debug("Trying to open package_info.json", currentMode=self.config.verbosity)
+
             with open(os.path.join(package_path, "package_info.json")) as json_file:
                 data = json.load(json_file)
-                print(json.dumps(data, indent=4))
+                # print(json.dumps(data, indent=4))
 
-            print("\n\nData that we will need")
+            self.printer.debug("Data", json.dumps(data, indent=2), currentMode=self.config.verbosity)
+
+            # print("\n\nData that we will need")
             package_name = data["package_information"]["package_name"]
             package_module = data["package_for"]["module"]
             package_submodule = data["package_for"]["submodule"]
 
             package = package_module + "/" + package_submodule + "/" + package_name
             hash = hashlib.sha256(package.encode()).hexdigest()
-            print(hash)
-            print("\n\n")
+            # print(hash)
+            # print("\n\n")
 
             data["package_information"]["uid"] = hash
 
-            print(data)
+            # print(data)
+            self.printer.debug("Writing data to config", currentMode=self.config.verbosity)
             with open(os.path.join(package_path, "package_info.json"), "w") as outfile:
                 json.dump(data, outfile)
-
-            print("\n\n")
+            self.printer.print_formatted_check("Done")
+            # print("\n\n")
         except Exception as e:
             print(e)
 

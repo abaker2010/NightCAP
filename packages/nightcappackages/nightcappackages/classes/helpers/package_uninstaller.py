@@ -64,6 +64,7 @@ class NightcapPackageUninstallerCommand(Command):
         self.printer = Printer()
         self.__package_paths = NightcapPackagesPaths()
         self._package_path = package_path
+        self._split_package_path = package_path.split("/")
         self._db = MongoPackagesDatabase()
         self._ex = self._db.check_package_path(package_path.split("/"))
 
@@ -72,63 +73,111 @@ class NightcapPackageUninstallerCommand(Command):
     # region Execute
     def execute(self) -> None:
         try:
-            split_package_path = self._package_path.split("/")
             if self._ex == False:
-                ScreenHelper().clearScr()
-                self.printer.print_formatted_delete(text="Package does not exist")
+                raise Exception("Package does not exist")
             else:
                 _package = MongoPackagesDatabase().get_package_config(
                     self._package_path.split("/")
                 )
-                self.printer.print_formatted_other("Module", split_package_path[0])
-                self.printer.print_formatted_other("Submodule", split_package_path[1])
-                self.printer.print_formatted_other("Package", split_package_path[2])
                 uconfirm = self._confim_delete(self._package_path)
-                ScreenHelper().clearScr()
-                if uconfirm.lower() == "y":
-                    try:
-                        self.printer.print_underlined_header_undecorated(
-                            "UNINSTALLED CONFIRMED"
-                        )
-                        self.printer.print_formatted_other(
-                            "Package",
-                            str(_package["_id"]),
-                            leadingText="~",
-                        )
+                if str(uconfirm).lower() == "y": 
+                    self.printer.print_header_w_option("Trying to Uninstall", self._package_path)
+                    # self.printer.print_underlined_header(
+                    #         "UNINSTALLED CONFIRMED", titleColor=Fore.LIGHTRED_EX
+                    #     )
+                    self.printer.item_1("ID", str(_package["_id"]), leadingText='[~]', seperator=":")
 
-                        try:
-                            try:
-                                self._db.delete(ObjectId(_package["_id"]))
-                                MongoSubModuleDatabase().submodule_try_uninstall(
-                                    split_package_path[0], split_package_path[1]
+                    #region Removing Package
+                    try:
+
+                        #region Deleting Package from DB
+                        self._db.delete(ObjectId(_package["_id"]))
+                        #endregion
+
+                        #region Deleteing Files
+                        self._delete(_package)
+                        #enregion
+
+                        #region Removing Submodules
+                        MongoSubModuleDatabase().submodule_try_uninstall(
+                            self._split_package_path[0], self._split_package_path[1]
+                        )
+                        #endregion
+
+                        #region Removing Modules
+                        if (
+                                MongoSubModuleDatabase()
+                                .find_submodules(self._split_package_path[0])
+                                .count()
+                                == 0
+                            ):
+                            MongoModuleDatabase().module_try_unintall(
+                                    self._split_package_path[0]
                                 )
-                                # If there are no submodules then remove the module
-                                if (
-                                    MongoSubModuleDatabase()
-                                    .find_submodules(split_package_path[0])
-                                    .count()
-                                    == 0
-                                ):
-                                    MongoModuleDatabase().module_try_unintall(
-                                        split_package_path[0]
-                                    )
-                                self._delete(_package)
-                                self.printer.print_formatted_check(
+                        #endregion
+
+                        
+                    except Exception as e:
+                        raise e
+                    #endregion
+
+                    #region Checking Sub/Modules
+                    # try:
+                    #     if (
+                    #             MongoSubModuleDatabase()
+                    #             .find_submodules(self._split_package_path[0])
+                    #             .count()
+                    #             == 0
+                    #         ):
+                    #             MongoModuleDatabase().module_try_unintall(
+                    #                 self._split_package_path[0]
+                    #             )
+                    # except Exception as e:
+                    #     raise e
+                    #endregion
+                else:
+                    raise Exception("User Cancled Uninstall")
+            
+            #         try:
+            #             try:
+            #                 try:
+            #                     self._db.delete(ObjectId(_package["_id"]))
+            #                     MongoSubModuleDatabase().submodule_try_uninstall(
+            #                         split_package_path[0], split_package_path[1]
+            #                     )
+            #                     # If there are no submodules then remove the module
+            #                     if (
+            #                         MongoSubModuleDatabase()
+            #                         .find_submodules(split_package_path[0])
+            #                         .count()
+            #                         == 0
+            #                     ):
+            #                         MongoModuleDatabase().module_try_unintall(
+            #                             split_package_path[0]
+            #                         )
+            #                     self._delete(_package)
+            #                     self.printer.print_formatted_check(
+            #                         text="UNINSTALLED",
+            #                         vtabs=1,
+            #                         endingBreaks=1,
+            #                         leadingTab=1,
+            #                     )
+            #                 except Exception as e:
+            #                     self.printer.print_error(e)
+
+            #             except Exception as e:
+            #                 self.printer.print_error(e)
+            #         except Exception as e:
+            #             self.printer.print_error(e)
+            self.printer.print_formatted_check(
                                     text="UNINSTALLED",
                                     vtabs=1,
                                     endingBreaks=1,
                                     leadingTab=1,
                                 )
-                            except Exception as e:
-                                self.printer.print_error(e)
-
-                        except Exception as e:
-                            self.printer.print_error(e)
-                    except Exception as e:
-                        self.printer.print_error(e)
 
         except Exception as e:
-            raise Exception("Package not found")
+            raise e
 
     # endregion
 

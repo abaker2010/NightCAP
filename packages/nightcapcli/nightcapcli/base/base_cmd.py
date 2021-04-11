@@ -82,6 +82,7 @@ class NightcapBaseCMD(cmd.Cmd):
         self,
         selectedList: list,
         channelid=None,
+        passedJson=None
     ):
         cmd.Cmd.__init__(self, completekey="tab", stdin=None, stdout=None)
         if selectedList != []:
@@ -100,6 +101,12 @@ class NightcapBaseCMD(cmd.Cmd):
         self.mongo_helper = NightcapMongoHelper(self.config)
         self.channelID = channelid
         self.prompt = self._prompt()
+        
+        # if passedJson != None:
+        #     self.config.filename = passedJson['filename']
+        #     self.config.isDir = passedJson['isDir']
+        #     self.config.dir = passedJson['dir']
+        #     self.config.project = passedJson['project']
         
     # endregion
 
