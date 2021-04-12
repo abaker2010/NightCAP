@@ -9,6 +9,9 @@ import subprocess
 from subprocess import Popen, PIPE, STDOUT
 import time
 import os
+import sys
+import re
+import getpass
 import docker as dDocker
 from docker import APIClient
 from colorama.ansi import Fore, Style
@@ -19,6 +22,7 @@ from nightcapcore.printers.print import Printer
 from nightcappackages.classes.databases.mogo.checker.mongo_database_checker import (
     MongoDatabaseChecker,
 )
+from requests.exceptions import RetryError
 
 DEVNULL = open(os.devnull, "wb")
 # endregion
@@ -350,11 +354,28 @@ class NightcapDockerHelper(object):
             #     time.sleep(1)
 
 
-            # p = subprocess.Popen(["docker", "exec", "nightcapsite", "python3", "manage.py", "createsuperuser"], stdout=PIPE, stdin=PIPE, shell=True)
-            # p.communicate()
-            # while p.poll() is None:
-            #     print("", end="", flush=True)
-            #     time.sleep(1)
+            try:
+                self.printer.print_formatted_additional("Making Migrations")
+                _p1 = self._wait_while_processing(subprocess.Popen(["docker", "exec", "-it", "nightcapsite", "python3", "manage.py", "makemigrations"], stdout=DEVNULL))
+            except Exception as e:
+                raise e
+
+            try:
+                self.printer.print_formatted_additional("Migrating")
+                _p2 = self._wait_while_processing(subprocess.Popen(["docker", "exec", "-it", "nightcapsite", "python3", "manage.py", "migrate"], stdout=DEVNULL))
+            except Exception as e:
+                raise e
+            
+            try:
+                self.printer.print_underlined_header("Django Admin Account")
+                self.printer.item_3("Please enter some information to create your web admin account", leadingTab=2, endingBreaks=1)
+                _username = input(Fore.LIGHTGREEN_EX + str("User Name: %s" % (Fore.LIGHTCYAN_EX)))
+                _email = input(Fore.LIGHTGREEN_EX + str("Email Address: %s" % (Fore.LIGHTCYAN_EX))) 
+                _password = getpass.getpass(Fore.LIGHTGREEN_EX + str("Password:")) 
+                _p3 = self._wait_while_processing(subprocess.Popen(["docker", "exec", "-it", "nightcapsite", "python", "manage.py", "shell", "-c",\
+                    ("from django.contrib.auth.models import User; User.objects.create_superuser('%s', '%s', '%s')" % (_username, _email, _password))], stdout=PIPE, stderr=PIPE))
+            except Exception as e:
+                raise e
 
             print()
             self.printer.print_underlined_header("Django Clean Up")
@@ -363,6 +384,28 @@ class NightcapDockerHelper(object):
         except Exception as e:
             raise e
     #endregion
+
+    def _wait_while_processing(self, process: Popen):
+        while process.poll() is None:
+            print("", end="", flush=True)
+            time.sleep(1)
+
+        if process.returncode == 0:
+            self.printer.print_formatted_check("Done", leadingTab=3)
+        else:
+            self.printer.print_error(Exception("Error pulling docker image: %s" % (process.returncode)))
+    
+        return process
+
+
+
+
+    def _email_validation(self, email: str):
+        regex = '^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$'
+        if(re.search(regex, email)):
+            return True
+        else:
+            return False
 
     # region Make Docker
     def make_docker(self):
