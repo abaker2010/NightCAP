@@ -152,7 +152,7 @@ class NightcapDockerHelper(object):
             self.init_nc_site(dc)
             self.build_containers()
             self.prepare_containers()
-            # self.set_account()
+            self.set_account()
             return True
         except Exception as e:
             raise e
@@ -216,6 +216,7 @@ class NightcapDockerHelper(object):
     # region start All Containers
     def start_all_containers(self):
         self.start_mongodb()
+        print()
         self.start_nighcap_site()
 
     # endregion
@@ -335,15 +336,30 @@ class NightcapDockerHelper(object):
     #region set admin
     def set_account(self):
         try:
-            self.printer.print_formatted_additional(text="Creating account")
-            _ = os.path.join(
-                Path(__file__).resolve().parent.parent, "manage.py"
-            )
-            p = subprocess.Popen(["python3", _, "createsuperuser"], stdout=PIPE, stdin=PIPE)
-            while p.poll() is None:
-                print("", end="", flush=True)
-                time.sleep(1)
+            self.printer.print_underlined_header(text="Creating account")
+            self.start_all_containers()
+            print()
+            self.printer.print_underlined_header(text="Account data")
+            
+            # _ = os.path.join(
+            #     Path(__file__).resolve().parent.parent, "manage.py"
+            # )
+            # p = subprocess.Popen(["python3", _, "createsuperuser"], stdout=PIPE, stdin=PIPE)
+            # while p.poll() is None:
+            #     print("", end="", flush=True)
+            #     time.sleep(1)
+
+
+            # p = subprocess.Popen(["docker", "exec", "nightcapsite", "python3", "manage.py", "createsuperuser"], stdout=PIPE, stdin=PIPE, shell=True)
+            # p.communicate()
+            # while p.poll() is None:
+            #     print("", end="", flush=True)
+            #     time.sleep(1)
+
+            print()
+            self.printer.print_underlined_header("Django Clean Up")
             self.printer.print_formatted_check(text="Account Created")
+            self.stop_nightcapsite()
         except Exception as e:
             raise e
     #endregion

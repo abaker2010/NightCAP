@@ -11,7 +11,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: mongodbadmin
       MONGO_INITDB_ROOT_PASSWORD: secret
     ports:
-      - 28017:27017
+      - 27017:27017
 
   website:
     image: nightcapsite:latest
@@ -21,7 +21,7 @@ services:
     ports:
       - "8000:8000"
     links: 
-        - "mongodb"
+      - "mongodb"
     depends_on:
       - mongodb
 

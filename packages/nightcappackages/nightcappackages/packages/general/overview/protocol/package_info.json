@@ -1,0 +1,25 @@
+{
+    "author_info": {
+        "creator": "Aaron Baker"
+    },
+    "package_for": {
+        "module": "general",
+        "submodule": "overview"
+    },
+    "package_information": {
+        "package_name": "protocol",
+        "version": "1.0",
+        "date": "03/29/2021",
+        "imports": [],
+        "details": "protocol overview script",
+        "entry_file": "overview.py",
+        "entry_file_optional_params": {
+            "0" : {
+                "name": "links",
+                "value": "False",
+                "description": "link to protocol urls"
+            }
+        },
+        "uid": "cc1f48047c7fb252f632c62434f1926ab5ab18dba2b90966f33a85ac861ed5cb"
+    }
+}

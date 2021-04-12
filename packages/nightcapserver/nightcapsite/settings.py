@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 import mongoengine
+import djongo
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -77,21 +78,39 @@ WSGI_APPLICATION = "nightcapsite.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 # connects to the django site
-mongoengine.connect(
-    db="nightcapsite",
-    username="mongodbadmin",
-    password="secret",
-    host="mongo",
-    port=28017,
-)
+# mongoengine.connect(
+#     db="nightcapsite",
+#     username="mongodbadmin",
+#     password="secret",
+#     host="mongo",
+#     port=28017,
+# )
 # mongodb://mongodbadmin:secret@localhost:28017
-# DATABASES = {
-#        'default': {
-#            'ENGINE': 'djongo',
-#            'NAME': 'nightcapsite',
-#            'HOST' : 'mongodb://mongodbadmin:secret@localhost:28017',
-#        }
-#    }
+DATABASES = {
+       'default': {
+           'ENGINE': 'djongo',
+           'ENFORCE_SCHEMA': True,
+            'LOGGING': {
+                'version': 1,
+                'loggers': {
+                    'djongo': {
+                        'level': 'DEBUG',
+                        'propogate': False,                        
+                    }
+                },
+            }, 
+           'NAME': 'demo',
+           'CLIENT' : {
+                'host': 'mongodb',
+                'port': 27017,
+                'username': 'mongodbadmin',
+                'password': "secret",
+                'authSource': 'admin',
+                'authMechanism': 'SCRAM-SHA-256'
+           }
+       }
+   }
+   # 'HOST' : 'mongodb://mongodbadmin:secret@mongodb:27017',
 # DATABASES = {
 #        'default': {
 #            'ENGINE': 'djongo',

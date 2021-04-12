@@ -1,0 +1,25 @@
+{
+    "author_info": {
+        "creator": "Aaron Baker"
+    },
+    "package_for": {
+        "module": "general",
+        "submodule": "overview"
+    },
+    "package_information": {
+        "package_name": "traffic",
+        "version": "1.0",
+        "date": "03/29/2021",
+        "imports": [],
+        "details": "traffic overview script",
+        "entry_file": "overview.py",
+        "entry_file_optional_params": {
+            "0" : {
+                "name": "fqdn",
+                "value": "False",
+                "description": "Fully Qualified Domain Lookup (FQDN)"
+            }
+        },
+        "uid": "01219a5028fc8824368ba3a62b54aab03bcc29266547628e00d72b0c863424bd"
+    }
+}

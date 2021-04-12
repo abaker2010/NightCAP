@@ -1,0 +1,19 @@
+{
+    "author_info": {
+        "creator": "Aaron Baker"
+    },
+    "package_for": {
+        "module": "htb",
+        "submodule": "pcap"
+    },
+    "package_information": {
+        "package_name": "marketdump",
+        "version": "1.0",
+        "date": "03/29/2021",
+        "imports": [],
+        "details": "Market Dump Pcap Solver",
+        "entry_file": "marketdump.py",
+        "entry_file_optional_params": {},
+        "uid": "54651698d22db6f0be8d5f350a451d92f9ca9ec65c068a95f57d345c1394217e"
+    }
+}
