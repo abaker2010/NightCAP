@@ -17,10 +17,14 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+
 from . import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include("nightcapsite.apps.public.urls")),
+    path("public/", include("nightcapsite.apps.public.urls")),
+    path("", include("nightcapsite.apps.accounts.urls")),
     path("accounts/", include("nightcapsite.apps.accounts.urls")),
 ]

@@ -10,6 +10,10 @@ urlpatterns = [
         views.ProfileView.as_view(template_name="accounts/profile.html"),
         name="profile",
     ),
+    path(
+        "",
+        views.ProfileView.as_view(template_name="accounts/profile.html"),
+    ),
     # Django Auth Stuff
     path(
         "login/",
@@ -17,6 +21,6 @@ urlpatterns = [
         name="login",
     ),
     path(
-        "logout/", auth_views.LogoutView.as_view(template_name="index"), name="logout"
+        "logout/", auth_views.LogoutView.as_view(template_name="public/index"), name="logout"
     ),
 ]

@@ -35,7 +35,6 @@ class NighcapCoreSimpleServer(object):
         )
 
     def get_status(self):
-
         if self.config.config["REPORTINGSERVER"]["status"] == "False":
             return "DOWN"
         if self.config.config["REPORTINGSERVER"]["status"] == "True":
