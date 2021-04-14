@@ -70,15 +70,8 @@ class NightcapScanner(NightcapBaseCMD):
         parser = argparse.ArgumentParser(description="Process some pcaps.")
         parser.add_argument("--data", required=True, help="list of pcap filenames")
         args = parser.parse_args()
-        print("Args after passing", args)
-        # print("\n\nArgs after passing", args.data, "\n\n")
-        # print("Args after passing", dict(json.loads(args.data)))
-        self.printer = Printer()
-
-        # dat = {}
-        # dat[0] = self.toJson()
-        # dat[1] = self.package_params
-        # dat[2] = self.pkg_information
+        
+        self.printer = Printer()   
 
         try:
             # print("Tring to pass json on to client", dict(json.loads(args.data)))
@@ -106,28 +99,10 @@ class NightcapScanner(NightcapBaseCMD):
             self._debug = debug
             self._elapseTime = 0
 
-            # self.filename = _data[0]['filename']
-            # self.isDir = _data[0]['isDir']
-            # self.dir = _data[0]['dir']
-            # self.project = _data[0]['project']
-            
+            self.printer.debug("Args after passing", args, currentMode=self.config.verbosity)
 
         except Exception as e:
             print("Error 1", e)
-        # print("Client generate PCAPS:", self.generatePcaps)
-
-        # self.captures = self.get_pcaps(display_filter='dhcp')
-        # NightcapCLIConfiguration.__init__(
-        #     self, generatePcaps=True, basedata=dict(json.loads(args.data))
-        # )
-        # print(self.generatePcaps)
-        # print(self.nc_pacakge_config)
-        # try:
-        #     self.pkg_config = NightcapCLIPackageConfiguration(self.config, dict(json.loads(args.data))['2'])
-        #     # nc_pacakge_config=dict(json.loads(args.data))['2']
-        # except Exception as e:
-        #     print("Error 2", e)
-        # print(self.pkg_config.pcaps)
         return []
 
     # endregion
@@ -152,11 +127,10 @@ class NightcapScanner(NightcapBaseCMD):
     # region onIntro
     def onIntro(self):
         """Intro to the program"""
+        # self.printer.print_underlined_header("Scanning with arguments")
         # self.show_params()
-        
-        # self.printer.print_formatted_additional(
-        #     "Please wait while processing PCAP files...", endingBreaks=1
-        # )
+        # self.printer.item_1("*"*30, leadingText="", endingBreaks=1, leadingTab=1)
+        pass
 
     # endregion
 
@@ -196,6 +170,7 @@ class NightcapScanner(NightcapBaseCMD):
                         self.onProcess(pkt, _count)
                     except Exception as e:
                         print("There has been an error")
+                        print(e)
                         pass
                     _count += 1
             self._elapseTime = time.time() - start
@@ -234,12 +209,16 @@ class NightcapScanner(NightcapBaseCMD):
         try:
             _pcapFiles = []
             # print("Trying to generate pcaps")Generating Reports
-            if self.config.isDir:
+            # print(self.base_params['isDir'])
+            # print(type(self.base_params['isDir']))
+            if self.base_params['isDir'] == True:
+                # print("Trying to use full dir")
                 exts = self.config.config["NIGHTCAPCORE"]["extentions"].split(" ")
-
-                for root, dirs, files in os.walk(self.dir, topdown=False):
+                for root, dirs, files in os.walk(self.base_params['dir'], topdown=False):
+                    # print("Root ", root)
+                    # print("Files", files)
                     for name in files:
-                        print("Parsing filename", name)
+                        # print("Parsing filename", name)
                         if str(name).split(".")[1] in exts:
                             _pcapFiles.append(
                                 pyshark.FileCapture(
@@ -262,7 +241,7 @@ class NightcapScanner(NightcapBaseCMD):
                                 )
                             )
             else:
-                print("Parsing filename", os.path.join(self.base_params['dir'], self.base_params['filename']))
+                # print("Parsing filename", os.path.join(self.base_params['dir'], self.base_params['filename']))
                 _pcapFiles.append(
                     pyshark.FileCapture(
                         os.path.join(self.base_params['dir'], self.base_params['filename']), 
