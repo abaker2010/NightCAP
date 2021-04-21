@@ -23,3 +23,8 @@ Installation
 -----------------------
 
 	Please take a look at the wiki to get information about installation and other features of Nightcap
+
+
+YouTube Video
+-----------------------
+* https://youtu.be/ZxLy5utx1rg
