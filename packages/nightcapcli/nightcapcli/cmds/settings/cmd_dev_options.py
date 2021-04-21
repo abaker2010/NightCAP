@@ -10,9 +10,7 @@ import hashlib
 from nightcapcli.base.base_cmd import NightcapBaseCMD
 from nightcapcore.configuration import NightcapCLIConfiguration
 from colorama import Fore, Style
-
 # endregion
-
 
 class NightcapDevOptions(NightcapBaseCMD):
     """

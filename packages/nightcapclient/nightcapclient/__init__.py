@@ -4,6 +4,6 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 from .client import NightcapScanner
-
-__all__ = ["NightcapScanner"]
+from .red import NightcapRedTeam
+__all__ = ["NightcapScanner", "NightcapRedTeam"]
 __version__ = "0.0.1"

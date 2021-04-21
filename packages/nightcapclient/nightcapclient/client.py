@@ -68,15 +68,17 @@ class NightcapScanner(NightcapBaseCMD):
                  use_json=False, output_file=None, include_raw=False, eventloop=None, custom_parameters=None,
                  debug=False, **kwargs):
         parser = argparse.ArgumentParser(description="Process some pcaps.")
-        parser.add_argument("--data", required=True, help="list of pcap filenames")
+        parser.add_argument("--data", required=True,
+                            help="list of pcap filenames")
         args = parser.parse_args()
-        
-        self.printer = Printer()   
+
+        self.printer = Printer()
 
         try:
             # print("Tring to pass json on to client", dict(json.loads(args.data)))
             NightcapBaseCMD.__init__(
-                self, dict(json.loads(args.data))["2"], passedJson=dict(json.loads(args.data))["0"]
+                self, dict(json.loads(args.data))["2"], passedJson=dict(
+                    json.loads(args.data))["0"]
             )
             _data = dict(json.loads(args.data))
             # print("Data needs fixed in the client", _data)
@@ -99,11 +101,12 @@ class NightcapScanner(NightcapBaseCMD):
             self._debug = debug
             self._elapseTime = 0
 
-            self.printer.debug("Args after passing", args, currentMode=self.config.verbosity)
+            self.printer.debug("Args after passing", args,
+                               currentMode=self.config.verbosity)
 
         except Exception as e:
             print("Error 1", e)
-        return []
+
 
     # endregion
 
@@ -111,7 +114,8 @@ class NightcapScanner(NightcapBaseCMD):
     def onClose(self):
         """Todo when the process is done"""
         try:
-            self.printer.print_formatted_check('Elapse time (seconds)', str(round(self._elapseTime, 3)), endingBreaks=1)
+            self.printer.print_formatted_check('Elapse time (seconds)', str(
+                round(self._elapseTime, 3)), endingBreaks=1)
         except Exception as e:
             print(e)
     # endregion
@@ -165,7 +169,8 @@ class NightcapScanner(NightcapBaseCMD):
                 _count = 1
                 for pkt in cpt:
                     # print(type(pkt))
-                    sys.stdout.write(Fore.LIGHTCYAN_EX + "\r\t\t[?] " + Fore.LIGHTGREEN_EX + "Scanning Packet # : " + Fore.LIGHTYELLOW_EX + str(_count) + Style.RESET_ALL)
+                    sys.stdout.write(Fore.LIGHTCYAN_EX + "\r\t\t[?] " + Fore.LIGHTGREEN_EX +
+                                     "Scanning Packet # : " + Fore.LIGHTYELLOW_EX + str(_count) + Style.RESET_ALL)
                     try:
                         self.onProcess(pkt, _count)
                     except Exception as e:
@@ -202,10 +207,10 @@ class NightcapScanner(NightcapBaseCMD):
 
     # region Get pcaps
     def get_pcaps(self, *args, keep_packets=True, display_filter=None, only_summaries=False,
-                 decryption_key=None, encryption_type="wpa-pwk", decode_as=None,
-                 disable_protocol=None, tshark_path=None, override_prefs=None,
-                 use_json=False, output_file=None, include_raw=False, eventloop=None, custom_parameters=None,
-                 debug=False, **kwargs):
+                  decryption_key=None, encryption_type="wpa-pwk", decode_as=None,
+                  disable_protocol=None, tshark_path=None, override_prefs=None,
+                  use_json=False, output_file=None, include_raw=False, eventloop=None, custom_parameters=None,
+                  debug=False, **kwargs):
         try:
             _pcapFiles = []
             # print("Trying to generate pcaps")Generating Reports
@@ -213,7 +218,8 @@ class NightcapScanner(NightcapBaseCMD):
             # print(type(self.base_params['isDir']))
             if self.base_params['isDir'] == True:
                 # print("Trying to use full dir")
-                exts = self.config.config["NIGHTCAPCORE"]["extentions"].split(" ")
+                exts = self.config.config["NIGHTCAPCORE"]["extentions"].split(
+                    " ")
                 for root, dirs, files in os.walk(self.base_params['dir'], topdown=False):
                     # print("Root ", root)
                     # print("Files", files)
@@ -244,7 +250,8 @@ class NightcapScanner(NightcapBaseCMD):
                 # print("Parsing filename", os.path.join(self.base_params['dir'], self.base_params['filename']))
                 _pcapFiles.append(
                     pyshark.FileCapture(
-                        os.path.join(self.base_params['dir'], self.base_params['filename']), 
+                        os.path.join(
+                            self.base_params['dir'], self.base_params['filename']),
                         display_filter=display_filter,
                         keep_packets=keep_packets,
                         only_summaries=only_summaries,
@@ -275,8 +282,9 @@ class NightcapScanner(NightcapBaseCMD):
     # endregion
 
 
-
 # region Show Params
+
+
     def show_params(self, detailed: bool = False):
 
         # if self.project == None:
@@ -336,7 +344,6 @@ class NightcapScanner(NightcapBaseCMD):
                 endingBreaks=1
             )
 
-
         if detailed == False:
             self.printer.print_formatted_other(
                 "PATH",
@@ -362,7 +369,8 @@ class NightcapScanner(NightcapBaseCMD):
         try:
             if self.pkg_params != {}:
 
-                self.printer.print_underlined_header("Package Parameters", leadingTab=2)
+                self.printer.print_underlined_header(
+                    "Package Parameters", leadingTab=2)
                 if detailed == False:
                     for k, v in self.pk.items():
                         _ = "None" if v == "" else v

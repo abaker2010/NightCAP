@@ -1,3 +1,3 @@
-from .nightcapclient import NightcapScanner
+from .nightcapclient import NightcapScanner, NightcapRedTeam
 
-__all__ = ["NightcapScanner"]
+__all__ = ["NightcapScanner", "NightcapRedTeam"]
