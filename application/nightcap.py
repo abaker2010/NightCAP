@@ -92,34 +92,11 @@ class Nightcap(NightcapCLICMDMixIn):
 
                 NightcapCLIPublisher().register(_channel, _who)
                 _who.cmdloop()
-                # raise Exception("Not Implemented")
         except Exception as e:
             self.printer.print_error(e)
             NightcapCLIPublisher().del_channel(_channel)
             print(NightcapCLIPublisher().channels)
-        # NightcapCLIPublisher().selectedList.append(directions["nextstep"][-1])
-        # print(NightcapCLIPublisher().selectedList)
-        # _channel = NightcapCLIPublisher().new_channel()
-        # _who = None
-        
-        # if len(directions["nextstep"]) == 3:
-        #     print("pushing object with", NightcapCLIPublisher().selectedList)
-        #     # _who = NightcapCLIPackage(
-        #     #     NightcapCLIPublisher().selectedList,
-        #     #     NightcapCLIPublisher().get_package_config(NightcapCLIPublisher().selectedList),
-        #     #     _channel,
-        #     # )
-        #     print("PKG Data:", NightcapCLIPublisher().get_package_config(NightcapCLIPublisher().selectedList))
-        # else:
-        #     _who = self.pageobjct(
-        #         NightcapCLIPublisher().selectedList,
-        #         _channel,
-        #         self.channelID,
-        #         directions["additionalsteps"],
-        #     )
-
-        #     NightcapCLIPublisher().register(_channel, _who)
-        #     _who.cmdloop()
+       
 
     def cli_update(self, message):
         # print("Cli update called")

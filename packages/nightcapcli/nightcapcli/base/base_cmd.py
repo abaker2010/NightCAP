@@ -202,33 +202,33 @@ class NightcapBaseCMD(cmd.Cmd):
                     "Current Project", "None", leadingTab=3
                 )
 
-        self.printer.print_underlined_header("Web Server (Django)", leadingTab=2)
-        self.printer.print_formatted_other(
-            "IP",
-            self.config.config["REPORTINGSERVER"]["ip"],
-            leadingTab=3,
-            optionalTextColor=Fore.YELLOW,
-        )
-        self.printer.print_formatted_other(
-            "Port",
-            self.config.config["REPORTINGSERVER"]["port"],
-            leadingTab=3,
-            optionalTextColor=Fore.YELLOW,
-        )
-        self.printer.print_formatted_other(
-            "URL",
-            NighcapCoreSimpleServer(self.config).get_url(),
-            leadingTab=3,
-            optionalTextColor=Fore.YELLOW,
-        )
-        self.printer.print_formatted_other(
-            "Status",
-            NighcapCoreSimpleServer(self.config).get_status(),
-            leadingTab=3,
-            optionalTextColor=Fore.LIGHTGREEN_EX
-            if NighcapCoreSimpleServer(self.config).get_status() == "UP"
-            else Fore.MAGENTA,
-        )
+        # self.printer.print_underlined_header("Web Server (Django)", leadingTab=2)
+        # self.printer.print_formatted_other(
+        #     "IP",
+        #     self.config.config["REPORTINGSERVER"]["ip"],
+        #     leadingTab=3,
+        #     optionalTextColor=Fore.YELLOW,
+        # )
+        # self.printer.print_formatted_other(
+        #     "Port",
+        #     self.config.config["REPORTINGSERVER"]["port"],
+        #     leadingTab=3,
+        #     optionalTextColor=Fore.YELLOW,
+        # )
+        # self.printer.print_formatted_other(
+        #     "URL",
+        #     NighcapCoreSimpleServer(self.config).get_url(),
+        #     leadingTab=3,
+        #     optionalTextColor=Fore.YELLOW,
+        # )
+        # self.printer.print_formatted_other(
+        #     "Status",
+        #     NighcapCoreSimpleServer(self.config).get_status(),
+        #     leadingTab=3,
+        #     optionalTextColor=Fore.LIGHTGREEN_EX
+        #     if NighcapCoreSimpleServer(self.config).get_status() == "UP"
+        #     else Fore.MAGENTA,
+        # )
 
         self.printer.print_underlined_header("Database (Mongo)", leadingTab=2)
         self.printer.print_formatted_other(

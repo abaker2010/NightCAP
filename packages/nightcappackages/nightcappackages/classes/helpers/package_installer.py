@@ -81,9 +81,23 @@ class NightcapPackageInstallerCommand(Command):
 
     # region Execute
     def execute(self) -> None:
+        # unpacking package 
+        print("Package to unpack: " + self._package_path)
+        shutil.copyfile(self._package_path, '/tmp/ncp_installer.ncp')
+        shutil.unpack_archive('/tmp/ncp_installer.ncp', '/tmp/ncp_installer/', 'zip') 
+
+        _base_path = ''
+        for root, dirs, files in os.walk("/tmp/ncp_installer"):
+            # for name in files:
+            #     print(os.path.join(root, name))
+            for name in dirs:
+                if 'src' not in name:
+                    print(os.path.join(root, name))
+                    _base_path = os.path.join(root, name)
+
         try:
             with open(
-                os.path.join(self._package_path, "package_info.json")
+                os.path.join(_base_path, "package_info.json")
             ) as json_file:
                 self._package = json.load(json_file)
             ScreenHelper().clearScr()
@@ -121,7 +135,7 @@ class NightcapPackageInstallerCommand(Command):
         _imports = self._imports(self._package)
         if _imports:
             if self._db.install(self._package):
-                self._copy(self._package, self._package_path)
+                self._copy(self._package, _base_path)
                 self.printer.print_formatted_check(
                     text="INSTALLED", leadingTab=1, endingBreaks=1, leadingBreaks=1
                 )
@@ -141,11 +155,11 @@ class NightcapPackageInstallerCommand(Command):
             ],
         )
         try:
-            shutil.copytree(src, _path)
+            shutil.move(src, _path)
         except OSError as e:
             # If the error was caused because the source wasn't a directory
             if e.errno == errno.ENOTDIR:
-                shutil.copy(src, _path)
+                shutil.move(src, _path)
             else:
                 self.printer.print_formatted_delete(
                     text="Package not copied. Error: %s" % str(e)

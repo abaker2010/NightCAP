@@ -6,6 +6,7 @@
 # region Imports
 import os
 import sys
+from nightcapcli.generator.option_generator import NightcapOptionGenerator
 from nightcapcli.cmds.cmd_shared.network_config_cmd import (
     NightcapMongoNetworkSettingsCMD,
 )
@@ -92,8 +93,8 @@ class NightcapSettingsCMD(NightcapBaseCMD):
     """
 
     # region Init
-    def __init__(self):
-        NightcapBaseCMD.__init__(self, ["settings"])
+    def __init__(self, channelID: str = None):
+        NightcapBaseCMD.__init__(self, ["settings"], channelid=channelID)
 
     # endregion
 
@@ -102,7 +103,7 @@ class NightcapSettingsCMD(NightcapBaseCMD):
         self.printer.help("Developer Options")
 
     def do_devoptions(self, line):
-        NightcapDevOptions(self.selectedList).cmdloop()
+        NightcapDevOptions(["settings", "dev"], "devoptions").cmdloop()
 
     # endregion
 
@@ -219,18 +220,18 @@ class NightcapSettingsCMD(NightcapBaseCMD):
     # endregion
 
     # region Server config section
-    def complete_server(self, text, line, begidx, endidx):
-        return [i for i in ("web", "database") if i.startswith(text)]
+    # def complete_server(self, text, line, begidx, endidx):
+    #     return [i for i in ("web", "database") if i.startswith(text)]
 
-    def help_server(self):
-        self.printer.help("Configure a server")
-        self.printer.help("Usage: server <web|database>")
+    # def help_server(self):
+    #     self.printer.help("Configure a server")
+    #     self.printer.help("Usage: server <web|database>")
 
-    def do_server(self, line):
-        try:
-            NightcapMongoNetworkSettingsCMD(line).cmdloop()
-        except Exception as e:
-            self.printer.print_error(e)
+    # def do_server(self, line):
+    #     try:
+    #         NightcapMongoNetworkSettingsCMD(line).cmdloop()
+    #     except Exception as e:
+    #         self.printer.print_error(e)
 
     # endregion
 

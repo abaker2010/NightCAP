@@ -7,6 +7,9 @@
 import os
 import json
 import hashlib
+from pathlib import Path
+import shutil
+from checksumdir import dirhash
 from nightcapcli.base.base_cmd import NightcapBaseCMD
 from nightcapcore.configuration import NightcapCLIConfiguration
 from colorama import Fore, Style
@@ -39,49 +42,56 @@ class NightcapDevOptions(NightcapBaseCMD):
     """
 
     # region Init
-    def __init__(self, selectedList: list):
+    def __init__(self, selectedList: list, channelID: str = None):
         self.selectedList = selectedList
-        self.selectedList.append("dev")
-        NightcapBaseCMD.__init__(self, self.selectedList)
+        # self.selectedList.append("dev")
+        NightcapBaseCMD.__init__(self, self.selectedList, channelid=channelID)
 
+    # endregion
+
+    # region make archive
+    def make_archive(self, source, destination):
+        base = os.path.basename(destination)
+        name = base.split('.')[0]
+        format = base.split('.')[1]
+        archive_from = os.path.dirname(source)
+        archive_to = os.path.basename(source.strip(os.sep))
+        shutil.make_archive(name, format, archive_from, archive_to)
+        shutil.move('%s.%s'%(name,format), destination)
     # endregion
 
     # region Do genPackageUID
     def do_genPackageUID(self, package_path: str):
         try:
-            self.printer.print_underlined_header("Trying to sign package")
-            self.printer.print_formatted_additional("Please wait...")
-            print(os.path.join(package_path, "package_info.json"))
-            data = None
-            self.printer.debug("Trying to open package_info.json", currentMode=self.config.verbosity)
-
+        
             with open(os.path.join(package_path, "package_info.json")) as json_file:
                 data = json.load(json_file)
-                # print(json.dumps(data, indent=4))
 
-            self.printer.debug("Data", json.dumps(data, indent=2), currentMode=self.config.verbosity)
-
-            # print("\n\nData that we will need")
             package_name = data["package_information"]["package_name"]
             package_module = data["package_for"]["module"]
             package_submodule = data["package_for"]["submodule"]
 
-            package = package_module + "/" + package_submodule + "/" + package_name
-            hash = hashlib.sha256(package.encode()).hexdigest()
-            # print(hash)
-            # print("\n\n")
+            _out_file = package_module + "-" + package_submodule + "-" + package_name + "-" + str(data["package_information"]["version"]).replace('.','-')
+            _base = os.path.join(Path(package_path).parent, _out_file)
 
-            data["package_information"]["uid"] = hash
+            self.printer.print_underlined_header("Trying to sign package")
+            self.printer.print_formatted_additional("Please wait...")
+            self.printer.print_formatted_additional("Path to be used", optionaltext=package_path)
+            self.printer.print_formatted_additional("Package Being Created", optionaltext=_out_file + ".ncp")
 
-            # print(data)
-            self.printer.debug("Writing data to config", currentMode=self.config.verbosity)
-            with open(os.path.join(package_path, "package_info.json"), "w") as outfile:
-                json.dump(data, outfile)
-            self.printer.print_formatted_check("Done")
-            # print("\n\n")
+            self.make_archive(package_path, str(_base)+'.zip')
+            os.rename(str(_base) + ".zip", str(_base) + ".ncp")
+            
+            with open(str(_base) + ".ncp", "rb") as f:
+                file_hash = hashlib.md5()
+                chunk = f.read(8192)
+                while chunk:
+                    file_hash.update(chunk)
+                    chunk = f.read(8192)
+            self.printer.print_formatted_check("Done", endingBreaks=1)
+            
         except Exception as e:
             print(e)
-
     # endregion
 
     # region Help genPackageUID
@@ -98,5 +108,4 @@ class NightcapDevOptions(NightcapBaseCMD):
             # (Fore.YELLOW + h3 + Style.RESET_ALL),
         )
         print(p)
-
     # endregion

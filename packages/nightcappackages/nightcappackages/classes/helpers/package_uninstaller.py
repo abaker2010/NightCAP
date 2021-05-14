@@ -85,7 +85,7 @@ class NightcapPackageUninstallerCommand(Command):
                     # self.printer.print_underlined_header(
                     #         "UNINSTALLED CONFIRMED", titleColor=Fore.LIGHTRED_EX
                     #     )
-                    self.printer.item_1("ID", str(_package["_id"]), leadingText='[~]', seperator=":")
+                    self.printer.item_1("ID", str(_package["_id"]), leadingText='[~]', seperator=" : ")
 
                     #region Removing Package
                     try:

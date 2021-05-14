@@ -6,6 +6,7 @@
 # region Imports
 import os
 import sys
+from docker.errors import DockerException
 from colorama.ansi import Fore, Style
 from nc_docker.docker_helper import NightcapDockerHelper
 from nightcapcore.configuration import NightcapCLIConfiguration
@@ -69,10 +70,17 @@ class NightcapMongoHelper:
         self.printer = Printer()
         self.conf = conf
         self.yes = self.conf.config.get("NIGHTCAPCORE", "yes").split()
-        self.docker_helper = NightcapDockerHelper(self.conf)
+        try:
+            self.docker_helper = NightcapDockerHelper(self.conf)
+        except DockerException as de:
+            self.printer.print_error(Exception("Error: Docker needs to be running locally"))
+            exit()
+        except Exception as e:
+            self.printer.print_error(e)
+            
         try:
             self.mongo_server = MongoDatabaseChecker()
-        except:
+        except Exception as e:
             self.mongo_server = None
 
     # endregion

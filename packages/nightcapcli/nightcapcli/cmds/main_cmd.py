@@ -23,25 +23,25 @@ class NightcapMainCMD(NightcapBaseCMD, ShellCMDMixin):
 
     # region Update Server
 
-    def complete_server(self, text, line, begidx, endidx):
-        return [i for i in ("start", "stop", "status") if i.startswith(text)]
+    # def complete_server(self, text, line, begidx, endidx):
+    #     return [i for i in ("start", "stop", "status") if i.startswith(text)]
 
-    def do_server(self, line):
-        """\n\tControll the update server\n\n\t\tOptions: status, start, stop"""
-        try:
-            if line == "start":
-                self.mongo_helper.docker_helper.start_nighcap_site()
-                # NighcapCoreSimpleServer(self.config).start()
-            elif line == "stop":
-                self.mongo_helper.docker_helper.stop_nightcapsite()
-            elif line == "status":
-                print(self.mongo_helper.docker_helper.get_site_container_status())
-            else:
-                raise Exception(
-                    "Error with server option. For more info use: help server"
-                )
-        except Exception as e:
-            self.printer.print_error(e)
+    # def do_server(self, line):
+    #     """\n\tControll the update server\n\n\t\tOptions: status, start, stop"""
+    #     try:
+    #         if line == "start":
+    #             self.mongo_helper.docker_helper.start_nighcap_site()
+    #             # NighcapCoreSimpleServer(self.config).start()
+    #         elif line == "stop":
+    #             self.mongo_helper.docker_helper.stop_nightcapsite()
+    #         elif line == "status":
+    #             print(self.mongo_helper.docker_helper.get_site_container_status())
+    #         else:
+    #             raise Exception(
+    #                 "Error with server option. For more info use: help server"
+    #             )
+    #     except Exception as e:
+    #         self.printer.print_error(e)
 
     # endregion
 
@@ -55,4 +55,4 @@ class NightcapMainCMD(NightcapBaseCMD, ShellCMDMixin):
     def do_settings(self, line):
         print("Settings here")
         ScreenHelper().clearScr()
-        NightcapSettingsCMD().cmdloop()
+        NightcapSettingsCMD(self.channelID).cmdloop()

@@ -95,25 +95,18 @@ class NightcapCLICMDMixIn(NightcapMainCMD):
 
     # region Do Use
     def do_use(self, line: str, override: object = None):
-        # print("Using ", line)
         try:
             _validator = NightcapCLIPublisher().isValid(line, self.selectedList)
             if _validator:
-                # print('Should notify about change', self.channelID)
-                # print(NightcapCLIPublisher().channels)
-
                 NightcapCLIPublisher().directions["override"] = override
-                # print("directions", NightcapCLIPublisher().directions)
                 NightcapCLIPublisher().dispatch(
                     self.channelID, NightcapCLIPublisher().directions
                 )
             else:
-                # print("Invalid using line: ", line)
                 self.printer.print_error(
                     Exception("Not a valid option. Use [options] for help")
                 )
 
         except Exception as e:
             self.printer.print_error(e)
-
     # endregion

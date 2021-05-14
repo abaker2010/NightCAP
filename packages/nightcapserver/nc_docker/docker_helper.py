@@ -153,7 +153,7 @@ class NightcapDockerHelper(object):
     def init_containers(self, dc: NightcapCoreDockerChecker):
         try:
             self.init_mongo(dc)
-            self.init_nc_site(dc)
+            # self.init_nc_site(dc)
             self.build_containers()
             self.prepare_containers()
             self.set_account()
@@ -176,7 +176,7 @@ class NightcapDockerHelper(object):
     def stop_all_containers(self):
         self.printer.print_underlined_header_undecorated("Stopping Docker Containers")
         self.stop_mongodb()
-        self.stop_nightcapsite()
+        # self.stop_nightcapsite()
         print("")
         return True
 
@@ -221,7 +221,7 @@ class NightcapDockerHelper(object):
     def start_all_containers(self):
         self.start_mongodb()
         print()
-        self.start_nighcap_site()
+        # self.start_nighcap_site()
 
     # endregion
 

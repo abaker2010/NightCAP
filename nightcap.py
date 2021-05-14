@@ -152,6 +152,8 @@ def main():
                         _printer.print_error(e)
             except ServerSelectionTimeoutError as e:
                 raise e
+            except Exception as e:
+                _printer.print_error(e)
 
     except KeyboardInterrupt:
         ScreenHelper().clearScr()
