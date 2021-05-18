@@ -99,19 +99,13 @@ class Nightcap(NightcapCLICMDMixIn):
        
 
     def cli_update(self, message):
-        # print("Cli update called")
         if type(message) == bool:
             # print("Child object destroyed:", str(message))
             # print("Current list is:", NightcapCLIPublisher().selectedList)
             pass
 
         elif type(message) == dict:
-            # self.printer.print_formatted_additional("dict object")
-            # print(message)
             self._push_object(message)
         else:
             pass
-            # print("Message", message)
-
-
 # endregion

@@ -71,8 +71,15 @@ class NightcapDevOptions(NightcapBaseCMD):
             package_module = data["package_for"]["module"]
             package_submodule = data["package_for"]["submodule"]
 
+            package = package_module + "/" + package_submodule + "/" + package_name
+            hash = hashlib.sha256(package.encode()).hexdigest()
+            data["package_information"]["uid"] = hash
+            
             _out_file = package_module + "-" + package_submodule + "-" + package_name + "-" + str(data["package_information"]["version"]).replace('.','-')
             _base = os.path.join(Path(package_path).parent, _out_file)
+
+            with open(os.path.join(package_path, "package_info.json"), "w") as outfile:
+                json.dump(data, outfile)
 
             self.printer.print_underlined_header("Trying to sign package")
             self.printer.print_formatted_additional("Please wait...")
