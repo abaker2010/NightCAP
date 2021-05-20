@@ -6,6 +6,7 @@
 # region Imports
 import json
 import os
+from typing import cast, final
 from nightcappackages.classes.databases.mogo.mongo_modules import MongoModuleDatabase
 from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
 from nightcappackages.classes.databases.mogo.mongo_submodules import (
@@ -70,79 +71,108 @@ class NightcapPackageInstallerCommand(Command):
     """
 
     # region Init
-    def __init__(self, package_path: str) -> None:
+    def __init__(self, package_path: str, clear: bool = True) -> None:
         self._package_paths = NightcapPackagesPaths()
         self._db = MongoPackagesDatabase()
         self.printer = Printer()
         self._package = None
         self._package_path = package_path
-
+        self._clearScreen = clear
+        self.printer.print_formatted_additional("_path set", optionaltext=self._package_path)
     # endregion
 
     # region Execute
     def execute(self) -> None:
-        # unpacking package 
-        print("Package to unpack: " + self._package_path)
-        shutil.copyfile(self._package_path, '/tmp/ncp_installer.ncp')
-        shutil.unpack_archive('/tmp/ncp_installer.ncp', '/tmp/ncp_installer/', 'zip') 
-
-        _base_path = ''
-        for root, dirs, files in os.walk("/tmp/ncp_installer"):
-            # for name in files:
-            #     print(os.path.join(root, name))
-            for name in dirs:
-                if 'src' not in name:
-                    print(os.path.join(root, name))
-                    _base_path = os.path.join(root, name)
-
         try:
-            with open(
-                os.path.join(_base_path, "package_info.json")
-            ) as json_file:
-                self._package = json.load(json_file)
-            ScreenHelper().clearScr()
-            self.printer.print_underlined_header_undecorated("INSTALLING")
-            self.printer.print_formatted_additional(
-                text="Package: "
-                + self._package["package_for"]["module"]
-                + "/"
-                + self._package["package_for"]["submodule"]
-                + "/"
-                + self._package["package_information"]["package_name"]
-            )
-        except FileNotFoundError as nf:
-            self.printer.print_error(nf)
-        except Exception as e:
-            self.printer.print_error(e)
+            # unpacking package 
+            # print("Package to unpack: " + self._package_path)
 
-        try:
-            npuid = self._package["package_information"]["uid"]
-        except Exception as e:
-            raise Exception("Package signature error")
+            shutil.copyfile(self._package_path, '/tmp/ncp_installer.ncp')
+            shutil.unpack_archive('/tmp/ncp_installer.ncp', '/tmp/ncp_installer/', 'zip') 
 
-        try:
-            MongoModuleDatabase().module_install(self._package["package_for"]["module"])
-        except Exception as e:
-            self.printer.print_error(e)
-        try:
-            MongoSubModuleDatabase().submodule_install(
-                self._package["package_for"]["module"],
-                self._package["package_for"]["submodule"],
-            )
-        except Exception as e:
-            raise e
+            _base_path = ''
+            for root, dirs, files in os.walk("/tmp/ncp_installer"):
+                # for name in files:
+                #     print(os.path.join(root, name))
+                for name in dirs:
+                    if 'src' not in name:
+                        # print(os.path.join(root, name))
+                        _base_path = os.path.join(root, name)
 
-        _imports = self._imports(self._package)
-        if _imports:
-            if self._db.install(self._package):
-                self._copy(self._package, _base_path)
-                self.printer.print_formatted_check(
-                    text="INSTALLED", leadingTab=1, endingBreaks=1, leadingBreaks=1
+            try:
+                with open(
+                    os.path.join(_base_path, "package_info.json")
+                ) as json_file:
+                    self._package = json.load(json_file)
+                if self._clearScreen:
+                    ScreenHelper().clearScr()
+                self.printer.print_underlined_header_undecorated("INSTALLING")
+                self.printer.print_formatted_additional(
+                    text="Package: "
+                    + self._package["package_for"]["module"]
+                    + "/"
+                    + self._package["package_for"]["submodule"]
+                    + "/"
+                    + self._package["package_information"]["package_name"]
                 )
-            else:
-                self.printer.print_formatted_delete(text="Could not copy files")
+            except FileNotFoundError as nf:
+                self.printer.print_error(nf)
+            except Exception as e:
+                self.printer.print_error(e)
 
+            try:
+                npuid = self._package["package_information"]["uid"]
+            except Exception as e:
+                raise Exception("Package signature error")
+
+            try:
+                MongoModuleDatabase().module_install(self._package["package_for"]["module"])
+            except Exception as e:
+                self.printer.print_error(e)
+            try:
+                MongoSubModuleDatabase().submodule_install(
+                    self._package["package_for"]["module"],
+                    self._package["package_for"]["submodule"],
+                )
+            except Exception as e:
+                raise e
+
+            _imports = self._imports(self._package)
+            if _imports:
+                if self._db.install(self._package):
+                    self._copy(self._package, _base_path)
+                    self._copy_installer(self._package_path)
+                    self.printer.print_formatted_check(
+                        text="INSTALLED", leadingTab=1, endingBreaks=1, leadingBreaks=1
+                    )
+        except Exception as e:
+            self.printer.print_error(e)
+        finally:
+            try:
+                os.remove('/tmp/ncp_installer.ncp')
+                shutil.rmtree('/tmp/ncp_installer')
+            except:
+                self.printer.print_error(Exception("Error removing ncp_installer files"))
     # endregion
+
+    # region Copy
+    def _copy_installer(self, installer: str):
+        _path = self._package_paths.generate_path(
+            NightcapPackagesPathsEnum.Installers
+        )
+
+        try:
+            shutil.copy(installer, _path)
+        except OSError as e:
+            # If the error was caused because the source wasn't a directory
+            # if e.errno == errno.ENOTDIR:
+            #     shutil.move(src, _path)
+            # else:
+            self.printer.print_formatted_delete(
+                text="Package not copied (.ncp) Error: %s" % str(e)
+            )
+
+    # endregion    
 
     # region Copy
     def _copy(self, pkt: dict, src: str):

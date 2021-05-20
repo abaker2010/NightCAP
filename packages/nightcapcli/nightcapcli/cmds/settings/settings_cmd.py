@@ -6,6 +6,7 @@
 # region Imports
 import os
 import sys
+from nightcapcli.cmds.settings.backup_cmd import NightcapBackups
 from nightcapcli.generator.option_generator import NightcapOptionGenerator
 from nightcapcli.cmds.cmd_shared.network_config_cmd import (
     NightcapMongoNetworkSettingsCMD,
@@ -97,6 +98,16 @@ class NightcapSettingsCMD(NightcapBaseCMD):
         NightcapBaseCMD.__init__(self, ["settings"], channelid=channelID)
 
     # endregion
+
+    # region Dev Options
+    def help_backups(self):
+        self.printer.help("Backup/Restore options for your instance of the NightCAP DB")
+
+    def do_backups(self, line):
+        NightcapBackups(["settings", "backups"], "backups-main").cmdloop()
+
+    # endregion
+
 
     # region Dev Options
     def help_devoptions(self):

@@ -30,7 +30,7 @@ class NightcapScanner(NightcapBaseCMD):
 
     Attributes
     ----------
-        ** Not including those inherited from NightcapCLIPackageConfiguration for now
+        ** Not including those inherited from NightcapBaseCMD for now
 
         captures: -> List<FileCapture>
             returns a list of FileCaptures for the scanner to work with

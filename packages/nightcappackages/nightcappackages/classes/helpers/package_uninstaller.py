@@ -4,6 +4,8 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 # region Imports
+import os
+import glob
 from colorama import Fore
 from nightcapcore import Printer
 from nightcappackages.classes.databases.mogo.mongo_modules import MongoModuleDatabase
@@ -82,9 +84,7 @@ class NightcapPackageUninstallerCommand(Command):
                 uconfirm = self._confim_delete(self._package_path)
                 if str(uconfirm).lower() == "y": 
                     self.printer.print_header_w_option("Trying to Uninstall", self._package_path)
-                    # self.printer.print_underlined_header(
-                    #         "UNINSTALLED CONFIRMED", titleColor=Fore.LIGHTRED_EX
-                    #     )
+
                     self.printer.item_1("ID", str(_package["_id"]), leadingText='[~]', seperator=" : ")
 
                     #region Removing Package
@@ -116,59 +116,13 @@ class NightcapPackageUninstallerCommand(Command):
                                 )
                         #endregion
 
-                        
+                        self._rm_installer(self._split_package_path)
                     except Exception as e:
                         raise e
                     #endregion
 
-                    #region Checking Sub/Modules
-                    # try:
-                    #     if (
-                    #             MongoSubModuleDatabase()
-                    #             .find_submodules(self._split_package_path[0])
-                    #             .count()
-                    #             == 0
-                    #         ):
-                    #             MongoModuleDatabase().module_try_unintall(
-                    #                 self._split_package_path[0]
-                    #             )
-                    # except Exception as e:
-                    #     raise e
-                    #endregion
                 else:
                     raise Exception("User Cancled Uninstall")
-            
-            #         try:
-            #             try:
-            #                 try:
-            #                     self._db.delete(ObjectId(_package["_id"]))
-            #                     MongoSubModuleDatabase().submodule_try_uninstall(
-            #                         split_package_path[0], split_package_path[1]
-            #                     )
-            #                     # If there are no submodules then remove the module
-            #                     if (
-            #                         MongoSubModuleDatabase()
-            #                         .find_submodules(split_package_path[0])
-            #                         .count()
-            #                         == 0
-            #                     ):
-            #                         MongoModuleDatabase().module_try_unintall(
-            #                             split_package_path[0]
-            #                         )
-            #                     self._delete(_package)
-            #                     self.printer.print_formatted_check(
-            #                         text="UNINSTALLED",
-            #                         vtabs=1,
-            #                         endingBreaks=1,
-            #                         leadingTab=1,
-            #                     )
-            #                 except Exception as e:
-            #                     self.printer.print_error(e)
-
-            #             except Exception as e:
-            #                 self.printer.print_error(e)
-            #         except Exception as e:
-            #             self.printer.print_error(e)
             self.printer.print_formatted_check(
                                     text="UNINSTALLED",
                                     vtabs=1,
@@ -180,6 +134,27 @@ class NightcapPackageUninstallerCommand(Command):
             raise e
 
     # endregion
+
+    # region Copy
+    def _rm_installer(self, installer: list):
+        _path = self.__package_paths.generate_path(
+            NightcapPackagesPathsEnum.Installers,[
+                "-".join([
+            installer[0],
+            installer[1],
+            installer[2], '*'])
+            ]
+        )
+
+        _files = glob.glob(_path)
+        for f in _files:
+            try:
+                os.remove(f)
+            except Exception as e:
+                self.printer.print_error(e)
+
+
+    # endregion 
 
     # region Confirm Delete
     def _confim_delete(self, package_path: str):

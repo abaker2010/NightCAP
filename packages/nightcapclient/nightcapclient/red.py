@@ -21,6 +21,43 @@ from pyshark.packet.packet import Packet
 # endregion
 
 class NightcapRedTeam(NightcapBaseCMD):
+    """
+
+    This class is used to allows the Nightcap program to interact with the installed custom programs
+
+    ...
+
+    Attributes
+    ----------
+        ** Not including those inherited from NightcapBaseCMD for now
+
+    Methods
+    -------
+        Accessible
+        -------
+            onClose(self): -> NotImplementedError
+                After the package is ran
+
+            onIntro(self): -> NotImplementedError
+                Intro before the client package is executed
+
+            onConsolePrint(self): -> NotImplementedError
+                Console Printing will happen after the Processing has been done
+
+            onProcess(self): -> NotImplementedError
+                This is the code that the user is running in the package
+
+            onReport(self): -> NotImplementedError
+                This will be the way that the user generates reports
+
+            onRun(self): -> None
+                This will try and run the package
+
+            run(self): -> None
+                Allows the user to have the clean Object.run() syntax
+
+    """
+    #region Init
     def __init__(self, intro: str = None, *args, debug=False, **kwargs):
 
         parser = argparse.ArgumentParser(description="Process some pcaps.")
@@ -45,8 +82,9 @@ class NightcapRedTeam(NightcapBaseCMD):
                            currentMode=self.config.verbosity)
         except Exception as e:
             self.printer.print_error(e)
-     # region onClose
+    #endregion 
 
+    # region onClose
     def onClose(self):
         """Todo when the process is done"""
         try:
@@ -146,121 +184,4 @@ class NightcapRedTeam(NightcapBaseCMD):
     def run(self):
         self.onRun()
 
-    # endregion
-
-
-# region Show Params
-    # def show_params(self, detailed: bool = False):
-
-    #     # if self.project == None:
-    #     #     proj = "None"
-    #     # else:
-    #     #     proj = Fore.LIGHTYELLOW_EX + str(self.project["project_name"])
-
-    #     self.printer.print_underlined_header("Base Parameters", leadingTab=2)
-        # self.printer.print_formatted_other(
-        #     "PROJECT",
-        #     proj,
-        #     leadingTab=3,
-        #     optionalTextColor=Fore.YELLOW,
-        # )
-
-        # if detailed == False:
-        #     self.printer.print_formatted_other(
-        #         "FILENAME",
-        #         str(self.config.filename),
-        #         leadingTab=3,
-        #         optionalTextColor=Fore.YELLOW,
-        #     )
-        # else:
-        #     self.printer.print_formatted_other(
-        #         "FILENAME",
-        #         "Pcap file name to be used for the scan",
-        #         leadingTab=3,
-        #         optionalTextColor=Fore.MAGENTA,
-        #     )
-        #     self.printer.print_formatted_additional(
-        #         "Current Value",
-        #         str(self.config.filename),
-        #         leadingTab=4,
-        #         optionalTextColor=Fore.YELLOW,
-        #         endingBreaks=1
-        #     )
-
-        # # if detailed == False:
-        # #     self.printer.print_formatted_other(
-        # #         "ISDIR",
-        # #         str(self.config.isDir),
-        # #         leadingTab=3,
-        # #         optionalTextColor=Fore.YELLOW,
-        # #     )
-        # # else:
-        # #     self.printer.print_formatted_other(
-        # #         "ISDIR",
-        # #         "To either try and scan the pcap file or a directory of pcap files",
-        # #         leadingTab=3,
-        # #         optionalTextColor=Fore.MAGENTA,
-        # #     )
-        # #     self.printer.print_formatted_additional(
-        # #         "Current Value",
-        # #         str(self.config.isDir),
-        # #         leadingTab=4,
-        # #         optionalTextColor=Fore.YELLOW,
-        # #         endingBreaks=1
-        # #     )
-
-        # # if detailed == False:
-        # #     self.printer.print_formatted_other(
-        # #         "PATH",
-        # #         str(self.config.dir),
-        # #         leadingTab=3,
-        # #         optionalTextColor=Fore.YELLOW,
-        # #     )
-        # # else:
-        # #     self.printer.print_formatted_other(
-        # #         "PATH",
-        # #         "The directory of the pcap file(s)",
-        # #         leadingTab=3,
-        # #         optionalTextColor=Fore.MAGENTA,
-        # #     )
-        # #     self.printer.print_formatted_additional(
-        # #         "Current Value",
-        # #         str(self.config.dir),
-        # #         leadingTab=4,
-        # #         optionalTextColor=Fore.YELLOW,
-        # #         endingBreaks=1
-        # #     )
-
-        # try:
-        #     if self.pkg_params != {}:
-
-        #         self.printer.print_underlined_header(
-        #             "Package Parameters", leadingTab=2)
-        #         if detailed == False:
-        #             for k, v in self.pk.items():
-        #                 _ = "None" if v == "" else v
-        #                 self.printer.print_formatted_other(
-        #                     str(k).upper(),
-        #                     str(_),
-        #                     leadingTab=3,
-        #                     optionalTextColor=Fore.YELLOW,
-        #                 )
-        #         else:
-        #             for k, v in self.pkg_params.items():
-        #                 _ = "None" if v == "" else v
-        #                 self.printer.print_formatted_other(
-        #                     str(k).upper(),
-        #                     str(self.pkg_descripts[k]),
-        #                     leadingTab=3,
-        #                     optionalTextColor=Fore.MAGENTA,
-        #                 )
-        #                 self.printer.print_formatted_other(
-        #                     "Current Value",
-        #                     str(_),
-        #                     leadingTab=4,
-        #                     optionalTextColor=Fore.YELLOW,
-        #                 )
-        # except Exception as e:
-        #     pass
-        # print()
     # endregion

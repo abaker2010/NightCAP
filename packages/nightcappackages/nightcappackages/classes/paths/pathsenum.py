@@ -10,4 +10,5 @@ import os
 class NightcapPackagesPathsEnum(enum.Enum):
     ProjectBase = "classes"
     PackagesBase = "packages"
+    Installers = "installers"
     Databases = ProjectBase + os.sep + "databases"
