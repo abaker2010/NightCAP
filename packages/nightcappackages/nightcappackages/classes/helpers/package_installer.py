@@ -161,7 +161,16 @@ class NightcapPackageInstallerCommand(Command):
             NightcapPackagesPathsEnum.Installers
         )
 
+        _name = os.path.basename(installer)
+
         try:
+            # print("Installer path: " + str(installer))
+            # print("Path _path: " + str(_path))
+            # print("Basename: " + str(_name))
+
+            if os.path.exists(os.path.join(_path, _name)):
+                os.remove(os.path.join(_path, _name))
+
             shutil.copy(installer, _path)
         except OSError as e:
             # If the error was caused because the source wasn't a directory
@@ -192,7 +201,7 @@ class NightcapPackageInstallerCommand(Command):
                 shutil.move(src, _path)
             else:
                 self.printer.print_formatted_delete(
-                    text="Package not copied. Error: %s" % str(e)
+                    text="Package not copied. (Installer Files) Error: %s" % str(e)
                 )
 
     # endregion

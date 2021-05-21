@@ -268,7 +268,7 @@ class MongoPackagesDatabase(MongoDatabaseOperationsConnection, metaclass=Singlet
                 self.printer.print_error(e)
                 return False
         else:
-            self.printer.print_formatted_check(text="Package Already Installed")
+            self.printer.print_formatted_additional(text="Package Already Installed (Not Replacing)", textColor=Fore.LIGHTRED_EX, endingBreaks=1)
             return False
 
     # endregion

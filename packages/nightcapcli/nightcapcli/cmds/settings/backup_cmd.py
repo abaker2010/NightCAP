@@ -174,6 +174,7 @@ class NightcapBackups(NightcapBaseCMD):
             # _dbs_path = os.path.join(self.tmpdir, "restoring_backup")
 
             shutil.rmtree(self.tmpdir)
+            self.printer.print_formatted_check("Restore Complete", leadingTab=1, endingBreaks=1, leadingBreaks=1)
         else:
             self.printer.print_error(Exception("Please check the backup file. Inforrect file type used"))
         
@@ -190,8 +191,8 @@ class NightcapBackups(NightcapBaseCMD):
 
     def restore_installers(self, installers: str):
         # for _ in installers:
-        print("Installing: " + installers['name'])
-        print("Installing: " + installers['path'])
+        # print("Installing: " + installers['name'])
+        # print("Installing: " + installers['path'])
         _pack = NightcapPackageInstallerCommand(installers['path'], clear=False)
         _pack.execute()
         # for installer in _installers:
@@ -203,7 +204,7 @@ class NightcapBackups(NightcapBaseCMD):
         # except Exception as e:
         #     self.printer.print_error(e)
 
-        self.printer.print_formatted_check("Restore Complete", leadingTab=1, endingBreaks=1, leadingBreaks=1)
+        
 
     def resotre_dbs(self, location: str):
         _module_backup = os.path.join(location, "modules.json")
