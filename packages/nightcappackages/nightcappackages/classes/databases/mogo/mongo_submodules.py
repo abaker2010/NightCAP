@@ -95,6 +95,10 @@ class MongoSubModuleDatabase(MongoDatabaseOperationsConnection, metaclass=Single
 
     # endregion
 
+    def drop(self):
+        self._db.drop()
+        
+
     # region Find
     def find(self, module: str = None, submodule: str = None):
         return self._db.find(

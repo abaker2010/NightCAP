@@ -169,37 +169,38 @@ class NightcapMongoHelper:
                     optionalTextColor=Fore.RED,
                     endingBreaks=1,
                 )
-
-            self.printer.print_underlined_header_undecorated(
-                "Nighcapsite", leadingTab=2
-            )
-            if _docker_checker.ncs_exits == False:
-                self.printer.print_formatted_delete(
-                    text="Container Status",
-                    optionaltext=self.docker_helper.get_site_container_status(),
-                    leadingTab=3,
-                )
-                self.printer.print_formatted_delete(
-                    text="Nightcapsite",
-                    optionaltext="Missing",
-                    leadingTab=3,
-                    endingBreaks=1,
-                )
-            else:
-                self.printer.print_formatted_check(
-                    text="Container Status",
-                    optionaltext=self.docker_helper.get_site_container_status(),
-                    leadingTab=3,
-                    textColor=Fore.CYAN,
-                )
-                self.printer.print_formatted_additional(
-                    text="Nightcapsite",
-                    optionaltext="Exists",
-                    leadingTab=3,
-                    optionalTextColor=Fore.RED,
-                    endingBreaks=1,
-                )
-
+            # region Working Code (Commenting out for now due to time limitations for the feature)
+            # self.printer.print_underlined_header_undecorated(
+            #     "Nighcapsite", leadingTab=2
+            # )
+            # if _docker_checker.ncs_exits == False:
+            #     self.printer.print_formatted_delete(
+            #         text="Container Status",
+            #         optionaltext=self.docker_helper.get_site_container_status(),
+            #         leadingTab=3,
+            #     )
+            #     self.printer.print_formatted_delete(
+            #         text="Nightcapsite",
+            #         optionaltext="Missing",
+            #         leadingTab=3,
+            #         endingBreaks=1,
+            #     )
+            # else:
+            #     self.printer.print_formatted_check(
+            #         text="Container Status",
+            #         optionaltext=self.docker_helper.get_site_container_status(),
+            #         leadingTab=3,
+            #         textColor=Fore.CYAN,
+            #     )
+            #     self.printer.print_formatted_additional(
+            #         text="Nightcapsite",
+            #         optionaltext="Exists",
+            #         leadingTab=3,
+            #         optionalTextColor=Fore.RED,
+            #         endingBreaks=1,
+            #     )
+            # endregion
+            
             self.printer.print_underlined_header("Error connecting to mongo server")
             self.printer.print_formatted_additional(
                 text="Initialize",

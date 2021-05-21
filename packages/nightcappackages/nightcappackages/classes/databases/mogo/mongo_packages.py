@@ -101,6 +101,10 @@ class MongoPackagesDatabase(MongoDatabaseOperationsConnection, metaclass=Singlet
 
     # endregion
 
+    def drop(self):
+        self._db.drop()
+        
+
     # region Get package run path
     def get_package_run_path(self, pkg_config: dict = None):
         _path = NightcapPackagesPaths().generate_path(

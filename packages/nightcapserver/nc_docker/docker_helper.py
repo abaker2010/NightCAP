@@ -156,7 +156,7 @@ class NightcapDockerHelper(object):
             # self.init_nc_site(dc)
             self.build_containers()
             self.prepare_containers()
-            self.set_account()
+            # self.set_account()
             return True
         except Exception as e:
             raise e

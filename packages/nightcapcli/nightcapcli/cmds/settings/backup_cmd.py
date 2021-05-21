@@ -67,7 +67,7 @@ class NightcapBackups(NightcapBaseCMD):
             shutil.rmtree(self.tmpdir)
             
     def _move_backup(self, source, destination, name):
-        self.make_archive(source, destination, name, 'zip')
+        self._make_archive(source, destination, name, 'zip')
         os.rename(os.path.join(destination, name + ".zip"), os.path.join(destination, name+ ".ncb"))
         self.printer.print_formatted_check("Done", endingBreaks=1)
 
@@ -80,7 +80,7 @@ class NightcapBackups(NightcapBaseCMD):
         self.printer.print_formatted_additional("Installer(s) Location: ", optionaltext=_installer_path)
         self.printer.print_formatted_additional("Backup Location:", optionaltext=output)
 
-        self.make_archive(_installer_path, output, "installers", "zip")
+        self._make_archive(_installer_path, output, "installers", "zip")
         self.printer.print_formatted_check("Done")
 
 
@@ -88,26 +88,23 @@ class NightcapBackups(NightcapBaseCMD):
 
         self.printer.print_underlined_header("Backing Up Collections")        
 
-        _packages = self.backup_packages()
+        _packages = self._backup_packages()
         self._write_file(output, "packages.json", _packages)
         self.printer.print_formatted_additional("Packages", optionaltext="Backed Up")
 
-        _projects = self.backup_projects()
+        _projects = self._backup_projects()
         self._write_file(output, "projects.json", _projects)
         self.printer.print_formatted_additional("Projects", optionaltext="Backed Up")
         
-        _submodules = self.backup_submodules()
+        _submodules = self._backup_submodules()
         self._write_file(output, "submodules.json", _submodules)
         self.printer.print_formatted_additional("Submodules", optionaltext="Backed Up")
 
-        _modules = self.backup_modules()
+        _modules = self._backup_modules()
         self._write_file(output, "modules.json", _modules)
         self.printer.print_formatted_additional("Modules", optionaltext="Backed Up")
 
         self.printer.print_formatted_check("Done")
-
-        
-        
 
     def _write_file(self, dest, name, data):
         with open(os.path.join(dest, name), "w") as outfile:
@@ -115,24 +112,24 @@ class NightcapBackups(NightcapBaseCMD):
 
 
     # region make archive(s)
-    def make_archive(self, source, destination, name, format):
+    def _make_archive(self, source, destination, name, format):
         shutil.make_archive(name, format, source)
         shutil.move('%s.%s'%(name,format), destination)
         
 
-    def backup_modules(self):
+    def _backup_modules(self):
         _modules = MongoModuleDatabase().read()
         return list(_modules)
 
-    def backup_submodules(self):
+    def _backup_submodules(self):
         _submodules = MongoSubModuleDatabase().read()
         return list(_submodules)
 
-    def backup_packages(self):
+    def _backup_packages(self):
         _packages = MongoPackagesDatabase().read()
         return list(_packages)
 
-    def backup_projects(self):
+    def _backup_projects(self):
         _projects = MongoProjectsDatabase().read()
         return list(_projects)
 
@@ -147,70 +144,175 @@ class NightcapBackups(NightcapBaseCMD):
         self.printer.help("useage: restore <output location>.ncb")
 
     def do_restore(self, line):
-        print(str(line).split(os.sep)[-1])
+        # print(str(line).split(os.sep)[-1])
         if ".ncb" in str(line).split(os.sep)[-1]:
-            self.printer.print_underlined_header("Starting Restore")
+            
+            self.printer.print_underlined_header("Starting Restore", leadingBreaks=1)
             self.printer.print_formatted_additional("Restore File Path", optionaltext=line, endingBreaks=1)
 
-            self.tmpdir = tempfile.mkdtemp()
-            shutil.copy(str(line), self.tmpdir)
-            # print(self.tmpdir)
+            # _installer_path = self._package_paths.generate_path(
+            #     NightcapPackagesPathsEnum.Installers
+            # )
 
-            name = os.path.basename(str(line))
-            new_name = name.replace(".ncb", ".zip")
-            dir = os.path.dirname(str(line))
-            # print("Name : " + name)
-            # print("Dir : " + dir)
+            # _packages_path = self._package_paths.generate_path(
+            # NightcapPackagesPathsEnum.PackagesBase)
 
-            os.rename(os.path.join(self.tmpdir, name), os.path.join(self.tmpdir, new_name))
+            # self.printer.print_underlined_header("Cleaning")
+            # try:
+            #     shutil.rmtree(_installer_path)
+            #     self.printer.print_formatted_check("Cleaned", optionaltext=("Installers"))
+            # except Exception as e:
+            #     self.printer.print_formatted_additional("Installers Not Cleaned", optionaltext=str(e))
 
-            shutil.unpack_archive(os.path.join(self.tmpdir, new_name), os.path.join(self.tmpdir, "restoring_backup"), "zip") 
-            shutil.unpack_archive(os.path.join(self.tmpdir, "restoring_backup", "installers.zip"), os.path.join(self.tmpdir, "restoring_backup", "installers"), "zip") 
+            # try:
+            #     os.makedirs(_installer_path)
+            #     self.printer.print_formatted_check("Created", optionaltext=("Installers Location"))
+            # except Exception as e:
+            #     self.printer.print_formatted_additional("Installers Not Created", optionaltext=str(e))
 
-            _installers_path = os.path.join(self.tmpdir, "restoring_backup", "installers")
-            _r_paths = self.restore_installers_paths(_installers_path)
-            for _r in _r_paths:
-                self.restore_installers(_r)
-            # _dbs_path = os.path.join(self.tmpdir, "restoring_backup")
+            # try:
+            #     shutil.rmtree(_packages_path)
+            #     self.printer.print_formatted_check("Cleaned", optionaltext=("Packages"), leadingBreaks=1)
+            # except Exception as e:
+            #     self.printer.print_formatted_additional("Installers Not Cleaned", optionaltext=str(e))
 
-            shutil.rmtree(self.tmpdir)
-            self.printer.print_formatted_check("Restore Complete", leadingTab=1, endingBreaks=1, leadingBreaks=1)
+            # try:
+            #     os.makedirs(_packages_path)
+            #     self.printer.print_formatted_check("Created", optionaltext=("Packages Location"))
+            # except Exception as e:
+            #     self.printer.print_formatted_additional("Installers Not Created", optionaltext=str(e))
+
+            # try:
+            #     self._drop_dbs()
+            #     self.printer.print_formatted_check("Database", optionaltext=("Successful"))
+            # except Exception as e:
+            #     self.printer.print_formatted_additional("Dropping DB's", optionaltext=str(e))
+
+            _cleaned = self._clean_all()
+
+            if _cleaned:
+                self.printer.print_underlined_header("Unpacking Backup")
+                self.tmpdir = tempfile.mkdtemp()
+
+                shutil.copy(str(line), self.tmpdir)
+                name = os.path.basename(str(line))
+                new_name = name.replace(".ncb", ".zip")
+                dir = os.path.dirname(str(line))
+
+
+                os.rename(os.path.join(self.tmpdir, name), os.path.join(self.tmpdir, new_name))
+
+                shutil.unpack_archive(os.path.join(self.tmpdir, new_name), os.path.join(self.tmpdir, "restoring_backup"), "zip") 
+                shutil.unpack_archive(os.path.join(self.tmpdir, "restoring_backup", "installers.zip"), os.path.join(self.tmpdir, "restoring_backup", "installers"), "zip") 
+                self.printer.print_formatted_check("Successfully unpacked backup")
+                    
+
+                _installers_path = os.path.join(self.tmpdir, "restoring_backup", "installers")
+                _r_paths = self._restore_installers_paths(_installers_path)
+                for _r in _r_paths:
+                    self._restore_installers(_r)
+                    print("\t\t" + Fore.LIGHTMAGENTA_EX + "*"*25 + Style.RESET_ALL + "\n")           
+            
+                self.printer.item_1("Cleaning Up", leadingBreaks=1, endingBreaks=1)
+                shutil.rmtree(self.tmpdir)
+                self.printer.print_formatted_check("Restore Completed", leadingBreaks=1, endingBreaks=1)
+            else:
+                self.printer.print_error(Exception("There was an error when cleaning, please view above for more details."))
         else:
             self.printer.print_error(Exception("Please check the backup file. Inforrect file type used"))
         
 
-    def restore_installers_paths(self, location: str):
+    def _drop_dbs(self):
+        try:
+            MongoModuleDatabase().drop() 
+        except Exception as e:
+            self.printer.print_error(e)
+
+        try:
+            MongoSubModuleDatabase().drop()
+        except Exception as e:
+            self.printer.print_error(e)
+            
+        try:
+            MongoPackagesDatabase().drop()
+        except Exception as e:
+            self.printer.print_error(e)
+        
+        try:
+            MongoProjectsDatabase().drop()
+        except Exception as e:
+            self.printer.print_error(e)
+
+    def _restore_installers_paths(self, location: str):
         _installers = []
 
         for root, dirs, files in os.walk(location):
             for file in files:
                 if file.endswith('.ncp'):
-                    print(file)
+                    # print(file)
                     _installers.append({"name" : file.replace(".ncp", ''), "path" : os.path.join(root, file)})
         return _installers
 
-    def restore_installers(self, installers: str):
-        # for _ in installers:
-        # print("Installing: " + installers['name'])
-        # print("Installing: " + installers['path'])
+    def _restore_installers(self, installers: str):
         _pack = NightcapPackageInstallerCommand(installers['path'], clear=False)
         _pack.execute()
-        # for installer in _installers:
-        #     self.printer.print_formatted_additional("Installing", installer['name'])
-        # try:
-        #     invoker = Invoker()
-        #     invoker.set_on_start(NightcapPackageInstallerCommand(installers['path'], clear=False))
-        #     invoker.execute()
-        # except Exception as e:
-        #     self.printer.print_error(e)
-
-        
-
-    def resotre_dbs(self, location: str):
-        _module_backup = os.path.join(location, "modules.json")
-        _submodule_backup = os.path.join(location, "submodules.json")
-        _packages_backup = os.path.join(location, "packages.json")
-        _projects_backup = os.path.join(location, "projects.json")
-
-
     #endregion
+
+
+    def do_clean(self, line):
+        _cleaned = self._clean_all()
+
+        if _cleaned:
+            self.printer.print_formatted_check("Cleaning was successful", leadingBreaks=1, endingBreaks=1, leadingTab=1)
+        else:
+            self.printer.print_error(Exception("There was an error when cleaning, please view above for more details."))
+
+
+    def _clean_all(self):
+        self.printer.print_underlined_header("Cleaning")
+
+        _installer_path = self._package_paths.generate_path(
+            NightcapPackagesPathsEnum.Installers
+        )
+
+        _packages_path = self._package_paths.generate_path(
+        NightcapPackagesPathsEnum.PackagesBase)
+
+        _passed = True
+
+        try:
+            shutil.rmtree(_installer_path)
+            self.printer.print_formatted_check("Cleaned", optionaltext=("Installers"))
+        except Exception as e:
+            self.printer.print_formatted_additional("Installers Not Cleaned", optionaltext=str(e))
+            _passed = False
+
+        try:
+            os.makedirs(_installer_path)
+            self.printer.print_formatted_check("Created", optionaltext=("Installers Location"))
+        except Exception as e:
+            self.printer.print_formatted_additional("Installers Not Created", optionaltext=str(e))
+            _passed = False
+
+        try:
+            shutil.rmtree(_packages_path)
+            self.printer.print_formatted_check("Cleaned", optionaltext=("Packages"), leadingBreaks=1)
+        except Exception as e:
+            self.printer.print_formatted_additional("Installers Not Cleaned", optionaltext=str(e))
+            _passed = False
+
+        try:
+            os.makedirs(_packages_path)
+            self.printer.print_formatted_check("Created", optionaltext=("Packages Location"))
+        except Exception as e:
+            self.printer.print_formatted_additional("Installers Not Created", optionaltext=str(e))
+            _passed = False
+
+        try:
+            self._drop_dbs()
+            self.printer.print_formatted_check("Database", optionaltext=("Successful"))
+        except Exception as e:
+            self.printer.print_formatted_additional("Dropping DB's", optionaltext=str(e))
+            _passed = False
+
+        return _passed

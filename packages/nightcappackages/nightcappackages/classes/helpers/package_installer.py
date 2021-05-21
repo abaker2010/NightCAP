@@ -78,7 +78,7 @@ class NightcapPackageInstallerCommand(Command):
         self._package = None
         self._package_path = package_path
         self._clearScreen = clear
-        self.printer.print_formatted_additional("_path set", optionaltext=self._package_path)
+        # self.printer.print_formatted_additional("_path set", optionaltext=self._package_path)
     # endregion
 
     # region Execute

@@ -92,6 +92,10 @@ class MongoModuleDatabase(MongoDatabaseOperationsConnection, metaclass=Singleton
 
     # endregion
 
+    def drop(self):
+        self._db.drop()
+        
+
     # region Find
     def find(self, module: str = None):
         return self._db.find({"type": module})
