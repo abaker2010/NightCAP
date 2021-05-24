@@ -1,7 +1,7 @@
 
 
 import os
-from packages.nightcapcore.nightcapcore.printers.print import Printer
+from nightcapcore.printers.print import Printer
 import shutil
 import tempfile
 from .clean import NightcapCleanHelper

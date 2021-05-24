@@ -23,6 +23,9 @@ from nightcappackages.classes.databases.mogo.checker.mongo_database_checker impo
     MongoDatabaseChecker,
 )
 from requests.exceptions import RetryError
+from nightcappackages.classes.paths.paths import NightcapPackagesPaths
+from nightcappackages.classes.paths.pathsenum import NightcapPackagesPathsEnum
+from nightcappackages.classes.helpers.restore import NightcapRestoreHelper
 
 DEVNULL = open(os.devnull, "wb")
 # endregion
@@ -156,12 +159,23 @@ class NightcapDockerHelper(object):
             # self.init_nc_site(dc)
             self.build_containers()
             self.prepare_containers()
+            self.restore_packages()
             # self.set_account()
             return True
         except Exception as e:
             raise e
 
     # endregion
+
+    def restore_packages(self):
+        self.printer.print_underlined_header("Restoring Packages...")
+        _path = NightcapPackagesPaths().generate_path(
+            NightcapPackagesPathsEnum.NCInitRestore
+        )
+        _bc_path = os.path.join(_path, "restore_point.ncb")
+        # print("Path for restore file: ", str(_bc_path))
+        NightcapRestoreHelper(str(_bc_path)).restore()
+
 
     # region NC Site Init
     def init_nc_site(self, dc: NightcapCoreDockerChecker):

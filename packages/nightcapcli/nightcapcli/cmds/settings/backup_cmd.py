@@ -5,9 +5,12 @@
 # file that should have been included as part of this package.
 # region Imports
 import json
-from nightcapcli.helpers.restore import NightcapRestoreHelper
-from nightcapcli.helpers.backup import NightcapBackupHelper
-from nightcapcli.helpers.clean import NightcapCleanHelper
+from nightcappackages.classes.helpers.backup import NightcapBackupHelper
+from nightcappackages.classes.helpers.restore import NightcapRestoreHelper
+from nightcappackages.classes.helpers.clean import NightcapCleanHelper
+# from nightcapcli.helpers.restore import NightcapRestoreHelper
+# from nightcapcli.helpers.backup import NightcapBackupHelper
+# from nightcapcli.helpers.clean import NightcapCleanHelper
 from bson.objectid import ObjectId
 from nightcapcli.base.base_cmd import NightcapBaseCMD
 # endregion

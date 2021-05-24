@@ -2,7 +2,7 @@
 
 import shutil
 import os
-from packages.nightcapcore.nightcapcore.printers.print import Printer
+from nightcapcore.printers.print import Printer
 from nightcappackages.classes.databases.mogo.mongo_modules import MongoModuleDatabase
 from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
 from nightcappackages.classes.databases.mogo.mongo_projects import MongoProjectsDatabase

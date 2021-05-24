@@ -2,6 +2,7 @@
 
 import os
 import json
+from nightcappackages.classes.helpers.encoder import JSONEncoder
 from nightcapcore.printers.print import Printer
 import shutil
 import tempfile
@@ -12,7 +13,7 @@ from nightcappackages.classes.databases.mogo.mongo_projects import MongoProjects
 from nightcappackages.classes.databases.mogo.mongo_submodules import MongoSubModuleDatabase
 from nightcappackages.classes.paths.paths import NightcapPackagesPaths
 from nightcappackages.classes.paths.pathsenum import NightcapPackagesPathsEnum
-from nightcapcli.helpers.encoder import JSONEncoder
+# from nightcapcli.helpers.encoder import JSONEncoder
 
 class NightcapBackupHelper(object):
 
@@ -23,7 +24,6 @@ class NightcapBackupHelper(object):
         self._package_paths = NightcapPackagesPaths()
 
     def backup(self):
-        print("Backing up files")
         if len(self.path) == 0:
             self.printer.print_error(Exception("Please enter an output location"))
         else:
