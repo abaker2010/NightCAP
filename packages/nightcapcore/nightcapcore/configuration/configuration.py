@@ -38,6 +38,10 @@ class NightcapCLIConfiguration(metaclass=Singleton):
             else self.config.get("NIGHTCAPSCAN", "filename")
         )
 
+        self.buildNumber = int(self.config.get("BUILD_DATA", "build"))
+        self.versionNumber = int(self.config.get("BUILD_DATA", "version"))
+        self.mainbranch = self.config.getboolean("BUILD_DATA", "main_branch")
+
         if data != None:
             # print("Trying to set config data")
             self.project = data['project']

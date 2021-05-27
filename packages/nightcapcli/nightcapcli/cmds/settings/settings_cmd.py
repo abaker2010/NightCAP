@@ -5,22 +5,15 @@
 # file that should have been included as part of this package.
 # region Imports
 import os
+from nightcappackages.classes.commands import NightcapPackageUpdaterCommand
+from nightcapcli.cmds.settings.network_cmd import NightcapNetworkCMD
 import sys
 from nightcapcli.cmds.settings.backup_cmd import NightcapBackups
-from nightcapcli.generator.option_generator import NightcapOptionGenerator
-from nightcapcli.cmds.cmd_shared.network_config_cmd import (
-    NightcapMongoNetworkSettingsCMD,
-)
 from nightcapcli.base.base_cmd import NightcapBaseCMD
 from nightcapcli.cmds.settings.cmd_dev_options import NightcapDevOptions
 from nightcapcli.generator.listpackages import NightcapListPackages
-from nightcapcli.updater.updater import NightcapUpdater
-from nightcappackages.classes.helpers.package_installer import (
-    NightcapPackageInstallerCommand,
-)
-from nightcappackages.classes.helpers.package_uninstaller import (
-    NightcapPackageUninstallerCommand,
-)
+# from nightcapcli.updater.updater import NightcapUpdater
+from nightcappackages.classes.commands import NightcapPackageInstallerCommand, NightcapPackageUninstallerCommand
 from nightcapcore import *
 
 # endregion
@@ -99,6 +92,15 @@ class NightcapSettingsCMD(NightcapBaseCMD):
 
     # endregion
 
+    # region Networking Options
+    def help_network(self):
+        self.printer.help("Select the protocol to use for requests")
+
+    def do_network(self, line):
+        NightcapNetworkCMD("networking-main").cmdloop()
+
+    # endregion
+
     # region Dev Options
     def help_backups(self):
         self.printer.help("Backup/Restore options for your instance of the NightCAP DB")
@@ -166,40 +168,64 @@ class NightcapSettingsCMD(NightcapBaseCMD):
             "update [main|dev] [-v]",
         )
 
+    def complete_update(self, text, line, begidx, endidx):
+        _ = ["dev", "main"]
+        return [i for i in _ if i.startswith(text)]
+
     def do_update(self, line):
         sline = str(line).lstrip().split(" ")
-        print("Line: ", str(line).split(" "))
+        # print("Line: ", str(line).split(" "))
+        invoker = Invoker()
+        # invoker.set_on_start(NightcapPackageInstallerCommand(line))
+        # invoker.execute()
+        # _updater = NightcapPackageUpdaterCommand(self.config)
+        
         try:
             if len(sline) == 1:
-                print("No Verbose")
+                # print("No Verbose")
                 if sline[0] == "":
-                    print("using default / no verbose")
-                    NightcapUpdater().update(True)
+                    # print("using default / no verbose")
+                    invoker.set_on_start(NightcapPackageUpdaterCommand(self.config, True))
+                    invoker.execute()
+                    # _updater.update(True)
                 elif sline[0] == "dev":
-                    print("using dev / no verbose")
-                    NightcapUpdater().update(False)
+                    # print("using dev / no verbose")
+                    invoker.set_on_start(NightcapPackageUpdaterCommand(self.config, False))
+                    invoker.execute()
+                    # _updater.update(False)
                 elif sline[0] == "main":
-                    print("Using main / no verbose")
-                    NightcapUpdater().update(True)
+                    # print("Using main / no verbose")
+                    invoker.set_on_start(NightcapPackageUpdaterCommand(self.config, True))
+                    invoker.execute()
+                    # _updater.update(True)
                 else:
-                    print("Not an option")
+                    self.printer.print_error(Exception("Option not allowed"))
+                    # print("Not an option")
             elif len(sline) == 2:
-                print("Verbose")
+                # print("Verbose")
                 if sline[1] == "-v":
                     if sline[0] == "dev":
-                        print("using dev / verbose")
-                        NightcapUpdater().update(False, True)
+                        # print("using dev / verbose")
+                        invoker.set_on_start(NightcapPackageUpdaterCommand(self.config, False, True))
+                        invoker.execute()
+                        # _updater.update(False, True)
                     elif sline[0] == "main":
-                        print("Using main / verbose")
-                        NightcapUpdater().update(True, True)
+                        # print("Using main / verbose")
+                        invoker.set_on_start(NightcapPackageUpdaterCommand(self.config, True, True))
+                        invoker.execute()
+                        # _updater.update(True, True)
                     else:
-                        print("Error with verbose")
+                        self.printer.print_error(Exception("Error processing verbose output"))
+                        # print("Error with verbose")
                 else:
-                    print("Error with verbose option")
+                    self.printer.print_error(Exception("Error with verbose option"))
+                    # print("Error with verbose option")
             else:
-                print("To many arguments")
+                self.printer.print_error(Exception("To many arguments"))
+                # print("To many arguments")
         except Exception as e:
-            print("Exception:", e)
+            self.printer.print_error(e)
+            # print("Exception:", e)
 
     # endregion
 

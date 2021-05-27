@@ -62,13 +62,14 @@ class NightcapPackageUninstallerCommand(Command):
     """
 
     # region Init
-    def __init__(self, package_path: str) -> None:
+    def __init__(self, package_path: str, override: bool = False) -> None:
         self.printer = Printer()
         self.__package_paths = NightcapPackagesPaths()
         self._package_path = package_path
         self._split_package_path = package_path.split("/")
         self._db = MongoPackagesDatabase()
         self._ex = self._db.check_package_path(package_path.split("/"))
+        self._override = override
 
     # endregion
 
@@ -81,7 +82,10 @@ class NightcapPackageUninstallerCommand(Command):
                 _package = MongoPackagesDatabase().get_package_config(
                     self._package_path.split("/")
                 )
-                uconfirm = self._confim_delete(self._package_path)
+                if self._override:
+                    uconfirm = 'y'
+                else:
+                    uconfirm = self._confim_delete(self._package_path)
                 if str(uconfirm).lower() == "y": 
                     self.printer.print_header_w_option("Trying to Uninstall", self._package_path)
 

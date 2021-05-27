@@ -45,8 +45,8 @@ class NightcapBanner(NightcapCLIConfiguration):
     # region Init
     def __init__(self):
         NightcapCLIConfiguration.__init__(self)
-        self.build_version = self.config["BUILD_DATA"]["version"]
-        self.build_number = self.config["BUILD_DATA"]["build"]
+        self.build_version = str(self.versionNumber)
+        self.build_number = str(self.buildNumber)
 
     # endregion
 
@@ -78,16 +78,25 @@ class NightcapBanner(NightcapCLIConfiguration):
         try:
             version_string = rcolor + "Version ~ " + rcolor2 + self.build_version
             build_number_string = rcolor + "Build ~ " + rcolor2 + self.build_number
+            branch_string = rcolor + "Branch ~ " + rcolor2 + ("Main" if self.mainbranch else "Dev")
             print(
                 "\t=",
                 rcolor2,
-                ("%s\t%s" % (version_string, build_number_string)).center(109, " "),
+                ("%s" % (branch_string)).center(106, " "),
+                rcolor,
+                "=",
+            )
+            print("\t=", " " * 98, "=")
+            print(
+                "\t=",
+                rcolor2,
+                ("%s\t\t%s" % (build_number_string, version_string)).center(107, " "),
                 rcolor,
                 "=",
             )
         except:
             pass
-        print("\t", "=" * 100, Style.RESET_ALL)
+        print("\t", "=" * 100, Style.RESET_ALL, "\n")
         return
 
     # endregion
