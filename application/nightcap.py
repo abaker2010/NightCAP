@@ -67,7 +67,7 @@ class Nightcap(NightcapCLICMDMixIn):
                     NightcapCLIPublisher().selectedList,
                     _channel,
                     self.channelID,
-                    directions["additionalsteps"],
+                    directions["additionalsteps"], 
                 )
 
                 NightcapCLIPublisher().register(_channel, _who)
