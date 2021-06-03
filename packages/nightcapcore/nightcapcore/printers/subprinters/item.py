@@ -28,7 +28,7 @@ class ItemPrinter(PrinterBase):
         breakTextColor=Fore.LIGHTMAGENTA_EX,
         styleRest=Style.RESET_ALL,
         **kwargs
-    ):
+    ) -> None:
 
         self.base_print(
             text,
@@ -65,7 +65,7 @@ class ItemPrinter(PrinterBase):
         breakTextColor=Fore.LIGHTMAGENTA_EX,
         styleRest=Style.RESET_ALL,
         **kwargs
-    ):
+    ) -> None:
         self.base_print(
             text,
             optionalText,
@@ -101,7 +101,7 @@ class ItemPrinter(PrinterBase):
         breakTextColor=Fore.LIGHTMAGENTA_EX,
         styleRest=Style.RESET_ALL,
         **kwargs
-    ):
+    ) -> None:
 
         self.base_print(
             text,
@@ -138,7 +138,7 @@ class ItemPrinter(PrinterBase):
         breakTextColor=Fore.LIGHTMAGENTA_EX,
         styleRest=Style.RESET_ALL,
         **kwargs
-    ):
+    ) -> None:
 
         self.base_print(
             text,

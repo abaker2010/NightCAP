@@ -4,3 +4,4 @@ pyshark==0.4.2.11
 pathlib==1.0.1
 tinydb==4.3.0
 json5==0.9.5
+pgpy==0.5.4

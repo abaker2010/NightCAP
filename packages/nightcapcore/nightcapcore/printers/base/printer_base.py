@@ -6,9 +6,9 @@
 from colorama import Fore, Back, Style
 
 
-class PrinterBase:
+class PrinterBase(object):
     def __init__(self):
-        return
+        super().__init__()
 
     def base_print(
         self,
@@ -27,7 +27,7 @@ class PrinterBase:
         breakTextColor=Fore.LIGHTMAGENTA_EX,
         styleRest=Style.RESET_ALL,
         **kwargs
-    ):
+    ) -> None:
         # print("okay")
         # print("Leading tab", str(leadingTab))
         _start = ("\v" * vtabs) + ("\n" * leadingBreaks)
@@ -56,7 +56,7 @@ class PrinterBase:
         optionalTextColor=Fore.LIGHTGREEN_EX,
         breakTextColor=Fore.LIGHTMAGENTA_EX,
         styleRest=Style.RESET_ALL,
-    ):
+    ) -> None:
         _start = ("\v" * vtabs) + ("\n" * leadingBreaks)
         _leading = ("\t" * leadingTab) + " " + leadingColor + leadingText
         _text = textColor + str(text)

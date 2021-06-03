@@ -29,7 +29,7 @@ class NightcapPaths(NightcapPathCleaner):
     """
 
     # region Init
-    def __init__(self):
+    def __init__(self) -> None:
         """Paths for the Nightcap project"""
         NightcapPathCleaner.__init__(
             self, os.path.dirname(__file__).replace((os.sep + "paths"), "")
@@ -38,10 +38,10 @@ class NightcapPaths(NightcapPathCleaner):
     # endregion
 
     # region Generate Path
-    def generate_path(self, path: NightcapPathsEnum, pathextra: list = []):
+    def generate_path(self, path: NightcapPathsEnum, pathextra: list = []) -> str:
         try:
             return self.combine_with_base(path.value, pathextra)
         except Exception as e:
-            return e
+            raise e
 
     # endregion

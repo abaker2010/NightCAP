@@ -11,6 +11,8 @@ class InputPrinter(PrinterBase):
     def __init__(self):
         super().__init__()
 
+    #region Input
+    # User input, the default entry for the data is Y (aka yes)
     def input(
         self,
         text: str,
@@ -20,8 +22,13 @@ class InputPrinter(PrinterBase):
         sep: str = " ",
         vtab=1,
         etab=1,
-    ):
+        default="y"
+    ) -> str:
         print("\n" * vtab)
         _input = input(questionColor + str(text).center(width, sep) + inputcolor)
         print("\n" * etab)
-        return _input
+        if _input == "":
+            return default
+        else:
+            return _input
+    #endregion

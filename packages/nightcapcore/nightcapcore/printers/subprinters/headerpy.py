@@ -24,7 +24,7 @@ class HeaderPrinter(PrinterBase):
         leadingColor=Fore.YELLOW,
         styleRest=Style.RESET_ALL,
         **kwargs
-    ):
+    ) -> None:
         self.base_print(
             str(text + styleRest),
             leadingText=leadingText,
@@ -55,7 +55,7 @@ class HeaderPrinter(PrinterBase):
         optionaltextColor=Fore.MAGENTA,
         styleRest=Style.RESET_ALL,
         **kwargs
-    ):
+    ) -> None:
         self.base_print(
             str(text + styleRest),
             optionaltext=optionaltext,
@@ -92,7 +92,7 @@ class HeaderPrinter(PrinterBase):
         leadingColor=Fore.YELLOW,
         styleRest=Style.RESET_ALL,
         **kwargs
-    ):
+    ) -> None:
         self.base_print(
             text=text,
             vtabs=vtabs,
@@ -126,7 +126,7 @@ class HeaderPrinter(PrinterBase):
         leadingColor=Fore.YELLOW,
         styleRest=Style.RESET_ALL,
         **kwargs
-    ):
+    ) -> None:
         self.base_print(
             text=text,
             vtabs=vtabs,

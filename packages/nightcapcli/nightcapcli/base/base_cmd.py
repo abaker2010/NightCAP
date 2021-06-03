@@ -3,24 +3,14 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-import os
+#region Imports
+import cmd
+from colorama import Fore, Style
 from mongo.mongo_helper import NightcapMongoHelper
 from nightcapcli.observer.publisher import NightcapCLIPublisher
 from nightcapcore import NightcapCLIConfiguration, Printer, ScreenHelper, NightcapBanner
-from nightcapcore.test_pcaps.test_pcaps import TestPcaps
-from nightcappackages import *
-import cmd
-from colorama import Fore, Style
-from nightcapserver.server.server import NighcapCoreSimpleServer
-
-try:
-    from subprocess import DEVNULL  # py3k
-except ImportError:
-    import os
-
-    DEVNULL = open(os.devnull, "wb")
-
-
+#endregion
+ 
 class NightcapBaseCMD(cmd.Cmd):
     """
     This class is used as the base cmd for the program
@@ -83,7 +73,7 @@ class NightcapBaseCMD(cmd.Cmd):
         selectedList: list,
         channelid=None,
         passedJson=None
-    ):
+    ) -> None:
         cmd.Cmd.__init__(self, completekey="tab", stdin=None, stdout=None)
         if selectedList != []:
             self.selectedList = selectedList
@@ -102,24 +92,24 @@ class NightcapBaseCMD(cmd.Cmd):
         self.channelID = channelid
         self.prompt = self._prompt()
         
-        # if passedJson != None:
-        #     self.config.filename = passedJson['filename']
-        #     self.config.isDir = passedJson['isDir']
-        #     self.config.dir = passedJson['dir']
-        #     self.config.project = passedJson['project']
+        if passedJson != None:
+            self.config.filename = passedJson['filename']
+            self.config.isDir = passedJson['isDir']
+            self.config.dir = passedJson['dir']
+            self.config.project = passedJson['project']
         
     # endregion
 
-    def addselected(self, item):
+    def addselected(self, item) -> None:
         NightcapCLIPublisher().selectedList.append(item)
         self.selectedList = NightcapCLIPublisher().selectedList
 
-    def popselected(self):
+    def popselected(self) -> None:
         NightcapCLIPublisher().selectedList.pop(-1)
         self.selectedList = NightcapCLIPublisher().selectedList
 
     #region 
-    def _prompt(self):
+    def _prompt(self) -> str:
         _p = []
         for _ in self.selectedList:
             _p.append("[" + Fore.LIGHTYELLOW_EX + _ + Fore.LIGHTGREEN_EX + "]")
@@ -128,7 +118,7 @@ class NightcapBaseCMD(cmd.Cmd):
     #endregion
 
     # region CMD Overrides
-    def emptyline(self):
+    def emptyline(self) -> None:
         pass
 
     # putting into place to be used later
@@ -145,7 +135,7 @@ class NightcapBaseCMD(cmd.Cmd):
     #####
 
     # region Exit
-    def do_exit(self, line):
+    def do_exit(self, line) -> bool:
         try:
             if self.channelID != None:
                 self.printer.debug("Pop Before/After", self.channelID, currentMode=self.config.verbosity)
@@ -165,16 +155,16 @@ class NightcapBaseCMD(cmd.Cmd):
     # endregion
 
     # region Help
-    def do_help(self, line):
+    def do_help(self, line) -> None:
         super(NightcapBaseCMD, self).do_help(line)
 
     # endregion
 
     # region Config
-    def help_config(self):
+    def help_config(self) -> None:
         self.printer.help("Get the current system configuration(s)")
 
-    def do_config(self, line):
+    def do_config(self, line) -> None:
         ScreenHelper().clearScr()
         self.printer.print_underlined_header_undecorated("Configuration")
 
@@ -248,7 +238,7 @@ class NightcapBaseCMD(cmd.Cmd):
     # endregion
 
     # region Banner
-    def do_banner(self, line):
+    def do_banner(self, line) -> None:
         ScreenHelper().clearScr()
         NightcapBanner().Banner()
 

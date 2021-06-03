@@ -23,7 +23,7 @@ class DebugPrinter(PrinterBase):
         textColor=Fore.LIGHTCYAN_EX,
         leadingColor=Fore.MAGENTA,
         **kwargs
-    ):
+    ) -> None:
         # print("Text", text)
         # print("Optional",optionaltext)
         if currentMode == True:

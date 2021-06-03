@@ -5,19 +5,11 @@
 # file that should have been included as part of this package.
 # region Imports
 import argparse
-import json
 import abc
-import os
-import sys
+from nightcappackages.classes.helpers.encoder import NightcapJSONEncoder
 import time
-from abc import abstractmethod
-from colorama import Fore
-from colorama.ansi import Style
 from nightcapcli.base.base_cmd import NightcapBaseCMD
-from nightcapcore.configuration.package_config import NightcapCLIPackageConfiguration
 from nightcapcore.printers.print import Printer
-import pyshark
-from pyshark.packet.packet import Packet
 # endregion
 
 class NightcapRedTeam(NightcapBaseCMD):
@@ -58,34 +50,32 @@ class NightcapRedTeam(NightcapBaseCMD):
 
     """
     #region Init
-    def __init__(self, intro: str = None, *args, debug=False, **kwargs):
+    def __init__(self, intro: str = None, *args, debug=False, **kwargs) -> None:
 
         parser = argparse.ArgumentParser(description="Process some pcaps.")
         parser.add_argument("--data", required=True,
                             help="list of pcap filenames")
         args = parser.parse_args()
         self.printer = Printer()
-
-        
-        _data = dict(json.loads(args.data))
-        self.base_params = _data["0"]
-        self.package_params = _data["1"]
-
-        
+  
         try:
-            NightcapBaseCMD.__init__(
-                    self, dict(json.loads(args.data))["2"], passedJson=dict(
-                        json.loads(args.data))["0"]
-                )
 
+            _data = NightcapJSONEncoder().default(args.data)
+
+            self.base_params = _data["0"]
+            self.package_params = _data["1"]
+            NightcapBaseCMD.__init__(
+                    self, _data["2"], passedJson=_data["0"]
+                )
             self.printer.debug("Args after passing", args,
                            currentMode=self.config.verbosity)
+
         except Exception as e:
             self.printer.print_error(e)
     #endregion 
 
     # region onClose
-    def onClose(self):
+    def onClose(self) -> None:
         """Todo when the process is done"""
         try:
             self.printer.print_formatted_check('Elapse time (seconds)', str(
@@ -99,17 +89,27 @@ class NightcapRedTeam(NightcapBaseCMD):
     def onConsolePrint(self):
         """Generate Console Report"""
         raise NotImplementedError
-
     # endregion
 
     # region onIntro
     def onIntro(self):
         """Intro to the program"""
-        # self.printer.print_underlined_header("Scanning with arguments")
-        # self.show_params()
-        # self.printer.item_1("*"*30, leadingText="", endingBreaks=1, leadingTab=1)
-        pass
+        try:
+            if self.config.project != None or self.package_params != [] or self.package_params != None:
+                self.printer.print_underlined_header("Scan Details: (Params Used)")
 
+            if self.config.project != None:
+                self.printer.print_underlined_header("Project", leadingTab=2)
+                self.printer.item_1("ID", optionalText=self.base_params['project']['_id']['$oid'], seperator=" : ", leadingTab=3)
+                self.printer.item_1("Name", optionalText=self.base_params['project']['project_name'], seperator=" : ", leadingTab=3)
+                
+            if self.package_params != [] or self.package_params != None:
+                self.printer.print_underlined_header("Package Params", leadingTab=2)
+                for k, v in dict(self.package_params).items():
+                    self.printer.item_1(str(k), optionalText=str(v), seperator=" : ", leadingTab=3)
+        except Exception as e:
+            self.printer.print_error(e)
+        pass
     # endregion
 
     # region onProcess
@@ -117,7 +117,6 @@ class NightcapRedTeam(NightcapBaseCMD):
     def onProcess(self):
         """Process to do"""
         raise NotImplementedError
-
     # endregion
 
     # region onReport
@@ -139,20 +138,8 @@ class NightcapRedTeam(NightcapBaseCMD):
 
         try:
             start = time.time()
+            self.printer.print_formatted_additional("Running package. Please wait...", leadingTab=1, leadingBreaks=1, endingBreaks=1)
             self.onProcess()
-            # for cpt in self.get_pcaps(display_filter=self._display_filter):
-            #     _count = 1
-            #     for pkt in cpt:
-            #         # print(type(pkt))
-            #         sys.stdout.write(Fore.LIGHTCYAN_EX + "\r\t\t[?] " + Fore.LIGHTGREEN_EX +
-            #                          "Scanning Packet # : " + Fore.LIGHTYELLOW_EX + str(_count) + Style.RESET_ALL)
-            #         try:
-            #             self.onProcess(pkt, _count)
-            #         except Exception as e:
-            #             print("There has been an error")
-            #             print(e)
-            #             pass
-            #         _count += 1
             self._elapseTime = time.time() - start
             print("")
         except Exception as e:
@@ -177,11 +164,9 @@ class NightcapRedTeam(NightcapBaseCMD):
         except Exception as e:
             self.printer.print_error(Exception("Error with Closing"))
             raise e
-
     # endregion
 
     # region run
     def run(self):
         self.onRun()
-
     # endregion

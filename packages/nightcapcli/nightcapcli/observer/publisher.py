@@ -5,6 +5,7 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 # region Imports
+from typing import Any, Literal
 from nightcapcli.observer.publisher_base import NightcapCLIPublisherBase
 from nightcappackages.classes.databases.mogo.mongo_modules import MongoModuleDatabase
 from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
@@ -85,7 +86,7 @@ class NightcapCLIPublisher(NightcapCLIPublisherBase, metaclass=Singleton):
     """
 
     # region Init
-    def __init__(self):
+    def __init__(self) -> None:
         NightcapCLIPublisherBase.__init__(self, ["basecli"])
 
         self.modules_db = MongoModuleDatabase()
@@ -99,19 +100,19 @@ class NightcapCLIPublisher(NightcapCLIPublisherBase, metaclass=Singleton):
     # endregion
 
     # region Set List
-    def set_list(self, list: list = []):
+    def set_list(self, list: list = []) -> None:
         self.selectedList = list
 
     # endregion
 
     # region isValid
-    def isValid(self, options, selectedList):
+    def isValid(self, options, selectedList) -> bool:
         return self._validate(options, selectedList)
 
     # endregion
 
     # region Get package config
-    def get_package_config(self, path: list):
+    def get_package_config(self, path: list) -> Any:
         self.pkg_conf = self.packages_db.get_package_config(path)
         # print("Found pkg config", self.pkg_conf)
         return self.pkg_conf
@@ -119,13 +120,13 @@ class NightcapCLIPublisher(NightcapCLIPublisherBase, metaclass=Singleton):
     # endregion
 
     # region Check module tpye
-    def _check_module_types(self, path: list):
+    def _check_module_types(self, path: list) -> bool:
         return False if self.modules_db.check_module_path(path).count() == 0 else True
 
     # endregion
 
     # region Check submodule
-    def _check_sub_module(self, path: list):
+    def _check_sub_module(self, path: list) -> bool:
         # print("Checking submodule", path)
         return (
             False
@@ -136,14 +137,14 @@ class NightcapCLIPublisher(NightcapCLIPublisherBase, metaclass=Singleton):
     # endregion
 
     # region Check package
-    def _check_packages(self, selected):
+    def _check_packages(self, selected) -> bool:
         # print("Checking package")
         return self.packages_db.check_package_path(selected)
 
     # endregion
 
     # region Check current path
-    def _check_current_path(self, path: list):
+    def _check_current_path(self, path: list) -> bool:
         if len(path) == 1:
             return self._check_module_types(path)
         elif len(path) == 2:
@@ -159,7 +160,7 @@ class NightcapCLIPublisher(NightcapCLIPublisherBase, metaclass=Singleton):
     # endregion
 
     # region Get popped object
-    def _get_pop(self, list: list):
+    def _get_pop(self, list: list) -> Literal:
         _pop = 0
 
         if self.selectedList == []:
@@ -186,7 +187,7 @@ class NightcapCLIPublisher(NightcapCLIPublisherBase, metaclass=Singleton):
     # endregion
 
     # region Validate
-    def _validate(self, line: str, selected: list):
+    def _validate(self, line: str, selected: list) -> bool:
         try:
             _options = []
             self.directions = {"nextstep": [], "additionalsteps": [], "remove": 0}

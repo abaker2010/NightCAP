@@ -26,7 +26,7 @@ class WaitingPrinter(PrinterBase):
         optionalTextColor=Fore.LIGHTBLUE_EX,
         breakTextColor=Fore.LIGHTMAGENTA_EX,
         styleRest=Style.RESET_ALL,
-    ):
+    ) -> None:
 
         self.animated_base_print(
             leadingText=leadingText,

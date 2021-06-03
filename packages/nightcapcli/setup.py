@@ -12,12 +12,12 @@ except ImportError:
 NAME = "nightcapcli"
 
 
-def read_file(path):
+def read_file(path) -> str:
     with open(os.path.join(os.path.dirname(__file__), path)) as fp:
         return fp.read()
 
 
-def _get_version_match(content):
+def _get_version_match(content) -> str:
     # Search for lines of the form: # __version__ = 'ver'
     regex = r"^__version__ = ['\"]([^'\"]*)['\"]"
     version_match = re.search(regex, content, re.M)
@@ -26,7 +26,7 @@ def _get_version_match(content):
     raise RuntimeError("Unable to find version string.")
 
 
-def get_version(path):
+def get_version(path) -> str:
     return _get_version_match(read_file(path))
 
 

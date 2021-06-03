@@ -5,7 +5,9 @@
 # file that should have been included as part of this package.
 # region Imports
 import time
+from colorama import Fore, Style
 from subprocess import Popen, PIPE, STDOUT
+import docker as dDocker
 import os
 
 from nightcapcore.printers.print import Printer
@@ -48,20 +50,20 @@ class NightcapCoreDockerChecker(object):
     # region Init
     def __init__(self) -> None:
         super().__init__()
+        self.printer = Printer()
+        self.docker = dDocker.from_env()
+        
         self.mongo_im_exists = self.__check_image("mongo", "latest", "mongo")
         self.ncs_exits = self.__check_image("nightcapsite", "latest", "nightcapsite")
-        self.printer = Printer()
+        
     # endregion
 
     # region Check Image
     def __check_image(self, image: str, tag: str, grep: str):
-        _p1 = Popen(["docker", "images", ("%s:%s" % (image, tag))], stdout=PIPE)
-        _p2 = Popen(["grep", grep], stdin=_p1.stdout, stdout=PIPE)
-        _p1.stdout.close()
-        _d = _p2.communicate()[0].decode("utf-8")
-        _image_exists = True if _d != "" else False
-        return _image_exists
-
+        try:
+            return self.docker.images.get(image+":"+tag)
+        except Exception as e:
+            return False
     # endregion
 
     # region Check Set-up
@@ -72,20 +74,15 @@ class NightcapCoreDockerChecker(object):
     # endregion
 
     # region Pull Image
-    def pull_image(self, image: str):
-        self.printer.item_1("Please wait while pulling Image", image)
-        self.printer.print_formatted_additional("Note: This could take some time", leadingTab=3)
-        p = Popen(["docker", "pull", image], stdout=DEVNULL)
-        while p.poll() is None:
-            print("", end="", flush=True)
-            time.sleep(1)
-
-        if p.returncode == 0:
-            self.printer.print_formatted_check("Done", leadingTab=3)
-        else:
-            self.printer.print_error(Exception("Error pulling docker image: %s" % (p.returncode)))
-        # _p1 = subprocess.Popen(['docker', 'pull', image], stdout=subprocess.PIPE)
-        # _p1.wait()
-        # return
+    def pull_image(self, image: str) -> None:
+        # self.printer.item_1("Please wait while pulling Image", image)
+        # self.printer.print_underlined_header("Progress for downloading Mongo Image")
+        try:
+            # self.printer.print_formatted_additional("Pulling image", optionaltext=image)
+            self.docker.images.pull(image)
+            # self.printer.print_formatted_check("Done", leadingTab=3)
+        except Exception as e:
+            self.printer.print_error(Exception("Error pulling image: " + image))
+            raise e
 
     # endregion

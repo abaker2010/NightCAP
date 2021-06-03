@@ -9,7 +9,7 @@ from colorama import Fore, Back, Style
 # endregion
 
 
-class NightcapColors:
+class NightcapColors(object):
     """
 
     This class is used to allow for random color selection
@@ -26,9 +26,9 @@ class NightcapColors:
     """
 
     def __init__(self):
-        return
+        super().__init__()
 
-    def randomColor(self, number: int):
+    def randomColor(self, number: int) -> str:
         if number == 0:
             return Fore.LIGHTGREEN_EX
         elif number == 1:

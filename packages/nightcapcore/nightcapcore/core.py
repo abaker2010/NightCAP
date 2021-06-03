@@ -18,7 +18,7 @@ class NightcapCore(NightcapCLIConfiguration):
 
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         parser = argparse.ArgumentParser(description="Process some pcaps.")
         parser.add_argument("--data", required=True, help="list of pcap filenames")
         args = parser.parse_args()

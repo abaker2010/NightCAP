@@ -4,5 +4,6 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 # from .simplereport import NightcapSimpleReport
+from .report import NightcapReport
 
-# __all__ = ["NightcapSimpleReport"]
+__all__ = ["NightcapReport"]

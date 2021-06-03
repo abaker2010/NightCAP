@@ -2,7 +2,7 @@
 
 import os
 import json
-from nightcappackages.classes.helpers.encoder import JSONEncoder
+from nightcappackages.classes.helpers.encoder import NightcapJSONEncoder
 from nightcapcore.printers.print import Printer
 import shutil
 import tempfile
@@ -13,7 +13,6 @@ from nightcappackages.classes.databases.mogo.mongo_projects import MongoProjects
 from nightcappackages.classes.databases.mogo.mongo_submodules import MongoSubModuleDatabase
 from nightcappackages.classes.paths.paths import NightcapPackagesPaths
 from nightcappackages.classes.paths.pathsenum import NightcapPackagesPathsEnum
-# from nightcapcli.helpers.encoder import JSONEncoder
 
 class NightcapBackupHelper(object):
 
@@ -90,7 +89,7 @@ class NightcapBackupHelper(object):
 
     def _write_file(self, dest, name, data):
         with open(os.path.join(dest, name), "w") as outfile:
-                json.dump(JSONEncoder().encode(data), outfile)
+                json.dump(NightcapJSONEncoder().encode(data), outfile)
 
 
     # region make archive(s)

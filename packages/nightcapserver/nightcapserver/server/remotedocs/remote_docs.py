@@ -5,10 +5,11 @@
 # file that should have been included as part of this package.
 # region Imports
 import os
-from typing import Mapping
+from typing import List, Mapping
 from nightcapcore.printers import Printer
 from tinydb import TinyDB
 from tinydb.queries import Query
+from tinydb.table import Document
 
 # endregion
 
@@ -46,7 +47,7 @@ class NightcapCoreRemoteDocs(object):
     """
 
     # region Init
-    def __init__(self):
+    def __init__(self) -> None:
         self.protocol_db = TinyDB(
             os.path.join(
                 os.path.dirname(__file__), "..", "database", "protocol_links.json"
@@ -57,7 +58,7 @@ class NightcapCoreRemoteDocs(object):
     # endregion
 
     # region Get Link
-    def get_link(self, protocol):
+    def get_link(self, protocol) -> List[Document]:
         found = self.protocol_db.table("protocol_links").search(
             Query()["name"] == protocol
         )
@@ -66,7 +67,7 @@ class NightcapCoreRemoteDocs(object):
     # endregion
 
     # region Add Link
-    def __add_link(self, link: Mapping):
+    def __add_link(self, link: Mapping) -> None:
         try:
             self.protocol_db.table("protocol_links").insert(link)
         except Exception as e:
@@ -75,7 +76,7 @@ class NightcapCoreRemoteDocs(object):
     # endregion
 
     # region Update
-    def update(self, updatedb: TinyDB):
+    def update(self, updatedb: TinyDB) -> None:
         try:
             _items_added = 0
             for protocol in updatedb.table("protocol_links").all():

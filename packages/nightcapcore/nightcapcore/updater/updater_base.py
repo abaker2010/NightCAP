@@ -3,26 +3,27 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
+from typing import List
 from nightcapcore.printers import Printer
 from nightcapcore.updater import NightcapCoreUpaterRules
 from tinydb import TinyDB, Query
 from tinydb.queries import where
-from tinydb.table import Table
+from tinydb.table import Document, Table
 
 
-class NightcapCoreUpdaterBase:
+class NightcapCoreUpdaterBase(object):
     def __init__(self):
+        super().__init__()
         self.printer = Printer()
-        pass
 
-    def _insert(self, localtable: Table, item: dict):
+    def _insert(self, localtable: Table, item: dict) -> None:
         try:
             localtable.insert(item)
             self.printer.print_formatted_check(text="added", leadingTab=4)
         except Exception as e:
             self.printer.print_error(e, "Error with inserting: ")
 
-    def _find_module_item(self, localtable: Table, find: str, checkonrow: str):
+    def _find_module_item(self, localtable: Table, find: str, checkonrow: str) -> List[Document]:
         _v = localtable.search(Query()[checkonrow] == find)
         return _v
 
@@ -33,7 +34,7 @@ class NightcapCoreUpdaterBase:
         findtwo: str,
         checkonrow: str,
         checkonrowtwo: str,
-    ):
+    ) -> List[Document]:
         _v = localtable.search(
             (where(checkonrow) == find) & (where(checkonrowtwo) == findtwo)
         )
@@ -46,7 +47,7 @@ class NightcapCoreUpdaterBase:
         checkonrow: str,
         updaterrule: NightcapCoreUpaterRules,
         checkonrowtwo: str = None,
-    ):
+    ) -> None:
         for _upditem in updatetable.all():
             _found = None
             if updaterrule == NightcapCoreUpaterRules.Module:

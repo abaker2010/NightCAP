@@ -70,7 +70,7 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
     """
 
     # region Init
-    def __init__(self, pkg_information: dict, data: dict = None):
+    def __init__(self, pkg_information: dict, data: dict = None) -> None:
         NightcapCLIConfiguration.__init__(self, data=data)
         # NightcapCLIConfiguration.__init__(self)
         # self.config = config
@@ -96,7 +96,7 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
     # endregion
 
     # region Show Params
-    def show_params(self, detailed: bool = False):
+    def show_params(self, detailed: bool = False) -> None:
 
         # if self.project == None:
         #     proj = "None"
@@ -213,7 +213,7 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
     # endregion
 
     # region Complete params
-    def complete_params(self, text, line, begidx, endidx):
+    def complete_params(self, text, line, begidx, endidx) -> list:
         _ = ["isdir", "filename", "path"]
         _.extend(list(dict(self.pkg_params).keys()))
         return [i for i in _ if i.startswith(text)]
@@ -221,7 +221,7 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
     # endregion
 
     # region Help params
-    def help_params(self):
+    def help_params(self) -> None:
         self.printer.item_2(
             "see parameters",
             "params",
@@ -242,7 +242,7 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
     # endregion
 
     # region Do params
-    def do_params(self, line):
+    def do_params(self, line) -> None:
         try:
             if len(line) == 0:
                 self.show_params()
@@ -299,7 +299,7 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
                  decryption_key=None, encryption_type="wpa-pwk", decode_as=None,
                  disable_protocol=None, tshark_path=None, override_prefs=None,
                  use_json=False, output_file=None, include_raw=False, eventloop=None, custom_parameters=None,
-                 debug=False, **kwargs):
+                 debug=False, **kwargs) -> None:
         try:
             _pcapFiles = []
             # print("Trying to generate pcaps")Generating Reports
@@ -358,7 +358,7 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
     # endregion
 
     # region To JSON
-    def toJson(self):
+    def toJson(self) -> dict:
         js = {
             "project": self.project,
             "isDir": self.isDir,

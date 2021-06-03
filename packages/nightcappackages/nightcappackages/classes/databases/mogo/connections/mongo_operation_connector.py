@@ -4,32 +4,17 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 # region Import
-from nightcapcore import NightcapCLIConfiguration
-from nightcapcore.singleton.singleton import Singleton
-from nightcappackages.classes.databases.mogo.interfaces.mongo_db_interface import (
-    MongoDatabaseInterface,
-)
+from nightcappackages.classes.databases.mogo.connections.mongo_connection import MongoDatabaseConnection
 from nightcapcore.interface.template_interface import abstractfunc
-from pymongo.errors import ServerSelectionTimeoutError
-
 # endregion
 
 
-class MongoDatabaseOperationsConnection(MongoDatabaseInterface):
+class MongoDatabaseOperationsConnection(MongoDatabaseConnection):
     """
 
     This class is used to define some of the MongoDatabseInterface
 
     ...
-
-    Attributes
-    ----------
-        conf: -> NightcapCLIConfiguration
-        ip: -> str
-        port: -> str
-        _db_name: -> str
-        _uname: -> str
-        _pass: -> str
 
      Methods
     -------
@@ -51,27 +36,7 @@ class MongoDatabaseOperationsConnection(MongoDatabaseInterface):
 
     # region Init
     def __init__(self):
-        self.conf = NightcapCLIConfiguration()
-        ip = self.conf.config["MONGOSERVER"]["ip"]
-        port = self.conf.config["MONGOSERVER"]["port"]
-        _db_name = self.conf.config["MONGOSERVER"]["db_name"]
-        _uname = self.conf.config["MONGOSERVER"]["username"]
-        _pass = self.conf.config["MONGOSERVER"]["password"]
-
-        self.name = None
-        if ip == None:
-            raise Exception("Mongo Server IP not set")
-        if port == None:
-            raise Exception("Mongo Server Port not set")
-        if _db_name == None:
-            raise Exception("Mongo Server DB_Name not set")
-        else:
-            self.db_name = _db_name
-        try:
-            super().__init__(ip, port, _uname, _pass)
-        except ServerSelectionTimeoutError as e:
-            raise e
-
+        super().__init__()
     # endregion
 
     @abstractfunc

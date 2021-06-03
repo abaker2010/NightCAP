@@ -5,9 +5,7 @@
 # file that should have been included as part of this package.
 # region Imports
 from nightcapcli.base.base_cmd import NightcapBaseCMD
-from nightcapcore import *
 from colorama import Fore
-
 # endregion
 
 
@@ -56,7 +54,7 @@ class NightcapMongoNetworkSettingsCMD(NightcapBaseCMD):
     """
 
     # region Init
-    def __init__(self, networkopt: str):
+    def __init__(self, networkopt: str) -> None:
         self.network = ""
         if networkopt.lower() == "database":
             NightcapBaseCMD.__init__(self, ["settings", "server", "database"])
@@ -70,10 +68,10 @@ class NightcapMongoNetworkSettingsCMD(NightcapBaseCMD):
     # endregion
 
     # region Config
-    def help_config(self):
+    def help_config(self) -> None:
         self.printer.help("Shows current configuration")
 
-    def do_config(self, line):
+    def do_config(self, line) -> None:
         self.printer.print_underlined_header("CURRENT CONFIG")
         self.printer.print_formatted_other(
             "IP",
@@ -92,7 +90,7 @@ class NightcapMongoNetworkSettingsCMD(NightcapBaseCMD):
     # endregion
 
     # region Is IP Valid
-    def _isvalidIPAddress(self, IP):
+    def _isvalidIPAddress(self, IP) -> bool:
         """
         :type IP: str
         :rtype: str
@@ -121,10 +119,10 @@ class NightcapMongoNetworkSettingsCMD(NightcapBaseCMD):
     # endregion
 
     # region IP
-    def help_ip(self):
+    def help_ip(self) -> None:
         self.printer.help("Sets a new IP Address", "ip [IP Address]")
 
-    def do_ip(self, line):
+    def do_ip(self, line) -> None:
         print("Set IP")
         try:
             print("Change IP address for django server")
@@ -146,10 +144,10 @@ class NightcapMongoNetworkSettingsCMD(NightcapBaseCMD):
     # endregion
 
     # region Port
-    def help_port(self):
+    def help_port(self) -> None:
         self.printer.help("Sets a new Port Number", "port [1-65535]")
 
-    def do_port(self, line):
+    def do_port(self, line) -> None:
         print("Set port")
         try:
             port = int(line)

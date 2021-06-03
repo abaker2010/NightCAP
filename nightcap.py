@@ -12,11 +12,10 @@ from colorama import Fore, Style
 from mongo.mongo_helper import NightcapMongoHelper
 from nightcapcli.observer.publisher import NightcapCLIPublisher
 from nightcapcore import ScreenHelper, Printer, NightcapCLIConfiguration, NightcapBanner
-from nightcapserver.server.server import NighcapCoreSimpleServer
+
 from pymongo.errors import ServerSelectionTimeoutError
 from application.nightcap import Nightcap
 from application.legal.legal import Legal
-from subprocess import Popen, PIPE, STDOUT
 
 DEVNULL = open(os.devnull, "wb")
 try:
@@ -33,7 +32,7 @@ else:
 # endregion
 
 # region Entry
-class Entry:
+class Entry(object):
     """
 
     This class is used to as a wrapper for the entry process to the program
@@ -70,40 +69,39 @@ class Entry:
     """
 
     # region Init
-    def __init__(self):
+    def __init__(self) -> None:
+        super().__init__()
         self.conf = NightcapCLIConfiguration()
         self.printer = Printer()
         self.yes = self.conf.config.get("NIGHTCAPCORE", "yes").split()
-        # self.mongo_server = None
         self.mongo_helper = NightcapMongoHelper(self.conf)
-
+        print("Mongo Container From Updated Object")
     # endregion
 
     # region Agreements
-    def agreements(self):
+    def agreements(self) -> bool:
         """Legal agreement the at the user must accept to use the program"""
         while not self.conf.config.getboolean("NIGHTCAPCORE", "agreement"):
             ScreenHelper().clearScr()
             NightcapBanner().Banner()
             Legal().termsAndConditions()
-            agree = input(
-                Fore.LIGHTGREEN_EX
-                + "\t\tYou must agree to our terms and conditions first (Y/n): "
-                + Style.RESET_ALL
+            agree = self.printer.input(
+                "\t\tYou must agree to our terms and conditions first (Y/n): "
             ).lower()
 
             if agree in self.yes:
-                self.conf.config.set("NIGHTCAPCORE", "agreement", "true")
+                self.conf.config.set("NIGHTCAPCORE", "agreement", True)
                 self.conf.Save()
                 ScreenHelper().clearScr()
                 self.banner()
 
+                return True
         return True
 
     # endregion
 
     # region Banner
-    def banner(self):
+    def banner(self) -> None:
         NightcapBanner().Banner()
 
     # endregion
@@ -124,6 +122,7 @@ def main():
         colorama.init()
         if _entry.agreements():
             try:
+                _printer.print_underlined_header("Starting Up")
                 if _entry.mongo_helper.check_mongo_container():
                     _printer.print_formatted_check(
                         text="Mongo Server", optionaltext="Connected"
@@ -155,7 +154,8 @@ def main():
             except Exception as e:
                 _printer.print_error(e)
 
-    except KeyboardInterrupt:
+
+    except KeyboardInterrupt as ke:
         ScreenHelper().clearScr()
         _entry.banner()
         _printer.print_formatted_delete(text="Forced Termination!! ")
@@ -175,16 +175,28 @@ def main():
     
         _printer.print_underlined_header("Cleaning up...")
         try:
-            NighcapCoreSimpleServer(_entry.conf).shutdown()
-            _entry.mongo_helper.docker_helper.stop_all_containers()
+            if _entry.conf.config.getboolean("REPORTINGSERVER", "shutdown_on_exit") == True:
+                _entry.mongo_helper.docker_helper.stop_nightcapsite()
+                
+            if _entry.conf.config.getboolean("MONGOSERVER", "shutdown_on_exit") == True:
+                _entry.mongo_helper.docker_helper.stop_mongodb()
         except Exception as e:
             _printer.print_error(e)
-        exit()
-
 
 # endregion
 
 # region __NAME__
 if __name__ == "__main__":
+    # try:
     main()
+    # except KeyboardInterrupt as ke:
+    #     try:
+    #         """Restarts the current program.
+    #         Note: this function does not return. Any cleanup action (like
+    #         saving data) must be done before calling this function."""
+    #         python = sys.executable
+    #         os.execl(python, python, * sys.argv)
+    #     except Exception as e:
+    #         print(e)
+
 # endregion

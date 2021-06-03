@@ -35,7 +35,7 @@ def main():
     ncore = SomePackageName()
     try:
         
-        ncore.printer.print_underlined_header("Protocol Overview")
+        # ncore.printer.print_underlined_header("Protocol Overview")
         ncore.run()
 
     # ncore.simple_report.name = "Test Report"

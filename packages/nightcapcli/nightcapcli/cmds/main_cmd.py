@@ -3,56 +3,57 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-
+#region Imports
+from typing import List
 from nightcapcli.cmds.cmd_shared.shell_cmd import ShellCMDMixin
 from nightcapcli.cmds.projects import NightcapProjectsCMD
-from nightcapcore import NightcapCLIConfiguration
-from colorama import Fore, Style
 from ..base import NightcapBaseCMD
 from nightcapcore import ScreenHelper
 from nightcapcli.cmds.settings import NightcapSettingsCMD
-
+#endregion
 
 class NightcapMainCMD(NightcapBaseCMD, ShellCMDMixin):
     def __init__(
         self,
         selectedList,
         channelid: str = None,
-    ):
+    ) -> None:
         NightcapBaseCMD.__init__(self, selectedList, channelid)
 
-    # region Update Server
+    #region Update Server
+    def complete_server(self, text, line, begidx, endidx) -> List[str]:
+        return [i for i in ("start", "stop", "status") if i.startswith(text)]
 
-    # def complete_server(self, text, line, begidx, endidx):
-    #     return [i for i in ("start", "stop", "status") if i.startswith(text)]
-
-    # def do_server(self, line):
-    #     """\n\tControll the update server\n\n\t\tOptions: status, start, stop"""
-    #     try:
-    #         if line == "start":
-    #             self.mongo_helper.docker_helper.start_nighcap_site()
-    #             # NighcapCoreSimpleServer(self.config).start()
-    #         elif line == "stop":
-    #             self.mongo_helper.docker_helper.stop_nightcapsite()
-    #         elif line == "status":
-    #             print(self.mongo_helper.docker_helper.get_site_container_status())
-    #         else:
-    #             raise Exception(
-    #                 "Error with server option. For more info use: help server"
-    #             )
-    #     except Exception as e:
-    #         self.printer.print_error(e)
+    def do_server(self, line) -> None:
+        """\n\tControll the update server\n\n\t\tOptions: status, start, stop"""
+        try:
+            if line == "start":
+                self.mongo_helper.docker_helper.start_nighcap_site()
+            elif line == "stop":
+                self.mongo_helper.docker_helper.stop_nightcapsite()
+            elif line == "status":
+                print(self.mongo_helper.docker_helper.get_site_container_status())
+            else:
+                raise Exception(
+                    "Error with server option. For more info use: help server"
+                )
+        except Exception as e:
+            self.printer.print_error(e)
 
     # endregion
 
-    def do_projects(self, line):
+    #region Projects
+    def do_projects(self, line) -> None:
         """\n\nChange current project"""
         try:
             NightcapProjectsCMD().cmdloop()
         except Exception as e:
             print(e)
+    #endregion
 
-    def do_settings(self, line):
+    #region Settings
+    def do_settings(self, line) -> None:
         print("Settings here")
         ScreenHelper().clearScr()
         NightcapSettingsCMD(self.channelID).cmdloop()
+    #endregion

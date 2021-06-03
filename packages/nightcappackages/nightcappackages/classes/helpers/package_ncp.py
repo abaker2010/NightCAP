@@ -5,14 +5,10 @@
 # file that should have been included as part of this package.
 # region Imports
 import os
-from nightcappackages.classes.paths import (
-    NightcapPackagesPathsEnum,
-    NightcapPackagesPaths,
-)
-from nightcapcore import *
 import shutil
 import errno
-
+from nightcapcore.printers.print import Printer
+from nightcappackages.classes.paths import NightcapPackagesPathsEnum, NightcapPackagesPaths
 # endregion
 
 class NightcapPackageInstallerHelper(object):

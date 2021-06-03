@@ -13,11 +13,8 @@ from nightcapcore.configuration import NightcapCLIConfiguration
 from nightcapcore.docker.docker_checker import NightcapCoreDockerChecker
 from nightcapcore.helpers.screen.screen_helper import ScreenHelper
 from nightcapcore.printers.print import Printer
-from nightcappackages.classes.databases.mogo.checker.mongo_database_checker import (
-    MongoDatabaseChecker,
-)
+from nightcappackages.classes.databases.mogo.checker.mongo_database_checker import MongoDatabaseChecker
 from pymongo.errors import ServerSelectionTimeoutError
-
 # endregion
 
 
@@ -114,10 +111,8 @@ class NightcapMongoHelper:
             self.printer.print_formatted_additional(
                 text="Mongo Server initialize", optionaltext="No"
             )
-            agree = input(
-                Fore.LIGHTGREEN_EX
+            agree = self.printer.input(
                 + "\n\t\tWould you like to initialize the Mongo Server (Y/N): "
-                + Style.RESET_ALL
             ).lower()
             if agree in self.yes:
                 self.mongo_server.initialize_database()
@@ -170,35 +165,35 @@ class NightcapMongoHelper:
                     endingBreaks=1,
                 )
             # region Working Code (Commenting out for now due to time limitations for the feature)
-            # self.printer.print_underlined_header_undecorated(
-            #     "Nighcapsite", leadingTab=2
-            # )
-            # if _docker_checker.ncs_exits == False:
-            #     self.printer.print_formatted_delete(
-            #         text="Container Status",
-            #         optionaltext=self.docker_helper.get_site_container_status(),
-            #         leadingTab=3,
-            #     )
-            #     self.printer.print_formatted_delete(
-            #         text="Nightcapsite",
-            #         optionaltext="Missing",
-            #         leadingTab=3,
-            #         endingBreaks=1,
-            #     )
-            # else:
-            #     self.printer.print_formatted_check(
-            #         text="Container Status",
-            #         optionaltext=self.docker_helper.get_site_container_status(),
-            #         leadingTab=3,
-            #         textColor=Fore.CYAN,
-            #     )
-            #     self.printer.print_formatted_additional(
-            #         text="Nightcapsite",
-            #         optionaltext="Exists",
-            #         leadingTab=3,
-            #         optionalTextColor=Fore.RED,
-            #         endingBreaks=1,
-            #     )
+            self.printer.print_underlined_header_undecorated(
+                "Nighcapsite", leadingTab=2
+            )
+            if _docker_checker.ncs_exits == False:
+                self.printer.print_formatted_delete(
+                    text="Container Status",
+                    optionaltext=self.docker_helper.get_site_container_status(),
+                    leadingTab=3,
+                )
+                self.printer.print_formatted_delete(
+                    text="Nightcapsite",
+                    optionaltext="Missing",
+                    leadingTab=3,
+                    endingBreaks=1,
+                )
+            else:
+                self.printer.print_formatted_check(
+                    text="Container Status",
+                    optionaltext=self.docker_helper.get_site_container_status(),
+                    leadingTab=3,
+                    textColor=Fore.CYAN,
+                )
+                self.printer.print_formatted_additional(
+                    text="Nightcapsite",
+                    optionaltext="Exists",
+                    leadingTab=3,
+                    optionalTextColor=Fore.RED,
+                    endingBreaks=1,
+                )
             # endregion
             
             self.printer.print_underlined_header("Error connecting to mongo server")
@@ -227,9 +222,9 @@ class NightcapMongoHelper:
             ).lower()
 
             if _selection.strip().lower() == "c":
-                yes = input(
+                yes = self.printer.input(
                     Fore.YELLOW
-                    + "\t\tAre you sure you want to change the settings (Y/N): "
+                    + "\t\tAre you sure you want to change the settings (Y/n): "
                     + Style.RESET_ALL
                 ).lower()
                 self._change_mogo_settings(yes)
@@ -237,9 +232,9 @@ class NightcapMongoHelper:
                 self.printer.print_formatted_additional(text="Rebooting...")
                 os.execv(sys.argv[0], sys.argv)
             elif _selection.strip().lower() == "i":
-                yes = input(
+                yes = self.printer.input(
                     Fore.YELLOW
-                    + "\t\tAre you sure you want to initialize containers (Y/N): "
+                    + "\t\tAre you sure you want to initialize containers (Y/n): "
                     + Style.RESET_ALL
                 ).lower()
                 ScreenHelper().clearScr()
@@ -254,9 +249,9 @@ class NightcapMongoHelper:
                         self.printer.print_formatted_additional(text="Rebooting...")
                         os.execv(sys.argv[0], sys.argv)
             elif _selection.strip().lower() == "s":
-                yes = input(
+                yes = self.printer.input(
                     Fore.YELLOW
-                    + "\t\tAre you sure you want to start containers (Y/N): "
+                    + "\t\tAre you sure you want to start containers (Y/n): "
                     + Style.RESET_ALL
                 ).lower()
                 if yes in self.yes:
@@ -268,6 +263,9 @@ class NightcapMongoHelper:
                 self.docker_helper.stop_mongodb()
                 self.docker_helper.start_mongodb()
                 os.execv(sys.argv[0], sys.argv)
+            else:
+                ScreenHelper().clearScr()
+                self.change_mongo_server()
 
         else:
             agree = input(

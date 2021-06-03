@@ -5,7 +5,6 @@
 # file that should have been included as part of this package.
 import enum
 
-
 class NightcapCoreUpaterRules(enum.Enum):
     Basic = (0,)
     Module = (1,)

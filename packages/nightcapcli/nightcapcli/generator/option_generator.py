@@ -16,7 +16,7 @@ from nightcappackages.classes.databases.mogo.mongo_submodules import (
 # endregion
 
 
-class NightcapOptionGenerator:
+class NightcapOptionGenerator(object):
     """
 
     This class is used to help validate user input to the console
@@ -53,14 +53,15 @@ class NightcapOptionGenerator:
     """
 
     # region Init
-    def __init__(self, selectedList):
+    def __init__(self, selectedList) -> None:
+        super().__init__()
         self.selectedList = selectedList
         self.printer = Printer()
 
     # endregion
 
     # region Tab options complete
-    def completed_options(self):
+    def completed_options(self) -> list:
         vals = []
         # print("List to use to find m/sm/p:", self.selectedList)
 
@@ -101,7 +102,7 @@ class NightcapOptionGenerator:
     # endregion
 
     # region Options
-    def options(self, isDetailed=False):
+    def options(self, isDetailed=False) -> None:
 
         vals = []
         opt = True
@@ -174,7 +175,7 @@ class NightcapOptionGenerator:
     # endregion
 
     # region Options Help
-    def option_help(self):
+    def option_help(self) -> None:
         print(
             """
         Modules that are available to use to investigate pcap files.

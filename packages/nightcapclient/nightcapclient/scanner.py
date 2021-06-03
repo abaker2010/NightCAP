@@ -16,6 +16,7 @@ from colorama.ansi import Style
 from nightcapcli.base.base_cmd import NightcapBaseCMD
 from nightcapcore.configuration.package_config import NightcapCLIPackageConfiguration
 from nightcapcore.printers.print import Printer
+from nightcappackages.classes.helpers.encoder import NightcapJSONEncoder
 import pyshark
 from pyshark.packet.packet import Packet
 # endregion
@@ -66,7 +67,7 @@ class NightcapScanner(NightcapBaseCMD):
                  decryption_key=None, encryption_type="wpa-pwk", decode_as=None,
                  disable_protocol=None, tshark_path=None, override_prefs=None,
                  use_json=False, output_file=None, include_raw=False, eventloop=None, custom_parameters=None,
-                 debug=False, **kwargs):
+                 debug=False, **kwargs)  -> None:
         parser = argparse.ArgumentParser(description="Process some pcaps.")
         parser.add_argument("--data", required=True,
                             help="list of pcap filenames")
@@ -75,12 +76,13 @@ class NightcapScanner(NightcapBaseCMD):
         self.printer = Printer()
 
         try:
+            _data = NightcapJSONEncoder().default(args.data)
+
             # print("Tring to pass json on to client", dict(json.loads(args.data)))
             NightcapBaseCMD.__init__(
-                self, dict(json.loads(args.data))["2"], passedJson=dict(
-                    json.loads(args.data))["0"]
+                self, _data["2"], passedJson=_data["0"]
             )
-            _data = dict(json.loads(args.data))
+            # _data = dict(json.loads(args.data))
             # print("Data needs fixed in the client", _data)
             self.base_params = _data["0"]
             self.package_params = _data["1"]
@@ -125,17 +127,32 @@ class NightcapScanner(NightcapBaseCMD):
     def onConsolePrint(self):
         """Generate Console Report"""
         raise NotImplementedError
-
     # endregion
 
     # region onIntro
     def onIntro(self):
         """Intro to the program"""
-        # self.printer.print_underlined_header("Scanning with arguments")
-        # self.show_params()
-        # self.printer.item_1("*"*30, leadingText="", endingBreaks=1, leadingTab=1)
-        pass
+        try:
+            if self.config.project != None or self.package_params != {}:
+                self.printer.print_underlined_header("Scan Details: (Params Used)")
+                
+            if self.config.project != None:
+                self.printer.print_underlined_header("Project", leadingTab=2)
+                self.printer.item_1("ID", optionalText=self.base_params['project']['_id']['$oid'], seperator=" : ", leadingTab=3)
+                self.printer.item_1("Name", optionalText=self.base_params['project']['project_name'], seperator=" : ", leadingTab=3)
 
+                self.printer.print_underlined_header("Scan Params", leadingTab=2)                
+                self.printer.item_1("isDir", optionalText=self.base_params['isDir'], seperator=" : ", leadingTab=3)
+                self.printer.item_1("dir", optionalText=self.base_params['dir'], seperator=" : ", leadingTab=3)
+                self.printer.item_1("filename", optionalText=self.base_params['filename'], seperator=" : ", leadingTab=3)
+                
+            if self.package_params != {}:
+                self.printer.print_underlined_header("Package Params", leadingTab=2)
+                for k, v in dict(self.package_params).items():
+                    self.printer.item_1(str(k), optionalText=str(v), seperator=" : ", leadingTab=3)
+        except Exception as e:
+            self.printer.print_error(e)
+        pass
     # endregion
 
     # region onProcess
@@ -143,7 +160,6 @@ class NightcapScanner(NightcapBaseCMD):
     def onProcess(self, pkt: Packet, count: int):
         """Process to do"""
         raise NotImplementedError
-
     # endregion
 
     # region onReport
@@ -151,7 +167,6 @@ class NightcapScanner(NightcapBaseCMD):
     def onReport(self):
         """Generate Reports"""
         raise NotImplementedError
-
     # endregion
 
     # region onRun
@@ -165,6 +180,7 @@ class NightcapScanner(NightcapBaseCMD):
 
         try:
             start = time.time()
+            self.printer.print_formatted_additional("Running package. Please wait...", leadingTab=1, leadingBreaks=1, endingBreaks=1)
             for cpt in self.get_pcaps(display_filter=self._display_filter):
                 _count = 1
                 for pkt in cpt:
@@ -202,7 +218,6 @@ class NightcapScanner(NightcapBaseCMD):
         except Exception as e:
             self.printer.print_error(Exception("Error with Closing"))
             raise e
-
     # endregion
 
     # region Get pcaps
@@ -210,7 +225,7 @@ class NightcapScanner(NightcapBaseCMD):
                   decryption_key=None, encryption_type="wpa-pwk", decode_as=None,
                   disable_protocol=None, tshark_path=None, override_prefs=None,
                   use_json=False, output_file=None, include_raw=False, eventloop=None, custom_parameters=None,
-                  debug=False, **kwargs):
+                  debug=False, **kwargs) -> list:
         try:
             _pcapFiles = []
             # print("Trying to generate pcaps")Generating Reports
@@ -276,127 +291,6 @@ class NightcapScanner(NightcapBaseCMD):
     # endregion
 
     # region run
-    def run(self):
+    def run(self) -> None:
         self.onRun()
-
-    # endregion
-
-
-# region Show Params
-
-
-    def show_params(self, detailed: bool = False):
-
-        # if self.project == None:
-        #     proj = "None"
-        # else:
-        #     proj = Fore.LIGHTYELLOW_EX + str(self.project["project_name"])
-
-        self.printer.print_underlined_header("Base Parameters", leadingTab=2)
-        # self.printer.print_formatted_other(
-        #     "PROJECT",
-        #     proj,
-        #     leadingTab=3,
-        #     optionalTextColor=Fore.YELLOW,
-        # )
-
-        if detailed == False:
-            self.printer.print_formatted_other(
-                "FILENAME",
-                str(self.config.filename),
-                leadingTab=3,
-                optionalTextColor=Fore.YELLOW,
-            )
-        else:
-            self.printer.print_formatted_other(
-                "FILENAME",
-                "Pcap file name to be used for the scan",
-                leadingTab=3,
-                optionalTextColor=Fore.MAGENTA,
-            )
-            self.printer.print_formatted_additional(
-                "Current Value",
-                str(self.config.filename),
-                leadingTab=4,
-                optionalTextColor=Fore.YELLOW,
-                endingBreaks=1
-            )
-
-        if detailed == False:
-            self.printer.print_formatted_other(
-                "ISDIR",
-                str(self.config.isDir),
-                leadingTab=3,
-                optionalTextColor=Fore.YELLOW,
-            )
-        else:
-            self.printer.print_formatted_other(
-                "ISDIR",
-                "To either try and scan the pcap file or a directory of pcap files",
-                leadingTab=3,
-                optionalTextColor=Fore.MAGENTA,
-            )
-            self.printer.print_formatted_additional(
-                "Current Value",
-                str(self.config.isDir),
-                leadingTab=4,
-                optionalTextColor=Fore.YELLOW,
-                endingBreaks=1
-            )
-
-        if detailed == False:
-            self.printer.print_formatted_other(
-                "PATH",
-                str(self.config.dir),
-                leadingTab=3,
-                optionalTextColor=Fore.YELLOW,
-            )
-        else:
-            self.printer.print_formatted_other(
-                "PATH",
-                "The directory of the pcap file(s)",
-                leadingTab=3,
-                optionalTextColor=Fore.MAGENTA,
-            )
-            self.printer.print_formatted_additional(
-                "Current Value",
-                str(self.config.dir),
-                leadingTab=4,
-                optionalTextColor=Fore.YELLOW,
-                endingBreaks=1
-            )
-
-        try:
-            if self.pkg_params != {}:
-
-                self.printer.print_underlined_header(
-                    "Package Parameters", leadingTab=2)
-                if detailed == False:
-                    for k, v in self.pk.items():
-                        _ = "None" if v == "" else v
-                        self.printer.print_formatted_other(
-                            str(k).upper(),
-                            str(_),
-                            leadingTab=3,
-                            optionalTextColor=Fore.YELLOW,
-                        )
-                else:
-                    for k, v in self.pkg_params.items():
-                        _ = "None" if v == "" else v
-                        self.printer.print_formatted_other(
-                            str(k).upper(),
-                            str(self.pkg_descripts[k]),
-                            leadingTab=3,
-                            optionalTextColor=Fore.MAGENTA,
-                        )
-                        self.printer.print_formatted_other(
-                            "Current Value",
-                            str(_),
-                            leadingTab=4,
-                            optionalTextColor=Fore.YELLOW,
-                        )
-        except Exception as e:
-            pass
-        print()
-
     # endregion

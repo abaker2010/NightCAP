@@ -27,7 +27,7 @@ class CheckMarkPrinter(PrinterBase):
         optionalTextColor=Fore.LIGHTBLACK_EX,
         breakTextColor=Fore.LIGHTBLACK_EX,
         **kwargs
-    ):
+    ) -> None:
         self.base_print(
             text,
             optionaltext,
@@ -58,7 +58,7 @@ class CheckMarkPrinter(PrinterBase):
         optionalTextColor=Fore.LIGHTBLACK_EX,
         breakTextColor=Fore.LIGHTBLACK_EX,
         **kwargs
-    ):
+    ) -> None:
         self.base_print(
             text,
             optionaltext,
@@ -89,7 +89,7 @@ class CheckMarkPrinter(PrinterBase):
         optionalTextColor=Fore.LIGHTBLACK_EX,
         breakTextColor=Fore.LIGHTBLACK_EX,
         **kwargs
-    ):
+    ) -> None:
         self.base_print(
             text,
             optionaltext,
@@ -120,7 +120,7 @@ class CheckMarkPrinter(PrinterBase):
         optionalTextColor=Fore.LIGHTBLACK_EX,
         breakTextColor=Fore.LIGHTBLACK_EX,
         **kwargs
-    ):
+    ) -> None:
         self.base_print(
             text,
             optionaltext,

@@ -10,7 +10,7 @@ from uuid import uuid4
 # endregion
 
 
-class NightcapCLIPublisherBase:
+class NightcapCLIPublisherBase(object):
     """
 
     This class is used as the base publisher
@@ -45,13 +45,13 @@ class NightcapCLIPublisherBase:
                 send message to channel
     """
 
-    def __init__(self, channels):
+    def __init__(self, channels) -> None:
         self.channels = {channel: dict() for channel in channels}
 
-    def get_channel(self, channel):
+    def get_channel(self, channel) -> dict:
         return self.channels[channel]
 
-    def new_channel(self):
+    def new_channel(self) -> str:
         _uid = uuid4().hex
         if _uid not in dict(self.channels).keys():
             self.channels[_uid] = dict()
@@ -59,7 +59,7 @@ class NightcapCLIPublisherBase:
         else:
             self.new_channel()
 
-    def register(self, channel, who, callback=None, attr=None):
+    def register(self, channel, who, callback=None, attr=None) -> dict:
         if callback is None:
             if attr is None:
                 callback = getattr(who, "cli_update")
@@ -67,12 +67,12 @@ class NightcapCLIPublisherBase:
                 callback = getattr(who, attr)
         self.get_channel(channel)[who] = callback
 
-    def unregister(self, channel, who):
+    def unregister(self, channel, who) -> None:
         del self.get_channel(channel)[who]
 
-    def del_channel(self, channel):
+    def del_channel(self, channel) -> None:
         del self.channels[channel]
 
-    def dispatch(self, channel, message):
+    def dispatch(self, channel, message) -> None:
         for subscriber, callback in dict(self.get_channel(channel)).items():
             callback(message)

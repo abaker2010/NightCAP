@@ -24,7 +24,7 @@ class ErrorPrinter(PrinterBase):
         vtab=1,
         endtab=1,
         **kwargs
-    ):
+    ) -> None:
         self.base_print(
             str(exception),
             message,

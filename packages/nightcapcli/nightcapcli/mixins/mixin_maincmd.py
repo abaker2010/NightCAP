@@ -47,14 +47,14 @@ class NightcapCLICMDMixIn(NightcapMainCMD):
         selectedList: list,
         nextobj: type = object,
         channelid: str = None,
-    ):
+    ) -> None:
         NightcapMainCMD.__init__(self, selectedList, channelid)
         self.pageobjct = nextobj
 
     # endregion
 
     # region Do Options
-    def do_options(self, line):
+    def do_options(self, line) -> None:
         """\nSee what options are available to use. Use -d on packages to see detailed information\n"""
         if len(line) == 0:
             NightcapOptionGenerator(self.selectedList).options()
@@ -76,7 +76,7 @@ class NightcapCLICMDMixIn(NightcapMainCMD):
     # endregion
 
     # region Help Use
-    def help_use(self):
+    def help_use(self) -> None:
         print(
             "\nSelect/Use a module/submobule/package: use [module/submobule/package name]\n"
         )
@@ -84,7 +84,7 @@ class NightcapCLICMDMixIn(NightcapMainCMD):
     # endregion
 
     # region Complete Use
-    def complete_use(self, text, line, begidx, endidx):
+    def complete_use(self, text, line, begidx, endidx) -> list:
         return [
             i
             for i in NightcapOptionGenerator(self.selectedList).completed_options()
@@ -94,7 +94,7 @@ class NightcapCLICMDMixIn(NightcapMainCMD):
     # endregion
 
     # region Do Use
-    def do_use(self, line: str, override: object = None):
+    def do_use(self, line: str, override: object = None) -> None:
         try:
             _validator = NightcapCLIPublisher().isValid(line, self.selectedList)
             if _validator:

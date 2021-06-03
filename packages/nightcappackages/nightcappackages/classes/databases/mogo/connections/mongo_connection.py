@@ -5,9 +5,7 @@
 # file that should have been included as part of this package.
 # region Import
 from nightcapcore import NightcapCLIConfiguration
-from nightcappackages.classes.databases.mogo.interfaces.mongo_db_interface import (
-    MongoDatabaseInterface,
-)
+from nightcappackages.classes.databases.mogo.interfaces.mongo_db_interface import MongoDatabaseInterface
 from pymongo.errors import ServerSelectionTimeoutError
 
 # endregion

@@ -5,11 +5,9 @@
 # file that should have been included as part of this package.
 # region Imports
 from nightcappackages.classes.databases.mogo.mongo_projects import MongoProjectsDatabase
-from nightcapcli.base.base_cmd import NightcapBaseCMD
+from nightcapcli.base import NightcapBaseCMD
 from colorama import Fore, Style
-
 # endregion
-
 
 class NightcapProjectsCMD(NightcapBaseCMD):
     """
@@ -57,7 +55,7 @@ class NightcapProjectsCMD(NightcapBaseCMD):
     """
 
     # region Init
-    def __init__(self):
+    def __init__(self) -> None:
         NightcapBaseCMD.__init__(self, ["projects"])
         self._db = MongoProjectsDatabase()
         # self.config = conf
@@ -66,7 +64,7 @@ class NightcapProjectsCMD(NightcapBaseCMD):
     # endregion
 
     # region Delete Project
-    def do_delete(self, line):
+    def do_delete(self, line) -> None:
         """Delete a project"""
 
         try:
@@ -121,12 +119,12 @@ class NightcapProjectsCMD(NightcapBaseCMD):
 
     # endregion
 
-    def _prepare_list(self, item):
+    def _prepare_list(self, item) -> dict:
         self._count += 1
         return {self._count: item}
 
     # region List Projects
-    def do_list(self, line):
+    def do_list(self, line) -> None:
         """List all projects"""
         _prj = self._db.projects()
         if _prj == None:
@@ -158,7 +156,7 @@ class NightcapProjectsCMD(NightcapBaseCMD):
     # endregion
 
     # region Select Project
-    def do_select(self, line):
+    def do_select(self, line) -> None:
         """\n\tSelect a project\n\t\tUsage: select [project_number]\n"""
         try:
             try:
@@ -188,7 +186,7 @@ class NightcapProjectsCMD(NightcapBaseCMD):
     # endregion
 
     # region Unselect Project
-    def do_unselect(self, line):
+    def do_unselect(self, line) -> None:
         """\n\tUnselect a project\n\t\tUsage: unselect\n"""
         try:
             self.config.project = None
@@ -201,7 +199,7 @@ class NightcapProjectsCMD(NightcapBaseCMD):
     # endregion
 
     # region Create Project
-    def do_create(self, line):
+    def do_create(self, line) -> None:
         """\n\tCreate a project\n\t\tUsage: create [project_name]\n"""
         try:
             self._db.create(line)
@@ -210,7 +208,7 @@ class NightcapProjectsCMD(NightcapBaseCMD):
 
     # endregion
 
-    def do_exit(self, line):
+    def do_exit(self, line) -> bool:
         return True
 
     # def update(self, updatedb: TinyDB):

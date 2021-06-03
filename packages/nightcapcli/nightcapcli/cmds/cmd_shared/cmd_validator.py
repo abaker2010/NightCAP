@@ -4,17 +4,12 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 # region Import
-from nightcappackages import *
-from nightcappackages.classes.databases.mogo.mongo_modules import MongoModuleDatabase
-from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
-from nightcappackages.classes.databases.mogo.mongo_submodules import (
-    MongoSubModuleDatabase,
-)
-
+from typing import Any
+from nightcappackages.classes.databases.mogo import *
 # endregion
 
 
-class NightcapCLIOptionsValidator:
+class NightcapCLIOptionsValidator(object):
     """
     This class is used to help validate user input to the console
 
@@ -69,7 +64,7 @@ class NightcapCLIOptionsValidator:
     """
 
     # region Init
-    def __init__(self, options, selectedList):
+    def __init__(self, options, selectedList) -> None:
         self.modules_db = MongoModuleDatabase()
         self.submodules_db = MongoSubModuleDatabase()
         self.packages_db = MongoPackagesDatabase()
@@ -80,7 +75,7 @@ class NightcapCLIOptionsValidator:
     # endregion
 
     # region Package Configuration
-    def get_package_config(self, path: list):
+    def get_package_config(self, path: list) -> Any:
         self.pkg_conf = self.packages_db.get_package_config(path)
         # print("Found pkg config", self.pkg_conf)
         return self.pkg_conf
@@ -88,7 +83,7 @@ class NightcapCLIOptionsValidator:
     # endregion
 
     # region Check Sub/Module/Packages Types
-    def _check_module_types(self, path: list):
+    def _check_module_types(self, path: list) -> bool:
         return False if self.modules_db.check_module_path(path).count() == 0 else True
 
     def _check_sub_module(self, path: list):
@@ -106,7 +101,7 @@ class NightcapCLIOptionsValidator:
     # endregion
 
     # region Check Current Path
-    def _check_current_path(self, path: list):
+    def _check_current_path(self, path: list) -> bool:
         if len(path) == 1:
             return self._check_module_types(path)
         elif len(path) == 2:
@@ -122,7 +117,7 @@ class NightcapCLIOptionsValidator:
     # endregion
 
     # region Validate Input
-    def _validate(self, line: str, selected: list):
+    def _validate(self, line: str, selected: list) -> bool:
 
         try:
             _options = []

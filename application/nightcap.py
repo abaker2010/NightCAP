@@ -4,15 +4,10 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 # region Import
-import cmd
-from nightcapcli.cmds.main_cmd import NightcapMainCMD
+# from nightcapcli import NightcapCLIPublisher, NightcapCLIPackage, NightcapCLICMDMixIn
 from nightcapcli.observer.publisher import NightcapCLIPublisher
-from nightcapcore import NightcapCLIConfiguration
-from nightcapcli.cmds.settings import NightcapSettingsCMD
 from nightcapcli.cmds import NightcapCLIPackage
 from nightcapcli.mixins.mixin_maincmd import NightcapCLICMDMixIn
-from nightcapcore import ScreenHelper
-
 # endregion
 
 
@@ -36,7 +31,7 @@ class Nightcap(NightcapCLICMDMixIn):
         channelid: str = "",
         parentid: str = "",
         additionalchildren: list = [],
-    ):
+    ) -> None:
         NightcapCLICMDMixIn.__init__(self, selected, Nightcap, channelid)
         self.channelid = channelid
         self.parentid = parentid
@@ -48,10 +43,10 @@ class Nightcap(NightcapCLICMDMixIn):
             _directions = {"nextstep": _nns, "additionalsteps": _nac, "remove": 0}
             self._push_object(_directions)
 
-    def __del__(self):
-        pass
+    # def __del__(self):
+    #     pass
 
-    def _push_object(self, directions: dict):
+    def _push_object(self, directions: dict) -> None:
         self.printer.debug("Trying to push new object", currentMode=self.config.verbosity)
         self.printer.debug("Current path:", NightcapCLIPublisher().selectedList, currentMode=self.config.verbosity)
 
@@ -98,7 +93,7 @@ class Nightcap(NightcapCLICMDMixIn):
             print(NightcapCLIPublisher().channels)
        
 
-    def cli_update(self, message):
+    def cli_update(self, message) -> None:
         if type(message) == bool:
             # print("Child object destroyed:", str(message))
             # print("Current list is:", NightcapCLIPublisher().selectedList)

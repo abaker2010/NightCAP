@@ -31,14 +31,13 @@ class NightcapPathCleaner(object):
     """
 
     # region Init
-    def __init__(self, cwd: str):
+    def __init__(self, cwd: str) -> None:
+        super().__init__()
         self.cwd = cwd
-
     # endregion
 
     # region Combine with base
-    def combine_with_base(self, path: str, paths: list = []):
+    def combine_with_base(self, path: str, paths: list = []) -> str:
         _cleaned_list = list(map(lambda v: str(v), paths))
         return os.sep.join([self.cwd, path, os.sep.join(_cleaned_list)])
-
     # endregion

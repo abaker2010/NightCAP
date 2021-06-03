@@ -10,7 +10,7 @@ import platform
 # endregion
 
 
-class ScreenHelper:
+class ScreenHelper(object):
     """
 
     This class is used to help with screen actions
@@ -27,13 +27,13 @@ class ScreenHelper:
     """
 
     # region Init
-    def __init__(self):
-        return
+    def __init__(self) -> None:
+        super().__init__()
 
     # endregion
 
     # region Clear Screen
-    def clearScr(self):
+    def clearScr(self) -> None:
         if platform.system() == "windows":
             os.system("cls")
         else:

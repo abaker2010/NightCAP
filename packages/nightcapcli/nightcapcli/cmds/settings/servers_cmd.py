@@ -5,12 +5,9 @@
 # file that should have been included as part of this package.
 # region Imports
 from nightcapcli.base.base_cmd import NightcapBaseCMD
-from nightcapcli.cmds.settings import NightcapMongoSettingsCMD
-from nightcapcli.cmds.settings.django_cmd import NightcapDjangoSettingsCMD
+from nightcapcli.cmds.settings import NightcapMongoSettingsCMD, NightcapDjangoSettingsCMD
 from nightcapcore.configuration import NightcapCLIConfiguration
-
-# ednregion
-
+# endregion
 
 class NightcapMongoServerSettingsCMD(NightcapBaseCMD):
     """
@@ -36,17 +33,17 @@ class NightcapMongoServerSettingsCMD(NightcapBaseCMD):
                 Allows the user to enter in to the web cmd
     """
 
-    def __init__(self, configuration: NightcapCLIConfiguration):
+    def __init__(self, configuration: NightcapCLIConfiguration) -> None:
         NightcapBaseCMD.__init__(self, ["settings", "server"])
 
-    def help_database(self):
+    def help_database(self) -> None:
         self.printer.help("(Mongo) Database Configurations")
 
-    def do_database(self, line):
+    def do_database(self, line) -> None:
         NightcapMongoSettingsCMD().cmdloop()
 
-    def help_web(self):
+    def help_web(self) -> None:
         self.printer.help("Web Server Configurations")
 
-    def do_web(self, line):
+    def do_web(self, line) -> None:
         NightcapDjangoSettingsCMD().cmdloop()

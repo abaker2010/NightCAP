@@ -10,7 +10,7 @@ import errno
 # endregion
 
 
-class NightcapCoreFiles:
+class NightcapCoreFiles(object):
     """
 
     This class is used to help validate user input to the console
@@ -37,13 +37,13 @@ class NightcapCoreFiles:
     """
 
     # region Init
-    def __init__(self, ppath: str):
+    def __init__(self, ppath: str) -> None:
         self.ppath = ppath
 
     # endregion
 
     # region Make Dirs
-    def _make_dirs(self):
+    def _make_dirs(self) -> None:
         _path = os.path.dirname(self.ppath)
         try:
             print("testing", _path)
@@ -57,7 +57,7 @@ class NightcapCoreFiles:
     # endregion
 
     # region Generate reports
-    def create_html_report(self, data):
+    def create_html_report(self, data) -> None:
         print("Creating HTML Report at:", self.ppath)
         print("Data to be wrote", len(data))
         self._make_dirs()

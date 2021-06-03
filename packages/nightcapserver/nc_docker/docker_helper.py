@@ -9,23 +9,16 @@ import subprocess
 from subprocess import Popen, PIPE, STDOUT
 import time
 import os
-import sys
 import re
 import getpass
 import docker as dDocker
-from docker import APIClient
-from colorama.ansi import Fore, Style
+from colorama.ansi import Fore
 from nightcapcore.configuration import NightcapCLIConfiguration
 from nightcapcore.docker.docker_checker import NightcapCoreDockerChecker
 from nightcapcore.helpers.screen.screen_helper import ScreenHelper
 from nightcapcore.printers.print import Printer
-from nightcappackages.classes.databases.mogo.checker.mongo_database_checker import (
-    MongoDatabaseChecker,
-)
-from requests.exceptions import RetryError
-from nightcappackages.classes.paths.paths import NightcapPackagesPaths
-from nightcappackages.classes.paths.pathsenum import NightcapPackagesPathsEnum
-from nightcappackages.classes.helpers.restore import NightcapRestoreHelper
+from nightcappackages.classes.paths import NightcapPackagesPathsEnum, NightcapPackagesPaths
+from nightcappackages.classes.helpers import NightcapRestoreHelper
 
 DEVNULL = open(os.devnull, "wb")
 # endregion
@@ -155,12 +148,20 @@ class NightcapDockerHelper(object):
     # region Init Containers
     def init_containers(self, dc: NightcapCoreDockerChecker):
         try:
+            self.printer.print_underlined_header("Initializing")
             self.init_mongo(dc)
-            # self.init_nc_site(dc)
+            self.init_nc_site(dc)
+
+
+            self.printer.print_underlined_header("Building Containers")
             self.build_containers()
+            
+            self.printer.print_underlined_header("Preparing Containers")
             self.prepare_containers()
+
+            self.printer.print_underlined_header("Installing Packages...")
             self.restore_packages()
-            # self.set_account()
+            self.set_account()
             return True
         except Exception as e:
             raise e
@@ -168,64 +169,56 @@ class NightcapDockerHelper(object):
     # endregion
 
     def restore_packages(self):
-        self.printer.print_underlined_header("Restoring Packages...")
+        
         _path = NightcapPackagesPaths().generate_path(
             NightcapPackagesPathsEnum.NCInitRestore
         )
         _bc_path = os.path.join(_path, "restore_point.ncb")
-        # print("Path for restore file: ", str(_bc_path))
         NightcapRestoreHelper(str(_bc_path)).restore()
 
 
     # region NC Site Init
     def init_nc_site(self, dc: NightcapCoreDockerChecker):
         if dc.ncs_exits == False:
-            self.printer.print_underlined_header(
-                "Initializing: (NC Site)", endingBreaks=1
-            )
-            self.make_docker()
+            self.printer.item_1("Please wait while pulling Image", "nightcapsite:latest")
+
+            p = subprocess.Popen(["make", "-C", Path(__file__).resolve().parent.parent], stdout=DEVNULL, stderr=DEVNULL)
+
+            while p.poll() is None:
+                print("", end="", flush=True)
+                time.sleep(1)
+
+
+            if p.returncode != 0:
+                self.printer.print_error(Exception("Error pulling docker image: %s" % (p.returncode)))
     # endregion
 
     # region Stop all containers
     def stop_all_containers(self):
         self.printer.print_underlined_header_undecorated("Stopping Docker Containers")
         self.stop_mongodb()
-        # self.stop_nightcapsite()
+        self.stop_nightcapsite()
         print("")
         return True
-
     # endregion
 
     # region Stop Nightcap Site
     def stop_nightcapsite(self):
         self.stop_container_by_name("nightcapsite")
-
     # endregion
 
     # region Stop MongoDB Container
     def stop_mongodb(self):
         self.stop_container_by_name("nightcapmongodb")
-
     # endregion
 
     # region Stop Container By Name
     def stop_container_by_name(self, name: str):
         try:
-            # for _container in self.docker.containers.list(all=True):
-            #     if _container.name == name:
-            self.printer.print_formatted_additional("Stopping...", name)
-            # client = APIClient(base_url='unix://var/run/docker.sock')
-            # client.stop(_container.name)
-            p = subprocess.Popen(["docker", "stop", name], stdout=DEVNULL)
-            while p.poll() is None:
-                print("", end="", flush=True)
-                time.sleep(1)
+            self.printer.print_formatted_additional("Stopping...", name)        
+            _container = self.docker.containers.get(name)
+            _container.stop()
             self.printer.print_formatted_check("Stopped", leadingTab=3)
-            # return True
-
-            # return False
-            # while self.get_container_status_by_name(name) != 'running':
-            #     time.sleep(1)
         except Exception as e:
             raise e
 
@@ -235,7 +228,7 @@ class NightcapDockerHelper(object):
     def start_all_containers(self):
         self.start_mongodb()
         print()
-        # self.start_nighcap_site()
+        self.start_nighcap_site()
 
     # endregion
 
@@ -253,34 +246,17 @@ class NightcapDockerHelper(object):
 
     # region Start Container By Name
     def start_container_by_name(self, name: str):
-        # print("Containers")
-        # print(self.docker.containers.list(all=True))
-        # self.docker.containers.run("mongo:latest")
         try:
             for _container in self.docker.containers.list(all=True):
                 if _container.name == name:
                     self.printer.print_formatted_additional(
                         "Starting...", _container.name
                     )
-                    # client = APIClient(base_url='unix://var/run/docker.sock')
-                    # client.create_container(image='mongo:lastest',host_config=_container.attrs['Config'])
-                    p = subprocess.Popen(
-                        [
-                            "docker",
-                            "start",
-                            dict(_container.attrs["Config"])["Hostname"],
-                        ],
-                        stdout=DEVNULL,
-                    )
-                    while p.poll() is None:
-                        print("", end="", flush=False)
-                        time.sleep(1)
-                    self.printer.print_formatted_check(text="Container Started")
+                    _container.start()
+                    self.printer.print_formatted_check("Container Started", name)
                     return True
 
             return False
-            # while self.get_container_status_by_name(name) != 'running':
-            #     time.sleep(1)
         except Exception as e:
             raise e
 
@@ -289,30 +265,27 @@ class NightcapDockerHelper(object):
     # region Get Mongo Container Status
     def get_mongo_container_status(self):
         return self.get_container_status_by_name("nightcapmongodb")
-
     # endregion
 
     # region Get Nightcap Site Container Status
     def get_site_container_status(self):
         return self.get_container_status_by_name("nightcapsite")
-
     # endregion
 
     # region Mongo Container Exists
     def mongo_continer_exists(self):
         return self.container_exists("nightcapmongodb")
-
     # endregion
 
     # region Nightcap Site Contatiner Exists
     def site_container_exists(self):
         return self.container_exists("nightcapsite")
-
     # endregion
 
     # region Container Exists
     def container_exists(self, name: str):
         try:
+
             for _container in self.docker.containers.list(all=True):
                 if _container.name == name:
                     return True
@@ -337,7 +310,7 @@ class NightcapDockerHelper(object):
     # region Build Containers
     def build_containers(self):
         try:
-            self.printer.print_underlined_header(text="Creating Docker Containers")
+            self.printer.item_1(text="Creating Docker Containers")
             _ = os.path.join(
                 Path(__file__).resolve().parent.parent, "docker-compose.yml"
             )
@@ -356,63 +329,57 @@ class NightcapDockerHelper(object):
         try:
             self.printer.print_underlined_header(text="Creating account")
             self.start_all_containers()
-            print()
-            self.printer.print_underlined_header(text="Account data")
-            
-            # _ = os.path.join(
-            #     Path(__file__).resolve().parent.parent, "manage.py"
-            # )
-            # p = subprocess.Popen(["python3", _, "createsuperuser"], stdout=PIPE, stdin=PIPE)
-            # while p.poll() is None:
-            #     print("", end="", flush=True)
-            #     time.sleep(1)
+            self.printer.print_underlined_header(text="Account data", leadingBreaks=1)
 
+            try:              
+                _container = self.docker.containers.get("nightcapsite")
+                
+                _container.exec_run("python3 manage.py makemigrations")
+                self.printer.print_formatted_check("Making Migrations")
 
-            try:
-                self.printer.print_formatted_additional("Making Migrations")
-                _p1 = self._wait_while_processing(subprocess.Popen(["docker", "exec", "-it", "nightcapsite", "python3", "manage.py", "makemigrations"], stdout=DEVNULL))
-            except Exception as e:
-                raise e
-
-            try:
-                self.printer.print_formatted_additional("Migrating")
-                _p2 = self._wait_while_processing(subprocess.Popen(["docker", "exec", "-it", "nightcapsite", "python3", "manage.py", "migrate"], stdout=DEVNULL))
-            except Exception as e:
-                raise e
-            
-            try:
+                _container.exec_run("python3 manage.py migrate")
                 self.printer.print_underlined_header("Django Admin Account")
                 self.printer.item_3("Please enter some information to create your web admin account", leadingTab=2, endingBreaks=1)
-                _username = input(Fore.LIGHTGREEN_EX + str("User Name: %s" % (Fore.LIGHTCYAN_EX)))
-                _email = input(Fore.LIGHTGREEN_EX + str("Email Address: %s" % (Fore.LIGHTCYAN_EX))) 
-                _password = getpass.getpass(Fore.LIGHTGREEN_EX + str("Password:")) 
-                _p3 = self._wait_while_processing(subprocess.Popen(["docker", "exec", "-it", "nightcapsite", "python", "manage.py", "shell", "-c",\
-                    ("from django.contrib.auth.models import User; User.objects.create_superuser('%s', '%s', '%s')" % (_username, _email, _password))], stdout=PIPE, stderr=PIPE))
+                self._set_user(_container)
+                
             except Exception as e:
+                self.printer.print_error(e)
                 raise e
 
-            print()
-            self.printer.print_underlined_header("Django Clean Up")
-            self.printer.print_formatted_check(text="Account Created")
-            self.stop_nightcapsite()
         except Exception as e:
+            self.printer.print_error(e)
             raise e
     #endregion
+
+    def _set_user(self, _container):
+        _username = input(Fore.LIGHTGREEN_EX + str("\tUser Name: %s" % (Fore.LIGHTCYAN_EX)))
+        _email = input(Fore.LIGHTGREEN_EX + str("\tEmail Address: %s" % (Fore.LIGHTCYAN_EX))) 
+        
+        if self._email_validation(_email):
+
+            _password = getpass.getpass(Fore.LIGHTGREEN_EX + str("\tPassword:")) 
+            _retype_password = getpass.getpass(Fore.LIGHTGREEN_EX + str("\tRetype Password:")) 
+            if _password == _retype_password:
+                _cmd = "".join(["python3 manage.py shell -c \"", ("from django.contrib.auth.models import User; User.objects.create_superuser('%s', '%s', '%s')" % (_username, _email, _password)),"\""])
+                _container.exec_run(_cmd)
+                self.printer.print_formatted_check(text="Account Created", leadingBreaks=1)
+                return True
+            else:
+                self.printer.print_error(Exception('Passwords didn\'t match'))
+                self._set_user(_container)
+        else:
+            ScreenHelper().clearScr()
+            self.printer.print_error(Exception('Please enter a valid email address'))
+            self._set_user(_container)
 
     def _wait_while_processing(self, process: Popen):
         while process.poll() is None:
             print("", end="", flush=True)
             time.sleep(1)
 
-        if process.returncode == 0:
-            self.printer.print_formatted_check("Done", leadingTab=3)
-        else:
+        if process.returncode != 0:
             self.printer.print_error(Exception("Error pulling docker image: %s" % (process.returncode)))
-    
         return process
-
-
-
 
     def _email_validation(self, email: str):
         regex = '^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$'
@@ -421,40 +388,12 @@ class NightcapDockerHelper(object):
         else:
             return False
 
-    # region Make Docker
-    def make_docker(self):
-        # ScreenHelper().clearScr()
-        self.printer.item_1(
-            "Please wait while making NC Docker Image"
-        )
-        p = subprocess.Popen(["make", "-C", Path(__file__).resolve().parent.parent], stdout=DEVNULL, stderr=DEVNULL)
-
-        while p.poll() is None:
-            print("", end="", flush=True)
-            time.sleep(1)
-
-        # print("returncode", p.returncode)
-        if p.returncode == 0:
-            self.printer.print_formatted_check("Done", leadingTab=3)
-        else:
-            self.printer.print_error(Exception("Error pulling docker image: %s" % (p.returncode)))
-
-    # endregion
-
     # region Init Mongo
     def init_mongo(self, dc: NightcapCoreDockerChecker):
         if dc.mongo_im_exists == False:
-            # ScreenHelper().clearScr()
             try:
-                self.printer.print_underlined_header(
-                    "Initializing: (Mongo)", endingBreaks=1
-                )
-                print(Fore.LIGHTBLACK_EX)
-                dc.pull_image("mongo")
-                self.printer.print_formatted_check(
-                    text="Initialized", optionaltext="Mongo"
-                )
-                #
+                self.printer.item_1("Please wait while pulling Image", "mongo:latest")
+                self.docker.images.pull("mongo:latest")
                 return True
             except Exception as e:
                 self.printer.print_formatted_delete(

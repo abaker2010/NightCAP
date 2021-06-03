@@ -11,7 +11,7 @@ from nightcapcore.singleton.singleton import Singleton
 
 
 class NightcapCLIConfiguration(metaclass=Singleton):
-    def __init__(self, data: dict = None):
+    def __init__(self, data: dict = None) -> None:
         self._config()
         self.printer = Printer()
 
@@ -49,7 +49,7 @@ class NightcapCLIConfiguration(metaclass=Singleton):
             self.dir = data['dir']
             self.filename = data['filename']
 
-    def _config(self):
+    def _config(self) -> None:
         conf = configparser.RawConfigParser()
         _path = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "nightcapcore.cfg"
@@ -58,7 +58,7 @@ class NightcapCLIConfiguration(metaclass=Singleton):
         self.config = conf
         # return conf
 
-    def Save(self):
+    def Save(self) -> None:
         _path = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "nightcapcore.cfg"
         )

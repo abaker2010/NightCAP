@@ -26,5 +26,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("public/", include("nightcapsite.apps.public.urls")),
     path("", include("nightcapsite.apps.accounts.urls")),
-    path("accounts/", include("nightcapsite.apps.accounts.urls")),
+    # path("accounts/", include("nightcapsite.apps.accounts.urls")),
 ]

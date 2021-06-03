@@ -7,12 +7,11 @@
 import os
 import json
 import hashlib
-from pathlib import Path
 import shutil
-from checksumdir import dirhash
-from nightcapcli.base.base_cmd import NightcapBaseCMD
-from nightcapcore.configuration import NightcapCLIConfiguration
+from pathlib import Path
 from colorama import Fore, Style
+from nightcapcli.base.base_cmd import NightcapBaseCMD
+
 # endregion
 
 class NightcapDevOptions(NightcapBaseCMD):
@@ -42,7 +41,7 @@ class NightcapDevOptions(NightcapBaseCMD):
     """
 
     # region Init
-    def __init__(self, selectedList: list, channelID: str = None):
+    def __init__(self, selectedList: list, channelID: str = None) -> None:
         self.selectedList = selectedList
         # self.selectedList.append("dev")
         NightcapBaseCMD.__init__(self, self.selectedList, channelid=channelID)
@@ -50,7 +49,7 @@ class NightcapDevOptions(NightcapBaseCMD):
     # endregion
 
     # region make archive
-    def make_archive(self, source, destination):
+    def make_archive(self, source, destination) -> None:
         base = os.path.basename(destination)
         name = base.split('.')[0]
         format = base.split('.')[1]
@@ -61,7 +60,7 @@ class NightcapDevOptions(NightcapBaseCMD):
     # endregion
 
     # region Do genPackageUID
-    def do_genPackageUID(self, package_path: str):
+    def do_genPackageUID(self, package_path: str) -> None:
         try:
         
             with open(os.path.join(package_path, "package_info.json")) as json_file:
@@ -102,7 +101,7 @@ class NightcapDevOptions(NightcapBaseCMD):
     # endregion
 
     # region Help genPackageUID
-    def help_genPackageUID(self):
+    def help_genPackageUID(self) -> None:
         h1 = "Generate UID for custom package:"
         h2 = "\tUsage ~ genPackageUID /path/to/package_info.json"
         # h3 = "set param:\tparams [PARAM] [PARAMVALUE]"

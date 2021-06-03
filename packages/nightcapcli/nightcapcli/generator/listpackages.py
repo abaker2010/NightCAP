@@ -12,7 +12,7 @@ from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackages
 # endregion
 
 
-class NightcapListPackages:
+class NightcapListPackages(object):
     """
 
     This class is used to print the installed packages
@@ -38,14 +38,15 @@ class NightcapListPackages:
     """
 
     # region Init
-    def __init__(self):
+    def __init__(self) -> None:
+        super().__init__()
         self.packages_db = MongoPackagesDatabase()
         self.priner = Printer()
 
     # endregion
 
     # region List Packages
-    def list_packages(self):
+    def list_packages(self) -> None:
         # print("\n\t\tInstalled packages")
         # print("\t\t", "-" * 20, "\n", sep="")
         self.priner.print_underlined_header_undecorated("Installed Packages", endingBreaks=1)

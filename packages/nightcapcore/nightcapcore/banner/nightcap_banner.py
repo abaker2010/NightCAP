@@ -43,7 +43,7 @@ class NightcapBanner(NightcapCLIConfiguration):
     """
 
     # region Init
-    def __init__(self):
+    def __init__(self) -> None:
         NightcapCLIConfiguration.__init__(self)
         self.build_version = str(self.versionNumber)
         self.build_number = str(self.buildNumber)
@@ -51,14 +51,14 @@ class NightcapBanner(NightcapCLIConfiguration):
     # endregion
 
     # region Random Color
-    def _randomColor(self):
+    def _randomColor(self) -> str:
         random = randint(0, 11)
         return NightcapColors().randomColor(random)
 
     # endregion
 
     # region Banner
-    def Banner(self, rand: bool = True):
+    def Banner(self, rand: bool = True) -> None:
         rcolor = None
         rcolor2 = self._randomColor()
         rcolor3 = self._randomColor()

@@ -163,7 +163,7 @@ class NightcapPackageUninstallerCommand(Command):
     # region Confirm Delete
     def _confim_delete(self, package_path: str):
         return self.printer.input(
-            "Are you sure you want to uninstall? [y/n]: ", questionColor=Fore.RED
+            "Are you sure you want to uninstall? [Y/n]: ", questionColor=Fore.RED
         )
 
     # endregion

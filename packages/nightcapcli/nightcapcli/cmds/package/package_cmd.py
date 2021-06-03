@@ -5,13 +5,16 @@
 # file that should have been included as part of this package.
 # region Imports
 import os
-import json
-from nightcapcli.cmds.projects.projects_cmd import NightcapProjectsCMD
-from nightcapcore.configuration.configuration import NightcapCLIConfiguration
-from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
-from nightcapcli.base.base_cmd import NightcapBaseCMD
+from typing import Any, List
 from colorama import Fore, Style
 
+from nightcapcore.configuration.configuration import NightcapCLIConfiguration
+
+from nightcapcli.cmds.projects.projects_cmd import NightcapProjectsCMD
+from nightcapcli.base.base_cmd import NightcapBaseCMD
+
+from nightcappackages.classes.helpers import NightcapJSONEncoder
+from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
 # endregion
 
 
@@ -58,7 +61,7 @@ class NightcapCLIPackage(NightcapBaseCMD):
         selectedList: list,
         pkg_config: dict = None,
         channelid: str = "",
-    ):
+    ) -> None:
         
         NightcapBaseCMD.__init__(self, selectedList, channelid=channelid)
         self.pkg_information = pkg_config
@@ -76,15 +79,14 @@ class NightcapCLIPackage(NightcapBaseCMD):
         except Exception as e:
             self.printer.print_error(e)
             self.pkg_params = {}
-        # print("Project", NightcapCLIConfiguration().project)
 
 
-    def do_exit(self, line):
+    def do_exit(self, line) -> bool:
         self.printer.debug("Selected list passed to package", self.selectedList)
         return super().do_exit(line)
 
     # region Show Params
-    def show_params(self, detailed: bool = False):
+    def show_params(self, detailed: bool = False) -> None:
         
 
         if self.pkg_information["package_information"]["package_type"] != "red-team":
@@ -188,7 +190,7 @@ class NightcapCLIPackage(NightcapBaseCMD):
     # endregion
 
     # region Complete params
-    def complete_params(self, text, line, begidx, endidx):
+    def complete_params(self, text, line, begidx, endidx) -> List[str]:
         _ = ["isdir", "filename", "path"]
         _.extend(list(dict(self.pkg_params).keys()))
         return [i for i in _ if i.startswith(text)]
@@ -196,7 +198,7 @@ class NightcapCLIPackage(NightcapBaseCMD):
     # endregion
 
     # region Help params
-    def help_params(self):
+    def help_params(self) -> None:
         self.printer.item_2(
             "see parameters",
             "params",
@@ -216,7 +218,7 @@ class NightcapCLIPackage(NightcapBaseCMD):
     # endregion
 
     # region Do params
-    def do_params(self, line):
+    def do_params(self, line) -> None:
         try:
             if len(line) == 0:
                 self.show_params()
@@ -269,7 +271,7 @@ class NightcapCLIPackage(NightcapBaseCMD):
         # endregion
 
     #region Do Projects
-    def do_projects(self, line):
+    def do_projects(self, line) -> None:
         """\n\nChange current project"""
         try:
             NightcapProjectsCMD().cmdloop()
@@ -290,52 +292,88 @@ class NightcapCLIPackage(NightcapBaseCMD):
     #endregion
 
     #region Do Run
-    def do_run(self, line):
+    def do_run(self, line) -> None:
         try:
-            if self.pkg_information["package_information"]["package_type"] == "scanner":
-                if self.config.filename == None:
-                    # self.printer.print_error(Exception("Please Specify A File"))
-                    raise Exception("Please Specify A File")
-                    # exit
             force = False
             if NightcapCLIConfiguration().project == None:
-                force = input(
-                    (
-                        Fore.YELLOW
-                        + "Project not selected to be used would you like to continue? [Y/n]: "
-                        + Fore.GREEN
+                    _ = self.printer.input(
+                        (
+                            Fore.YELLOW
+                            + "Project not selected to be used would you like to continue? [Y/n]: "
+                            + Fore.GREEN
+                        )
                     )
-                )
-                print(Style.RESET_ALL, Fore.LIGHTCYAN_EX)
-                yes_options = self.config.config.get("NIGHTCAPCORE","yes").split(" ")
-                if force == None:
-                    force = False
-                else:
-                    if force in yes_options:
+                    print(Style.RESET_ALL, Fore.LIGHTCYAN_EX)
+                    yes_options = self.config.config.get("NIGHTCAPCORE","yes").split(" ")
+
+                    if _ in yes_options:
                         force = True
             else:
-                print("project being used")
                 force = True
-            if force == True:
-                self._call_package()
+
+            if force:
+                _data = self._prepare_data()
+                self._call_package(_data)
+
             else:
-                self.printer.print_error(Exception("Scan canceled by user"))
-        
+                self.printer.print_error(Exception("User Terminated Scan"))
         except Exception as e:
-                self.printer.print_error(e)
+            self.printer.print_error(e)
+
+
+
+        # try:
+        #     if self.pkg_information["package_information"]["package_type"] == "scanner":
+        #         if self.config.filename == None:
+        #             # self.printer.print_error(Exception("Please Specify A File"))
+        #             raise Exception("Please Specify A File")
+        #             # exit
+        #     force = False
+        #     if NightcapCLIConfiguration().project == None:
+        #         force = self.printer.input(
+        #             (
+        #                 Fore.YELLOW
+        #                 + "Project not selected to be used would you like to continue? [Y/n]: "
+        #                 + Fore.GREEN
+        #             )
+        #         )
+        #         print(Style.RESET_ALL, Fore.LIGHTCYAN_EX)
+        #         yes_options = self.config.config.get("NIGHTCAPCORE","yes").split(" ")
+        #         # if force == None:
+        #         #     force = False
+        #         # else:
+        #         if force in yes_options:
+        #             force = True
+        #     else:
+        #         print("project being used")
+        #         print(self.config.project)
+        #         print(type(self.config.project))
+        #         force = True
+
+
+        #     if force == True:
+        #         self._call_package()
+        #     else:
+        #         self.printer.print_error(Exception("Scan canceled by user"))
+        
+        # except Exception as e:
+        #         self.printer.print_error(e)
     #endregion 
 
-    def _call_package(self):
+    def _prepare_data(self) -> str:
+        dat = {}
+        dat[0] = self.toJson()
+        dat[1] = self.pkg_params
+        dat[2] = self.pkg_information
+        return NightcapJSONEncoder().encode(dat)
+
+    def _call_package(self, dat: Any):
         if len(self.selectedList) == 3:
             try:
                 exe_path = self.db.get_package_run_path(self.pkg_information)
-                dat = {}
-                dat[0] = self.toJson()
-                dat[1] = self.pkg_params
-                dat[2] = self.pkg_information
                 call = "python3.8 %s --data '%s'" % (
-                    exe_path,
-                    json.dumps(dat, default=str),
+                    exe_path,   
+                    dat
                 )
                 os.system(call)
             except Exception as e:
@@ -345,15 +383,15 @@ class NightcapCLIPackage(NightcapBaseCMD):
             print(self.selectedList)
 
     #region Update
-    def cli_update(self, message):
+    def cli_update(self, message) -> bool:
         print("Trying to update from package cmd")
         self.do_exit()
     #endregion 
 
     # region To JSON
-    def toJson(self):
+    def toJson(self) -> dict:
         js = {
-            "project": None if NightcapCLIConfiguration().project == None else str(NightcapCLIConfiguration().project),
+            "project": None if NightcapCLIConfiguration().project == None else NightcapCLIConfiguration().project,
             "isDir": self.config.isDir,
             "dir": self.config.dir,
             "filename": self.config.filename,
