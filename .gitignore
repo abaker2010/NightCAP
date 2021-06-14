@@ -126,3 +126,4 @@ dmypy.json
 
 .DS_STORE
 nightcap.cfg
+packages/nightcapserver/nightcapserver/nightcapsite/nightcapsite/settings.py

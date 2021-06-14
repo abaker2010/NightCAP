@@ -4,8 +4,10 @@ pyshark==0.4.2.11
 pathlib==1.0.1
 gnureadline==8.0.0
 pyreadline==2.1
-tinydb==4.3.0
 art==5.1
 nightcapcore==0.0.1
 nightcappackages==0.0.1
 tqdm==4.55.0
+pymongo==3.11.3
+requests==2.25.1
+python-bsonjs==0.2.0
