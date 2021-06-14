@@ -27,10 +27,11 @@ import errno
 # endregion
 
 class NightcapPackageImports(object):
-    def __init__(self, imports) -> None:
+    def __init__(self, imports, verbose: bool = True) -> None:
         super().__init__()
         self.imports = imports
         self.printer = Printer()
+        self.verbose = verbose
     # def install(self):
 
     def install(self):
@@ -43,9 +44,10 @@ class NightcapPackageImports(object):
             _imports = list(package["package_information"]["imports"])
 
             if _imports != []:
-                self.printer.print_underlined_header_undecorated(
-                    "Installing Required Packages"
-                )
+                if self.verbose:
+                    self.printer.print_underlined_header_undecorated(
+                        "Installing Required Packages"
+                    )
 
                 installed_packages_dict = {}
                 installed_packages = pkg_resources.working_set
@@ -59,14 +61,15 @@ class NightcapPackageImports(object):
                     if pkg["package"] not in installed_packages_dict.keys():
                         try:
                             _success = self._install_import(pkg)
-                            if _success:
-                                self.printer.print_formatted_check(
-                                    text="Installed", leadingTab=3
-                                )
-                            else:
-                                self.printer.print_formatted_delete(
-                                    text="Not Installed", leadingTab=3
-                                )
+                            if self.verbose:
+                                if _success:
+                                    self.printer.print_formatted_check(
+                                        text="Installed", leadingTab=3
+                                    )
+                                else:
+                                    self.printer.print_formatted_delete(
+                                        text="Not Installed", leadingTab=3
+                                    )
                         except Exception as e:
                             self.printer.print_error(e)
                     else:
@@ -77,10 +80,11 @@ class NightcapPackageImports(object):
                             _rver = str(pkg["version"])
                             if _rver == _ver:
                                 # print("version required is the same/older")
-                                self.printer.print_formatted_check(
-                                    text="Installed: " + pkg["package"],
-                                    optionaltext=str(pkg["version"]),
-                                )
+                                if self.verbose:
+                                    self.printer.print_formatted_check(
+                                        text="Installed: " + pkg["package"],
+                                        optionaltext=str(pkg["version"]),
+                                    )
                             elif _rver != _ver:
                                 # print("version required is the same/older")
                                 self.printer.print_formatted_additional(
@@ -100,15 +104,8 @@ class NightcapPackageImports(object):
                                     ),
                                     leadingTab=3,
                                 )
-                                agree = input(
-                                    Fore.LIGHTGREEN_EX
-                                    + "\n\t\tOverride package? (Y/n): "
-                                    + Style.RESET_ALL
-                                ).lower()
-                                yes = self._db.conf.config.get(
-                                    "NIGHTCAPCORE", "yes"
-                                ).split()
-                                if agree in yes:
+                                agree = self.printer.input("Override package? (Y/n)")
+                                if agree:
                                     self.printer.print_formatted_delete(
                                         text="(Confirm) This will replace the currently installed pip package."
                                     )
@@ -127,13 +124,10 @@ class NightcapPackageImports(object):
                                             str(pkg["version"]),
                                         )
                                     )
-                                    agree = input(
-                                        Fore.RED
-                                        + "\n\t\tContinue? (Y/n): "
-                                        + Style.RESET_ALL
-                                    ).lower()
-                                    if agree in yes:
-                                        print("override package")
+                                    agree = self.printer.input("Continue? (Y/n)")
+                                    
+                                    if agree:
+                                        # print("override package")
                                         _success = self._install_import(
                                             pkg, reinstall=True
                                         )
@@ -150,7 +144,7 @@ class NightcapPackageImports(object):
 
                             else:
                                 print("version required is greater")
-                print()
+                # print()
 
             return True
         except Exception as e:
@@ -167,11 +161,12 @@ class NightcapPackageImports(object):
             _pkg = imprt["package"]
         else:
             _pkg = imprt["package"] + "==" + imprt["version"]
-        self.printer.print_formatted_additional(
-            text="Installing",
-            optionaltext=imprt["package"] + " ver. " + _ver,
-            textColor=Fore.LIGHTYELLOW_EX,
-        )
+        if self.verbose:
+            self.printer.print_formatted_additional(
+                text="Installing",
+                optionaltext=imprt["package"] + " ver. " + _ver,
+                textColor=Fore.LIGHTYELLOW_EX,
+            )
 
         try:
             python = sys.executable

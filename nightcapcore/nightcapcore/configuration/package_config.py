@@ -103,7 +103,7 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
         # else:
         #     proj = Fore.LIGHTYELLOW_EX + str(self.project["project_name"])
 
-        self.printer.print_underlined_header("Base Parameters", leadingTab=2)
+        # self.printer.print_underlined_header("Base Parameters", leadingTab=2)
         # self.printer.print_formatted_other(
         #     "PROJECT",
         #     proj,
@@ -111,72 +111,72 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
         #     optionalTextColor=Fore.YELLOW,
         # )
 
-        if detailed == False:
-            self.printer.print_formatted_other(
-                "FILENAME",
-                str(self.filename),
-                leadingTab=3,
-                optionalTextColor=Fore.YELLOW,
-            )
-        else:
-            self.printer.print_formatted_other(
-                "FILENAME",
-                "Pcap file name to be used for the scan",
-                leadingTab=3,
-                optionalTextColor=Fore.MAGENTA,
-            )
-            self.printer.print_formatted_additional(
-                "Current Value",
-                str(self.filename),
-                leadingTab=4,
-                optionalTextColor=Fore.YELLOW,
-                endingBreaks=1
-            )
+        # if detailed == False:
+        #     self.printer.print_formatted_other(
+        #         "FILENAME",
+        #         str(self.filename),
+        #         leadingTab=3,
+        #         optionalTextColor=Fore.YELLOW,
+        #     )
+        # else:
+        #     self.printer.print_formatted_other(
+        #         "FILENAME",
+        #         "Pcap file name to be used for the scan",
+        #         leadingTab=3,
+        #         optionalTextColor=Fore.MAGENTA,
+        #     )
+        #     self.printer.print_formatted_additional(
+        #         "Current Value",
+        #         str(self.filename),
+        #         leadingTab=4,
+        #         optionalTextColor=Fore.YELLOW,
+        #         endingBreaks=1
+        #     )
 
-        if detailed == False:
-            self.printer.print_formatted_other(
-                "ISDIR",
-                str(self.isDir),
-                leadingTab=3,
-                optionalTextColor=Fore.YELLOW,
-            )
-        else:
-            self.printer.print_formatted_other(
-                "ISDIR",
-                "To either try and scan the pcap file or a directory of pcap files",
-                leadingTab=3,
-                optionalTextColor=Fore.MAGENTA,
-            )
-            self.printer.print_formatted_additional(
-                "Current Value",
-                str(self.isDir),
-                leadingTab=4,
-                optionalTextColor=Fore.YELLOW,
-                endingBreaks=1
-            )
+        # if detailed == False:
+        #     self.printer.print_formatted_other(
+        #         "ISDIR",
+        #         str(self.isDir),
+        #         leadingTab=3,
+        #         optionalTextColor=Fore.YELLOW,
+        #     )
+        # else:
+        #     self.printer.print_formatted_other(
+        #         "ISDIR",
+        #         "To either try and scan the pcap file or a directory of pcap files",
+        #         leadingTab=3,
+        #         optionalTextColor=Fore.MAGENTA,
+        #     )
+        #     self.printer.print_formatted_additional(
+        #         "Current Value",
+        #         str(self.isDir),
+        #         leadingTab=4,
+        #         optionalTextColor=Fore.YELLOW,
+        #         endingBreaks=1
+        #     )
 
 
-        if detailed == False:
-            self.printer.print_formatted_other(
-                "PATH",
-                str(self.dir),
-                leadingTab=3,
-                optionalTextColor=Fore.YELLOW,
-            )
-        else:
-            self.printer.print_formatted_other(
-                "PATH",
-                "The directory of the pcap file(s)",
-                leadingTab=3,
-                optionalTextColor=Fore.MAGENTA,
-            )
-            self.printer.print_formatted_additional(
-                "Current Value",
-                str(self.dir),
-                leadingTab=4,
-                optionalTextColor=Fore.YELLOW,
-                endingBreaks=1
-            )
+        # if detailed == False:
+        #     self.printer.print_formatted_other(
+        #         "PATH",
+        #         str(self.dir),
+        #         leadingTab=3,
+        #         optionalTextColor=Fore.YELLOW,
+        #     )
+        # else:
+        #     self.printer.print_formatted_other(
+        #         "PATH",
+        #         "The directory of the pcap file(s)",
+        #         leadingTab=3,
+        #         optionalTextColor=Fore.MAGENTA,
+        #     )
+        #     self.printer.print_formatted_additional(
+        #         "Current Value",
+        #         str(self.dir),
+        #         leadingTab=4,
+        #         optionalTextColor=Fore.YELLOW,
+        #         endingBreaks=1
+        #     )
 
         try:
             if self.package_params != {}:
@@ -214,7 +214,7 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
 
     # region Complete params
     def complete_params(self, text, line, begidx, endidx) -> list:
-        _ = ["isdir", "filename", "path"]
+        _ = ["filename", "path"]
         _.extend(list(dict(self.pkg_params).keys()))
         return [i for i in _ if i.startswith(text)]
 
@@ -263,31 +263,8 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
                                 )
                             )
                         else:
-                            if _s[0].lower() == "isdir":
-                                try:
-                                    _ = None
-                                    if str(_s[1]).lower() == "true":
-                                        _ = True
-                                    elif str(_s[1]).lower() == "false":
-                                        _ = False
-                                    else:
-                                        raise Exception("Please use either True or False")
-                                    self.isDir = _
-                                except Exception as e:
-                                    raise e
-                            elif _s[0].lower() == "path":
-                                try:
-                                    self.dir = str(_s[1])
-                                except Exception as e:
-                                    raise e
-                            elif _s[0].lower() == "filename":
-                                try:
-                                    self.filename = str(_s[1])
-                                except Exception as e:
-                                    raise e
-                            else:
-                                if _s[0] in dict(self.pkg_params).keys():
-                                    self.pkg_params[_s[0]] = str(_s[1])
+                            if _s[0] in dict(self.pkg_params).keys():
+                                self.pkg_params[_s[0]] = str(_s[1])
                 except Exception as e:
                     raise e
         except Exception as e:
@@ -360,10 +337,7 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
     # region To JSON
     def toJson(self) -> dict:
         js = {
-            "project": self.project,
-            "isDir": self.isDir,
-            "dir": self.dir,
-            "filename": self.filename,
+            "project": self.project
         }
         return js
 

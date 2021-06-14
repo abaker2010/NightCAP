@@ -83,10 +83,10 @@ class NightcapPackageUninstallerCommand(Command):
                     self._package_path.split("/")
                 )
                 if self._override:
-                    uconfirm = 'y'
+                    uconfirm = True
                 else:
                     uconfirm = self._confim_delete(self._package_path)
-                if str(uconfirm).lower() == "y": 
+                if uconfirm: 
                     self.printer.print_header_w_option("Trying to Uninstall", self._package_path)
 
                     self.printer.item_1("ID", str(_package["_id"]), leadingText='[~]', seperator=" : ")

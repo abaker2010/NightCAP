@@ -189,7 +189,7 @@ class NightcapSettingsCMD(NightcapBaseCMD):
                     # print("Using main / no verbose")
                     invoker.set_on_start(NightcapPackageUpdaterCommand(self.config, True))
                 else:
-                    self.printer.print_error(Exception("Option not allowed"))
+                    raise Exception("Option not allowed")
                 invoker.execute()
             elif len(sline) == 2:
                 # print("Verbose")
@@ -203,12 +203,14 @@ class NightcapSettingsCMD(NightcapBaseCMD):
                     else:
                         self.printer.print_error(Exception("Error processing verbose output"))
                 else:
-                    self.printer.print_error(Exception("Error with verbose option"))
+                    raise Exception("Error with verbose option")
                 invoker.execute()
             else:
                 self.printer.print_error(Exception("To many arguments"))
+                raise Exception("To many arguments")
 
         except Exception as e:
+            # self.printer.print_error(e)
             if e.args[0] == "Restarting":
                 raise KeyboardInterrupt('Restarting')
             else:

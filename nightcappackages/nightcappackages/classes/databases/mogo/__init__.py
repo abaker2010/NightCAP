@@ -7,5 +7,6 @@
 from .mongo_modules import MongoModuleDatabase
 from .mongo_submodules import MongoSubModuleDatabase
 from .mongo_packages import MongoPackagesDatabase
+from .mongo_reporter import MongoReportsDatabase
 
-__all__ = ["MongoModuleDatabase", "MongoSubModuleDatabase", "MongoPackagesDatabase"]
+__all__ = ["MongoModuleDatabase", "MongoSubModuleDatabase", "MongoPackagesDatabase", "MongoReportsDatabase"]

@@ -6,17 +6,13 @@
 # region Imports
 import os
 from typing import Any, List
-from colorama import Fore, Style
-
+from colorama import Fore
 from nightcapcore.configuration.configuration import NightcapCLIConfiguration
-
 from nightcapcli.cmds.projects.projects_cmd import NightcapProjectsCMD
 from nightcapcli.base.base_cmd import NightcapBaseCMD
-
 from nightcappackages.classes.helpers import NightcapJSONEncoder
 from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
 # endregion
-
 
 class NightcapCLIPackage(NightcapBaseCMD):
     """
@@ -72,10 +68,15 @@ class NightcapCLIPackage(NightcapBaseCMD):
         try:
             self.pkg_params = {}
             self.pkg_descripts = {}
+            self.pkg_required = {}
             if self.pkg_information["package_information"]["entry_file_optional_params"] != {}:
                 for k, v in self.pkg_information["package_information"]["entry_file_optional_params"].items():
                     self.pkg_params[v["name"]] = v["value"]
                     self.pkg_descripts[v["name"]] = v["description"]
+                    try:
+                        self.pkg_required[v["name"]] = bool(v["required"])
+                    except:
+                        self.pkg_required[v["name"]] = False
         except Exception as e:
             self.printer.print_error(e)
             self.pkg_params = {}
@@ -87,76 +88,6 @@ class NightcapCLIPackage(NightcapBaseCMD):
 
     # region Show Params
     def show_params(self, detailed: bool = False) -> None:
-        
-
-        if self.pkg_information["package_information"]["package_type"] != "red-team":
-            self.printer.print_underlined_header("Base Parameters", leadingTab=2)
-            if detailed == False:
-                self.printer.print_formatted_other(
-                    "FILENAME",
-                    str(self.config.filename),
-                    leadingTab=3,
-                    optionalTextColor=Fore.YELLOW,
-                )
-            else:
-                self.printer.print_formatted_other(
-                    "FILENAME",
-                    "Pcap file name to be used for the scan",
-                    leadingTab=3,
-                    optionalTextColor=Fore.MAGENTA,
-                )
-                self.printer.print_formatted_additional(
-                    "Current Value",
-                    str(self.config.filename),
-                    leadingTab=4,
-                    optionalTextColor=Fore.YELLOW,
-                    endingBreaks=1
-                )
-
-            if detailed == False:
-                self.printer.print_formatted_other(
-                    "ISDIR",
-                    str(self.config.isDir),
-                    leadingTab=3,
-                    optionalTextColor=Fore.YELLOW,
-                )
-            else:
-                self.printer.print_formatted_other(
-                    "ISDIR",
-                    "To either try and scan the pcap file or a directory of pcap files",
-                    leadingTab=3,
-                    optionalTextColor=Fore.MAGENTA,
-                )
-                self.printer.print_formatted_additional(
-                    "Current Value",
-                    str(self.config.isDir),
-                    leadingTab=4,
-                    optionalTextColor=Fore.YELLOW,
-                    endingBreaks=1
-                )
-
-            if detailed == False:
-                self.printer.print_formatted_other(
-                    "PATH",
-                    str(self.config.dir),
-                    leadingTab=3,
-                    optionalTextColor=Fore.YELLOW,
-                )
-            else:
-                self.printer.print_formatted_other(
-                    "PATH",
-                    "The directory of the pcap file(s)",
-                    leadingTab=3,
-                    optionalTextColor=Fore.MAGENTA,
-                )
-                self.printer.print_formatted_additional(
-                    "Current Value",
-                    str(self.config.dir),
-                    leadingTab=4,
-                    optionalTextColor=Fore.YELLOW,
-                    endingBreaks=1
-                )
-
         try:
             if self.pkg_params != {}:
                 self.printer.print_underlined_header("Package Parameters", leadingTab=2)
@@ -164,7 +95,8 @@ class NightcapCLIPackage(NightcapBaseCMD):
                     for k, v in self.pkg_params.items():
                         _ = "None" if v == "" else v
                         self.printer.print_formatted_other(
-                            str(k).upper(),
+                            "%s%s" % ( "(Required) " if bool(self.pkg_required[k]) == True else "",
+                            str(k).upper()),
                             str(_),
                             leadingTab=3,
                             optionalTextColor=Fore.YELLOW,
@@ -173,7 +105,8 @@ class NightcapCLIPackage(NightcapBaseCMD):
                     for k, v in self.pkg_params.items():
                         _ = "None" if v == "" else v
                         self.printer.print_formatted_other(
-                            str(k).upper(),
+                            "%s%s" % ( "(Required) " if bool(self.pkg_required[k]) == True else "",
+                            str(k).upper()),
                             str(self.pkg_descripts[k]),
                             leadingTab=3,
                             optionalTextColor=Fore.MAGENTA,
@@ -191,7 +124,7 @@ class NightcapCLIPackage(NightcapBaseCMD):
 
     # region Complete params
     def complete_params(self, text, line, begidx, endidx) -> List[str]:
-        _ = ["isdir", "filename", "path"]
+        _ = []
         _.extend(list(dict(self.pkg_params).keys()))
         return [i for i in _ if i.startswith(text)]
 
@@ -239,31 +172,8 @@ class NightcapCLIPackage(NightcapBaseCMD):
                                 )
                             )
                         else:
-                            if _s[0].lower() == "isdir":
-                                try:
-                                    _ = None
-                                    if str(_s[1]).lower() == "true":
-                                        _ = True
-                                    elif str(_s[1]).lower() == "false":
-                                        _ = False
-                                    else:
-                                        raise Exception("Please use either True or False")
-                                    self.config.isDir = _
-                                except Exception as e:
-                                    raise e
-                            elif _s[0].lower() == "path":
-                                try:
-                                    self.config.dir = str(_s[1])
-                                except Exception as e:
-                                    raise e
-                            elif _s[0].lower() == "filename":
-                                try:
-                                    self.config.filename = str(_s[1])
-                                except Exception as e:
-                                    raise e
-                            else:
-                                if _s[0] in dict(self.pkg_params).keys():
-                                    self.pkg_params[_s[0]] = str(_s[1])
+                            if _s[0] in dict(self.pkg_params).keys():
+                                self.pkg_params[_s[0]] = str(_s[1])
                 except Exception as e:
                     raise e
         except Exception as e:
@@ -296,69 +206,29 @@ class NightcapCLIPackage(NightcapBaseCMD):
         try:
             force = False
             if NightcapCLIConfiguration().project == None:
-                    _ = self.printer.input(
-                        (
-                            Fore.YELLOW
-                            + "Project not selected to be used would you like to continue? [Y/n]: "
-                            + Fore.GREEN
-                        )
-                    )
-                    print(Style.RESET_ALL, Fore.LIGHTCYAN_EX)
-                    yes_options = self.config.config.get("NIGHTCAPCORE","yes").split(" ")
-
-                    if _ in yes_options:
+                    _ = self.printer.input("Project not selected for reporting. Would you like to continue? (Y/n)", defaultReturn=True)
+                    if _:
                         force = True
             else:
                 force = True
 
             if force:
-                _data = self._prepare_data()
-                self._call_package(_data)
+                if self._check_params():
+                    _data = self._prepare_data()
+                    self._call_package(_data)
 
             else:
                 self.printer.print_error(Exception("User Terminated Scan"))
         except Exception as e:
             self.printer.print_error(e)
-
-
-
-        # try:
-        #     if self.pkg_information["package_information"]["package_type"] == "scanner":
-        #         if self.config.filename == None:
-        #             # self.printer.print_error(Exception("Please Specify A File"))
-        #             raise Exception("Please Specify A File")
-        #             # exit
-        #     force = False
-        #     if NightcapCLIConfiguration().project == None:
-        #         force = self.printer.input(
-        #             (
-        #                 Fore.YELLOW
-        #                 + "Project not selected to be used would you like to continue? [Y/n]: "
-        #                 + Fore.GREEN
-        #             )
-        #         )
-        #         print(Style.RESET_ALL, Fore.LIGHTCYAN_EX)
-        #         yes_options = self.config.config.get("NIGHTCAPCORE","yes").split(" ")
-        #         # if force == None:
-        #         #     force = False
-        #         # else:
-        #         if force in yes_options:
-        #             force = True
-        #     else:
-        #         print("project being used")
-        #         print(self.config.project)
-        #         print(type(self.config.project))
-        #         force = True
-
-
-        #     if force == True:
-        #         self._call_package()
-        #     else:
-        #         self.printer.print_error(Exception("Scan canceled by user"))
-        
-        # except Exception as e:
-        #         self.printer.print_error(e)
     #endregion 
+
+    def _check_params(self):
+        for k, v in self.pkg_params.items():
+            if bool(self.pkg_required[k]):
+                if v == "None":
+                    raise Exception("Required param: %s" % (k))
+        return True
 
     def _prepare_data(self) -> str:
         dat = {}
@@ -390,11 +260,9 @@ class NightcapCLIPackage(NightcapBaseCMD):
 
     # region To JSON
     def toJson(self) -> dict:
+
         js = {
-            "project": None if NightcapCLIConfiguration().project == None else NightcapCLIConfiguration().project,
-            "isDir": self.config.isDir,
-            "dir": self.config.dir,
-            "filename": self.config.filename,
+            "project": None if NightcapCLIConfiguration().project == None else NightcapCLIConfiguration().project
         }
         return js
     # endregion

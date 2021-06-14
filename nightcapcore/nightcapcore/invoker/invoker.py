@@ -40,7 +40,7 @@ class Invoker:
         """
 
         if isinstance(self._on_start, Command):
-            self._on_start.execute()
+            return self._on_start.execute()
 
         if isinstance(self._on_finish, Command):
-            self._on_finish.execute()
+            return self._on_finish.execute()

@@ -1,3 +1,2 @@
-from .nightcapclient import NightcapScanner, NightcapRedTeam
+from .nightcapclient import *
 
-__all__ = ["NightcapScanner", "NightcapRedTeam"]

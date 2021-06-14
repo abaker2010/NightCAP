@@ -7,6 +7,7 @@
 from typing import List
 from nightcapcli.cmds.cmd_shared.shell_cmd import ShellCMDMixin
 from nightcapcli.cmds.projects import NightcapProjectsCMD
+from nightcapserver.helpers.django_helper import NightcapDjangoDockerHelper
 from ..base import NightcapBaseCMD
 from nightcapcore import ScreenHelper
 from nightcapcli.cmds.settings import NightcapSettingsCMD
@@ -26,13 +27,17 @@ class NightcapMainCMD(NightcapBaseCMD, ShellCMDMixin):
 
     def do_server(self, line) -> None:
         """\n\tControll the update server\n\n\t\tOptions: status, start, stop"""
+        _helper = NightcapDjangoDockerHelper()
         try:
             if line == "start":
-                self.mongo_helper.docker_helper.start_nighcap_site()
+                _helper.container_start()
+                # self.mongo_helper.docker_helper.start_nighcap_site()
             elif line == "stop":
-                self.mongo_helper.docker_helper.stop_nightcapsite()
+                _helper.continer_stop()
+                # self.mongo_helper.docker_helper.stop_nightcapsite()
             elif line == "status":
-                print(self.mongo_helper.docker_helper.get_site_container_status())
+               self.printer.print_formatted_additional("Website Status", _helper.container_status().value, leadingBreaks=1)
+                # print(self.mongo_helper.docker_helper.get_site_container_status())
             else:
                 raise Exception(
                     "Error with server option. For more info use: help server"

@@ -22,32 +22,13 @@ class NightcapCLIConfiguration(metaclass=Singleton):
             if self.config.get("NIGHTCAPSCAN", "project") == "None"
             else self.config.get("NIGHTCAPSCAN", "project")
         )
-        self.isDir = (
-            False
-            if self.config.getboolean("NIGHTCAPSCAN", "isdir") == "None"
-            else self.config.getboolean("NIGHTCAPSCAN", "isdir")
-        )
-        self.dir = (
-            os.path.join(Path(__file__).resolve().parent.parent, "test_pcaps")
-            if self.config.get("NIGHTCAPSCAN", "dir") == "None"
-            else self.config.get("NIGHTCAPSCAN", "dir")
-        )
-        self.filename = (
-            None
-            if self.config.get("NIGHTCAPSCAN", "filename") == "None"
-            else self.config.get("NIGHTCAPSCAN", "filename")
-        )
 
         self.buildNumber = int(self.config.get("BUILD_DATA", "build"))
         self.versionNumber = int(self.config.get("BUILD_DATA", "version"))
         self.mainbranch = self.config.getboolean("BUILD_DATA", "main_branch")
 
         if data != None:
-            # print("Trying to set config data")
             self.project = data['project']
-            self.isDir = data['isDir']
-            self.dir = data['dir']
-            self.filename = data['filename']
 
     def _config(self) -> None:
         conf = configparser.RawConfigParser()

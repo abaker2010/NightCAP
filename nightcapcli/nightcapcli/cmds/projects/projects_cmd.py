@@ -4,6 +4,7 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 # region Imports
+from nightcappackages.classes.helpers.encoder import NightcapJSONEncoder
 from nightcappackages.classes.databases.mogo.mongo_projects import MongoProjectsDatabase
 from nightcapcli.base import NightcapBaseCMD
 from colorama import Fore, Style
@@ -71,18 +72,12 @@ class NightcapProjectsCMD(NightcapBaseCMD):
             _puid = int(line)
             try:
                 if self._db.find_project_by_generated_num(_puid):
-                    _confirm = input(
-                        (
-                            Fore.RED
-                            + (
-                                "Project with ID: %s will be DELETED used would you like to continue? [Y/n]: "
-                                % (line)
-                            )
-                            + Fore.GREEN
-                        )
+                    _confirm = self.printer.input(
+                        "Project with ID: %s will be DELETED used would you like to continue? [Y/n]: "
+                        % (line), questionColor=Fore.RED
                     )
-                    yes_options = self.config.config["NIGHTCAPCORE"]["yes"].split(" ")
-                    if _confirm in yes_options:
+
+                    if _confirm:
                         self._db.delete(_puid)
 
                         # self.printer.print_formatted_check(text="DELETING PROJECT")
@@ -163,13 +158,20 @@ class NightcapProjectsCMD(NightcapBaseCMD):
                 _puid = int(line)
                 _selected = self._db.select(_puid)
                 if _selected != None:
-                    self.config.project = _selected
-                    self.printer.print_formatted_check(
-                        text="Selected",
-                        optionaltext=_selected["project_name"],
-                        leadingBreaks=1,
-                        endingBreaks=1,
-                    )
+                    try:
+                        # print(_selected)
+                        # print(type(_selected))
+                        
+                        self.config.project = _selected
+                        self.printer.print_formatted_check(
+                            text="Selected",
+                            optionaltext=_selected["project_name"],
+                            leadingBreaks=1,
+                            endingBreaks=1,
+                        )
+                        # print(self.config.project)
+                    except Exception as e:
+                        print("Error " , e)
                 else:
                     raise Exception()
             except ValueError as ar:
@@ -177,6 +179,7 @@ class NightcapProjectsCMD(NightcapBaseCMD):
                     Exception("Please enter an existing project ID Numder")
                 )
         except Exception as e:
+            print(e)
             self.printer.print_error(
                 Exception(
                     "Please check the param and try again. Note: Must use project number for selection"

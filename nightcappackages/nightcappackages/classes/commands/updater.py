@@ -8,48 +8,36 @@ from nightcapcore import *
 import shutil
 from colorama import Fore, Style
 from nightcapcore import Printer
+from tqdm.auto import tqdm
 import os
 import shutil
 import json
 from nightcappackages import *
-from nightcapcore import NightcapCLIConfiguration
 from nightcappackages.classes.commands.installer import NightcapPackageInstallerCommand
 from nightcappackages.classes.commands.uninstaller import NightcapPackageUninstallerCommand
 from nightcappackages.classes.helpers.check_version import NightcapPackageVersionCheckHelper
-from nightcappackages.classes.helpers.get_updater import NightcapPackageUpdateDownloaderHelper
+from nightcappackages.classes.commands.get_updater import NightcapPackageUpdateDownloaderHelper
 from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
 from nightcappackages.classes.helpers.tmp_files import NightcapTmpFileHelper
 # endregion
 
-
 class NightcapPackageUpdaterCommand(Command):
     # region Init
-    def __init__(self, config: NightcapCLIConfiguration, main: bool, verbose: bool = False):
+    def __init__(self, config: NightcapCLIConfiguration, main: bool, verbose: bool = False, force=False):
         self.currentDir = os.getcwd()
         self.updateFile = "update.ncb"
-        self.excludedPaths = []
-        self.dbPaths = []
-        self._excludeExt = (".json", ".pcapng", "LICENSE", ".md")
-        self._dbExt = ".json"
-        self._dbExclude = "EXAMPLE_MODULE"
-        self.updateCalled = False
         self.isMainBranch = None
-        # self.tmpUpdateLocation = None
-        self.installLocation = os.path.dirname(
-            __file__).split("/application")[0]
         self.printer = Printer()
         self.verbose = False
         self.config = config
         self.main = main
         self.verbose = verbose
-        self.yes = self.config.config.get("NIGHTCAPCORE", "yes").split()
-
-
+        self.force = force
     # endregion
 
     # region Execute
     def execute(self) -> None:
-        self.updateCalled = True
+        # self.updateCalled = True
         self.isMainBranch = self.main
         self.verbose = self.verbose
         try:
@@ -64,17 +52,17 @@ class NightcapPackageUpdaterCommand(Command):
 
             # reigon needs fixed 
 
-            if _available[0] == False:
+            if _available[0] == False and self.force == False:
                 self.printer.print_formatted_check("Running the most current version", endingBreaks=1)
             else:
                 self.printer.print_formatted_additional("Update Available")
-                agree = input(
-                    Fore.LIGHTGREEN_EX
-                    + "\n\t\tWould you like to update now? (Y/n): "
-                    + Style.RESET_ALL
-                ).lower()
+                if self.force == False:
+                    agree = self.printer.input("Would you like to update now? (Y/n)"
+                    )
+                else:
+                    agree = True
 
-                if agree in self.yes or len(agree) == 0:
+                if agree:
 
                     if self.isMainBranch:
                         _url = "https://github.com/abaker2010/NightCAPVersions/raw/main/%s/%s/update.ncb" % (
@@ -86,15 +74,14 @@ class NightcapPackageUpdaterCommand(Command):
 
                     try:
                         _tmpfile.create()
-                        print(_tmpfile.tmp_location)
-                        _updater = tuple(NightcapPackageUpdateDownloaderHelper(_url, _tmpfile.tmp_location, verbose=True).get())
-                        print(_updater)
+                        print("\n")
+                        invoker = Invoker()
+                        invoker.set_on_start(NightcapPackageUpdateDownloaderHelper(_url, _tmpfile.tmp_location))
+                        _updater = tuple(invoker.execute())
                         if _updater[0] == True:
-                            print("loc", str(_updater[1]))
                             self._update(str(_updater[1]), str(_updater[2]))
 
                     except Exception as e:
-                    
                         raise e
                     finally:
                         _tmpfile.delete()
@@ -115,28 +102,18 @@ class NightcapPackageUpdaterCommand(Command):
 
         except KeyboardInterrupt as e:
             self.printer.print_error(Exception("User Terminated"))
-            self.updateCalled = False
+            # self.updateCalled = False
         except Exception as ee:
             self.printer.print_error(ee)
         finally:
-            agree = input(
-                    Fore.LIGHTGREEN_EX
-                    + "\n\t\tManual restart is required. Press Enter when ready: "
-                    + Style.RESET_ALL
-                ).lower()
+            pass
 
     # region Update
     def _update(self, tmppath: str, filename: str):
         if ".ncb" in filename:
 
-            self.printer.print_underlined_header(
-                "Starting Update", leadingBreaks=1)
-
-            self.printer.print_underlined_header("Unpacking Backup")
-
             name = os.path.basename(str(filename))
             new_name = name.replace(".ncb", ".zip")
-
 
             os.rename(os.path.join(tmppath, name),
                       os.path.join(tmppath, new_name))
@@ -145,14 +122,18 @@ class NightcapPackageUpdaterCommand(Command):
                 tmppath, new_name), os.path.join(tmppath, "updater"), "zip")
             shutil.unpack_archive(os.path.join(tmppath, "updater", "installers.zip"), os.path.join(
                 tmppath, "updater", "installers"), "zip")
-            self.printer.print_formatted_check("Successfully unpacked backup")
+
 
             _installers_path = os.path.join(
                 tmppath, "updater", "installers")
             _r_paths = self._restore_installers_paths(_installers_path)
-            self.printer.print_underlined_header("Checking Packages")
-            for _r in _r_paths:
-                self.printer.print_formatted_additional("Checking", optionaltext=str(_r['name']))
+
+            description = (
+                Fore.LIGHTMAGENTA_EX + "\t[-] Installing  "
+            )
+
+            for i in tqdm(range(len(_r_paths)), desc=description, ncols = 100, unit='m'):
+                _r = _r_paths[i]
 
                 _new_name = str(_r['path']).replace(".ncp", ".zip")
                 
@@ -168,12 +149,11 @@ class NightcapPackageUpdaterCommand(Command):
                         if name == 'package_info.json':
                             with open(os.path.join(root, name)) as json_file:
                                 _package = json.load(json_file)
+
                             _pkexists = MongoPackagesDatabase().check_package_path(
                                 [_package['package_for']['module'], _package['package_for']['submodule'], _package["package_information"]["package_name"]])
 
                             if _pkexists == False:
-                                self.printer.print_formatted_additional(
-                                    "Installing package")
                                 invoker = Invoker()
                                 invoker.set_on_start(
                                     NightcapPackageInstallerCommand(str(_r['path'])))
@@ -183,11 +163,12 @@ class NightcapPackageUpdaterCommand(Command):
                                 _current_package = MongoPackagesDatabase().get_package_config(
                                     [_package['package_for']['module'], _package['package_for']['submodule'], _package["package_information"]["package_name"]])
                                 if _current_package['package_information']['version'] == _package['package_information']['version']:
-                                    self.printer.print_formatted_check(
-                                        "Current version installed", optionaltext=_package['package_information']['version'])
+                                    pass
+                                    # self.printer.print_formatted_check(
+                                    #     "Current version installed", optionaltext=_package['package_information']['version'])
                                 else:
-                                    self.printer.print_formatted_additional(
-                                        "Update Package")
+                                    # self.printer.print_formatted_additional(
+                                    #     "Update Package")
                                     invoker = Invoker()
                                     invoker.set_on_start(NightcapPackageUninstallerCommand(
                                         "/".join([_package['package_for']['module'], _package['package_for']['submodule'], _package["package_information"]["package_name"]]), True))
@@ -196,7 +177,7 @@ class NightcapPackageUpdaterCommand(Command):
                                     invoker.set_on_start(
                                     NightcapPackageInstallerCommand(str(_r['path'])))
                                     invoker.execute()
-                                    ScreenHelper().clearScr()
+                                    # ScreenHelper().clearScr()
             return True
         else:
             self.printer.print_error(

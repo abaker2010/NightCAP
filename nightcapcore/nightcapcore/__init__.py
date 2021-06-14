@@ -5,7 +5,6 @@
 # file that should have been included as part of this package.
 from .core import NightcapCore
 from .paths import NightcapPaths, NightcapPathsEnum, NightcapPathCleaner
-from .updater import NightcapCoreUpaterRules, NightcapCoreUpdaterBase
 from .files import NightcapCoreFiles
 from .printers import Printer
 from .configuration import NightcapCLIConfiguration
@@ -17,6 +16,7 @@ from .banner import NightcapBanner
 from .colors import NightcapColors
 from .interface import Interface
 from .docker import NightcapCoreDockerChecker
+from .legal import Legal
 
 __all__ = [
     "NightcapCLIConfiguration",
@@ -24,8 +24,6 @@ __all__ = [
     "NightcapPaths",
     "NightcapPathsEnum",
     "NightcapPathCleaner",
-    "NightcapCoreUpdaterBase",
-    "NightcapCoreUpaterRules",
     "NightcapCoreFiles",
     "Printer",
     "Singleton",
@@ -36,6 +34,7 @@ __all__ = [
     "NightcapColors",
     "Interface",
     "NightcapCoreDockerChecker",
+    "Legal"
 ]
 
 __version__ = "0.0.1"

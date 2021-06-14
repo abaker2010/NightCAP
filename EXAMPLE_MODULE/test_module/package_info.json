@@ -17,7 +17,8 @@
             "0" : {
                 "name": "testing",
                 "value": "",
-                "description": "some description for the user here"
+                "description": "some description for the user here",
+                "required" : "True"
             }
         },
         "uid": "75585e8ef70f3e046eba9ade640b0ea21425063bf67cb40c104432asdfasewe2"

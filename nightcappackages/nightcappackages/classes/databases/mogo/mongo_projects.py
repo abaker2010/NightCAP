@@ -79,7 +79,6 @@ class MongoProjectsDatabase(MongoDatabaseOperationsConnection, metaclass=Singlet
 
     # region Update
     def update(self):
-        # super().update(updatetable=updatedb.table('packages'),localtable=self.db_packages.table('packages'),checkonrow='package_information',checkonrowtwo='uid', updaterrule=NightcapCoreUpaterRules.Package)
         pass
 
     # endregion

@@ -65,13 +65,14 @@ class NightcapPackageInstallerCommand(Command):
     """
 
     # region Init
-    def __init__(self, package_path: str, clear: bool = True) -> None:
+    def __init__(self, package_path: str, clear: bool = False, verbose: bool = False) -> None:
         self._package_paths = NightcapPackagesPaths()
         self._db = MongoPackagesDatabase()
         self.printer = Printer()
         self._package = None
         self._package_path = package_path
         self._clearScreen = clear
+        self.verbose = verbose
     # endregion
 
     # region Execute
@@ -94,15 +95,15 @@ class NightcapPackageInstallerCommand(Command):
                     self._package = json.load(json_file)
                 if self._clearScreen:
                     ScreenHelper().clearScr()
-                self.printer.print_underlined_header_undecorated("INSTALLING")
-                self.printer.print_formatted_additional(
-                    text="Package: "
-                    + self._package["package_for"]["module"]
-                    + "/"
-                    + self._package["package_for"]["submodule"]
-                    + "/"
-                    + self._package["package_information"]["package_name"]
-                )
+                # self.printer.print_underlined_header_undecorated("INSTALLING")
+                # self.printer.print_formatted_additional(
+                #     text="Package: "
+                #     + self._package["package_for"]["module"]
+                #     + "/"
+                #     + self._package["package_for"]["submodule"]
+                #     + "/"
+                #     + self._package["package_information"]["package_name"]
+                # )
             except FileNotFoundError as nf:
                 self.printer.print_error(nf)
             except Exception as e:
@@ -125,7 +126,7 @@ class NightcapPackageInstallerCommand(Command):
             except Exception as e:
                 raise e
 
-            _imports = NightcapPackageImports(self._package).install()
+            _imports = NightcapPackageImports(self._package, verbose=self.verbose).install()
             if _imports:
                 if self._db.install(self._package):
                     NightcapPackageInstallerHelper(_base_path, self._package_path, self._package_paths, self._package).copy_installer()

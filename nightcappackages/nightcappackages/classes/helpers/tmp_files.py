@@ -45,7 +45,7 @@ class NightcapTmpFileHelper(object):
     def _rmtmp(self):
         self.printer.print_underlined_header("Clean Up")
         # if self.verbose:
-        self.printer.print_header("Removing tmp dir", endingBreaks=1)
+        self.printer.print_formatted_check("Tmp dir removed", endingBreaks=1)
         shutil.rmtree(self.tmp_location)
         # self.tmpUpdatePaths = []
         # self.tmpUpdateLocation = None

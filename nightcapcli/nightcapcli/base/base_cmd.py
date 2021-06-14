@@ -6,7 +6,6 @@
 #region Imports
 import cmd
 from colorama import Fore, Style
-from mongo.mongo_helper import NightcapMongoHelper
 from nightcapcli.observer.publisher import NightcapCLIPublisher
 from nightcapcore import NightcapCLIConfiguration, Printer, ScreenHelper, NightcapBanner
 #endregion
@@ -88,14 +87,10 @@ class NightcapBaseCMD(cmd.Cmd):
         self.config = NightcapCLIConfiguration()
         
         self.printer = Printer()
-        self.mongo_helper = NightcapMongoHelper(self.config)
         self.channelID = channelid
         self.prompt = self._prompt()
         
         if passedJson != None:
-            self.config.filename = passedJson['filename']
-            self.config.isDir = passedJson['isDir']
-            self.config.dir = passedJson['dir']
             self.config.project = passedJson['project']
         
     # endregion

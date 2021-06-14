@@ -70,7 +70,6 @@ class MongoModuleDatabase(MongoDatabaseOperationsConnection, metaclass=Singleton
     # region Create
     def create(self, module: str = None):
         self._db.insert_one({"type": module})
-        self.printer.print_formatted_check(text="Added to modules db")
 
     # endregion
 
@@ -134,15 +133,9 @@ class MongoModuleDatabase(MongoDatabaseOperationsConnection, metaclass=Singleton
     # region Uninstall Module
     def module_try_unintall(self, module: str):
         _moduleexists = self.find_one(module)
-        # print("module found", _moduleexists)
         self._db.remove(_moduleexists)
         self.printer.print_formatted_additional(
             text="Deleted module entry", leadingTab=3
         )
 
-    # endregion
-
-    # region Not sure if this is working yet
-    # def update(self, updatedb: TinyDB):
-    # super().update(updatetable=updatedb.table('modules'),localtable=self.db_modules.table('modules'),checkonrow='type', updaterrule=NightcapCoreUpaterRules.Module)
     # endregion

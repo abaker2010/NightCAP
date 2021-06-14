@@ -3,15 +3,15 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-from nightcapclient import NightcapScanner
+from nightcapclient import NightcapClient
 from nightcapcore import *
 import os
 #endregion
 
-class SomePackageName(NightcapScanner):
+class SomePackageName(NightcapClient):
     def __init__(self):
         # super(NightcapScanner, self).__init__()
-        NightcapScanner.__init__(self)
+        NightcapClient.__init__(self)
         # self.simple_report = NightcapSimpleReport(__file__, self.basedata['0'])
         self.found_count = 0
 

@@ -25,9 +25,6 @@ class NightcapPackageInstallerHelper(object):
     def copy_installer(self):
         self._copy(self._package, self._base_path)
         self._copy_installer(self._package_path)
-        self.printer.print_formatted_check(
-            text="INSTALLED", leadingTab=1, endingBreaks=1, leadingBreaks=1
-        )
 
     # region Copy
     def _copy_installer(self, installer: str):
