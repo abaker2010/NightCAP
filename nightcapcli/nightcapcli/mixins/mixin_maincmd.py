@@ -4,9 +4,11 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 # region Import
+from nightcapcli.completer.tab_completer import NightcapTabCompleter
 from nightcapcli.generator.option_generator import NightcapOptionGenerator
 from nightcapcli.observer.publisher import NightcapCLIPublisher
 from ..cmds import NightcapMainCMD
+from colorama import Fore, Style
 
 # endregion
 
@@ -85,11 +87,11 @@ class NightcapCLICMDMixIn(NightcapMainCMD):
 
     # region Complete Use
     def complete_use(self, text, line, begidx, endidx) -> list:
-        return [
-            i
-            for i in NightcapOptionGenerator(self.selectedList).completed_options()
-            if i.startswith(text)
-        ]
+        try:
+            _completer = NightcapTabCompleter()
+            return _completer.complete(self.selectedList, text, line.replace("use ", "")) 
+        except Exception as e:
+            print(e)
 
     # endregion
 

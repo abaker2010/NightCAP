@@ -7,11 +7,7 @@
 from nightcappackages import *
 from nightcapcore import Printer
 from colorama import Fore, Style
-from nightcappackages.classes.databases.mogo.mongo_modules import MongoModuleDatabase
-from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
-from nightcappackages.classes.databases.mogo.mongo_submodules import (
-    MongoSubModuleDatabase,
-)
+from nightcappackages.classes.databases.mogo import MongoModuleDatabase, MongoPackagesDatabase, MongoSubModuleDatabase
 
 # endregion
 
