@@ -27,7 +27,7 @@ import errno
 # endregion
 
 
-class NightcapPackageImports(object):
+class NightcapGithubPackageImports(object):
     def __init__(self, imports, verbose: bool = True) -> None:
         super().__init__()
         self.imports = imports

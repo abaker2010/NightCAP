@@ -5,6 +5,7 @@
 # file that should have been included as part of this package.
 # region Import
 from typing import Any
+import os
 from bson.objectid import ObjectId
 from colorama.ansi import Fore, Style
 from nightcapcore.singleton.singleton import Singleton
@@ -104,17 +105,21 @@ class MongoPackagesDatabase(MongoDatabaseOperationsConnection, metaclass=Singlet
 
     def drop(self) -> None:
         self._db.drop()
-        
 
     # region Get package run path
     def get_package_run_path(self, pkg_config: dict = None):
+        _file = (
+            os.sep.join(pkg_config["package_information"]["entry_file"])
+            if isinstance(pkg_config["package_information"]["entry_file"], list)
+            else pkg_config["package_information"]["entry_file"]
+        )
         _path = NightcapPackagesPaths().generate_path(
             NightcapPackagesPathsEnum.PackagesBase,
             [
                 pkg_config["package_for"]["module"],
                 pkg_config["package_for"]["submodule"],
                 pkg_config["package_information"]["package_name"],
-                pkg_config["package_information"]["entry_file"],
+                _file,
             ],
         )
         return _path
@@ -273,7 +278,11 @@ class MongoPackagesDatabase(MongoDatabaseOperationsConnection, metaclass=Singlet
                 self.printer.print_error(e)
                 return False
         else:
-            self.printer.print_formatted_additional(text="Package Already Installed (Not Replacing)", textColor=Fore.LIGHTRED_EX, endingBreaks=1)
+            self.printer.print_formatted_additional(
+                text="Package Already Installed (Not Replacing)",
+                textColor=Fore.LIGHTRED_EX,
+                endingBreaks=1,
+            )
             return False
 
     # endregion

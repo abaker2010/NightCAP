@@ -8,7 +8,9 @@ from nightcappackages.classes.helpers.encoder import NightcapJSONEncoder
 from nightcappackages.classes.databases.mogo.mongo_projects import MongoProjectsDatabase
 from nightcapcli.base import NightcapBaseCMD
 from colorama import Fore, Style
+
 # endregion
+
 
 class NightcapProjectsCMD(NightcapBaseCMD):
     """
@@ -74,7 +76,8 @@ class NightcapProjectsCMD(NightcapBaseCMD):
                 if self._db.find_project_by_generated_num(_puid):
                     _confirm = self.printer.input(
                         "Project with ID: %s will be DELETED used would you like to continue? [Y/n]: "
-                        % (line), questionColor=Fore.RED
+                        % (line),
+                        questionColor=Fore.RED,
                     )
 
                     if _confirm:
@@ -161,7 +164,7 @@ class NightcapProjectsCMD(NightcapBaseCMD):
                     try:
                         # print(_selected)
                         # print(type(_selected))
-                        
+
                         self.config.project = _selected
                         self.printer.print_formatted_check(
                             text="Selected",
@@ -171,7 +174,7 @@ class NightcapProjectsCMD(NightcapBaseCMD):
                         )
                         # print(self.config.project)
                     except Exception as e:
-                        print("Error " , e)
+                        print("Error ", e)
                 else:
                     raise Exception()
             except ValueError as ar:
@@ -194,7 +197,9 @@ class NightcapProjectsCMD(NightcapBaseCMD):
         try:
             self.config.project = None
             # self.output.output("[+] Unselected project")
-            self.printer.print_formatted_check("Unselected project", leadingBreaks=1,endingBreaks=1)
+            self.printer.print_formatted_check(
+                "Unselected project", leadingBreaks=1, endingBreaks=1
+            )
         except Exception as e:
             # self.output.output(str(e), level=6)
             self.printer.print_error(e)

@@ -5,7 +5,9 @@
 # file that should have been included as part of this package.
 # region Imports
 import enum
+
 # endregion
+
 
 class NightcapDockerStatus(enum.Enum):
     """

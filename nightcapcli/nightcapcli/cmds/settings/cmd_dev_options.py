@@ -14,6 +14,7 @@ from nightcapcli.base.base_cmd import NightcapBaseCMD
 
 # endregion
 
+
 class NightcapDevOptions(NightcapBaseCMD):
     """
     (User CLI Object)
@@ -51,18 +52,19 @@ class NightcapDevOptions(NightcapBaseCMD):
     # region make archive
     def make_archive(self, source, destination) -> None:
         base = os.path.basename(destination)
-        name = base.split('.')[0]
-        format = base.split('.')[1]
+        name = base.split(".")[0]
+        format = base.split(".")[1]
         archive_from = os.path.dirname(source)
         archive_to = os.path.basename(source.strip(os.sep))
         shutil.make_archive(name, format, archive_from, archive_to)
-        shutil.move('%s.%s'%(name,format), destination)
+        shutil.move("%s.%s" % (name, format), destination)
+
     # endregion
 
     # region Do genPackageUID
     def do_genPackageUID(self, package_path: str) -> None:
         try:
-        
+
             with open(os.path.join(package_path, "package_info.json")) as json_file:
                 data = json.load(json_file)
 
@@ -73,8 +75,16 @@ class NightcapDevOptions(NightcapBaseCMD):
             package = package_module + "/" + package_submodule + "/" + package_name
             hash = hashlib.sha256(package.encode()).hexdigest()
             data["package_information"]["uid"] = hash
-            
-            _out_file = package_module + "-" + package_submodule + "-" + package_name + "-" + str(data["package_information"]["version"]).replace('.','-')
+
+            _out_file = (
+                package_module
+                + "-"
+                + package_submodule
+                + "-"
+                + package_name
+                + "-"
+                + str(data["package_information"]["version"]).replace(".", "-")
+            )
             _base = os.path.join(Path(package_path).parent, _out_file)
 
             with open(os.path.join(package_path, "package_info.json"), "w") as outfile:
@@ -82,12 +92,16 @@ class NightcapDevOptions(NightcapBaseCMD):
 
             self.printer.print_underlined_header("Trying to sign package")
             self.printer.print_formatted_additional("Please wait...")
-            self.printer.print_formatted_additional("Path to be used", optionaltext=package_path)
-            self.printer.print_formatted_additional("Package Being Created", optionaltext=_out_file + ".ncp")
+            self.printer.print_formatted_additional(
+                "Path to be used", optionaltext=package_path
+            )
+            self.printer.print_formatted_additional(
+                "Package Being Created", optionaltext=_out_file + ".ncp"
+            )
 
-            self.make_archive(package_path, str(_base)+'.zip')
+            self.make_archive(package_path, str(_base) + ".zip")
             os.rename(str(_base) + ".zip", str(_base) + ".ncp")
-            
+
             with open(str(_base) + ".ncp", "rb") as f:
                 file_hash = hashlib.md5()
                 chunk = f.read(8192)
@@ -95,9 +109,10 @@ class NightcapDevOptions(NightcapBaseCMD):
                     file_hash.update(chunk)
                     chunk = f.read(8192)
             self.printer.print_formatted_check("Done", endingBreaks=1)
-            
+
         except Exception as e:
             print(e)
+
     # endregion
 
     # region Help genPackageUID
@@ -114,4 +129,5 @@ class NightcapDevOptions(NightcapBaseCMD):
             # (Fore.YELLOW + h3 + Style.RESET_ALL),
         )
         print(p)
+
     # endregion

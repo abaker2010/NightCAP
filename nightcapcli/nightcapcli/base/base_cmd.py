@@ -3,13 +3,15 @@
 # This file is part of the Nightcap Project,
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
-#region Imports
+# region Imports
 import cmd
 from colorama import Fore, Style
 from nightcapcli.observer.publisher import NightcapCLIPublisher
 from nightcapcore import NightcapCLIConfiguration, Printer, ScreenHelper, NightcapBanner
-#endregion
- 
+
+# endregion
+
+
 class NightcapBaseCMD(cmd.Cmd):
     """
     This class is used as the base cmd for the program
@@ -67,12 +69,7 @@ class NightcapBaseCMD(cmd.Cmd):
     """
 
     # region Init
-    def __init__(
-        self,
-        selectedList: list,
-        channelid=None,
-        passedJson=None
-    ) -> None:
+    def __init__(self, selectedList: list, channelid=None, passedJson=None) -> None:
         cmd.Cmd.__init__(self, completekey="tab", stdin=None, stdout=None)
         if selectedList != []:
             self.selectedList = selectedList
@@ -85,14 +82,14 @@ class NightcapBaseCMD(cmd.Cmd):
         self.ruler = Fore.YELLOW + "-" + Style.RESET_ALL
 
         self.config = NightcapCLIConfiguration()
-        
+
         self.printer = Printer()
         self.channelID = channelid
         self.prompt = self._prompt()
-        
+
         if passedJson != None:
-            self.config.project = passedJson['project']
-        
+            self.config.project = passedJson["project"]
+
     # endregion
 
     def addselected(self, item) -> None:
@@ -103,14 +100,15 @@ class NightcapBaseCMD(cmd.Cmd):
         NightcapCLIPublisher().selectedList.pop(-1)
         self.selectedList = NightcapCLIPublisher().selectedList
 
-    #region 
+    # region
     def _prompt(self) -> str:
         _p = []
         for _ in self.selectedList:
             _p.append("[" + Fore.LIGHTYELLOW_EX + _ + Fore.LIGHTGREEN_EX + "]")
         _p = "".join(_p)
         return Fore.GREEN + "nightcap" + _p + " > " + Fore.CYAN
-    #endregion
+
+    # endregion
 
     # region CMD Overrides
     def emptyline(self) -> None:
@@ -133,20 +131,36 @@ class NightcapBaseCMD(cmd.Cmd):
     def do_exit(self, line) -> bool:
         try:
             if self.channelID != None:
-                self.printer.debug("Pop Before/After", self.channelID, currentMode=self.config.verbosity)
-                self.printer.debug(NightcapCLIPublisher().channels, currentMode=self.config.verbosity)
+                self.printer.debug(
+                    "Pop Before/After",
+                    self.channelID,
+                    currentMode=self.config.verbosity,
+                )
+                self.printer.debug(
+                    NightcapCLIPublisher().channels, currentMode=self.config.verbosity
+                )
                 NightcapCLIPublisher().del_channel(self.channelID)
                 self.popselected()
-                self.printer.debug(NightcapCLIPublisher().channels, currentMode=self.config.verbosity)
+                self.printer.debug(
+                    NightcapCLIPublisher().channels, currentMode=self.config.verbosity
+                )
             else:
-                self.printer.debug("Pop Before/After (NO CHANNLE ID)", currentMode=self.config.verbosity)
-                self.printer.debug(NightcapCLIPublisher().channels, currentMode=self.config.verbosity)
+                self.printer.debug(
+                    "Pop Before/After (NO CHANNLE ID)",
+                    currentMode=self.config.verbosity,
+                )
+                self.printer.debug(
+                    NightcapCLIPublisher().channels, currentMode=self.config.verbosity
+                )
                 self.popselected()
-                self.printer.debug(NightcapCLIPublisher().channels, currentMode=self.config.verbosity)
-                
+                self.printer.debug(
+                    NightcapCLIPublisher().channels, currentMode=self.config.verbosity
+                )
+
         except Exception as e:
             pass
         return True
+
     # endregion
 
     # region Help

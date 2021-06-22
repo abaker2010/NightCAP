@@ -6,7 +6,9 @@
 # region Imports
 from typing import List
 from nightcapcli.base.base_cmd import NightcapBaseCMD
+
 # endregion
+
 
 class NightcapNetworkCMD(NightcapBaseCMD):
     # region Init
@@ -27,6 +29,8 @@ class NightcapNetworkCMD(NightcapBaseCMD):
         elif str(line).lower() == "standard":
             print("Selecting Standard")
         else:
-            self.printer.print_error(Exception("Error selecting network. Please view the help to see options allowed."))
-
-
+            self.printer.print_error(
+                Exception(
+                    "Error selecting network. Please view the help to see options allowed."
+                )
+            )

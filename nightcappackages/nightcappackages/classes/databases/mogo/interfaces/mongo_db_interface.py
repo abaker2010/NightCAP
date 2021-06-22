@@ -95,19 +95,22 @@ class MongoDatabaseInterface:
             username=username,
             password=password,
             authMechanism=authMechanism,
-            serverSelectionTimeoutMS=1000,
+            serverSelectionTimeoutMS=5000,
         )
-        client.server_info()  # force connection on a request as the
-        # connect=True parameter of MongoClient seems
-        # to be useless here
-        self.client = client
-        return True
+        try:
+            client.server_info()  # force connection on a request as the
+            # connect=True parameter of MongoClient seems
+            # to be useless here
+            self.client = client
+            return True
+        except Exception as e:
+            raise Exception("Error Connecting To Mongo DB : Connection Timed Out")
 
     # endregion
 
     # region Unauthenticated Connection
     def connect_unauthenticated(self, ip: str, port: str):
-        client = MongoClient(str(ip), int(port), serverSelectionTimeoutMS=300)
+        client = MongoClient(str(ip), int(port), serverSelectionTimeoutMS=5000)
         client.server_info()  # force connection on a request as the
         # connect=True parameter of MongoClient seems
         # to be useless here

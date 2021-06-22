@@ -78,7 +78,9 @@ class NightcapBanner(NightcapCLIConfiguration):
         try:
             version_string = rcolor + "Version ~ " + rcolor2 + self.build_version
             build_number_string = rcolor + "Build ~ " + rcolor2 + self.build_number
-            branch_string = rcolor + "Branch ~ " + rcolor2 + ("Main" if self.mainbranch else "Dev")
+            branch_string = (
+                rcolor + "Branch ~ " + rcolor2 + ("Main" if self.mainbranch else "Dev")
+            )
             print(
                 "\t=",
                 rcolor2,

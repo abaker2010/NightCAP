@@ -6,6 +6,7 @@
 # region Import
 from typing import Any
 from nightcappackages.classes.databases.mogo import *
+
 # endregion
 
 

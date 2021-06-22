@@ -11,7 +11,12 @@ from nightcapcli.cmds.settings.backup_cmd import NightcapBackups
 from nightcapcli.base.base_cmd import NightcapBaseCMD
 from nightcapcli.cmds.settings.cmd_dev_options import NightcapDevOptions
 from nightcapcli.generator.listpackages import NightcapListPackages
-from nightcappackages.classes.commands import NightcapPackageInstallerCommand, NightcapPackageUninstallerCommand, NightcapUpdaterRebootCommand, NightcapPackageUpdaterCommand
+from nightcappackages.classes.commands import (
+    NightcapPackageInstallerCommand,
+    NightcapPackageUninstallerCommand,
+    NightcapUpdaterRebootCommand,
+    NightcapPackageUpdaterCommand,
+)
 from nightcapcore.invoker import Invoker
 from nightcapcore.helpers import ScreenHelper
 
@@ -109,7 +114,6 @@ class NightcapSettingsCMD(NightcapBaseCMD):
 
     # endregion
 
-
     # region Dev Options
     def help_devoptions(self) -> None:
         self.printer.help("Developer Options")
@@ -175,19 +179,25 @@ class NightcapSettingsCMD(NightcapBaseCMD):
         sline = str(line).lstrip().split(" ")
         invoker = Invoker()
         invoker.set_on_finish(NightcapUpdaterRebootCommand())
-        
+
         try:
             if len(sline) == 1:
                 # print("No Verbose")
                 if sline[0] == "":
                     # print("using default / no verbose")
-                    invoker.set_on_start(NightcapPackageUpdaterCommand(self.config, True))
+                    invoker.set_on_start(
+                        NightcapPackageUpdaterCommand(self.config, True)
+                    )
                 elif sline[0] == "dev":
                     # print("using dev / no verbose")
-                    invoker.set_on_start(NightcapPackageUpdaterCommand(self.config, False))
+                    invoker.set_on_start(
+                        NightcapPackageUpdaterCommand(self.config, False)
+                    )
                 elif sline[0] == "main":
                     # print("Using main / no verbose")
-                    invoker.set_on_start(NightcapPackageUpdaterCommand(self.config, True))
+                    invoker.set_on_start(
+                        NightcapPackageUpdaterCommand(self.config, True)
+                    )
                 else:
                     raise Exception("Option not allowed")
                 invoker.execute()
@@ -196,12 +206,18 @@ class NightcapSettingsCMD(NightcapBaseCMD):
                 if sline[1] == "-v":
                     if sline[0] == "dev":
                         # print("using dev / verbose")
-                        invoker.set_on_start(NightcapPackageUpdaterCommand(self.config, False, True))
+                        invoker.set_on_start(
+                            NightcapPackageUpdaterCommand(self.config, False, True)
+                        )
                     elif sline[0] == "main":
                         # print("Using main / verbose")
-                        invoker.set_on_start(NightcapPackageUpdaterCommand(self.config, True, True))
+                        invoker.set_on_start(
+                            NightcapPackageUpdaterCommand(self.config, True, True)
+                        )
                     else:
-                        self.printer.print_error(Exception("Error processing verbose output"))
+                        self.printer.print_error(
+                            Exception("Error processing verbose output")
+                        )
                 else:
                     raise Exception("Error with verbose option")
                 invoker.execute()
@@ -212,9 +228,10 @@ class NightcapSettingsCMD(NightcapBaseCMD):
         except Exception as e:
             # self.printer.print_error(e)
             if e.args[0] == "Restarting":
-                raise KeyboardInterrupt('Restarting')
+                raise KeyboardInterrupt("Restarting")
             else:
                 self.printer.print_error(e)
+
     # endregion
 
     # region Verbosity
@@ -230,10 +247,10 @@ class NightcapSettingsCMD(NightcapBaseCMD):
             if line != "":
                 if "normal" == str(line).lower().strip():
                     self.config.verbosity = False
-                    self.config.config.set('NIGHTCAPCORE', 'verbose', 'False')
+                    self.config.config.set("NIGHTCAPCORE", "verbose", "False")
                 elif "debug" == str(line).lower().strip():
                     self.config.verbosity = True
-                    self.config.config.set('NIGHTCAPCORE', 'verbose', 'True')
+                    self.config.config.set("NIGHTCAPCORE", "verbose", "True")
                 self.config.Save()
             else:
                 raise Exception(
@@ -260,7 +277,8 @@ class NightcapSettingsCMD(NightcapBaseCMD):
 
     # endregion
 
-    #region Exit
+    # region Exit
     def do_exit(self, line) -> bool:
         return True
-    #endregion
+
+    # endregion

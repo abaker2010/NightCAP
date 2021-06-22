@@ -5,9 +5,14 @@
 # file that should have been included as part of this package.
 # region Imports
 from nightcapcli.base.base_cmd import NightcapBaseCMD
-from nightcapcli.cmds.settings import NightcapMongoSettingsCMD, NightcapDjangoSettingsCMD
+from nightcapcli.cmds.settings import (
+    NightcapMongoSettingsCMD,
+    NightcapDjangoSettingsCMD,
+)
 from nightcapcore.configuration import NightcapCLIConfiguration
+
 # endregion
+
 
 class NightcapMongoServerSettingsCMD(NightcapBaseCMD):
     """

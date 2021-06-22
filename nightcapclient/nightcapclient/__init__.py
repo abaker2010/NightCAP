@@ -5,5 +5,6 @@
 # file that should have been included as part of this package.
 from .client import NightcapClient
 from .reports import NightcapSimpleReport
+
 __all__ = ["NightcapClient", "NightcapSimpleReport"]
 __version__ = "0.0.1"

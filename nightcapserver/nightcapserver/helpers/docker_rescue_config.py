@@ -13,16 +13,13 @@ from nightcapcore.helpers.screen.screen_helper import ScreenHelper
 from nightcapcore.printers.print import Printer
 
 DEVNULL = open(os.devnull, "wb")
-#endregion
-
+# endregion
 
 
 class NightcapDockRescueConfigHelper:
-
     def __init__(self, conf: NightcapCLIConfiguration) -> None:
         self.printer = Printer()
         self.conf = conf
-
 
     # region Is IP Valid
     def _isvalidIPAddress(self, IP: str) -> bool:
@@ -56,14 +53,16 @@ class NightcapDockRescueConfigHelper:
     def change_connection_only(self):
         ScreenHelper().clearScr()
         self.printer.print_underlined_header("Change Docker Base Config")
-        _ip = input(Fore.LIGHTGREEN_EX + str("\n\tNew IP Addrress: %s" % (Fore.LIGHTCYAN_EX)))
+        _ip = input(
+            Fore.LIGHTGREEN_EX + str("\n\tNew IP Addrress: %s" % (Fore.LIGHTCYAN_EX))
+        )
         _port = input(Fore.LIGHTGREEN_EX + str("\tNew Port: %s" % (Fore.LIGHTCYAN_EX)))
         ScreenHelper().clearScr()
         self.printer.print_header("Reconfig Info")
         self.printer.print_formatted_additional("IP", _ip)
         self.printer.print_formatted_additional("Port", _port)
 
-        _ready = self.printer.input('Confirm? (Y/n)', defaultReturn=True)
+        _ready = self.printer.input("Confirm? (Y/n)", defaultReturn=True)
 
         if _ready:
             print("Change IP")
@@ -79,7 +78,8 @@ class NightcapDockRescueConfigHelper:
                 else:
                     self.printer.print_error(
                         Exception(
-                            "Error with setting IP Address { %s }, please try again" % _ip
+                            "Error with setting IP Address { %s }, please try again"
+                            % _ip
                         )
                     )
 
@@ -99,7 +99,7 @@ class NightcapDockRescueConfigHelper:
                     )
             except Exception as e:
                 self.printer.print_error(e)
-                    
+
             return True
         else:
             return False

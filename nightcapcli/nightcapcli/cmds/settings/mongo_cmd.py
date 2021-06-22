@@ -4,8 +4,12 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 # region Imports
-from nightcapcli.cmds.cmd_shared.network_config_cmd import NightcapMongoNetworkSettingsCMD
+from nightcapcli.cmds.cmd_shared.network_config_cmd import (
+    NightcapMongoNetworkSettingsCMD,
+)
+
 # endregion
+
 
 class NightcapMongoSettingsCMD(NightcapMongoNetworkSettingsCMD):
     """

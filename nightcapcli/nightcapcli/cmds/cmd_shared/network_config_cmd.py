@@ -6,6 +6,7 @@
 # region Imports
 from nightcapcli.base.base_cmd import NightcapBaseCMD
 from colorama import Fore
+
 # endregion
 
 

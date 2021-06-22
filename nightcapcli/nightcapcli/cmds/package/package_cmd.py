@@ -12,7 +12,9 @@ from nightcapcli.cmds.projects.projects_cmd import NightcapProjectsCMD
 from nightcapcli.base.base_cmd import NightcapBaseCMD
 from nightcappackages.classes.helpers import NightcapJSONEncoder
 from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
+
 # endregion
+
 
 class NightcapCLIPackage(NightcapBaseCMD):
     """
@@ -58,7 +60,7 @@ class NightcapCLIPackage(NightcapBaseCMD):
         pkg_config: dict = None,
         channelid: str = "",
     ) -> None:
-        
+
         NightcapBaseCMD.__init__(self, selectedList, channelid=channelid)
         self.pkg_information = pkg_config
         self.pkg_params = []
@@ -69,8 +71,15 @@ class NightcapCLIPackage(NightcapBaseCMD):
             self.pkg_params = {}
             self.pkg_descripts = {}
             self.pkg_required = {}
-            if self.pkg_information["package_information"]["entry_file_optional_params"] != {}:
-                for k, v in self.pkg_information["package_information"]["entry_file_optional_params"].items():
+            if (
+                self.pkg_information["package_information"][
+                    "entry_file_optional_params"
+                ]
+                != {}
+            ):
+                for k, v in self.pkg_information["package_information"][
+                    "entry_file_optional_params"
+                ].items():
                     self.pkg_params[v["name"]] = v["value"]
                     self.pkg_descripts[v["name"]] = v["description"]
                     try:
@@ -80,7 +89,6 @@ class NightcapCLIPackage(NightcapBaseCMD):
         except Exception as e:
             self.printer.print_error(e)
             self.pkg_params = {}
-
 
     def do_exit(self, line) -> bool:
         self.printer.debug("Selected list passed to package", self.selectedList)
@@ -95,8 +103,13 @@ class NightcapCLIPackage(NightcapBaseCMD):
                     for k, v in self.pkg_params.items():
                         _ = "None" if v == "" else v
                         self.printer.print_formatted_other(
-                            "%s%s" % ( "(Required) " if bool(self.pkg_required[k]) == True else "",
-                            str(k).upper()),
+                            "%s%s"
+                            % (
+                                "(Required) "
+                                if bool(self.pkg_required[k]) == True
+                                else "",
+                                str(k).upper(),
+                            ),
                             str(_),
                             leadingTab=3,
                             optionalTextColor=Fore.YELLOW,
@@ -105,8 +118,13 @@ class NightcapCLIPackage(NightcapBaseCMD):
                     for k, v in self.pkg_params.items():
                         _ = "None" if v == "" else v
                         self.printer.print_formatted_other(
-                            "%s%s" % ( "(Required) " if bool(self.pkg_required[k]) == True else "",
-                            str(k).upper()),
+                            "%s%s"
+                            % (
+                                "(Required) "
+                                if bool(self.pkg_required[k]) == True
+                                else "",
+                                str(k).upper(),
+                            ),
                             str(self.pkg_descripts[k]),
                             leadingTab=3,
                             optionalTextColor=Fore.MAGENTA,
@@ -120,6 +138,7 @@ class NightcapCLIPackage(NightcapBaseCMD):
         except Exception as e:
             pass
         print()
+
     # endregion
 
     # region Complete params
@@ -148,6 +167,7 @@ class NightcapCLIPackage(NightcapBaseCMD):
             leadingText="",
             textColor=Fore.LIGHTGREEN_EX,
         )
+
     # endregion
 
     # region Do params
@@ -160,7 +180,7 @@ class NightcapCLIPackage(NightcapBaseCMD):
                     _s = str(line).split(" ")
 
                     if len(_s) != 2:
-                        if _s[0] == '-d':
+                        if _s[0] == "-d":
                             self.show_params(detailed=True)
                         else:
                             raise Exception("Paramater Error.")
@@ -180,16 +200,16 @@ class NightcapCLIPackage(NightcapBaseCMD):
             self.printer.print_error(e)
         # endregion
 
-    #region Do Projects
-    def do_projects(self, line) -> None:
-        """\n\nChange current project"""
-        try:
-            NightcapProjectsCMD().cmdloop()
-        except Exception as e:
-            print(e)
-    #endregion
+    # #region Do Projects
+    # def do_projects(self, line) -> None:
+    #     """\n\nChange current project"""
+    #     try:
+    #         NightcapProjectsCMD().cmdloop()
+    #     except Exception as e:
+    #         print(e)
+    # #endregion
 
-    #region Help Run
+    # region Help Run
     def help_run(self):
         self.printer.item_2(
             "Run package",
@@ -199,16 +219,20 @@ class NightcapCLIPackage(NightcapBaseCMD):
             leadingText="",
             textColor=Fore.LIGHTGREEN_EX,
         )
-    #endregion
 
-    #region Do Run
+    # endregion
+
+    # region Do Run
     def do_run(self, line) -> None:
         try:
             force = False
             if NightcapCLIConfiguration().project == None:
-                    _ = self.printer.input("Project not selected for reporting. Would you like to continue? (Y/n)", defaultReturn=True)
-                    if _:
-                        force = True
+                _ = self.printer.input(
+                    "Project not selected for reporting. Would you like to continue? (Y/n)",
+                    defaultReturn=True,
+                )
+                if _:
+                    force = True
             else:
                 force = True
 
@@ -221,7 +245,8 @@ class NightcapCLIPackage(NightcapBaseCMD):
                 self.printer.print_error(Exception("User Terminated Scan"))
         except Exception as e:
             self.printer.print_error(e)
-    #endregion 
+
+    # endregion
 
     def _check_params(self):
         for k, v in self.pkg_params.items():
@@ -241,10 +266,58 @@ class NightcapCLIPackage(NightcapBaseCMD):
         if len(self.selectedList) == 3:
             try:
                 exe_path = self.db.get_package_run_path(self.pkg_information)
-                call = "python3.8 %s --data '%s'" % (
-                    exe_path,   
-                    dat
-                )
+                try:
+                    exe_path = os.path.join(exe_path)
+                except Exception as e:
+                    pass
+                if type(exe_path) == list:
+                    exe_path = os.path.join(exe_path)
+                if "github" in self.pkg_information["package_information"].keys():
+                    flags = ""
+                    _flag_pairs = {}
+                    if (
+                        self.pkg_information["package_information"][
+                            "entry_file_optional_params"
+                        ]
+                        != {}
+                    ):
+                        for k, v in self.pkg_information["package_information"][
+                            "entry_file_optional_params"
+                        ].items():
+                            try:
+                                _required = (
+                                    True if v["required"].lower() == "true" else False
+                                )
+                            except Exception as e:
+                                _required = False
+                            _flag_pairs[v["name"]] = {
+                                "flag": v["corresponding_flag"],
+                                "param_needed": bool(v["param_needed"]),
+                                "required": _required,
+                            }
+
+                    for k, v in self.pkg_params.items():
+                        if _flag_pairs[k]["required"] == True:
+                            if v == "None" or v == None or v == False:
+                                raise Exception("Required Param: " + str(k))
+                            else:
+
+                                flags += "%s %s " % (_flag_pairs[k]["flag"], str(v))
+                        else:
+                            if v != "None" and v != "False":
+                                if v.lower() == "true":
+                                    flags += "%s " % (_flag_pairs[k]["flag"])
+
+                    call = "%s %s %s" % (
+                        self.pkg_information["package_information"]["github"]["lang"],
+                        exe_path,
+                        flags,
+                    )
+                    # print(call)
+                else:
+                    call = "python3.8 %s --data '%s'" % (exe_path, dat)
+
+                # print(call)
                 os.system(call)
             except Exception as e:
                 self.printer.print_error(e)
@@ -252,17 +325,21 @@ class NightcapCLIPackage(NightcapBaseCMD):
             self.printer.print_error(Exception("Package not selected to be used"))
             print(self.selectedList)
 
-    #region Update
+    # region Update
     def cli_update(self, message) -> bool:
         print("Trying to update from package cmd")
         self.do_exit()
-    #endregion 
+
+    # endregion
 
     # region To JSON
     def toJson(self) -> dict:
 
         js = {
-            "project": None if NightcapCLIConfiguration().project == None else NightcapCLIConfiguration().project
+            "project": None
+            if NightcapCLIConfiguration().project == None
+            else NightcapCLIConfiguration().project
         }
         return js
+
     # endregion

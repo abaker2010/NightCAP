@@ -14,7 +14,7 @@ __all__ = [
     "NightcapProjectsCMD",
     "NightcapSettingsCMD",
     "NightcapCLIPublisherBase",
-    "NightcapTabCompleter"
+    "NightcapTabCompleter",
 ]
 
 __version__ = "0.0.1"

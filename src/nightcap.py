@@ -7,6 +7,7 @@
 from nightcapcli.observer.publisher import NightcapCLIPublisher
 from nightcapcli.cmds import NightcapCLIPackage
 from nightcapcli.mixins.mixin_maincmd import NightcapCLICMDMixIn
+
 # endregion
 
 
@@ -43,41 +44,75 @@ class Nightcap(NightcapCLICMDMixIn):
             self._push_object(_directions)
 
     def _push_object(self, directions: dict) -> None:
-        self.printer.debug("Trying to push new object", currentMode=self.config.verbosity)
-        self.printer.debug("Current path:", NightcapCLIPublisher().selectedList, currentMode=self.config.verbosity)
+        self.printer.debug(
+            "Trying to push new object", currentMode=self.config.verbosity
+        )
+        self.printer.debug(
+            "Current path:",
+            NightcapCLIPublisher().selectedList,
+            currentMode=self.config.verbosity,
+        )
 
         try:
             self.printer.debug("Making new channel", currentMode=self.config.verbosity)
             _channel = NightcapCLIPublisher().new_channel()
 
-            self.printer.debug("Channels",NightcapCLIPublisher().channels, currentMode=self.config.verbosity)
+            self.printer.debug(
+                "Channels",
+                NightcapCLIPublisher().channels,
+                currentMode=self.config.verbosity,
+            )
             self.printer.debug("Channel", _channel, currentMode=self.config.verbosity)
 
             if len(directions["nextstep"]) != 3:
-                self.printer.debug("Trying to add", directions["nextstep"][-1], currentMode=self.config.verbosity)
+                self.printer.debug(
+                    "Trying to add",
+                    directions["nextstep"][-1],
+                    currentMode=self.config.verbosity,
+                )
                 self.addselected(directions["nextstep"][-1])
 
-                self.printer.debug("After adding", NightcapCLIPublisher().selectedList, currentMode=self.config.verbosity)
+                self.printer.debug(
+                    "After adding",
+                    NightcapCLIPublisher().selectedList,
+                    currentMode=self.config.verbosity,
+                )
 
                 _who = self.pageobjct(
                     NightcapCLIPublisher().selectedList,
                     _channel,
                     self.channelID,
-                    directions["additionalsteps"], 
+                    directions["additionalsteps"],
                 )
 
                 NightcapCLIPublisher().register(_channel, _who)
                 _who.cmdloop()
             else:
-                self.printer.debug("Trying to add", directions["nextstep"][-1], currentMode=self.config.verbosity)
+                self.printer.debug(
+                    "Trying to add",
+                    directions["nextstep"][-1],
+                    currentMode=self.config.verbosity,
+                )
                 self.addselected(directions["nextstep"][-1])
-                
-                self.printer.debug("New Path", NightcapCLIPublisher().selectedList, currentMode=self.config.verbosity)
-                self.printer.debug("Package Config", NightcapCLIPublisher().get_package_config(NightcapCLIPublisher().selectedList), currentMode=self.config.verbosity)
-                
+
+                self.printer.debug(
+                    "New Path",
+                    NightcapCLIPublisher().selectedList,
+                    currentMode=self.config.verbosity,
+                )
+                self.printer.debug(
+                    "Package Config",
+                    NightcapCLIPublisher().get_package_config(
+                        NightcapCLIPublisher().selectedList
+                    ),
+                    currentMode=self.config.verbosity,
+                )
+
                 _who = NightcapCLIPackage(
                     NightcapCLIPublisher().selectedList,
-                    NightcapCLIPublisher().get_package_config(NightcapCLIPublisher().selectedList),
+                    NightcapCLIPublisher().get_package_config(
+                        NightcapCLIPublisher().selectedList
+                    ),
                     _channel,
                 )
 
@@ -87,7 +122,6 @@ class Nightcap(NightcapCLICMDMixIn):
             self.printer.print_error(e)
             NightcapCLIPublisher().del_channel(_channel)
             print(NightcapCLIPublisher().channels)
-       
 
     def cli_update(self, message) -> None:
         if type(message) == bool:
@@ -96,4 +130,6 @@ class Nightcap(NightcapCLICMDMixIn):
             self._push_object(message)
         else:
             pass
+
+
 # endregion

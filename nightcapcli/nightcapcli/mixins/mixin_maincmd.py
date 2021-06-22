@@ -66,9 +66,13 @@ class NightcapCLICMDMixIn(NightcapMainCMD):
                 #     text="Detailed information can not be provided at this level"
                 # )
                 if len(self.selectedList) == 0:
-                    self.printer.print_header_w_option("Module Name", "(Submodule Count)")
-                elif len(self.selectedList) == 1:    
-                    self.printer.print_header_w_option("Submodule Name", "(Submodule Count)")
+                    self.printer.print_header_w_option(
+                        "Module Name", "(Submodule Count)"
+                    )
+                elif len(self.selectedList) == 1:
+                    self.printer.print_header_w_option(
+                        "Submodule Name", "(Submodule Count)"
+                    )
                 NightcapOptionGenerator(self.selectedList).options(isDetailed=False)
             else:
                 NightcapOptionGenerator(self.selectedList).options(isDetailed=True)
@@ -89,7 +93,9 @@ class NightcapCLICMDMixIn(NightcapMainCMD):
     def complete_use(self, text, line, begidx, endidx) -> list:
         try:
             _completer = NightcapTabCompleter()
-            return _completer.complete(self.selectedList, text, line.replace("use ", "")) 
+            return _completer.complete(
+                self.selectedList, text, line.replace("use ", "")
+            )
         except Exception as e:
             print(e)
 
@@ -111,4 +117,5 @@ class NightcapCLICMDMixIn(NightcapMainCMD):
 
         except Exception as e:
             self.printer.print_error(e)
+
     # endregion

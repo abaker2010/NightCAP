@@ -1,5 +1,3 @@
-
-
 import os
 from nightcapcore.printers.print import Printer
 import shutil
@@ -10,7 +8,6 @@ from nightcappackages.classes.commands import NightcapPackageInstallerCommand
 
 
 class NightcapRestoreHelper(object):
-
     def __init__(self, path: str) -> None:
         super().__init__()
         self.path = path
@@ -18,9 +15,11 @@ class NightcapRestoreHelper(object):
 
     def restore(self):
         if ".ncb" in str(self.path).split(os.sep)[-1]:
-            
+
             self.printer.print_underlined_header("Starting Restore", leadingBreaks=1)
-            self.printer.print_formatted_additional("Restore File Path", optionaltext=self.path, endingBreaks=1)
+            self.printer.print_formatted_additional(
+                "Restore File Path", optionaltext=self.path, endingBreaks=1
+            )
 
             _cleaned = NightcapCleanHelper().clean()
 
@@ -33,41 +32,70 @@ class NightcapRestoreHelper(object):
                 new_name = name.replace(".ncb", ".zip")
                 dir = os.path.dirname(str(self.path))
 
-                os.rename(os.path.join(self.tmpdir, name), os.path.join(self.tmpdir, new_name))
+                os.rename(
+                    os.path.join(self.tmpdir, name), os.path.join(self.tmpdir, new_name)
+                )
 
-                shutil.unpack_archive(os.path.join(self.tmpdir, new_name), os.path.join(self.tmpdir, "restoring_backup"), "zip") 
-                shutil.unpack_archive(os.path.join(self.tmpdir, "restoring_backup", "installers.zip"), os.path.join(self.tmpdir, "restoring_backup", "installers"), "zip") 
+                shutil.unpack_archive(
+                    os.path.join(self.tmpdir, new_name),
+                    os.path.join(self.tmpdir, "restoring_backup"),
+                    "zip",
+                )
+                shutil.unpack_archive(
+                    os.path.join(self.tmpdir, "restoring_backup", "installers.zip"),
+                    os.path.join(self.tmpdir, "restoring_backup", "installers"),
+                    "zip",
+                )
                 self.printer.print_formatted_check("Successfully unpacked backup")
-                    
 
-                _installers_path = os.path.join(self.tmpdir, "restoring_backup", "installers")
+                _installers_path = os.path.join(
+                    self.tmpdir, "restoring_backup", "installers"
+                )
                 _r_paths = self._restore_installers_paths(_installers_path)
                 for _r in _r_paths:
                     self._restore_installers(_r)
-                    print("\t\t" + Fore.LIGHTMAGENTA_EX + "*"*25 + Style.RESET_ALL + "\n")           
-            
+                    print(
+                        "\t\t"
+                        + Fore.LIGHTMAGENTA_EX
+                        + "*" * 25
+                        + Style.RESET_ALL
+                        + "\n"
+                    )
+
                 self.printer.item_1("Cleaning Up", leadingBreaks=1, endingBreaks=1)
                 shutil.rmtree(self.tmpdir)
-                self.printer.print_formatted_check("Restore Completed", leadingBreaks=1, endingBreaks=1)
+                self.printer.print_formatted_check(
+                    "Restore Completed", leadingBreaks=1, endingBreaks=1
+                )
                 return True
             else:
-                self.printer.print_error(Exception("There was an error when cleaning, please view above for more details."))
+                self.printer.print_error(
+                    Exception(
+                        "There was an error when cleaning, please view above for more details."
+                    )
+                )
                 return False
         else:
-            self.printer.print_error(Exception("Please check the backup file. Inforrect file type used"))
+            self.printer.print_error(
+                Exception("Please check the backup file. Inforrect file type used")
+            )
             return False
-
 
     def _restore_installers_paths(self, location: str):
         _installers = []
 
         for root, dirs, files in os.walk(location):
             for file in files:
-                if file.endswith('.ncp'):
+                if file.endswith(".ncp"):
                     # print(file)
-                    _installers.append({"name" : file.replace(".ncp", ''), "path" : os.path.join(root, file)})
+                    _installers.append(
+                        {
+                            "name": file.replace(".ncp", ""),
+                            "path": os.path.join(root, file),
+                        }
+                    )
         return _installers
 
     def _restore_installers(self, installers: str):
-        _pack = NightcapPackageInstallerCommand(installers['path'], clear=False)
+        _pack = NightcapPackageInstallerCommand(installers["path"], clear=False)
         _pack.execute()

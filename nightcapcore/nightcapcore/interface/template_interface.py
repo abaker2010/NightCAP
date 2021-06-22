@@ -15,6 +15,7 @@ def abstractfunc(func):
 
 # endregion
 
+
 class Interface(type):
     """
 

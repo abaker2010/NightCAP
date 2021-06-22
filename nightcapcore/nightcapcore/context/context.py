@@ -1,9 +1,9 @@
-
 from __future__ import annotations
 from typing import Any
 from nightcapcore.strategy.strategy import Strategy
 
-class Context():
+
+class Context:
     """
     The Context defines the interface of interest to clients.
     """

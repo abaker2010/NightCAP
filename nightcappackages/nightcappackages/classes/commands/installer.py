@@ -6,6 +6,10 @@
 # region Imports
 import json
 import os
+from nightcappackages.classes.commands.github_installer import (
+    NightcapGithubPackageInstallerCommand,
+)
+
 from nightcappackages.classes.helpers.package_ncp import NightcapPackageInstallerHelper
 from nightcappackages.classes.helpers.package_imports import NightcapPackageImports
 from nightcappackages.classes.databases.mogo.mongo_modules import MongoModuleDatabase
@@ -18,6 +22,7 @@ from nightcappackages.classes.paths import (
 )
 from nightcapcore import *
 import shutil
+
 # endregion
 
 
@@ -65,7 +70,9 @@ class NightcapPackageInstallerCommand(Command):
     """
 
     # region Init
-    def __init__(self, package_path: str, clear: bool = False, verbose: bool = False) -> None:
+    def __init__(
+        self, package_path: str, clear: bool = False, verbose: bool = False
+    ) -> None:
         self._package_paths = NightcapPackagesPaths()
         self._db = MongoPackagesDatabase()
         self.printer = Printer()
@@ -73,37 +80,33 @@ class NightcapPackageInstallerCommand(Command):
         self._package_path = package_path
         self._clearScreen = clear
         self.verbose = verbose
+
     # endregion
 
     # region Execute
     def execute(self) -> None:
-        try:
-            # unpacking package 
-            shutil.copyfile(self._package_path, '/tmp/ncp_installer.ncp')
-            shutil.unpack_archive('/tmp/ncp_installer.ncp', '/tmp/ncp_installer/', 'zip') 
 
-            _base_path = ''
+        # This section needs to be refactored to protect against a bad installation of a package.
+        # There also needs to be OS Checking here
+        try:
+            # unpacking package
+            shutil.copyfile(self._package_path, "/tmp/ncp_installer.ncp")
+            shutil.unpack_archive(
+                "/tmp/ncp_installer.ncp", "/tmp/ncp_installer/", "zip"
+            )
+
+            _base_path = ""
             for root, dirs, files in os.walk("/tmp/ncp_installer"):
                 for name in dirs:
-                    if 'src' not in name:
+                    if "src" not in name:
                         _base_path = os.path.join(root, name)
 
             try:
-                with open(
-                    os.path.join(_base_path, "package_info.json")
-                ) as json_file:
+                with open(os.path.join(_base_path, "package_info.json")) as json_file:
                     self._package = json.load(json_file)
                 if self._clearScreen:
                     ScreenHelper().clearScr()
-                # self.printer.print_underlined_header_undecorated("INSTALLING")
-                # self.printer.print_formatted_additional(
-                #     text="Package: "
-                #     + self._package["package_for"]["module"]
-                #     + "/"
-                #     + self._package["package_for"]["submodule"]
-                #     + "/"
-                #     + self._package["package_information"]["package_name"]
-                # )
+
             except FileNotFoundError as nf:
                 self.printer.print_error(nf)
             except Exception as e:
@@ -115,7 +118,9 @@ class NightcapPackageInstallerCommand(Command):
                 raise Exception("Package signature error")
 
             try:
-                MongoModuleDatabase().module_install(self._package["package_for"]["module"])
+                MongoModuleDatabase().module_install(
+                    self._package["package_for"]["module"]
+                )
             except Exception as e:
                 self.printer.print_error(e)
             try:
@@ -126,16 +131,39 @@ class NightcapPackageInstallerCommand(Command):
             except Exception as e:
                 raise e
 
-            _imports = NightcapPackageImports(self._package, verbose=self.verbose).install()
-            if _imports:
+            if "github" in self._package["package_information"].keys():
                 if self._db.install(self._package):
-                    NightcapPackageInstallerHelper(_base_path, self._package_path, self._package_paths, self._package).copy_installer()
+                    invoker = Invoker()
+                    invoker.set_on_start(
+                        NightcapGithubPackageInstallerCommand(
+                            self._package["package_information"]["github"],
+                            self._package_path,
+                            self._package_paths,
+                            self._package,
+                        )
+                    )
+                    invoker.execute()
+            else:
+                _imports = NightcapPackageImports(
+                    self._package, verbose=self.verbose
+                ).install()
+                if _imports:
+                    if self._db.install(self._package):
+                        NightcapPackageInstallerHelper(
+                            _base_path,
+                            self._package_path,
+                            self._package_paths,
+                            self._package,
+                        ).copy_installer()
         except Exception as e:
             self.printer.print_error(e)
         finally:
             try:
-                os.remove('/tmp/ncp_installer.ncp')
-                shutil.rmtree('/tmp/ncp_installer')
+                os.remove("/tmp/ncp_installer.ncp")
+                shutil.rmtree("/tmp/ncp_installer")
             except:
-                self.printer.print_error(Exception("Error removing ncp_installer files"))
+                self.printer.print_error(
+                    Exception("Error removing ncp_installer files")
+                )
+
     # endregion

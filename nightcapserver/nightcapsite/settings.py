@@ -87,30 +87,30 @@ WSGI_APPLICATION = "nightcapsite.wsgi.application"
 # )
 # mongodb://mongodbadmin:secret@localhost:28017
 DATABASES = {
-       'default': {
-           'ENGINE': 'djongo',
-           'ENFORCE_SCHEMA': True,
-            'LOGGING': {
-                'version': 1,
-                'loggers': {
-                    'djongo': {
-                        'level': 'DEBUG',
-                        'propogate': False,                        
-                    }
-                },
-            }, 
-           'NAME': 'django',
-           'CLIENT' : {
-                'host': 'mongodb',
-                'port': 27017,
-                'username': 'mongodbadmin',
-                'password': "secret",
-                'authSource': 'admin',
-                'authMechanism': 'SCRAM-SHA-256'
-           }
-       }
-   }
-   # 'HOST' : 'mongodb://mongodbadmin:secret@mongodb:27017',
+    "default": {
+        "ENGINE": "djongo",
+        "ENFORCE_SCHEMA": True,
+        "LOGGING": {
+            "version": 1,
+            "loggers": {
+                "djongo": {
+                    "level": "DEBUG",
+                    "propogate": False,
+                }
+            },
+        },
+        "NAME": "django",
+        "CLIENT": {
+            "host": "mongodb",
+            "port": 27017,
+            "username": "mongodbadmin",
+            "password": "secret",
+            "authSource": "admin",
+            "authMechanism": "SCRAM-SHA-256",
+        },
+    }
+}
+# 'HOST' : 'mongodb://mongodbadmin:secret@mongodb:27017',
 # DATABASES = {
 #        'default': {
 #            'ENGINE': 'djongo',
@@ -154,9 +154,12 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
-STATICFILES_DIRS = (os.path.join(BASE_DIR,'nightcapsite/static'),os.path.join(BASE_DIR, 'static'),)
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATIC_URL = "/static/"
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "nightcapsite/static"),
+    os.path.join(BASE_DIR, "static"),
+)
 
 LOGIN_URL = "accounts:login"
 

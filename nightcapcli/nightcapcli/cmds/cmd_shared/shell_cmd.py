@@ -24,7 +24,10 @@ class ShellCMDMixin(cmd.Cmd, object):
         -------
 
     """
-    def __init__(self, completekey: str, stdin: Optional[IO[str]], stdout: Optional[IO[str]]) -> None:
+
+    def __init__(
+        self, completekey: str, stdin: Optional[IO[str]], stdout: Optional[IO[str]]
+    ) -> None:
         super().__init__(completekey=completekey, stdin=stdin, stdout=stdout)
 
     def do_shell(self, s) -> None:

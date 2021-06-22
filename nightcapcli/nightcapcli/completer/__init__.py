@@ -6,4 +6,4 @@
 
 from .tab_completer import NightcapTabCompleter
 
-__all__  = ['NightcapTabCompleter']
+__all__ = ["NightcapTabCompleter"]

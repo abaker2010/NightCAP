@@ -28,7 +28,7 @@ class NightcapCLIConfiguration(metaclass=Singleton):
         self.mainbranch = self.config.getboolean("BUILD_DATA", "main_branch")
 
         if data != None:
-            self.project = data['project']
+            self.project = data["project"]
 
     def _config(self) -> None:
         conf = configparser.RawConfigParser()

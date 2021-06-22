@@ -49,7 +49,9 @@ class NightcapListPackages(object):
     def list_packages(self) -> None:
         # print("\n\t\tInstalled packages")
         # print("\t\t", "-" * 20, "\n", sep="")
-        self.priner.print_underlined_header_undecorated("Installed Packages", endingBreaks=1)
+        self.priner.print_underlined_header_undecorated(
+            "Installed Packages", endingBreaks=1
+        )
         _packages = list(map(lambda v: v, self.packages_db.get_all_packages()))
         if _packages == []:
             # print(Fore.YELLOW + "\t\tNo Packages Installed\n", Style.RESET_ALL)
@@ -72,6 +74,12 @@ class NightcapListPackages(object):
                     p["author_info"]["creator"],
                     sep="",
                 )
-                self.priner.item_3(p["package_information"]["details"], endingBreaks=1, leadingTab=2, leadingText="[?] - ")
+                self.priner.item_3(
+                    p["package_information"]["details"],
+                    endingBreaks=1,
+                    leadingTab=2,
+                    leadingText="[?] - ",
+                )
                 # print(Fore.GREEN, "\t\t", p["package_information"]["details"], "\n")
+
     # endregion

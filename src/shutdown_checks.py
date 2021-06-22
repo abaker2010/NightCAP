@@ -7,23 +7,19 @@
 from nightcapserver.helpers.docker_configure import NightcapDockerConfigurationHelper
 from nightcapcore.strategy.strategy import Strategy
 from nightcapcore import Printer, NightcapCLIConfiguration
-#endregion
+
+# endregion
 
 
 class NightcapShutdownChecks(Strategy):
-
     def __init__(self) -> None:
         super().__init__()
         self.printer = Printer()
         self.conf = NightcapCLIConfiguration()
-        
 
     def execute(self, *arg, **kwargs):
         try:
             _docker_configer = NightcapDockerConfigurationHelper(self.conf)
-            if self.conf.config.getboolean("REPORTINGSERVER", "shutdown_on_exit") == True:
-                _docker_configer.django_helper.continer_stop()
-                self.printer.print_formatted_check("Shutdown Django Server")
 
             if self.conf.config.getboolean("MONGOSERVER", "shutdown_on_exit") == True:
                 _docker_configer.mongo_helper.continer_stop()

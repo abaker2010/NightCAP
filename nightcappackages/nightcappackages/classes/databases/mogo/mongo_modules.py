@@ -93,7 +93,6 @@ class MongoModuleDatabase(MongoDatabaseOperationsConnection, metaclass=Singleton
 
     def drop(self):
         self._db.drop()
-        
 
     # region Find
     def find(self, module: str = None):

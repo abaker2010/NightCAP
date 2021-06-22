@@ -52,18 +52,19 @@ class NightcapCoreDockerChecker(object):
         super().__init__()
         self.printer = Printer()
         self.docker = dDocker.from_env()
-        
+
         self.mongo_im_exists = self.__check_image("mongo", "latest", "mongo")
         self.ncs_exits = self.__check_image("nightcapsite", "latest", "nightcapsite")
-        
+
     # endregion
 
     # region Check Image
     def __check_image(self, image: str, tag: str, grep: str):
         try:
-            return self.docker.images.get(image+":"+tag)
+            return self.docker.images.get(image + ":" + tag)
         except Exception as e:
             return False
+
     # endregion
 
     # region Check Set-up
