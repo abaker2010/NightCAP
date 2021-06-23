@@ -86,53 +86,57 @@ class NightcapPackageUninstallerCommand(Command):
                     uconfirm = True
                 else:
                     uconfirm = self._confim_delete(self._package_path)
-                if uconfirm: 
-                    self.printer.print_header_w_option("Trying to Uninstall", self._package_path)
+                if uconfirm:
+                    self.printer.print_header_w_option(
+                        "Trying to Uninstall", self._package_path
+                    )
 
-                    self.printer.item_1("ID", str(_package["_id"]), leadingText='[~]', seperator=" : ")
+                    self.printer.item_1(
+                        "ID", str(_package["_id"]), leadingText="[~]", seperator=" : "
+                    )
 
-                    #region Removing Package
+                    # region Removing Package
                     try:
 
-                        #region Deleting Package from DB
+                        # region Deleting Package from DB
                         self._db.delete(ObjectId(_package["_id"]))
-                        #endregion
+                        # endregion
 
-                        #region Deleteing Files
+                        # region Deleteing Files
                         self._delete(_package)
-                        #enregion
+                        # enregion
 
-                        #region Removing Submodules
+                        # region Removing Submodules
                         MongoSubModuleDatabase().submodule_try_uninstall(
                             self._split_package_path[0], self._split_package_path[1]
                         )
-                        #endregion
+                        # endregion
 
-                        #region Removing Modules
+                        # region Removing Modules
                         if (
-                                MongoSubModuleDatabase()
-                                .find_submodules(self._split_package_path[0])
-                                .count()
-                                == 0
-                            ):
+                            MongoSubModuleDatabase()
+                            .find_submodules(self._split_package_path[0])
+                            .count()
+                            == 0
+                        ):
                             MongoModuleDatabase().module_try_unintall(
-                                    self._split_package_path[0]
-                                )
-                        #endregion
+                                self._split_package_path[0]
+                            )
+                        # endregion
 
                         self._rm_installer(self._split_package_path)
                     except Exception as e:
                         raise e
-                    #endregion
+                    # endregion
 
                 else:
                     raise Exception("User Cancled Uninstall")
             self.printer.print_formatted_check(
-                                    text="UNINSTALLED",
-                                    vtabs=1,
-                                    endingBreaks=1,
-                                    leadingTab=1,
-                                )
+                text="UNINSTALLED",
+                vtabs=1,
+                endingBreaks=1,
+                leadingTab=1,
+            )
 
         except Exception as e:
             raise e
@@ -142,12 +146,8 @@ class NightcapPackageUninstallerCommand(Command):
     # region Copy
     def _rm_installer(self, installer: list):
         _path = self.__package_paths.generate_path(
-            NightcapPackagesPathsEnum.Installers,[
-                "-".join([
-            installer[0],
-            installer[1],
-            installer[2], '*'])
-            ]
+            NightcapPackagesPathsEnum.Installers,
+            ["-".join([installer[0], installer[1], installer[2], "*"])],
         )
 
         _files = glob.glob(_path)
@@ -157,8 +157,7 @@ class NightcapPackageUninstallerCommand(Command):
             except Exception as e:
                 self.printer.print_error(e)
 
-
-    # endregion 
+    # endregion
 
     # region Confirm Delete
     def _confim_delete(self, package_path: str):

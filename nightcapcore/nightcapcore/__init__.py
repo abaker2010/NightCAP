@@ -34,7 +34,7 @@ __all__ = [
     "NightcapColors",
     "Interface",
     "NightcapCoreDockerChecker",
-    "Legal"
+    "Legal",
 ]
 
 __version__ = "0.0.1"

@@ -7,7 +7,11 @@
 from nightcappackages import *
 from nightcapcore import Printer
 from colorama import Fore, Style
-from nightcappackages.classes.databases.mogo import MongoModuleDatabase, MongoPackagesDatabase, MongoSubModuleDatabase
+from nightcappackages.classes.databases.mogo import (
+    MongoModuleDatabase,
+    MongoPackagesDatabase,
+    MongoSubModuleDatabase,
+)
 
 # endregion
 
@@ -165,7 +169,13 @@ class NightcapOptionGenerator(object):
                             _cvals.append(v)
 
         self.printer.item_1(
-            "".join(_cvals), "", leadingTab=1, leadingText="", vtabs=1, endingBreaks=1, seperator=''
+            "".join(_cvals),
+            "",
+            leadingTab=1,
+            leadingText="",
+            vtabs=1,
+            endingBreaks=1,
+            seperator="",
         )
 
     # endregion

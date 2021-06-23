@@ -10,7 +10,9 @@ from nightcapserver.helpers.docker_configure import NightcapDockerConfigurationH
 from nightcapserver.helpers.docker_status import NightcapDockerStatus
 from nightcapcore.strategy.strategy import Strategy
 from nightcapcore import ScreenHelper, Printer, NightcapCLIConfiguration, NightcapBanner
-#endregion
+
+# endregion
+
 
 class NightcapBootChecks(Strategy):
     """
@@ -46,7 +48,7 @@ class NightcapBootChecks(Strategy):
 
     def __init__(self) -> None:
         super().__init__()
-        
+
     def execute(self, *arg, **kwargs) -> bool:
         _printer = Printer()
         _conf = NightcapCLIConfiguration()
@@ -57,21 +59,31 @@ class NightcapBootChecks(Strategy):
 
             if _docker_configer.check_legal():
                 _docker_configer = NightcapDockerConfigurationHelper(_conf)
-                if _docker_configer.env_check() != ((NightcapDockerStatus.EXISTS, NightcapDockerStatus.EXISTS), (NightcapDockerStatus.EXISTS, NightcapDockerStatus.EXISTS)):
+                # print(_docker_configer.env_check())
+                # if _docker_configer.env_check() != (
+                #     (NightcapDockerStatus.EXISTS, NightcapDockerStatus.EXISTS),
+                #     (NightcapDockerStatus.EXISTS, NightcapDockerStatus.EXISTS),
+                # ):
+
+                if _docker_configer.mongo_helper.container_status() == NightcapDockerStatus.RUNNING and _docker_configer.mongo_helper.image_exists() == NightcapDockerStatus.EXISTS:
+                    return True
+                else:    
                     ScreenHelper().clearScr()
                     _banner.Banner()
                     _ready = _docker_configer.change_configuration()
                     if _ready:
                         return True
-                else:
-                    return True
+
 
         except DockerException as de:
-            _printer.print_error(Exception("Error connecting to Docker Container(s) Please Reconfigure."))
-            _now = _printer.input("Would you like to reconfigure now? (Y/n)", defaultReturn=True)
-            if _now: 
+            _printer.print_error(
+                Exception("Error connecting to Docker Container(s) Please Reconfigure.")
+            )
+            _now = _printer.input(
+                "Would you like to reconfigure now? (Y/n)", defaultReturn=True
+            )
+            if _now:
                 NightcapDockRescueConfigHelper(_conf).change_connection_only()
                 self.execute()
             else:
                 return False
-                    

@@ -8,11 +8,11 @@ from nightcapcore import Printer
 import tempfile
 import shutil
 from nightcappackages import *
+
 # endregion
 
 
 class NightcapTmpFileHelper(object):
-
     def __init__(self) -> None:
         super().__init__()
         self.tmp_location: str = ""
@@ -26,7 +26,6 @@ class NightcapTmpFileHelper(object):
         except Exception as e:
             pass
 
-    
     def delete(self):
         self._rmtmp()
         self._deleted = True
@@ -43,9 +42,9 @@ class NightcapTmpFileHelper(object):
         self.printer.item_1("Creating tmp dir " + self.tmp_location)
 
     def _rmtmp(self):
-        self.printer.print_underlined_header("Clean Up")
+        # self.printer.print_underlined_header("Clean Up")
         # if self.verbose:
-        self.printer.print_formatted_check("Tmp dir removed", endingBreaks=1)
+        # self.printer.print_formatted_check("Tmp dir removed", endingBreaks=1)
         shutil.rmtree(self.tmp_location)
         # self.tmpUpdatePaths = []
         # self.tmpUpdateLocation = None

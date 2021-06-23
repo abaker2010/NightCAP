@@ -11,7 +11,7 @@ class InputPrinter(PrinterBase):
     def __init__(self):
         super().__init__()
 
-    #region Input
+    # region Input
     # User input, the default entry for the data is Y (aka yes)
     def input(
         self,
@@ -23,11 +23,15 @@ class InputPrinter(PrinterBase):
         etab=1,
         leadingBreaks=1,
         default=["yes", "y", "ye", "ya", "yep", "yeah"],
-        defaultReturn=False
+        defaultReturn=False,
     ) -> bool:
         width = len(text) + 5
         print("\n" * vtab)
-        _input = input(questionColor + str("\t"*leadingBreaks + text + str(sep)).center(width, " ") + inputcolor)
+        _input = input(
+            questionColor
+            + str("\t" * leadingBreaks + text + str(sep)).center(width, " ")
+            + inputcolor
+        )
         print("\n" * etab)
         if _input == "":
             return defaultReturn
@@ -35,7 +39,8 @@ class InputPrinter(PrinterBase):
             return True
         else:
             return False
-    #endregion
+
+    # endregion
 
     # User input, the default entry for the data is Y (aka yes)
     def input_return_only(
@@ -47,14 +52,19 @@ class InputPrinter(PrinterBase):
         vtab=1,
         etab=1,
         leadingBreaks=1,
-        defaultReturn=False
+        defaultReturn=False,
     ) -> str:
         width = len(text) + 5
         print("\n" * vtab)
-        _input = input(questionColor + str("\t"*leadingBreaks + text + str(sep)).center(width, " ") + inputcolor)
+        _input = input(
+            questionColor
+            + str("\t" * leadingBreaks + text + str(sep)).center(width, " ")
+            + inputcolor
+        )
         print("\n" * etab)
         if _input == "":
             return defaultReturn
         else:
             return _input
-    #endregion
+
+    # endregion

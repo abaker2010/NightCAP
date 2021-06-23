@@ -13,7 +13,9 @@ from nightcappackages.classes.helpers.encoder import NightcapJSONEncoder
 import time
 from nightcapcli.base.base_cmd import NightcapBaseCMD
 from nightcapcore.printers.print import Printer
+
 # endregion
+
 
 class NightcapClient(NightcapBaseCMD):
     """
@@ -52,43 +54,50 @@ class NightcapClient(NightcapBaseCMD):
                 Allows the user to have the clean Object.run() syntax
 
     """
-    #region Init
+
+    # region Init
     def __init__(self, intro: str = None, *args, debug=False, **kwargs) -> None:
 
         parser = argparse.ArgumentParser(description="Process some pcaps.")
-        parser.add_argument("--data", required=True,
-                            help="list of pcap filenames")
+        parser.add_argument("--data", required=True, help="list of pcap filenames")
         args = parser.parse_args()
         self.printer = Printer()
-  
+
         try:
             _data = NightcapJSONEncoder().default(args.data)
 
             self.base_params = _data["0"]
             self.package_params = _data["1"]
-            NightcapBaseCMD.__init__(
-                    self, _data["2"], passedJson=_data["0"]
-                )
-            self.printer.debug("Args after passing", args,
-                           currentMode=self.config.verbosity)
+            NightcapBaseCMD.__init__(self, _data["2"], passedJson=_data["0"])
+            self.printer.debug(
+                "Args after passing", args, currentMode=self.config.verbosity
+            )
 
-            try:            
-                self.reporter = NightcapSimpleReport(self.config.project, _data['2']['package_information']['uid'], self.base_params, self.package_params)
+            try:
+                self.reporter = NightcapSimpleReport(
+                    self.config.project,
+                    _data["2"]["package_information"]["uid"],
+                    self.base_params,
+                    self.package_params,
+                )
             except Exception as nt:
                 print(nt)
                 self.reporter = None
         except Exception as e:
             self.printer.print_error(e)
-    #endregion 
+
+    # endregion
 
     # region onClose
     def onClose(self) -> None:
         """Todo when the process is done"""
         try:
-            self.printer.print_formatted_check('Elapse time (seconds)', str(
-                round(self._elapseTime, 3)), endingBreaks=1)
+            self.printer.print_formatted_check(
+                "Elapse time (seconds)", str(round(self._elapseTime, 3)), endingBreaks=1
+            )
         except Exception as e:
             print(e)
+
     # endregion
 
     # region onConsolePrint
@@ -96,27 +105,45 @@ class NightcapClient(NightcapBaseCMD):
     def onConsolePrint(self):
         """Generate Console Report"""
         raise NotImplementedError
+
     # endregion
 
     # region onIntro
     def onIntro(self):
         """Intro to the program"""
         try:
-            if self.config.project != None or self.package_params != [] or self.package_params != None:
+            if (
+                self.config.project != None
+                or self.package_params != []
+                or self.package_params != None
+            ):
                 self.printer.print_underlined_header("Scan Details: (Params Used)")
 
             if self.config.project != None:
                 self.printer.print_underlined_header("Project", leadingTab=2)
-                self.printer.item_1("ID", optionalText=self.base_params['project']['_id']['$oid'], seperator=" : ", leadingTab=3)
-                self.printer.item_1("Name", optionalText=self.base_params['project']['project_name'], seperator=" : ", leadingTab=3)
-                
+                self.printer.item_1(
+                    "ID",
+                    optionalText=self.base_params["project"]["_id"]["$oid"],
+                    seperator=" : ",
+                    leadingTab=3,
+                )
+                self.printer.item_1(
+                    "Name",
+                    optionalText=self.base_params["project"]["project_name"],
+                    seperator=" : ",
+                    leadingTab=3,
+                )
+
             if self.package_params != [] or self.package_params != None:
                 self.printer.print_underlined_header("Package Params", leadingTab=2)
                 for k, v in dict(self.package_params).items():
-                    self.printer.item_1(str(k), optionalText=str(v), seperator=" : ", leadingTab=3)
+                    self.printer.item_1(
+                        str(k), optionalText=str(v), seperator=" : ", leadingTab=3
+                    )
         except Exception as e:
             self.printer.print_error(e)
         pass
+
     # endregion
 
     # region onProcess
@@ -124,6 +151,7 @@ class NightcapClient(NightcapBaseCMD):
     def onProcess(self):
         """Process to do"""
         raise NotImplementedError
+
     # endregion
 
     # region onReport
@@ -145,7 +173,12 @@ class NightcapClient(NightcapBaseCMD):
 
         try:
             start = time.time()
-            self.printer.print_formatted_additional("Running package. Please wait...", leadingTab=1, leadingBreaks=1, endingBreaks=1)
+            self.printer.print_formatted_additional(
+                "Running package. Please wait...",
+                leadingTab=1,
+                leadingBreaks=1,
+                endingBreaks=1,
+            )
             self.onProcess()
             self._elapseTime = time.time() - start
             print("")
@@ -171,9 +204,11 @@ class NightcapClient(NightcapBaseCMD):
         except Exception as e:
             self.printer.print_error(Exception("Error with Closing"))
             raise e
+
     # endregion
 
     # region run
     def run(self):
         self.onRun()
+
     # endregion

@@ -1,5 +1,3 @@
-
-
 import os
 import json
 from nightcappackages.classes.helpers.encoder import NightcapJSONEncoder
@@ -10,12 +8,14 @@ from datetime import datetime
 from nightcappackages.classes.databases.mogo.mongo_modules import MongoModuleDatabase
 from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
 from nightcappackages.classes.databases.mogo.mongo_projects import MongoProjectsDatabase
-from nightcappackages.classes.databases.mogo.mongo_submodules import MongoSubModuleDatabase
+from nightcappackages.classes.databases.mogo.mongo_submodules import (
+    MongoSubModuleDatabase,
+)
 from nightcappackages.classes.paths.paths import NightcapPackagesPaths
 from nightcappackages.classes.paths.pathsenum import NightcapPackagesPathsEnum
 
-class NightcapBackupHelper(object):
 
+class NightcapBackupHelper(object):
     def __init__(self, path: str) -> None:
         super().__init__()
         self.path = path
@@ -30,44 +30,51 @@ class NightcapBackupHelper(object):
             # self.printer.print_formatted_additional("Backup Location:", optionaltext=str(line))
 
             self.tmpdir = tempfile.mkdtemp()
-            self.printer.print_formatted_additional("Tmp Location", optionaltext=self.tmpdir)
+            self.printer.print_formatted_additional(
+                "Tmp Location", optionaltext=self.tmpdir
+            )
 
             self._backup_installers(self.tmpdir)
             self._backup_databases(self.tmpdir)
 
             self.printer.print_underlined_header("Moving Backup")
             now = datetime.now()
-            #date and time format: dd/mm/YYYY H:M:S
+            # date and time format: dd/mm/YYYY H:M:S
             format = "%d-%m-%Y-%H-%M-%S"
-            #format datetime using strftime() 
+            # format datetime using strftime()
             time1 = now.strftime(format)
             self._move_backup(self.tmpdir, str(self.path), "backup_" + str(time1))
-            
 
-            self.printer.print_formatted_additional("Backup Complete", endingBreaks=1, leadingTab=1, leadingBreaks=1)
+            self.printer.print_formatted_additional(
+                "Backup Complete", endingBreaks=1, leadingTab=1, leadingBreaks=1
+            )
             shutil.rmtree(self.tmpdir)
 
     def _move_backup(self, source, destination, name):
-        self._make_archive(source, destination, name, 'zip')
-        os.rename(os.path.join(destination, name + ".zip"), os.path.join(destination, name+ ".ncb"))
+        self._make_archive(source, destination, name, "zip")
+        os.rename(
+            os.path.join(destination, name + ".zip"),
+            os.path.join(destination, name + ".ncb"),
+        )
         self.printer.print_formatted_check("Done", endingBreaks=1)
 
     def _backup_installers(self, output: str):
         _installer_path = self._package_paths.generate_path(
-                NightcapPackagesPathsEnum.Installers
-            )
+            NightcapPackagesPathsEnum.Installers
+        )
 
-        self.printer.print_underlined_header("Backing Up Installers")  
-        self.printer.print_formatted_additional("Installer(s) Location: ", optionaltext=_installer_path)
+        self.printer.print_underlined_header("Backing Up Installers")
+        self.printer.print_formatted_additional(
+            "Installer(s) Location: ", optionaltext=_installer_path
+        )
         self.printer.print_formatted_additional("Backup Location:", optionaltext=output)
 
         self._make_archive(_installer_path, output, "installers", "zip")
         self.printer.print_formatted_check("Done")
 
-
     def _backup_databases(self, output: str):
 
-        self.printer.print_underlined_header("Backing Up Collections")        
+        self.printer.print_underlined_header("Backing Up Collections")
 
         _packages = self._backup_packages()
         self._write_file(output, "packages.json", _packages)
@@ -76,7 +83,7 @@ class NightcapBackupHelper(object):
         _projects = self._backup_projects()
         self._write_file(output, "projects.json", _projects)
         self.printer.print_formatted_additional("Projects", optionaltext="Backed Up")
-        
+
         _submodules = self._backup_submodules()
         self._write_file(output, "submodules.json", _submodules)
         self.printer.print_formatted_additional("Submodules", optionaltext="Backed Up")
@@ -89,14 +96,12 @@ class NightcapBackupHelper(object):
 
     def _write_file(self, dest, name, data):
         with open(os.path.join(dest, name), "w") as outfile:
-                json.dump(NightcapJSONEncoder().encode(data), outfile)
-
+            json.dump(NightcapJSONEncoder().encode(data), outfile)
 
     # region make archive(s)
     def _make_archive(self, source, destination, name, format):
         shutil.make_archive(name, format, source)
-        shutil.move('%s.%s'%(name,format), destination)
-        
+        shutil.move("%s.%s" % (name, format), destination)
 
     def _backup_modules(self):
         _modules = MongoModuleDatabase().read()
@@ -116,4 +121,4 @@ class NightcapBackupHelper(object):
 
     # endregion
 
-    #endregion
+    # endregion

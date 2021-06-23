@@ -83,10 +83,8 @@ class MongoProjectsDatabase(MongoDatabaseOperationsConnection, metaclass=Singlet
 
     # endregion
 
-
     def drop(self):
         self._db.drop()
-        
 
     # region Date
     def delete(self, puid: int):

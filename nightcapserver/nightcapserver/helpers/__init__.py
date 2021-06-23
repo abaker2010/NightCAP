@@ -6,7 +6,4 @@
 from .mongo_helper import NightcapMongoDockerHelper
 from .docker_container_helper import NightcapDockerContainerHelper
 
-__all__ = [
-    "NightcapDockerContainerHelper",
-    "NightcapDockerHelper"
-    ]
+__all__ = ["NightcapDockerContainerHelper", "NightcapDockerHelper"]

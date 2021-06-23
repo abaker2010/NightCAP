@@ -4,14 +4,20 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 # region Imports
-from nightcappackages.classes.helpers import NightcapBackupHelper, NightcapRestoreHelper, NightcapCleanHelper
+from nightcappackages.classes.helpers import (
+    NightcapBackupHelper,
+    NightcapRestoreHelper,
+    NightcapCleanHelper,
+)
 from nightcapcli.base import NightcapBaseCMD
+
 # endregion
+
 
 class NightcapBackups(NightcapBaseCMD):
     def __init__(self, selectedList: list, channelid):
         super().__init__(selectedList, channelid=channelid)
-        
+
     # region Backup
     def help_backup(self) -> None:
         self.printer.help("Backup your instance of the NightCAP program")
@@ -20,7 +26,7 @@ class NightcapBackups(NightcapBaseCMD):
     def do_backup(self, line) -> None:
         NightcapBackupHelper(line).backup()
 
-    #region Restore
+    # region Restore
     def help_restore(self) -> None:
         self.printer.help("Restore your instance of the NightCAP program from a backup")
         self.printer.help("useage: restore <output location>.ncb")
@@ -30,4 +36,3 @@ class NightcapBackups(NightcapBaseCMD):
 
     def do_clean(self, line) -> None:
         NightcapCleanHelper().clean()
-        

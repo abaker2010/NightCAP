@@ -7,4 +7,3 @@
 from .reports import NightcapReport
 
 __all__ = ["NightcapReport"]
-

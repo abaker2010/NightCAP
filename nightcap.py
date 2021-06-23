@@ -56,7 +56,7 @@ def main():
             # else:
             #     _printer.print_error(Exception("Error with connecting to Docker"))
         except ServerSelectionTimeoutError as e:
-                raise e
+            raise e
         except Exception as e:
             raise e
 
@@ -67,13 +67,14 @@ def main():
     except Exception as e:
         _printer.print_error(e)
     finally:
-    
+
         _printer.print_underlined_header("Cleaning up...")
         try:
             context = Context(NightcapShutdownChecks())
             context.execute()
         except Exception as e:
             _printer.print_error(e)
+
 
 # endregion
 

@@ -22,18 +22,18 @@ import sys
 from nightcappackages import *
 from nightcapcore import NightcapCLIConfiguration
 from nightcappackages.classes.commands.installer import NightcapPackageInstallerCommand
-from nightcappackages.classes.commands.uninstaller import NightcapPackageUninstallerCommand
+from nightcappackages.classes.commands.uninstaller import (
+    NightcapPackageUninstallerCommand,
+)
 from nightcappackages.classes.databases.mogo.mongo_packages import MongoPackagesDatabase
+
 # endregion
 
 
 class NightcapUpdaterRebootCommand(Command):
     def __init__(self) -> None:
         super().__init__()
-        
 
     def execute(self) -> None:
         print("Reboot please")
         raise KeyboardInterrupt("Restarting")
-
-

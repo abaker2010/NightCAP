@@ -8,14 +8,24 @@ import os
 import shutil
 import errno
 from nightcapcore.printers.print import Printer
-from nightcappackages.classes.paths import NightcapPackagesPathsEnum, NightcapPackagesPaths
+from nightcappackages.classes.paths import (
+    NightcapPackagesPathsEnum,
+    NightcapPackagesPaths,
+)
+
 # endregion
 
-class NightcapPackageInstallerHelper(object):
 
-    def __init__(self, base_path: str, package_path, package_paths: NightcapPackagesPaths, package) -> None:
+class NightcapPackageInstallerHelper(object):
+    def __init__(
+        self,
+        base_path: str,
+        package_path,
+        package_paths: NightcapPackagesPaths,
+        package,
+    ) -> None:
         super().__init__()
-    
+
         self._package = package
         self._base_path = base_path
         self._package_paths = package_paths
@@ -28,9 +38,7 @@ class NightcapPackageInstallerHelper(object):
 
     # region Copy
     def _copy_installer(self, installer: str):
-        _path = self._package_paths.generate_path(
-            NightcapPackagesPathsEnum.Installers
-        )
+        _path = self._package_paths.generate_path(NightcapPackagesPathsEnum.Installers)
 
         _name = os.path.basename(installer)
 
@@ -44,7 +52,8 @@ class NightcapPackageInstallerHelper(object):
             self.printer.print_formatted_delete(
                 text="Package not copied (.ncp) Error: %s" % str(e)
             )
-    # endregion    
+
+    # endregion
 
     # region Copy
     def _copy(self, pkt: dict, src: str):

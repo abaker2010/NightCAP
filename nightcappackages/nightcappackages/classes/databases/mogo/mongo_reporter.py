@@ -60,11 +60,12 @@ class MongoReportsDatabase(MongoDatabaseOperationsConnection, metaclass=Singleto
         self.printer = Printer()
         if project != None:
             self.project = project
-            
+
             self.db = self.client[self.conf.config["MONGOSERVER"]["db_name"]]["reports"]
         else:
             self.project = None
             self.db = None
+
     # endregion
 
     def create(self, report: dict):
@@ -85,10 +86,8 @@ class MongoReportsDatabase(MongoDatabaseOperationsConnection, metaclass=Singleto
 
     # endregion
 
-
     def drop(self):
         self.db.drop()
-        
 
     # region Date
     def delete(self, puid: int):

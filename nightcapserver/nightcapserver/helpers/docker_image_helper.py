@@ -18,12 +18,16 @@ from nightcapcore.configuration import NightcapCLIConfiguration
 from nightcapcore.docker.docker_checker import NightcapCoreDockerChecker
 from nightcapcore.helpers.screen.screen_helper import ScreenHelper
 from nightcapcore.printers.print import Printer
-from nightcappackages.classes.paths import NightcapPackagesPathsEnum, NightcapPackagesPaths
+from nightcappackages.classes.paths import (
+    NightcapPackagesPathsEnum,
+    NightcapPackagesPaths,
+)
 from nightcappackages.classes.helpers import NightcapRestoreHelper
 from abc import ABC, abstractmethod
 
 DEVNULL = open(os.devnull, "wb")
 # endregion
+
 
 class NightcapDockerImageHelper(ABC):
 
@@ -40,11 +44,16 @@ class NightcapDockerImageHelper(ABC):
         #     # if not self.suppress:
         #         # self.printer.print_error(Exception("Image Does Not Exist"))
         #     self.image = None
+
     # endregion
 
     def image_exists(self) -> NightcapDockerStatus:
         try:
-            return NightcapDockerStatus.MISSING if self.docker.images.get(self.name+":"+self.tag) == None else NightcapDockerStatus.EXISTS
+            return (
+                NightcapDockerStatus.MISSING
+                if self.docker.images.get(self.name + ":" + self.tag) == None
+                else NightcapDockerStatus.EXISTS
+            )
         except Exception as e:
             return NightcapDockerStatus.MISSING
 

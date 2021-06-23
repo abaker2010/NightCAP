@@ -82,8 +82,13 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
         try:
             self.pkg_params = {}
             self.pkg_descripts = {}
-            if pkg_information["package_information"]["entry_file_optional_params"] != {}:
-                for k, v in pkg_information["package_information"]["entry_file_optional_params"].items():
+            if (
+                pkg_information["package_information"]["entry_file_optional_params"]
+                != {}
+            ):
+                for k, v in pkg_information["package_information"][
+                    "entry_file_optional_params"
+                ].items():
                     self.pkg_params[v["name"]] = v["value"]
                     self.pkg_descripts[v["name"]] = v["description"]
 
@@ -93,6 +98,7 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
             self.package_params = None
         # print("Generate pcap files package_conf", self.config.generatePcaps)
         # self.pcaps = self._get_pcaps() if self.config.generatePcaps == True else []
+
     # endregion
 
     # region Show Params
@@ -154,7 +160,6 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
         #         optionalTextColor=Fore.YELLOW,
         #         endingBreaks=1
         #     )
-
 
         # if detailed == False:
         #     self.printer.print_formatted_other(
@@ -251,7 +256,7 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
                     _s = str(line).split(" ")
 
                     if len(_s) != 2:
-                        if _s[0] == '-d':
+                        if _s[0] == "-d":
                             self.show_params(detailed=True)
                         else:
                             raise Exception("Paramater Error.")
@@ -272,11 +277,26 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
         # endregion
 
     # region Get pcaps
-    def get_pcaps(self, *args, keep_packets=True, display_filter=None, only_summaries=False,
-                 decryption_key=None, encryption_type="wpa-pwk", decode_as=None,
-                 disable_protocol=None, tshark_path=None, override_prefs=None,
-                 use_json=False, output_file=None, include_raw=False, eventloop=None, custom_parameters=None,
-                 debug=False, **kwargs) -> None:
+    def get_pcaps(
+        self,
+        *args,
+        keep_packets=True,
+        display_filter=None,
+        only_summaries=False,
+        decryption_key=None,
+        encryption_type="wpa-pwk",
+        decode_as=None,
+        disable_protocol=None,
+        tshark_path=None,
+        override_prefs=None,
+        use_json=False,
+        output_file=None,
+        include_raw=False,
+        eventloop=None,
+        custom_parameters=None,
+        debug=False,
+        **kwargs
+    ) -> None:
         try:
             _pcapFiles = []
             # print("Trying to generate pcaps")Generating Reports
@@ -303,13 +323,13 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
                                     include_raw=include_raw,
                                     eventloop=eventloop,
                                     custom_parameters=custom_parameters,
-                                    debug=debug
+                                    debug=debug,
                                 )
                             )
             else:
                 _pcapFiles.append(
                     pyshark.FileCapture(
-                        os.path.join(self.dir, self.filename), 
+                        os.path.join(self.dir, self.filename),
                         display_filter=display_filter,
                         keep_packets=keep_packets,
                         only_summaries=only_summaries,
@@ -324,7 +344,7 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
                         include_raw=include_raw,
                         eventloop=eventloop,
                         custom_parameters=custom_parameters,
-                        debug=debug
+                        debug=debug,
                     )
                 )
             return _pcapFiles
@@ -336,9 +356,7 @@ class NightcapCLIPackageConfiguration(NightcapCLIConfiguration):
 
     # region To JSON
     def toJson(self) -> dict:
-        js = {
-            "project": self.project
-        }
+        js = {"project": self.project}
         return js
 
     # endregion

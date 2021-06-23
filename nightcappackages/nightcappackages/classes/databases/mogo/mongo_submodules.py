@@ -66,6 +66,7 @@ class MongoSubModuleDatabase(MongoDatabaseOperationsConnection, metaclass=Single
         MongoDatabaseOperationsConnection.__init__(self)
         self._db = self.client[self.conf.config["MONGOSERVER"]["db_name"]]["submodules"]
         self.printer = Printer()
+
     # endregion
 
     # region Create
@@ -95,7 +96,6 @@ class MongoSubModuleDatabase(MongoDatabaseOperationsConnection, metaclass=Single
 
     def drop(self):
         self._db.drop()
-        
 
     # region Find
     def find(self, module: str = None, submodule: str = None):
@@ -141,9 +141,14 @@ class MongoSubModuleDatabase(MongoDatabaseOperationsConnection, metaclass=Single
     def submodule_try_uninstall(self, module: str, submodule: str):
         _count = MongoPackagesDatabase().find_packages(module, submodule).count()
         if _count == 0:
-            self.printer.debug("Trying remove submodule:", self.find_one(module, submodule), currentMode=self.conf.verbosity)
+            self.printer.debug(
+                "Trying remove submodule:",
+                self.find_one(module, submodule),
+                currentMode=self.conf.verbosity,
+            )
             self._db.remove(self.find_one(module, submodule))
-            self.printer.debug("Deleted submodule entry", currentMode=self.conf.verbosity)
+            self.printer.debug(
+                "Deleted submodule entry", currentMode=self.conf.verbosity
+            )
 
     # endregion
-

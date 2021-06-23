@@ -6,7 +6,9 @@
 from nightcapclient import NightcapClient
 from nightcapcore import *
 import os
-#endregion
+
+# endregion
+
 
 class SomePackageName(NightcapClient):
     def __init__(self):
@@ -15,13 +17,14 @@ class SomePackageName(NightcapClient):
         # self.simple_report = NightcapSimpleReport(__file__, self.basedata['0'])
         self.found_count = 0
 
-
     def onProcess(self, pkt):
         self.found_count += 1
 
     def onClose(self):
         self.printer.print_formatted_check("Total packets")
-        self.printer.print_formatted_additional("Count", str(self.found_count), leadingTab=3)
+        self.printer.print_formatted_additional(
+            "Count", str(self.found_count), leadingTab=3
+        )
 
     def onReport(self):
         # print("Generating Reports")
@@ -34,7 +37,7 @@ class SomePackageName(NightcapClient):
 def main():
     ncore = SomePackageName()
     try:
-        
+
         # ncore.printer.print_underlined_header("Protocol Overview")
         ncore.run()
 
@@ -74,6 +77,7 @@ def main():
     except Exception as e:
         ncore.printer.print_error(e)
         print(e)
+
 
 if __name__ == "__main__":
     try:
